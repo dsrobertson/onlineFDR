@@ -1,15 +1,15 @@
 ---
-title: "Managing multiple testing challenges with sequential inference using
-the onlineFDR package"
+title: Managing multiple testing challenges with sequential inference using the onlineFDR
+  package
 author: "David S. Robertson and Natasha A. Karp"
-date: "`r Sys.Date()`"
+date: '`r Sys.Date()`'
 output:
-    html_document:
-        toc: true
-vignette: >
-    %\VignetteIndexEntry{Using the onlineFDR package}
-    %\VignetteEngine{knitr::rmarkdown}
-    %\VignetteEncoding{UTF-8}
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{Using the onlineFDR package} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -45,10 +45,10 @@ Javanmard and Montanari have proposed two procedures,  LOND and LORD, to control
 FDR in an online manner (Javanmard and Montanari (2015), Javanmard and Montanari
 (2017)).   The LOND algorithm sets the significance level $\alpha_i$  based on
 the number of discoveries made so far, while LORD sets them according to the
-time of the most recent disovery. This package, onlineFDR, implements these new
+time of the most recent discovery. This package, onlineFDR, implements these new
 algorithms and provides wrappers to apply them to a historic dataset or a
 growing dataset. As a comparison,  we have also provided a wrapper for
-implementation of a method based on the Bonferroni approach adapated to an
+implementation of a method based on the Bonferroni approach adapted to an
 online scenario. This vignette explains the use of the package and demonstrates
 a typical workflow.
 
@@ -221,7 +221,7 @@ $\tau_i$ be the last time a discovery was made before $i$: \[
 \[ T(i) = \left\{ l \in \{1, \ldots, i-1 \} : R_l = 1 \right\}\]
 
 LORD depends on constants $w_0$ and $b_0$, where $w_0 \geq 0$ represents the
-intial 'wealth' of the procedure and $b_0 > 0$ represents the 'payout' for 
+initial 'wealth' of the procedure and $b_0 > 0$ represents the 'payout' for 
 rejecting a hypothesis. We require $w_0+b_0 \leq \alpha$ for FDR control to
 hold.
 
@@ -256,7 +256,7 @@ where $w_0$ represents the initial 'wealth', and $b_0$ represents the amount
 earned for rejecting a hypothesis.
 
 LORD 1 and LORD 2 are instances of monotone generalised alpha investing rules,
-and hence provably control the FDR for indepdendent p-values provided 
+and hence provably control the FDR for independent p-values provided 
 $w_0 + b_0 \leq \alpha$. In Javanmard and Montanari (2017), the authors also
 demonstrate empirically that LORD 3 controls the FDR. 
 
@@ -332,7 +332,7 @@ downstream analysis is a global analysis which can tolerate a higher proportion
 of false positives. 
 
 To ensure correct interpretation of the dates provided there is a date.format 
-argument. As a default, the date format is set to recieve dates as 
+argument. As a default, the date format is set to receive dates as 
 year-month(00-12)-day(number).  The following website provides clear guidance
 on symbols used to interpret the date information: 
 https://www.statmethods.net/input/dates.html
