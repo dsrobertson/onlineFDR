@@ -11,8 +11,8 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.7\cr
-#' Date: \tab 2018-04-13\cr
+#' Version: \tab 0.99.0\cr
+#' Date: \tab 2018-04-17\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -34,8 +34,8 @@
 #' Further details on all these procedures can be found in Javanmard and
 #' Montanari (2015, 2017).
 #'
-#' @author David Robertson (\email{david.robertson@@mrc-bsu.cam.ac.uk}) and
-#' Natasha Karp.
+#' @author David Robertson (\email{david.robertson@@mrc-bsu.cam.ac.uk}), Adel
+#' Javanmard, Andrea Montanari and Natasha Karp.
 #'
 #' @references
 #' Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery

@@ -1,9 +1,11 @@
 Package: onlineFDR
 Version: 0.99.0
-Date: 2018-04-13
+Date: 2018-04-17
 Title: Online FDR control
 Authors@R: c(person("David", "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),
+             person("Adel", "Javanmard", role = "aut"),
+             person("Andrea", "Montanari", role = "aut"),
              person("Natasha", "Karp", role = "aut"))
 Description: This package allows users to control the false discovery rate for
   online hypothesis testing, where hypotheses arrive sequentially in a stream,
