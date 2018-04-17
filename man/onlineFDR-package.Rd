@@ -17,8 +17,8 @@ are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 0.7\cr
-Date: \tab 2018-04-13\cr
+Version: \tab 0.99.0\cr
+Date: \tab 2018-04-17\cr
 License: \tab GPL-3 \cr
 }
 
@@ -51,6 +51,6 @@ in Annals of Statistics}, available at
 \url{https://arxiv.org/abs/1603.09000}.
 }
 \author{
-David Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}) and
-Natasha Karp.
+David Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}), Adel
+Javanmard, Andrea Montanari and Natasha Karp.
 }
