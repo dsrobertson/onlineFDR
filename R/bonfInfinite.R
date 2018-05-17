@@ -72,6 +72,10 @@
 bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
                         date.format="%Y-%m-%d") {
 
+    if(!(is.data.frame(d))){
+        stop("d must be a dataframe.")
+    }
+
     if(length(d$id) == 0){
         stop("The dataframe d is missing a column 'id' of identifiers.")
     } else if(length(d$pval) == 0){
@@ -88,7 +92,7 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
         d <- d[order(as.Date(d$date, format = date.format)),]
     }
 
-    if(alpha<0 || alpha>1 ){
+    if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
 
@@ -107,7 +111,8 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     N <- length(d$pval)
 
     if(missing(alphai)){
-        alphai <- 0.07720838*alpha*log(pmax(1:N,2))/((1:N)*exp(sqrt(log(1:N))))
+        alphai <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
+                    ((seq_len(N))*exp(sqrt(log(seq_len(N)))))
     } else if (any(alphai<0)){
         stop("All elements of alphai must be non-negative.")
     } else if(sum(alphai)>alpha){
@@ -116,14 +121,21 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     }
 
     if(random){
-        Nbatch <- length(unique(d$date))
+
+        if(exists(".Random.seed", where = .GlobalEnv)){
+            old.seed <- .Random.seed
+            on.exit({ .Random.seed <<- old.seed })
+        } else {
+            on.exit({set.seed(NULL)})
+        }
+
         set.seed(1)
 
-        for(i in 1:Nbatch){
-            d.temp <- d[d$date == unique(d$date)[i],]
-            d.temp <- d.temp[sample.int(length(d.temp$date)),]
-            d[d$date == unique(d$date)[i],] <- d.temp
-        }
+        lst <- lapply(split(d, d$date),
+                function(x){x[sample.int(length(x$date)),]})
+
+        d <- do.call('rbind', lst)
+        rownames(d) <- NULL
     }
 
     pval <- d$pval

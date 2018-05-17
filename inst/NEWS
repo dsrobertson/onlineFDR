@@ -1,2 +1,13 @@
-0.99.0
-First version of the onlineFDR package submitted to Bioconductor
+# A NEWS File to document package updates
+
+CHANGES IN VERSION 0.99.3
+-----------------------
+MODIFICATIONS:
+
+    * replace date field with hard-coded date in vignette
+    * updating data.frame rows by group now uses 'split-apply-combine'
+    * vectorise part of the LOND function
+    * replace 1:N with seq_len(N)
+    * applied consistent formatting & indentation
+    * internal set.seed() implementation now robust to random number state
+    * added new tests
