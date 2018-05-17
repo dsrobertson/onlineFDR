@@ -103,6 +103,10 @@
 LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
                 random=TRUE, date.format="%Y-%m-%d") {
 
+    if(!(is.data.frame(d))){
+        stop("d must be a dataframe.")
+    }
+
     if(length(d$id) == 0){
         stop("The dataframe d is missing a column 'id' of identifiers.")
     } else if(length(d$pval) == 0){
@@ -119,7 +123,7 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
         d <- d[order(as.Date(d$date, format = date.format)),]
     }
 
-    if(alpha<=0 || alpha>1 ){
+    if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
 
@@ -142,7 +146,8 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
     N <- length(d$pval)
 
     if(missing(gammai)){
-        gammai <- 0.07720838*log(pmax(1:N,2))/((1:N)*exp(sqrt(log(1:N))))
+        gammai <- 0.07720838*log(pmax(seq_len(N),2)) /
+                    (seq_len(N)*exp(sqrt(log(seq_len(N)))))
     } else if (any(gammai<0)){
         stop("All elements of gammai must be non-negative.")
     } else if(sum(gammai)>1){
@@ -158,17 +163,24 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
     }
 
     if(random){
-        Nbatch <- length(unique(d$date))
+
+        if(exists(".Random.seed", where = .GlobalEnv)){
+            old.seed <- .Random.seed
+            on.exit({ .Random.seed <<- old.seed })
+        } else {
+            on.exit({set.seed(NULL)})
+        }
+
         set.seed(1)
 
-        for(i in 1:Nbatch){
-            d.temp <- d[d$date == unique(d$date)[i],]
-            d.temp <- d.temp[sample.int(length(d.temp$date)),]
-            d[d$date == unique(d$date)[i],] <- d.temp
-        }
+        lst <- lapply(split(d, d$date),
+                function(x){x[sample.int(length(x$date)),]})
+
+        d <- do.call('rbind', lst)
+        rownames(d) <- NULL
     }
 
-    alphai <- R <- rep(0, N)
+    alphai <- rep(0, N)
     pval <- d$pval
 
     switch(version,
@@ -176,8 +188,8 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
         {
         R <- rep(0, N)
 
-        for (i in 1:N){
-            tau <- max(0, which(R[1:(i-1)] == 1))
+        for (i in seq_len(N)){
+            tau <- max(0, which(R[seq_len(i-1)] == 1))
             alphai[i] <- gammai[i]*w0*(tau == 0) + gammai[i-tau]*b0*(tau > 0)
             R[i] <- pval[i] <= alphai[i]
             }
@@ -188,8 +200,15 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
         alphai[1] <- gammai[1]*w0
         R[1] <- pval[1] <= alphai[1]
 
-        for (i in 2:N){
-            alphai[i] <- gammai[i]*w0 + sum(gammai[i-which(R[1:(i-1)] == 1)])*b0
+        if(N == 1){
+            d.out <- data.frame(d, alphai, R)
+            return(d.out)
+        }
+
+        for (i in (seq_len(N-1)+1)){
+            alphai[i] <- gammai[i]*w0 +
+                            sum(gammai[i-which(R[seq_len(i-1)] == 1)])*b0
+
             R[i] <- pval[i] <= alphai[i]
             }
         },
@@ -203,14 +222,20 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
         R[2] <- pval[1] <= alphai[1]
         W[2] <- w0 - phi + R[2]*b0
 
-        for (i in 2:N){
-            tau <- max(which(R[1:i] == 1))
+        if(N == 1){
+            R <- R[2]
+            d.out <- data.frame(d, alphai, R)
+            return(d.out)
+        }
+
+        for (i in (seq_len(N-1)+1)){
+            tau <- max(which(R[seq_len(i)] == 1))
             alphai[i] <- phi <- gammai[i-tau+1]*W[tau]
 
             R[i+1] <- pval[i] <= alphai[i]
             W[i+1] <- W[i] - phi + R[i+1]*b0
             }
-        R <- R[2:(N+1)]
+        R <- R[(seq_len(N)+1)]
         })
 
     d.out <- data.frame(d, alphai, R)

@@ -83,6 +83,10 @@
 LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
                     date.format="%Y-%m-%d") {
 
+    if(!(is.data.frame(d))){
+        stop("d must be a dataframe.")
+    }
+
     if(length(d$id) == 0){
         stop("The dataframe d is missing a column 'id' of identifiers.")
     } else if(length(d$pval) == 0){
@@ -99,7 +103,7 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
         d <- d[order(as.Date(d$date, format = date.format)),]
     }
 
-    if(alpha<=0 || alpha>1 ){
+    if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
 
@@ -118,7 +122,7 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
     N <- length(d$pval)
 
     if(missing(xi)){
-        xi <- 0.139307*alpha/(b0*(1:N)*(log(pmax(1:N,2)))^3)
+        xi <- 0.139307*alpha/(b0*seq_len(N)*(log(pmax(seq_len(N),2)))^3)
     } else if (any(xi<0)){
         stop("All elements of xi must be non-negative.")
     } else if(sum(xi)>alpha/b0){
@@ -136,14 +140,21 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
     }
 
     if(random){
-        Nbatch <- length(unique(d$date))
+
+        if(exists(".Random.seed", where = .GlobalEnv)){
+            old.seed <- .Random.seed
+            on.exit({ .Random.seed <<- old.seed })
+        } else {
+            on.exit({set.seed(NULL)})
+        }
+
         set.seed(1)
 
-    for(i in 1:Nbatch){
-        d.temp <- d[d$date == unique(d$date)[i],]
-        d.temp <- d.temp[sample.int(length(d.temp$date)),]
-        d[d$date == unique(d$date)[i],] <- d.temp
-        }
+        lst <- lapply(split(d, d$date),
+                function(x){x[sample.int(length(x$date)),]})
+
+        d <- do.call('rbind', lst)
+        rownames(d) <- NULL
     }
 
     pval <- d$pval
@@ -158,15 +169,21 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
     R[2] <- pval[1] <= alphai[1]
     W[2] <- w0 - phi + R[2]*b0
 
-    for (i in 2:N){
-        tau <- max(which(R[1:i] == 1))
+    if(N == 1){
+        R <- R[2]
+        d.out <- data.frame(d, alphai, R)
+        return(d.out)
+    }
+
+    for (i in (seq_len(N-1)+1)){
+        tau <- max(which(R[seq_len(i)] == 1))
         alphai[i] <- phi <- xi[i]*W[tau]
 
         R[i+1] <- pval[i] <= alphai[i]
         W[i+1] <- W[i] - phi + R[i+1]*b0
     }
 
-    R <- R[2:(N+1)]
+    R <- R[(seq_len(N)+1)]
     d.out <- data.frame(d, alphai, R)
 
     return(d.out)

@@ -88,6 +88,10 @@
 LOND <- function(d, alpha=0.05, beta, dep=FALSE, random=TRUE,
                 date.format="%Y-%m-%d") {
 
+    if(!(is.data.frame(d))){
+        stop("d must be a dataframe.")
+    }
+
     if(length(d$id) == 0){
         stop("The dataframe d is missing a column 'id' of identifiers.")
     } else if(length(d$pval) == 0){
@@ -104,7 +108,7 @@ LOND <- function(d, alpha=0.05, beta, dep=FALSE, random=TRUE,
         d <- d[order(as.Date(d$date, format = date.format)),]
     }
 
-    if(alpha<0 || alpha>1 ){
+    if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
 
@@ -123,7 +127,8 @@ LOND <- function(d, alpha=0.05, beta, dep=FALSE, random=TRUE,
     N <- length(d$pval)
 
     if(missing(beta)){
-        beta <- 0.07720838*alpha*log(pmax(1:N,2))/((1:N)*exp(sqrt(log(1:N))))
+        beta <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
+                (seq_len(N)*exp(sqrt(log(seq_len(N)))))
     } else if (any(beta<0)){
         stop("All elements of beta must be non-negative.")
     } else if(sum(beta)>alpha){
@@ -131,20 +136,26 @@ LOND <- function(d, alpha=0.05, beta, dep=FALSE, random=TRUE,
     }
 
     if(dep) {
-        for(i in 1:N){
-            beta[i] <- beta[i]/sum(1/(1:i))
-        }
+        den <- cumsum(1 / seq_len(N))
+        beta <- beta / den
     }
 
     if(random){
-        Nbatch <- length(unique(d$date))
+
+        if(exists(".Random.seed", where = .GlobalEnv)){
+            old.seed <- .Random.seed
+            on.exit({ .Random.seed <<- old.seed })
+        } else {
+            on.exit({set.seed(NULL)})
+        }
+
         set.seed(1)
 
-        for(i in 1:Nbatch){
-            d.temp <- d[d$date == unique(d$date)[i],]
-            d.temp <- d.temp[sample.int(length(d.temp$date)),]
-            d[d$date == unique(d$date)[i],] <- d.temp
-        }
+        lst <- lapply(split(d, d$date),
+                function(x){x[sample.int(length(x$date)),]})
+
+        d <- do.call('rbind', lst)
+        rownames(d) <- NULL
     }
 
     pval <- d$pval
@@ -155,10 +166,15 @@ LOND <- function(d, alpha=0.05, beta, dep=FALSE, random=TRUE,
     R[1] <- pval[1] <= alphai[1]
     D[1] <- R[1]
 
-    for (i in 2:N){
+    if(N == 1){
+        d.out <- data.frame(d, alphai, R)
+        return(d.out)
+    }
+
+    for (i in (seq_len(N-1)+1)){
         alphai[i] <- beta[i]*(D[i-1]+1)
         R[i] <- pval[i] <= alphai[i]
-        D[i] <- sum(R[1:i])
+        D[i] <- sum(R[seq_len(i)])
     }
 
     d.out <- data.frame(d, alphai, R)

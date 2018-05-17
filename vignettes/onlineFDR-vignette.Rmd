@@ -2,7 +2,7 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson and Natasha A. Karp"
-date: '`r Sys.Date()`'
+date: "2018-05-16"
 output:
   html_document:
     toc: yes
@@ -48,9 +48,9 @@ FDR in an online manner (Javanmard and Montanari (2015), Javanmard and Montanari
 (2017)).   The LOND algorithm sets the significance level $\alpha_i$  based on
 the number of discoveries made so far, while LORD sets them according to the
 time of the most recent discovery. This package, onlineFDR, implements these new
-algorithms and provides wrappers to apply them to a historic dataset or a
-growing dataset. As a comparison,  we have also provided a wrapper for
-implementation of a method based on the Bonferroni approach adapted to an
+algorithms and provides wrapper functions to apply them to a historic dataset or
+a growing dataset. As a comparison,  we have also provided a wrapper function 
+for implementation of a method based on the Bonferroni approach adapted to an
 online scenario. This vignette explains the use of the package and demonstrates
 a typical workflow.
 
@@ -61,25 +61,25 @@ a typical workflow.
 1. A dataset with three columns (an identifier ('id'), date ('date') and
 p-value ('pval')) is passed to one of the onlineFDR wrapper functions.
 
-2. The function orders the information by date order.  If there are multiple
-statistical tests with the same date, within each batch these dates are
-randomised by default.  
+2. The function orders the information by date.  If there are multiple p-values
+with the same date (i.e. the same batch), the order of the p-values within each
+batch is randomised by default.  
 
-3. The function then calculates, for each statistical test, the adjusted test
-level (`alphai`) at which the corresponding p-value would be declared
+3. For each hypothesis test, an adjusted test level (`alphai`) is calculated,
+which gives the threshold at which the corresponding p-value would be declared
 significant.   
 
-4. Using the p-values provided and the alphai, the wrapper calculates an
-indicator function of discoveries (`R`), where `R[i] = 1` corresponds to
-hypothesis i being rejected, otherwise `R[i] = 0`.  
+4. Using the p-values provided and the alphai, an indicator of discoveries (`R`)
+is calculated, where `R[i] = 1` corresponds to hypothesis i being rejected
+(and `R[i] = 0` otherwise).  
 
 5. A dataframe is returned, reordered by batch, with the original data and the
 newly calculated `alphai` and `R`. 
 
 6. For simplicity, as the dataset grows the new larger dataset should be passed
-to the wrapper and the values recalculated repeating steps 1 to 5. Note that the
-randomisation of the data within the previous batches will remain the same to
-allow for reproducibility of the results.
+to the wrapper function and the values recalculated repeating steps 1 to 5. Note
+that the randomisation of the data within the previous batches will remain the
+same to allow for reproducibility of the results.
 
 
 ### Outline of the four functions available
@@ -109,7 +109,7 @@ Implements online FDR control using a Bonferroni-like test.
 
 Here we show the steps to achieve online FDR control of a growing dataset. First
 you load a dataframe with the three columns: an identifier ('id'), date ('date')
-and p-value ('pval'), and then call the wrapper of interest. 
+and p-value ('pval'), and then call the wrapper function of interest. 
 
 ```{r}
 library(onlineFDR)
@@ -143,7 +143,7 @@ in  (Burgon *et al.*, 2010).
 
 ### Understanding the output
 
-For each statistical test, the wrapper calculates the adjusted test level
+For each hypothesis test, the functions calculate the adjusted test level
 (`alphai`) at which the corresponding p-value would be declared significant.   
 
 Also calculated is an indicator function of discoveries (`R`), where `R[i] = 1`
