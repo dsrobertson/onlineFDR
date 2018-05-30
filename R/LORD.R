@@ -58,9 +58,6 @@
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
-#' @param seed Optional seed value for the randomisation of the batches. Should
-#' be a single value, interpreted as an integer.
-#'
 #'
 #' @return
 #' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -98,14 +95,14 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
 #' LORD(sample.df, random=FALSE)
-#' LORD(sample.df, version=2, seed=1)
-#' LORD(sample.df, alpha=0.1, w0=0.05, seed=1)
+#' set.seed(1); LORD(sample.df, version=2)
+#' set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 #'
 #'
 #' @export
 
 LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
-                random=TRUE, date.format="%Y-%m-%d", seed=NULL) {
+                random=TRUE, date.format="%Y-%m-%d") {
 
     if(!(is.data.frame(d))){
         stop("d must be a dataframe.")
@@ -131,11 +128,7 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
         stop("alpha must be between 0 and 1.")
     }
 
-    if(!(is.null(seed)) && !(is.numeric(seed))){
-        stop("seed must be a valid integer.")
-    }
-
-    if(!(version %in% 1:3)){
+    if(!(version %in% c(1,2,3))){
         stop("version must be 1, 2 or 3.")
     }
 
@@ -171,7 +164,7 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
     }
 
     if(random){
-        d <- randBatch(d, seed)
+        d <- randBatch(d)
     }
 
     alphai <- rep(0, N)

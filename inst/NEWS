@@ -1,10 +1,9 @@
 # A NEWS File to document package updates
 
-CHANGES IN VERSION 0.99.6
+CHANGES IN VERSION 0.99.7
 -----------------------
 MODIFICATIONS:
 
-    * added optional seed argument to functions to set the seed for the randomisation of the batches
     * randomisation of batches now implemented via the randBatch helper function
     * updated references
     * updated vignette
@@ -19,5 +18,4 @@ MODIFICATIONS:
     * vectorise part of the LOND function
     * replace 1:N with seq_len(N)
     * applied consistent formatting & indentation
-    * internal set.seed() implementation now robust to random number state
     * added new tests

@@ -18,6 +18,8 @@ test.df4 <- data.frame(
     pval = c(1e-04, 1e-04, 0.1)
 )
 
+set.seed(1); test4 <- bonfInfinite(test.df4)$R
+
 
 test_that("Errors for edge cases", {
     expect_error(bonfInfinite(1e-04), "d must be a dataframe.")
@@ -28,5 +30,5 @@ test_that("Errors for edge cases", {
 
 test_that("Correct rejections for sample dataframes", {
     expect_identical(bonfInfinite(test.df3)$R, 1)
-    expect_identical(bonfInfinite(test.df4, seed=1)$R, c(1,0,1))
+    expect_identical(test4, c(1,0,1))
 })

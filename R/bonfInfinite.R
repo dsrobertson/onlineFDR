@@ -34,9 +34,6 @@
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
-#' @param seed Optional seed value for the randomisation of the batches. Should
-#' be a single value, interpreted as an integer.
-#'
 #'
 #' @return
 #' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -66,15 +63,15 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
-#' bonfInfinite(sample.df, seed=1)
+#' set.seed(1); bonfInfinite(sample.df)
 #' bonfInfinite(sample.df, random=FALSE)
-#' bonfInfinite(sample.df, alpha=0.1, seed=1)
+#' set.seed(1); bonfInfinite(sample.df, alpha=0.1)
 #'
 #'
 #'@export
 
 bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
-                        date.format="%Y-%m-%d", seed=NULL) {
+                        date.format="%Y-%m-%d") {
 
     if(!(is.data.frame(d))){
         stop("d must be a dataframe.")
@@ -98,10 +95,6 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
 
     if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
-    }
-
-    if(!(is.null(seed)) && !(is.numeric(seed))){
-        stop("seed must be a valid integer.")
     }
 
     if(anyNA(d$pval)){
@@ -129,7 +122,7 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     }
 
     if(random){
-        d <- randBatch(d, seed)
+        d <- randBatch(d)
     }
 
     pval <- d$pval
