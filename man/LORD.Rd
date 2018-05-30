@@ -5,7 +5,7 @@
 \title{Online FDR control based on recent discovery}
 \usage{
 LORD(d, alpha = 0.05, gammai, version = 3, w0 = alpha/10, b0 = alpha -
-  w0, random = TRUE, date.format = "\%Y-\%m-\%d")
+  w0, random = TRUE, date.format = "\%Y-\%m-\%d", seed = NULL)
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
@@ -16,7 +16,7 @@ are treated as being ordered sequentially with no batches.}
 is 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided as
-proposed by Javanmard and Montanari (2017), equation 31.}
+proposed by Javanmard and Montanari (2018), equation 31.}
 
 \item{version}{An integer from 1 to 3 giving the version of LORD to use.
 Defaults to 3.}
@@ -31,6 +31,9 @@ p-values in each batch (i.e. those that have exactly the same date) is
 randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
+
+\item{seed}{Optional seed value for the randomisation of the batches. Should
+be a single value, interpreted as an integer.}
 }
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -43,7 +46,7 @@ p-value is less than or equal to \eqn{\alpha_i}, in which case
 \description{
 Implements the LORD procedure for online FDR control where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by
-Javanmard and Montanari (2017).
+Javanmard and Montanari (2018).
 }
 \details{
 The function takes as its input a dataframe with three columns: an identifier
@@ -57,7 +60,7 @@ significance level \eqn{\alpha}, we choose a sequence of
 non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
 \eqn{\gamma_i \geq \gamma_j} for \eqn{i \leq j}.
 
-Javanmard and Montanari (2017) present three versions of LORD which
+Javanmard and Montanari (2018) present three versions of LORD which
 differ in the way the adjusted test levels \eqn{\alpha_i} are calculated. The
 test levels for LORD 1 are based on the time of the last discovery
 (i.e. hypothesis rejection), LORD 2 are based on all previous discovery
@@ -74,7 +77,7 @@ corresponding to true nulls are mutually independent, and independent from
 the non-null p-values.
 
 Further details of the LORD procedure can be found in Javanmard and
-Montanari (2017).
+Montanari (2018).
 }
 \examples{
 sample.df <- data.frame(
@@ -87,19 +90,19 @@ date = as.Date(c(rep("2014-12-01",3),
                 "2016-11-12",
                 rep("2017-03-27",4))),
 pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
-        3.60E-05, 0.79149, 0.27201, 0.28295, 7.59E-08,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 LORD(sample.df, random=FALSE)
-LORD(sample.df, version=2)
-LORD(sample.df, alpha=0.1, w0=0.05)
+LORD(sample.df, version=2, seed=1)
+LORD(sample.df, alpha=0.1, w0=0.05, seed=1)
+
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2017) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Accepted for publication
-in Annals of Statistics}, available at
-\url{https://arxiv.org/abs/1603.09000}.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
+46(2):526-554.
 }
 \seealso{
 \code{\link{LORDdep}} uses a modified version of the LORD algorithm that is

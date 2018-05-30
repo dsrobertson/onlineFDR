@@ -5,7 +5,7 @@
 \title{Online FDR control based on number of discoveries}
 \usage{
 LOND(d, alpha = 0.05, beta, dep = FALSE, random = TRUE,
-  date.format = "\%Y-\%m-\%d")
+  date.format = "\%Y-\%m-\%d", seed = NULL)
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
@@ -16,7 +16,7 @@ are treated as being ordered sequentially with no batches.}
 is 0.05.}
 
 \item{beta}{Optional vector of \eqn{\beta_i}. A default is provided as
-proposed by Javanmard and Montanari (2017), equation 31.}
+proposed by Javanmard and Montanari (2018), equation 31.}
 
 \item{dep}{Logical. If \code{TRUE}, runs the modified LOND algorithm which
 guarantees FDR control for \emph{dependent} p-values.
@@ -27,6 +27,9 @@ p-values in each batch (i.e. those that have exactly the same date) is
 randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
+
+\item{seed}{Optional seed value for the randomisation of the batches. Should
+be a single value, interpreted as an integer.}
 }
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -74,20 +77,20 @@ date = as.Date(c(rep("2014-12-01",3),
                 "2016-11-12",
                 rep("2017-03-27",4))),
 pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
-        3.60E-05, 0.79149, 0.27201, 0.28295, 7.59E-08,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
-LOND(sample.df)
+LOND(sample.df, seed=1)
 LOND(sample.df, random=FALSE)
-LOND(sample.df, alpha=0.1)
+LOND(sample.df, alpha=0.1, seed=1)
+
 
 }
 \references{
 Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
 Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
 
-Javanmard, A. and Montanari, A. (2017) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Accepted for publication
-in Annals of Statistics}, available at
-\url{https://arxiv.org/abs/1603.09000}.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
+46(2):526-554.
 }

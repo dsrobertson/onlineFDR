@@ -5,7 +5,7 @@
 \title{Online FDR control based on recent discovery for dependent p-values}
 \usage{
 LORDdep(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0,
-  random = TRUE, date.format = "\%Y-\%m-\%d")
+  random = TRUE, date.format = "\%Y-\%m-\%d", seed = NULL)
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
@@ -16,7 +16,7 @@ are treated as being ordered sequentially with no batches.}
 0.05.}
 
 \item{xi}{Optional vector of \eqn{\xi_i}. A default is provided to satisfy
-the condition given in Javanmard and Montanari (2017), example 3.8.}
+the condition given in Javanmard and Montanari (2018), example 3.7.}
 
 \item{w0}{Initial `wealth' of the procedure. Defaults to \eqn{\alpha/10}.}
 
@@ -28,6 +28,9 @@ p-values in each batch (i.e. those that have exactly the same date) is
 randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
+
+\item{seed}{Optional seed value for the randomisation of the batches. Should
+be a single value, interpreted as an integer.}
 }
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -40,7 +43,7 @@ p-value is less than or equal to \eqn{\alpha_i}, in which case
 \description{
 Implements the LORD procedure for online FDR control for dependent p-values,
 where LORD stands for (significance) Levels based On Recent Discovery, as
-presented by Javanmard and Montanari (2017).
+presented by Javanmard and Montanari (2018).
 }
 \details{
 The function takes as its input a dataframe with three columns: an identifier
@@ -52,7 +55,7 @@ sequentially with no batches.
 This modified LORD procedure controls FDR for dependent p-values. Given an
 overall significance level \eqn{\alpha}, we choose a sequence of
 non-negative numbers \eqn{\xi_i} such that they satisfy a condition given
-in Javanmard and Montanari (2017), example 3.8.
+in Javanmard and Montanari (2018), example 3.8.
 
 The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where
 \eqn{w_0 \ge 0} represents the intial `wealth' and \eqn{b_0 > 0} represents
@@ -60,7 +63,7 @@ the `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha}
 for FDR control to hold.
 
 Further details of the modified LORD procedure can be found in Javanmard and
-Montanari (2017).
+Montanari (2018).
 }
 \examples{
 sample.df <- data.frame(
@@ -73,17 +76,17 @@ date = as.Date(c(rep("2014-12-01",3),
                 "2016-11-12",
                 rep("2017-03-27",4))),
 pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
-        3.60E-05, 0.79149, 0.27201, 0.28295, 7.59E-08,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
-LORDdep(sample.df)
+LORDdep(sample.df, seed=1)
 LORDdep(sample.df, random=FALSE)
-LORDdep(sample.df, alpha=0.1, w0=0.05)
+LORDdep(sample.df, alpha=0.1, w0=0.05, seed=1)
+
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2017) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Accepted for publication
-in Annals of Statistics}, available at
-\url{https://arxiv.org/abs/1603.09000}.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
+46(2):526-554.
 }

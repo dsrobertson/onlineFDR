@@ -2,7 +2,7 @@
 #'
 #' Implements the LORD procedure for online FDR control for dependent p-values,
 #' where LORD stands for (significance) Levels based On Recent Discovery, as
-#' presented by Javanmard and Montanari (2017).
+#' presented by Javanmard and Montanari (2018).
 #'
 #' The function takes as its input a dataframe with three columns: an identifier
 #' (`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
@@ -13,7 +13,7 @@
 #' This modified LORD procedure controls FDR for dependent p-values. Given an
 #' overall significance level \eqn{\alpha}, we choose a sequence of
 #' non-negative numbers \eqn{\xi_i} such that they satisfy a condition given
-#' in Javanmard and Montanari (2017), example 3.8.
+#' in Javanmard and Montanari (2018), example 3.8.
 #'
 #' The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where
 #' \eqn{w_0 \ge 0} represents the intial `wealth' and \eqn{b_0 > 0} represents
@@ -21,7 +21,7 @@
 #' for FDR control to hold.
 #'
 #' Further details of the modified LORD procedure can be found in Javanmard and
-#' Montanari (2017).
+#' Montanari (2018).
 #'
 #'
 #' @param d Dataframe with three columns: an identifier (`id'), date (`date')
@@ -32,7 +32,7 @@
 #' 0.05.
 #'
 #' @param xi Optional vector of \eqn{\xi_i}. A default is provided to satisfy
-#' the condition given in Javanmard and Montanari (2017), example 3.8.
+#' the condition given in Javanmard and Montanari (2018), example 3.7.
 #'
 #' @param w0 Initial `wealth' of the procedure. Defaults to \eqn{\alpha/10}.
 #' @param b0 The `payout' for rejecting a hypothesis. Defaults to
@@ -43,6 +43,9 @@
 #' randomised.
 #'
 #' @param date.format Optional string giving the format that is used for dates.
+#'
+#' @param seed Optional seed value for the randomisation of the batches. Should
+#' be a single value, interpreted as an integer.
 #'
 #'
 #' @return
@@ -55,10 +58,9 @@
 #'
 #'
 #' @references
-#' Javanmard, A. and Montanari, A. (2017) Online Rules for Control of False
-#' Discovery Rate and False Discovery Exceedance. \emph{Accepted for publication
-#' in Annals of Statistics}, available at
-#' \url{https://arxiv.org/abs/1603.09000}.
+#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+#' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
+#' 46(2):526-554.
 #'
 #'
 #' @examples
@@ -72,16 +74,18 @@
 #'                 "2016-11-12",
 #'                 rep("2017-03-27",4))),
 #' pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
-#'         3.60E-05, 0.79149, 0.27201, 0.28295, 7.59E-08,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
-#' LORDdep(sample.df)
+#' LORDdep(sample.df, seed=1)
 #' LORDdep(sample.df, random=FALSE)
-#' LORDdep(sample.df, alpha=0.1, w0=0.05)
+#' LORDdep(sample.df, alpha=0.1, w0=0.05, seed=1)
 #'
+#'
+#' @export
 
 LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
-                    date.format="%Y-%m-%d") {
+                    date.format="%Y-%m-%d", seed=NULL) {
 
     if(!(is.data.frame(d))){
         stop("d must be a dataframe.")
@@ -107,9 +111,13 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
         stop("alpha must be between 0 and 1.")
     }
 
+    if(!(is.null(seed)) && !(is.numeric(seed))){
+        stop("seed must be a valid integer.")
+    }
+
     if(anyNA(d$pval)){
         warning("Missing p-values were ignored.")
-        d <- na.omit(d)
+        d <- stats::na.omit(d)
     }
 
     if(!(is.numeric(d$pval))){
@@ -140,21 +148,7 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
     }
 
     if(random){
-
-        if(exists(".Random.seed", where = .GlobalEnv)){
-            old.seed <- .Random.seed
-            on.exit({ .Random.seed <<- old.seed })
-        } else {
-            on.exit({set.seed(NULL)})
-        }
-
-        set.seed(1)
-
-        lst <- lapply(split(d, d$date),
-                function(x){x[sample.int(length(x$date)),]})
-
-        d <- do.call('rbind', lst)
-        rownames(d) <- NULL
+        d <- randBatch(d, seed)
     }
 
     pval <- d$pval

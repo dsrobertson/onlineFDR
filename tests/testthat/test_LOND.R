@@ -32,6 +32,6 @@ test_that("LOND gives same results when dep = TRUE for N = 1", {
 
 test_that("Correct rejections for sample dataframes", {
     expect_identical(LOND(test.df3)$R, 1)
-    expect_identical(LOND(test.df4)$R, c(1,0,1))
-    expect_identical(LOND(test.df4, dep=TRUE)$R, c(1,0,0))
+    expect_identical(LOND(test.df4, seed=1)$R, c(1,0,1))
+    expect_identical(LOND(test.df4, dep=TRUE, seed=1)$R, c(1,0,0))
 })
