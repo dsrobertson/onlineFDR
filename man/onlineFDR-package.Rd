@@ -17,12 +17,12 @@ are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 0.99.4\cr
-Date: \tab 2018-05-17\cr
+Version: \tab 0.99.6\cr
+Date: \tab 2018-05-30\cr
 License: \tab GPL-3 \cr
 }
 
-Javanmard and Montanari (2015, 2017) proposed two methods for online FDR
+Javanmard and Montanari (2015, 2018) proposed two methods for online FDR
 control. The first is LORD, which stands for (significance)
 Levels based On Recent Discovery and is implemented by the function
 \code{\link{LORD}}. \code{\link{LORDdep}} provides a modified version
@@ -38,17 +38,16 @@ by the function \code{\link{bonfInfinite}}. This procedure is also valid
 for dependent p-values.
 
 Further details on all these procedures can be found in Javanmard and
-Montanari (2015, 2017).
+Montanari (2015, 2018).
 }
 
 \references{
 Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
 Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
 
-Javanmard, A. and Montanari, A. (2017) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Accepted for publication
-in Annals of Statistics}, available at
-\url{https://arxiv.org/abs/1603.09000}.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
+46(2):526-554.
 }
 \author{
 David Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}), Adel

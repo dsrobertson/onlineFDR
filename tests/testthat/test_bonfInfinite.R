@@ -28,5 +28,5 @@ test_that("Errors for edge cases", {
 
 test_that("Correct rejections for sample dataframes", {
     expect_identical(bonfInfinite(test.df3)$R, 1)
-    expect_identical(bonfInfinite(test.df4)$R, c(1,0,1))
+    expect_identical(bonfInfinite(test.df4, seed=1)$R, c(1,0,1))
 })

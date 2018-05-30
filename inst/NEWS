@@ -1,6 +1,16 @@
 # A NEWS File to document package updates
 
-CHANGES IN VERSION 0.99.4
+CHANGES IN VERSION 0.99.6
+-----------------------
+MODIFICATIONS:
+
+    * added optional seed argument to functions to set the seed for the randomisation of the batches
+    * randomisation of batches now implemented via the randBatch helper function
+    * updated references
+    * updated vignette
+
+
+CHANGES IN VERSION 0.99.5
 -----------------------
 MODIFICATIONS:
 

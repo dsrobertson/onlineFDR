@@ -2,7 +2,7 @@
 #'
 #' Implements the LORD procedure for online FDR control where LORD stands for
 #' (significance) Levels based On Recent Discovery, as presented by
-#' Javanmard and Montanari (2017).
+#' Javanmard and Montanari (2018).
 #'
 #' The function takes as its input a dataframe with three columns: an identifier
 #' (`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
@@ -15,7 +15,7 @@
 #' non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
 #' \eqn{\gamma_i \geq \gamma_j} for \eqn{i \leq j}.
 #'
-#' Javanmard and Montanari (2017) present three versions of LORD which
+#' Javanmard and Montanari (2018) present three versions of LORD which
 #' differ in the way the adjusted test levels \eqn{\alpha_i} are calculated. The
 #' test levels for LORD 1 are based on the time of the last discovery
 #' (i.e. hypothesis rejection), LORD 2 are based on all previous discovery
@@ -32,7 +32,7 @@
 #' the non-null p-values.
 #'
 #' Further details of the LORD procedure can be found in Javanmard and
-#' Montanari (2017).
+#' Montanari (2018).
 #'
 #'
 #' @param d Dataframe with three columns: an identifier (`id'), date (`date')
@@ -43,7 +43,7 @@
 #' is 0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided as
-#' proposed by Javanmard and Montanari (2017), equation 31.
+#' proposed by Javanmard and Montanari (2018), equation 31.
 #'
 #' @param version An integer from 1 to 3 giving the version of LORD to use.
 #' Defaults to 3.
@@ -58,6 +58,9 @@
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
+#' @param seed Optional seed value for the randomisation of the batches. Should
+#' be a single value, interpreted as an integer.
+#'
 #'
 #' @return
 #' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -69,10 +72,9 @@
 #'
 #'
 #' @references
-#' Javanmard, A. and Montanari, A. (2017) Online Rules for Control of False
-#' Discovery Rate and False Discovery Exceedance. \emph{Accepted for publication
-#' in Annals of Statistics}, available at
-#' \url{https://arxiv.org/abs/1603.09000}.
+#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+#' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
+#' 46(2):526-554.
 #'
 #'
 #' @seealso
@@ -92,16 +94,18 @@
 #'                 "2016-11-12",
 #'                 rep("2017-03-27",4))),
 #' pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
-#'         3.60E-05, 0.79149, 0.27201, 0.28295, 7.59E-08,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
 #' LORD(sample.df, random=FALSE)
-#' LORD(sample.df, version=2)
-#' LORD(sample.df, alpha=0.1, w0=0.05)
+#' LORD(sample.df, version=2, seed=1)
+#' LORD(sample.df, alpha=0.1, w0=0.05, seed=1)
 #'
+#'
+#' @export
 
 LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
-                random=TRUE, date.format="%Y-%m-%d") {
+                random=TRUE, date.format="%Y-%m-%d", seed=NULL) {
 
     if(!(is.data.frame(d))){
         stop("d must be a dataframe.")
@@ -127,13 +131,17 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
         stop("alpha must be between 0 and 1.")
     }
 
+    if(!(is.null(seed)) && !(is.numeric(seed))){
+        stop("seed must be a valid integer.")
+    }
+
     if(!(version %in% 1:3)){
         stop("version must be 1, 2 or 3.")
     }
 
     if(anyNA(d$pval)){
         warning("Missing p-values were ignored.")
-        d <- na.omit(d)
+        d <- stats::na.omit(d)
     }
 
     if(!(is.numeric(d$pval))){
@@ -163,21 +171,7 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0=alpha/10, b0=alpha-w0,
     }
 
     if(random){
-
-        if(exists(".Random.seed", where = .GlobalEnv)){
-            old.seed <- .Random.seed
-            on.exit({ .Random.seed <<- old.seed })
-        } else {
-            on.exit({set.seed(NULL)})
-        }
-
-        set.seed(1)
-
-        lst <- lapply(split(d, d$date),
-                function(x){x[sample.int(length(x$date)),]})
-
-        d <- do.call('rbind', lst)
-        rownames(d) <- NULL
+        d <- randBatch(d, seed)
     }
 
     alphai <- rep(0, N)

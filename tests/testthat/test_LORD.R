@@ -33,7 +33,7 @@ test_that("LORD gives same results for all three versions when N = 1", {
 
 test_that("Correct rejections for sample dataframes", {
     expect_identical(LORD(test.df3)$R, 1)
-    expect_identical(LORD(test.df4)$R, c(1,0,1))
-    expect_identical(LORD(test.df4, version=2)$R, c(1,0,1))
-    expect_identical(LORD(test.df4, version=1)$R, c(1,0,0))
+    expect_identical(LORD(test.df4, seed=1)$R, c(1,0,1))
+    expect_identical(LORD(test.df4, version=2, seed=1)$R, c(1,0,1))
+    expect_identical(LORD(test.df4, version=1, seed=1)$R, c(1,0,0))
 })
