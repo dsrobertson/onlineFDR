@@ -18,6 +18,8 @@ test.df4 <- data.frame(
     pval = c(1e-07, 1e-07, 0.1)
 )
 
+set.seed(1); test4 <- LORDdep(test.df4)$R
+
 
 test_that("Errors for edge cases", {
     expect_error(LORDdep(1e-04), "d must be a dataframe.")
@@ -28,5 +30,5 @@ test_that("Errors for edge cases", {
 
 test_that("Correct rejections for sample dataframes", {
     expect_identical(LORDdep(test.df3)$R, 1)
-    expect_identical(LORDdep(test.df4, seed=1)$R, c(1,0,1))
+    expect_identical(test4, c(1,0,1))
 })

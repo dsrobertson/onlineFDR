@@ -5,7 +5,7 @@
 \title{Online FDR control based on recent discovery}
 \usage{
 LORD(d, alpha = 0.05, gammai, version = 3, w0 = alpha/10, b0 = alpha -
-  w0, random = TRUE, date.format = "\%Y-\%m-\%d", seed = NULL)
+  w0, random = TRUE, date.format = "\%Y-\%m-\%d")
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
@@ -31,9 +31,6 @@ p-values in each batch (i.e. those that have exactly the same date) is
 randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
-
-\item{seed}{Optional seed value for the randomisation of the batches. Should
-be a single value, interpreted as an integer.}
 }
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -94,8 +91,8 @@ pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 LORD(sample.df, random=FALSE)
-LORD(sample.df, version=2, seed=1)
-LORD(sample.df, alpha=0.1, w0=0.05, seed=1)
+set.seed(1); LORD(sample.df, version=2)
+set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 
 
 }

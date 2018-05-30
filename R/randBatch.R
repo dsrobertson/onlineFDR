@@ -1,8 +1,4 @@
-randBatch <- function(d, seed) {
-
-    if(!(is.null(seed))){
-        set.seed(seed)
-    }
+randBatch <- function(d) {
 
     lst <- lapply(split(seq_len(nrow(d)), d$date), function(x) {
         x[sample.int(length(x))]
@@ -10,7 +6,5 @@ randBatch <- function(d, seed) {
 
     d <- d[unlist(lst, use.names = FALSE),]
     rownames(d) <- NULL
-
     return(d)
-
 }

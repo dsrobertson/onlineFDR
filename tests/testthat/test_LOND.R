@@ -18,6 +18,9 @@ test.df4 <- data.frame(
     pval = c(1e-07, 6e-04, 0.1)
 )
 
+set.seed(1); test4 <- LOND(test.df4)$R
+set.seed(1); test4dep <- LOND(test.df4, dep=TRUE)$R
+
 
 test_that("Errors for edge cases", {
     expect_error(LOND(1e-04), "d must be a dataframe.")
@@ -32,6 +35,6 @@ test_that("LOND gives same results when dep = TRUE for N = 1", {
 
 test_that("Correct rejections for sample dataframes", {
     expect_identical(LOND(test.df3)$R, 1)
-    expect_identical(LOND(test.df4, seed=1)$R, c(1,0,1))
-    expect_identical(LOND(test.df4, dep=TRUE, seed=1)$R, c(1,0,0))
+    expect_identical(test4, c(1,0,1))
+    expect_identical(test4dep, c(1,0,0))
 })
