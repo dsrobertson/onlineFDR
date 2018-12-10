@@ -1,5 +1,5 @@
 Package: onlineFDR
-Version: 1.2.0
+Version: 1.1.1
 Date: 2018-12-10
 Title: Online FDR control
 Authors@R: c(person("David", "Robertson", role = c("aut", "cre"),
