@@ -48,9 +48,9 @@
 #' @return
 #' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
 #' be reordered if there are batches and \code{random = TRUE}), the
-#' LOND-adjusted test levels \eqn{\alpha_i} and the indicator function of
-#' discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-#' p-value is less than or equal to \eqn{\alpha_i}, in which case
+#' LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+#' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
+#' \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
 #' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'

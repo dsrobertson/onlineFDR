@@ -29,8 +29,8 @@ randomised.}
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
 be reordered if there are batches and \code{random = TRUE}),
-the test levels \code{alphai} and the indicator function of
-discoveries \code{R}, where \code{R[i] = 1} corresponds to
+the adjusted signifcance thresholds \code{alphai} and the indicator function
+of discoveries \code{R}, where \code{R[i] = 1} corresponds to
 hypothesis \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 }
 \description{

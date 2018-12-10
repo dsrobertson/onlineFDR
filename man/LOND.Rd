@@ -31,9 +31,9 @@ randomised.}
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
 be reordered if there are batches and \code{random = TRUE}), the
-LOND-adjusted test levels \eqn{\alpha_i} and the indicator function of
-discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-p-value is less than or equal to \eqn{\alpha_i}, in which case
+LOND-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
+\eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
 \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
@@ -51,7 +51,8 @@ sequentially with no batches.
 The LOND algorithm controls FDR for independent p-values. Given an overall
 significance level \eqn{\alpha}, we choose a sequence of
 non-negative numbers \eqn{\beta_i} such that they sum to \eqn{\alpha}. The
-values of the adjusted test levels \eqn{\alpha_i} are chosen as follows:
+values of the adjusted significance thresholds \eqn{\alpha_i} are chosen as
+follows:
 \deqn{\alpha_i = (D(i-1) + 1)\beta_i}
 where \eqn{D(n)} denotes the number of discoveries in the first \eqn{n}
 hypotheses.

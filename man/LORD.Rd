@@ -4,8 +4,8 @@
 \alias{LORD}
 \title{Online FDR control based on recent discovery}
 \usage{
-LORD(d, alpha = 0.05, gammai, version = 3, w0 = alpha/10, b0 = alpha -
-  w0, random = TRUE, date.format = "\%Y-\%m-\%d")
+LORD(d, alpha = 0.05, gammai, version = 3, w0, b0, random = TRUE,
+  date.format = "\%Y-\%m-\%d")
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
@@ -18,12 +18,12 @@ is 0.05.}
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided as
 proposed by Javanmard and Montanari (2018), equation 31.}
 
-\item{version}{An integer from 1 to 3 giving the version of LORD to use.
-Defaults to 3.}
+\item{version}{Either an integer from 1 to 3, or the character '++'. This 
+specifies the version of LORD to use, and defaults to 3.}
 
-\item{w0}{Initial `wealth' of the procedure. Defaults to \eqn{\alpha/10}.}
+\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
 
-\item{b0}{The 'payout' for rejecting a hypothesis. Defaults to
+\item{b0}{The 'payout' for rejecting a hypothesis in LORD 1/2/3. Defaults to
 \eqn{\alpha - w_0}.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
@@ -35,15 +35,15 @@ randomised.}
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
 be reordered if there are batches and \code{random = TRUE}), the
-LOND-adjusted test levels \eqn{\alpha_i} and the indicator function of
-discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-p-value is less than or equal to \eqn{\alpha_i}, in which case
+LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator 
+function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
+\eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
 \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the LORD procedure for online FDR control where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by
-Javanmard and Montanari (2018).
+Javanmard and Montanari (2018) and Ramdas et al. (2017).
 }
 \details{
 The function takes as its input a dataframe with three columns: an identifier
@@ -58,23 +58,24 @@ non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
 \eqn{\gamma_i \geq \gamma_j} for \eqn{i \leq j}.
 
 Javanmard and Montanari (2018) present three versions of LORD which
-differ in the way the adjusted test levels \eqn{\alpha_i} are calculated. The
-test levels for LORD 1 are based on the time of the last discovery
-(i.e. hypothesis rejection), LORD 2 are based on all previous discovery
-times, and LORD 3 are based on the time of the last discovery as well as
-the 'wealth' accumulated at that time.
+differ in the way the adjusted significance thresholds \eqn{\alpha_i} are
+calculated. The significance thresholds for LORD 1 are based on the time of
+the last discovery (i.e. hypothesis rejection), LORD 2 are based on all
+previous discovery times, and LORD 3 are based on the time of the last
+discovery as well as the 'wealth' accumulated at that time. LORD 2 was
+extended by Ramdas et al. (2017) to give a procedure called LORD++.
 
-LORD depends on constants \eqn{w_0} and \eqn{b_0}, where \eqn{w_0 \ge 0}
-represents the intial `wealth' of the procedure and \eqn{b_0 > 0} represents
-the `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha}
-for FDR control to hold.
+LORD depends on constants \eqn{w_0} and \eqn{b_0}, where
+\eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the procedure
+and \eqn{b_0 > 0} represents the `payout' for rejecting a hypothesis. 
+We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold for LORD 1/2/3.
 
 Note that FDR control also holds for the LORD procedure if only the p-values
 corresponding to true nulls are mutually independent, and independent from
 the non-null p-values.
 
-Further details of the LORD procedure can be found in Javanmard and
-Montanari (2018).
+Further details of the LORD procedures can be found in Javanmard and
+Montanari (2018) and Ramdas et al. (2017).
 }
 \examples{
 sample.df <- data.frame(
@@ -91,7 +92,7 @@ pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 LORD(sample.df, random=FALSE)
-set.seed(1); LORD(sample.df, version=2)
+set.seed(1); LORD(sample.df, version='++')
 set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 
 
@@ -100,6 +101,10 @@ set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 46(2):526-554.
+
+Ramdas, A. et al. (2017). Online control of the false discovery rate with 
+decaying memory. \emph{Advances in Neural Information Processing Systems 30},
+5650-5659.
 }
 \seealso{
 \code{\link{LORDdep}} uses a modified version of the LORD algorithm that is

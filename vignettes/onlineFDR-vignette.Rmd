@@ -2,7 +2,7 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson and Natasha A. Karp"
-date: "2018-05-30"
+date: "2018-12-10"
 output:
   html_document:
     toc: yes
@@ -43,16 +43,16 @@ provides a concrete example of such a scenario. Here the dataset is constantly
 growing as new knockout mice lines are generated and phenotyping data uploaded
 to a database. 
 
-Javanmard and Montanari have proposed two procedures, LOND and LORD, to control
-FDR in an online manner (Javanmard and Montanari (2015, 2018)). The LOND 
-procedure sets the significance level $\alpha_i$  based on the number of 
-discoveries made so far, while LORD sets them according to the time of the most
-recent discovery. This package, onlineFDR, implements these procedures and
-provides wrapper functions to apply them to a historic dataset or a growing
-dataset. As a comparison,  we have also provided a wrapper function for
-implementation of a method based on the Bonferroni approach adapted to an
-online scenario. This vignette explains the use of the package and demonstrates
-a typical workflow.
+Javanmard and Montanari proposed two procedures, LOND and LORD, to control
+FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter
+extended by Ramdas et al. (2017). The LOND procedure sets the significance level
+$\alpha_i$  based on the number of  discoveries made so far, while LORD sets
+them according to the time of the most recent discovery. This package,
+onlineFDR, implements these procedures and provides wrapper functions to apply
+them to a historic dataset or a growing dataset. As a comparison, we have also
+provided a wrapper function for implementation of a method based on the
+Bonferroni procedure adapted to the online scenario. This vignette explains the
+use of the package and demonstrates a typical workflow.
 
 ---
 
@@ -67,9 +67,9 @@ batch is randomised by default. In order for the randomisation of the p-values
 to be reproducible, it is necessary to set a seed (via the `set.seed`
 function) before calling the wrapper function (see also step 6).
 
-3. For each hypothesis test, an adjusted test level (`alphai`) is calculated,
-which gives the threshold at which the corresponding p-value would be declared
-significant.
+3. For each hypothesis test, an adjusted significance threshold (`alphai`) is
+calculated, which gives the threshold at which the corresponding p-value would
+be declared significant.
 
 4. Using the p-values provided and the alphai, an indicator of discoveries (`R`)
 is calculated, where `R[i] = 1` corresponds to hypothesis i being rejected
@@ -87,24 +87,25 @@ the same (and hence to allow for reproducibility of the results),
 
 ### Outline of the four functions available
 
-####1: LOND
+1: LOND
 Implements the LOND procedure for online FDR control, where LOND stands for
 (significance) Levels based On Number of Discoveries, as presented by Javanmard
 and Montanari (2015). The procedure controls the FDR for independent p-values,
 with an option (dep = TRUE) which guarantees control for dependent p-values.
 
-####2: LORD
+2: LORD
 Implements the LORD procedure for online FDR control where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by Javanmard
-and Montanari (2018). The function provides three different versions of the
-procedure for independent p-values, see 'Theory behind onlineFDR'.
+and Montanari (2018) and Ramdas et al. (2017). The function provides different
+versions of the procedure for independent p-values, see 
+'Theory behind onlineFDR'.
 
-####3: LORDdep
+3: LORDdep
 Implements the LORD procedure for online FDR control for dependent p-values,
 where LORD stands for (significance) Levels based On Recent Discovery,
 as presented by Javanmard and Montanari (2018).
 
-####4: BonfInfinite
+4: BonfInfinite
 Implements online FDR control using a Bonferroni-like test.
 
 
@@ -149,8 +150,9 @@ in  (Burgon *et al.*, 2010).
 
 ### Understanding the output
 
-For each hypothesis test, the functions calculate the adjusted test level
-(`alphai`) at which the corresponding p-value would be declared significant.   
+For each hypothesis test, the functions calculate the adjusted significance
+thresholds (`alphai`) at which the corresponding p-value would be declared
+statistically significant.   
 
 Also calculated is an indicator function of discoveries (`R`), where `R[i] = 1`
 corresponds to hypothesis i being rejected, otherwise `R[i] = 0`.  
@@ -179,28 +181,29 @@ to the package authors to respond on the support site.
 
 Consider a sequence of hypotheses $H_1, H_2, H_3, \ldots$ that arrive
 sequentially in a stream, with corresponding $p$-values
-$(p_1, p_2, p_3, \ldots)$. A testing procedure provides a sequence of test
-levels $\alpha_i$, with corresponding decision rule: \[ R_i = \begin{cases}
+$(p_1, p_2, p_3, \ldots)$. A testing procedure provides a sequence of adjusted
+significance thresholds $\alpha_i$, with corresponding decision rule:
+\[ R_i = \begin{cases}
 1 & \text{if } p_i \leq \alpha_i & (\text{reject } H_i)\\
 0 & \text{otherwise} & (\text{accept } H_i)
 \end{cases} \]
 
-
-In *online* testing, the test levels can only be functions of the prior
-decisions, i.e. $\alpha_i = \alpha_i(R_1, R_2, \ldots, R_{i-1})$.
+In *online* testing, the significance thresholds can only be functions of
+the prior decisions, i.e. $\alpha_i = \alpha_i(R_1, R_2, \ldots, R_{i-1})$.
 
 Javanmard and Montanari (2015, 2018) proposed two procedures for online control.
 The first is LOND, which stands for (significance) Levels based On Number of
 Discoveries. The second is LORD, which stands for (significance) Levels based
-On Recent Discovery.
+On Recent Discovery. LORD was subsequently extended by Ramdas et al. (2017).
 
 
 ### LOND procedure {#LOND}
 
 The LOND procedure controls the FDR for independent $p$-values. Given an overall
-significance level $\alpha$, we choose an infinite sequence of non-negative
+significance level $\alpha$, we choose any infinite sequence of non-negative
 numbers $\beta = (\beta_i)_{i \in \mathbb{N}}$ such that they sum to $\alpha$.
-The values of the test levels $\alpha_i$ are chosen as follows:
+The values of the adjusted significance thresholds $\alpha_i$ are chosen as
+follows:
 \[ \alpha_i = \beta_i (D(i-1) + 1) \]
 where $D(n) = \sum_{i=1}^n R_i$ denotes the number of discoveries
 (i.e. rejections) in the first $n$ hypotheses tested.
@@ -209,7 +212,11 @@ LOND can be adjusted to also control FDR under *dependent* $p$-values. To do so,
 it is modified with $\tilde{\beta}_i = \beta_i/H(i)$ in place of $\beta_i$, 
 where $H(i) = \sum_{j=1}^i \frac{1}{j}$ is the $i$-th harmonic number. 
 Note that this leads to a substantial loss in power compared to the
-unadjusted LOND procedure.
+unadjusted LOND procedure. The correction factor is similat to the 
+classical one used by Benjamini and Yekutieli (2001), except that in this case
+the $i$-th hypothesis among $N$ is penalised by a factor of $H(i)$ to give 
+consistent results across time (as compared to a factor $H(N)$ for the Benjamini
+and Yekutieli method).
 
 <a name="LOND_beta"></a> The default sequence of $\beta$ is given by
 \[\beta_j = C \alpha \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\] where 
@@ -225,7 +232,7 @@ that $\gamma_i \geq \gamma_j$ for
 $i \leq j$ and $\sum_{i=1}^{\infty} \gamma_i = 1$. At each time $i$, let 
 $\tau_i$ be the last time a discovery was made before $i$: \[
 \tau_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
-\] Also let $T_i$ be the set of discovery times up to time $i$: 
+\] Also let $T(i)$ be the set of discovery times up to time $i$: 
 \[ T(i) = \left\{ l \in \{1, \ldots, i-1 \} : R_l = 1 \right\}\]
 
 LORD depends on constants $w_0$ and $b_0$, where $w_0 \geq 0$ represents the
@@ -234,9 +241,10 @@ rejecting a hypothesis. We require $w_0+b_0 \leq \alpha$ for FDR control to
 hold.
 
 Javanmard and Montanari (2018) presented three different versions of LORD, which
-have different definitions of the test levels $\alpha_i$. 
+have different definitions of the adjusted signifcance thresholds $\alpha_i$. 
 
-* **LORD 1**: The test levels are based on the time of the last discovery, with 
+* **LORD 1**: The significance thresholds are based on the time of the last
+discovery, with 
 \[ 
 \alpha_i = \begin{cases}
 \gamma_i w_0 & \text{ if } i \leq t_1 \\
@@ -244,12 +252,13 @@ have different definitions of the test levels $\alpha_i$.
 \end{cases}
 \] where $t_1$ denotes the time of the first discovery.
 
-* **LORD 2**: The test levels are based on all previous discovery times, with
+* **LORD 2**: The significance thresholds are based on all previous discovery
+times, with
 \[ \alpha_i = \gamma_i w_0 + \left(\sum_{l \in T(i)} \gamma_{i-l} \right) b_0
 \]
 
-* **LORD 3**: The test levels depend on the time of the last discovery time and
-the wealth accumulated at that time, with
+* **LORD 3**: The significance thresholds depend on the time of the last
+discovery time and the wealth accumulated at that time, with
 \[
 \alpha_i  = \gamma_{i - \tau_i} W(\tau_i)
 \]
@@ -263,16 +272,27 @@ W(j) & = W(j-1) - \alpha_{j-1} + b_0 R_j
 where $w_0$ represents the initial 'wealth', and $b_0$ represents the amount
 earned for rejecting a hypothesis.
 
+* **LORD++**: Ramdas et al. (2017) derived a modified version of LORD 2, called
+LORD++, which has at least as high power. The significance thresholds for LORD++
+are chosen as follows: \[
+\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} + 
+\alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1} \gamma_{i - \tau_j}
+\] Hence the significance thresholds for LORD++ will always be equal or greater
+than those for LORD 2.
+
 LORD 1 and LORD 2 are instances of monotone generalised alpha investing rules,
 and hence provably control the FDR for independent p-values provided 
-$w_0 + b_0 \leq \alpha$. In Javanmard and Montanari (2018), the authors also
-demonstrate empirically that LORD 3 controls the FDR. 
+$w_0 + b_0 \leq \alpha$. LORD++ also provable controls the FDR for independent
+p-values provided $w_0 \leq \alpha$. In Javanmard and
+Montanari (2018), the authors demonstrate empirically that LORD 3
+controls the FDR. 
 
-Note that LORD 1 will always have a lower power than LORD 2 and LORD 3, and is
-included for completeness. In many scenarios LORD 3 will have a higher power
-than LORD 2, and so we would recommend using LORD 3 (the default) unless there
-is a need for a method for a provable guarantee of FDR control in which case we
-would recommend using LORD 2.
+Note that LORD 1 will always have a lower power than LORD 2 (and hence LORD++) 
+as well as LORD 3, and is included for completeness. In many scenarios with 
+large $N$, LORD 3 will have a slightly higher power than LORD++
+(see Robertson et al., 2018). Hence we would recommend using LORD 3
+(the default) unless there is a need for a method with a provable guarantee of
+FDR control in which case we would recommend using LORD++.
 
 <a name="LORD_gamma"></a> In all versions, the default sequence of $\gamma$ is
 given by \[\gamma_j = C \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\] 
@@ -283,8 +303,8 @@ equation 31.
 #### LORDdep {#LORDdep}
 
 Javanmard and Montanari (2018) also presented an adjusted version of LORD that
-is valid for *dependent* p-values. Similarly to LORD 3, the adjusted test levels
-are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where 
+is valid for *dependent* p-values. Similarly to LORD 3, the adjusted
+significance thresholds are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where 
 (assuming $w_0 \leq b_0$), 
 $\sum_{j=1}^{\infty} \xi_i (1 + \log(j)) \leq \alpha / b_0$
 
@@ -300,7 +320,8 @@ power compared with the LORD procedures described above.
 
 The procedure controls the FDR (as well as the FWER) for a potentially infinite
 stream of p-values using a Bonferroni-like test. Given an overall significance
-level $\alpha$, the test levels are chosen as \[\alpha_i = \alpha \gamma_i\]
+level $\alpha$, the significance thresholds are chosen as
+\[\alpha_i = \alpha \gamma_i\]
 where $\sum_{i=1}^{\infty} \gamma_i = 1$ and $\gamma_i \geq 0$. Note that the
 procedure is also valid for dependent p-values.
 
@@ -373,7 +394,7 @@ for dependent p-values. This method will in general be more conservative.
 set.seed(1); results.indep <- LOND(sample.df)    # for independent p-values
 set.seed(1); results.dep <- LOND(sample.df, dep=TRUE)   # for dependent p-values
 
-# compare adjusted test levels
+# compare adjusted significance thresholds
 cbind(independent = results.indep$alphai, dependent = results.dep$alphai)
 
 ```
@@ -385,24 +406,26 @@ user (as described above, see the formula for $\beta_j$ [here](#LOND_beta)).
 ### LORD
 
 The default version of LORD used is version 3, but the user can optionally
-specify versions 1 and 2 using the `version` argument (see [here](#LORD) for
+specify versions 1, 2 and ++ using the `version` argument (see [here](#LORD) for
 further details about the different versions).
 
 ```{r}
 set.seed(1); results.LORD1 <- LORD(sample.df, version=1)
 set.seed(1); results.LORD2 <- LORD(sample.df, version=2)
+set.seed(1); results.LORD.plus <- LORD(sample.df, version='++')
 set.seed(1); results.LORD3 <- LORD(sample.df)   # default version = 3
 
-# compare adjusted test levels
+# compare adjusted significance thresholds
 cbind(LORD1 = results.LORD1$alphai,
     LORD2 = results.LORD2$alphai,
+    LORD.plus = results.LORD.plus$alphai,
     LORD3 = results.LORD3$alphai)
 
 ```
 
-By default `w0 = alpha/10` and `b0 = alpha - w0`, but can optionally be 
-specified by the user subject to the requirements that $w_0 \geq 0$, $b_0 > 0$
-and $w_0+b_0 \leq \alpha$.
+By default `w0 = alpha/10` and (for LORD 1/2/3) `b0 = alpha - w0`, but these
+parameters can optionally be specified by the user subject to the requirements
+that $0 \leq w_0 \leq \alpha$, $b_0 > 0$ and $w_0+b_0 \leq \alpha$.
 
 The value of `gammai` is also supplied by default, but can optionally be 
 specified by the user (as described above, see the formula for $\gamma_j$
@@ -423,8 +446,8 @@ $\xi_j$ [here](#LORDdep_xi)).
 
 ### BonfInfinite
 
-The test levels `alphai` are supplied by default, but can optionally be
-specified by the user (as described above, see [here](#BonfInfinite)).
+The significance thresholds `alphai` are supplied by default, but can optionally
+be specified by the user (as described above, see [here](#BonfInfinite)).
 
 ---
 
@@ -445,7 +468,7 @@ Bourgon, R., Gentleman, R., and Huber, W. (2010). Independent filtering
 increases detection power for high-throughput experiments. 
 *Proceedings of the National Academy of Sciences*, 107(21), 9546-9551.
 
-Ioannidis, JPA. (2005). Why most published research findings are false.
+Ioannidis, J.P.A. (2005). Why most published research findings are false.
 *PLoS Medicine*, 2.8:e124.
 
 Javanmard, A., and Montanari, A. (2015). On Online Control of False
@@ -455,10 +478,17 @@ Javanmard, A., and Montanari, A. (2018). Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. *Annals of Statistics*, 
 46(2):526-554.
 
-Li, A., and Barber, FG. (2017). Accumulation Tests for FDR Control in Ordered
-Hypothesis Testing. *Journal of the American Statistical Association*, 
-112(518):837-849.
-
 Koscielny, G., *et al*. (2013). The International Mouse Phenotyping Consortium
 Web Portal, a unified point of access for knockout mice and related phenotyping
 data. *Nucleic Acids Research*, 42.D1:D802-D809.
+
+Li, A., and Barber, F.G. (2017). Accumulation Tests for FDR Control in Ordered
+Hypothesis Testing. *Journal of the American Statistical Association*, 
+112(518):837-849.
+
+Ramdas, A. et al. (2017). Online control of the false discovery rate with
+decaying memory. *Advances in Neural Information Processing Systems 30*,
+5650-5659.
+
+Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
+rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.

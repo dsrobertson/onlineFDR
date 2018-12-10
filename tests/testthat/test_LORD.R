@@ -19,6 +19,7 @@ test.df4 <- data.frame(
 )
 
 set.seed(1); test4 <- LORD(test.df4)$R
+set.seed(1); test4vplus <- LORD(test.df4, version='++')$R
 set.seed(1); test4v2 <- LORD(test.df4, version=2)$R
 set.seed(1); test4v1 <- LORD(test.df4, version=1)$R
 
@@ -30,7 +31,8 @@ test_that("Errors for edge cases", {
     expect_error(LORD(test.df2), "The dataframe d is missing a column 'pval' of p-values.")
 })
 
-test_that("LORD gives same results for all three versions when N = 1", {
+test_that("LORD gives same results when N = 1", {
+    expect_equal(LORD(test.df3), LORD(test.df3, version='++'))
     expect_equal(LORD(test.df3), LORD(test.df3, version=2))
     expect_equal(LORD(test.df3, version=2), LORD(test.df3, version=1))
 })
@@ -38,6 +40,7 @@ test_that("LORD gives same results for all three versions when N = 1", {
 test_that("Correct rejections for sample dataframes", {
     expect_identical(LORD(test.df3)$R, 1)
     expect_identical(test4, c(1,0,1))
+    expect_identical(test4vplus, c(1,0,1))
     expect_identical(test4v2, c(1,0,1))
     expect_identical(test4v1, c(1,0,0))
 })

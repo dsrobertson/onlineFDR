@@ -11,16 +11,18 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.99.7\cr
-#' Date: \tab 2018-05-30\cr
+#' Version: \tab 1.2.0\cr
+#' Date: \tab 2018-12-10\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
 #' Javanmard and Montanari (2015, 2018) proposed two methods for online FDR
 #' control. The first is LORD, which stands for (significance)
 #' Levels based On Recent Discovery and is implemented by the function
-#' \code{\link{LORD}}. \code{\link{LORDdep}} provides a modified version
-#' of LORD that is valid for dependent p-values.
+#' \code{\link{LORD}}. This function also includes the extension to the LORD 
+#' procedure, called LORD++, proposed by Ramdas et al. (2017).
+#' \code{\link{LORDdep}} provides a modified version of LORD that is valid for
+#' dependent p-values.
 #'
 #' The second method is LOND, which stands for (significance) Levels based On
 #' Number of Discoveries and is implemented by the function \code{\link{LOND}}.
@@ -32,7 +34,7 @@
 #' for dependent p-values.
 #'
 #' Further details on all these procedures can be found in Javanmard and
-#' Montanari (2015, 2018).
+#' Montanari (2015, 2018) and Ramdas et al. (2017).
 #'
 #' @author David Robertson (\email{david.robertson@@mrc-bsu.cam.ac.uk}), Adel
 #' Javanmard, Andrea Montanari and Natasha Karp.
@@ -44,6 +46,10 @@
 #' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
+#' 
+#' Ramdas, A. et al. (2017). Online control of the false discovery rate with
+#' decaying memory. \emph{Advances in Neural Information Processing Systems 30},
+#' 5650-5659.
 #'
 #' @docType package
 #' @name onlineFDR-package

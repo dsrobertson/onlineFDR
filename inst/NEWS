@@ -1,5 +1,14 @@
 # A NEWS File to document package updates
 
+CHANGES IN VERSION 1.2.0
+-----------------------
+MODIFICATIONS:
+
+    * added the LORD++ procedure for online FDR control
+    * updated references
+    * updated vignette
+    
+
 CHANGES IN VERSION 0.99.7
 -----------------------
 MODIFICATIONS:
