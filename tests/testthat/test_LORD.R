@@ -15,13 +15,13 @@ test.df3 <- data.frame(
 test.df4 <- data.frame(
     id = c('A', 'B', 'C'),
     date = as.Date(rep("2014-12-01",3)),
-    pval = c(1e-07, 0.00055, 0.1)
+    pval = c(1e-07, 0.1, 0.00055)
 )
 
-set.seed(1); test4 <- LORD(test.df4)$R
-set.seed(1); test4vplus <- LORD(test.df4, version='++')$R
-set.seed(1); test4v2 <- LORD(test.df4, version=2)$R
-set.seed(1); test4v1 <- LORD(test.df4, version=1)$R
+test4 <- LORD(test.df4, random=FALSE)$R
+test4vplus <- LORD(test.df4, version='++', random=FALSE)$R
+test4v2 <- LORD(test.df4, version=2, random=FALSE)$R
+test4v1 <- LORD(test.df4, version=1, random=FALSE)$R
 
 
 test_that("Errors for edge cases", {
