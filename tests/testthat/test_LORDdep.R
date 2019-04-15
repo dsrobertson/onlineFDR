@@ -15,10 +15,10 @@ test.df3 <- data.frame(
 test.df4 <- data.frame(
     id = c('A', 'B', 'C'),
     date = as.Date(rep("2014-12-01",3)),
-    pval = c(1e-07, 1e-07, 0.1)
+    pval = c(1e-07, 0.1, 1e-07)
 )
 
-set.seed(1); test4 <- LORDdep(test.df4)$R
+test4 <- LORDdep(test.df4, random=FALSE)$R
 
 
 test_that("Errors for edge cases", {
