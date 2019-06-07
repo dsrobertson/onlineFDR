@@ -2,7 +2,7 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson and Natasha A. Karp"
-date: "2018-12-10"
+date: "2019-06-06"
 output:
   html_document:
     toc: yes
@@ -47,12 +47,15 @@ Javanmard and Montanari proposed two procedures, LOND and LORD, to control
 FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter
 extended by Ramdas et al. (2017). The LOND procedure sets the significance level
 $\alpha_i$  based on the number of  discoveries made so far, while LORD sets
-them according to the time of the most recent discovery. This package,
-onlineFDR, implements these procedures and provides wrapper functions to apply
-them to a historic dataset or a growing dataset. As a comparison, we have also
-provided a wrapper function for implementation of a method based on the
-Bonferroni procedure adapted to the online scenario. This vignette explains the
-use of the package and demonstrates a typical workflow.
+them according to the time of the most recent discovery. Subsequently, Ramdas et
+al. (2018) proposed the SAFFRON procedure, which provides an adaptive method
+of online FDR control.
+
+This package, onlineFDR, implements all these procedures and provides wrapper
+functions to apply them to a historic dataset or a growing dataset. As a
+comparison, we have also provided a wrapper function for implementation of a
+method based on the Bonferroni procedure adapted to the online scenario. This
+vignette explains the use of the package and demonstrates a typical workflow.
 
 ---
 
@@ -85,7 +88,7 @@ the same (and hence to allow for reproducibility of the results),
 *the same seed should be used for all analyses*.
 
 
-### Outline of the four functions available
+### Outline of the functions available
 
 1: LOND
 Implements the LOND procedure for online FDR control, where LOND stands for
@@ -94,7 +97,7 @@ and Montanari (2015). The procedure controls the FDR for independent p-values,
 with an option (dep = TRUE) which guarantees control for dependent p-values.
 
 2: LORD
-Implements the LORD procedure for online FDR control where LORD stands for
+Implements the LORD procedure for online FDR control, where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by Javanmard
 and Montanari (2018) and Ramdas et al. (2017). The function provides different
 versions of the procedure for independent p-values, see 
@@ -105,7 +108,13 @@ Implements the LORD procedure for online FDR control for dependent p-values,
 where LORD stands for (significance) Levels based On Recent Discovery,
 as presented by Javanmard and Montanari (2018).
 
-4: BonfInfinite
+4: SAFFRON
+Implements the SAFFROM procedure for online FDR control, where SAFFRON stands 
+for Serial estimate of the Alpha Fraction that is Futiley Rationed On true 
+Null hypotheses, as presented by Ramdas et al. (2018). The procedure provides an
+adaptive method of online FDR control.
+
+5: BonfInfinite
 Implements online FDR control using a Bonferroni-like test.
 
 
@@ -197,7 +206,7 @@ Discoveries. The second is LORD, which stands for (significance) Levels based
 On Recent Discovery. LORD was subsequently extended by Ramdas et al. (2017).
 
 
-### LOND procedure {#LOND}
+### LOND {#LOND}
 
 The LOND procedure controls the FDR for independent $p$-values. Given an overall
 significance level $\alpha$, we choose any infinite sequence of non-negative
@@ -224,7 +233,7 @@ $C \approx 0.07720838$, as proposed by Javanmard and Montanari (2018)
 equation 31.
 
 
-### LORD procedures {#LORD}
+### LORD {#LORD}
 
 The LORD procedure controls the FDR for independent $p$-values. We first fix a
 sequence of non-negative numbers $\gamma = (\gamma_i)_{i \in \mathbb{N}}$ such
@@ -302,7 +311,7 @@ equation 31.
 
 #### LORDdep {#LORDdep}
 
-Javanmard and Montanari (2018) also presented an adjusted version of LORD that
+Javanmard and Montanari (2018) also proposed an adjusted version of LORD that
 is valid for *dependent* p-values. Similarly to LORD 3, the adjusted
 significance thresholds are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where 
 (assuming $w_0 \leq b_0$), 
@@ -315,6 +324,41 @@ where $C \approx 0.139307$.
 Note that allowing for dependent p-values can lead to a substantial loss in
 power compared with the LORD procedures described above.
 
+
+### SAFFRON {#SAFFRON}
+
+The SAFFRON procedure is valid for independent p-values, and was proposed 
+by Ramdas et al. (2018). The algorithm is based on an estimate of the proportion
+of true null hypotheses. More precisely, SAFFRON sets the adjusted test levels
+based on an estimate of the amount of alpha-wealth that is allocated to testing
+the true null hypotheses.
+
+SAFFRON depends on constants $w_0$ and $\lambda$, where $w_0$ satisfies 
+$0 \leq w_0 < (1 - \lambda)\alpha$ and represents the intial 'wealth' of the
+procedure, and $\lambda \in (0,1)$ represents the threshold for a 'candidate'
+hypothesis. A 'candidate' refers to p-values smaller than $\lambda$, since
+SAFFRON will never reject a p-value larger than $\lambda$. These candidates can
+be thought of as the hypotheses that are a-priori more likely to be non-null.
+
+The SAFFRON procedure runs as follows:
+
+1. Set the initial alpha-wealth $w_0 < (1-\lambda)\alpha$
+
+2. At each time $i$, define the number of candidates after the $k$-th rejection
+as \[ C_{k+} = C_{k+}(i) = \sum_{j = \tau_k + 1}^{i-1} C_j\]
+where $C_j = 1\{p_j \leq \lambda \}$ is the indicator for candidacy.
+
+3. SAFFRON starts with $\alpha_1 = \min\{\gamma_1 w_0, \lambda\}$. Subsequent 
+test levels are chosen as $\alpha_i = \min\{ \lambda, \tilde{\alpha}_i\}$, where
+\[
+\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} + 
+((1-\lambda)\alpha - w_0)\gamma_{i-\tau_1-C_{1+}} +
+(1-\lambda)\alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1} 
+\gamma_{i - \tau_j- C_{j+}}
+\]
+
+<a name="SAFFRON_gamma"></a> The default sequence of $\gamma$ for SAFFRON is
+given by $\gamma_j = 6/(\pi j^2)$.
 
 ### Bonferroni-like procedure (BonfInfinite) {#BonfInfinite}
 
@@ -331,10 +375,10 @@ The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
 
 ### Accounting for dependent p-values
 
-As noted above, the LOND procedure and LORD procedures (1, 2 and 3) assumes
-*independent* p-values, with adjusted versions of LOND and LORD available for
-*dependent* p-values (where the dependencies may be arbitrary). The 
-Bonferroni-like procedure also controls the FDR for dependent p-values.
+As noted above, the LOND procedure, LORD procedures (1, 2 and 3) and SAFFRON
+assume *independent* p-values, with adjusted versions of LOND and LORD
+available for *dependent* p-values (where the dependencies may be arbitrary).
+The Bonferroni-like procedure also controls the FDR for dependent p-values.
 
 By way of comparison, the usual Benjamini and Hochberg method for controlling
 the FDR assumes that the p-values are positively dependent (for example, for
@@ -444,6 +488,17 @@ specified by the user (as described above, see the formula for
 $\xi_j$ [here](#LORDdep_xi)).
 
 
+### SAFFRON
+
+By default `w0 = (1-lambda)*alpha/2` and `lambda = 0.5`, but these parameters 
+can optionally be specificed by the user, subject to the requirements that
+$0 \leq w_0 < (1-\lambda)\alpha$ and $0 < \lambda < 1$.
+
+The valuse of `gammai` is also supplied by default, but can optionally be
+specified by the user (as described above, see the formula for $\gamma_j$
+[here](#SAFFRON_gamma)).
+
+
 ### BonfInfinite
 
 The significance thresholds `alphai` are supplied by default, but can optionally
@@ -453,8 +508,8 @@ be specified by the user (as described above, see [here](#BonfInfinite)).
 
 ## Acknowledgements
 
-We would like to thank the IMPC team (via Jeremy Mason and Hamed Haseli) for
-useful discussions during the development of the package.
+We would like to thank the IMPC team (via Jeremy Mason and Hamed Haseli
+Mashhadi) for useful discussions during the development of the package.
 
 ---
 
@@ -489,6 +544,11 @@ Hypothesis Testing. *Journal of the American Statistical Association*,
 Ramdas, A. et al. (2017). Online control of the false discovery rate with
 decaying memory. *Advances in Neural Information Processing Systems 30*,
 5650-5659.
+
+Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
+of the false discovery rate.
+*Proceedings of the 35th International Conference in Machine Learning*,
+80:4286-4294.
 
 Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
 rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.

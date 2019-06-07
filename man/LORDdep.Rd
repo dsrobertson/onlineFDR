@@ -2,7 +2,8 @@
 % Please edit documentation in R/LORDdep.R
 \name{LORDdep}
 \alias{LORDdep}
-\title{Online FDR control based on recent discovery for dependent p-values}
+\title{LORD (dep): Online FDR control based on recent discovery for dependent
+p-values}
 \usage{
 LORDdep(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0,
   random = TRUE, date.format = "\%Y-\%m-\%d")

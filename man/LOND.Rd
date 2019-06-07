@@ -2,7 +2,7 @@
 % Please edit documentation in R/LOND.R
 \name{LOND}
 \alias{LOND}
-\title{Online FDR control based on number of discoveries}
+\title{LOND: Online FDR control based on number of discoveries}
 \usage{
 LOND(d, alpha = 0.05, beta, dep = FALSE, random = TRUE,
   date.format = "\%Y-\%m-\%d")

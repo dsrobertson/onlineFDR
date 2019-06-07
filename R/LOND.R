@@ -1,4 +1,4 @@
-#' Online FDR control based on number of discoveries
+#' LOND: Online FDR control based on number of discoveries
 #'
 #' Implements the LOND algorithm for online FDR control, where LOND stands for
 #' (significance) Levels based On Number of Discoveries, as presented by

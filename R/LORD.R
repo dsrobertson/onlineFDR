@@ -1,6 +1,6 @@
-#' Online FDR control based on recent discovery
+#' LORD: Online FDR control based on recent discovery
 #'
-#' Implements the LORD procedure for online FDR control where LORD stands for
+#' Implements the LORD procedure for online FDR control, where LORD stands for
 #' (significance) Levels based On Recent Discovery, as presented by
 #' Javanmard and Montanari (2018) and Ramdas et al. (2017).
 #'
@@ -13,7 +13,7 @@
 #' The LORD procedure controls FDR for independent p-values. Given an overall
 #' significance level \eqn{\alpha}, we choose a sequence of
 #' non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
-#' \eqn{\gamma_i \geq \gamma_j} for \eqn{i \leq j}.
+#' \eqn{\gamma_i \ge \gamma_j} for \eqn{i \le j}.
 #'
 #' Javanmard and Montanari (2018) present three versions of LORD which
 #' differ in the way the adjusted significance thresholds \eqn{\alpha_i} are

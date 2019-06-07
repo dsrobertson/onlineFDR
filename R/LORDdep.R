@@ -1,4 +1,5 @@
-#' Online FDR control based on recent discovery for dependent p-values
+#' LORD (dep): Online FDR control based on recent discovery for dependent
+#' p-values
 #'
 #' Implements the LORD procedure for online FDR control for dependent p-values,
 #' where LORD stands for (significance) Levels based On Recent Discovery, as
