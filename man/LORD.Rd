@@ -2,7 +2,7 @@
 % Please edit documentation in R/LORD.R
 \name{LORD}
 \alias{LORD}
-\title{Online FDR control based on recent discovery}
+\title{LORD: Online FDR control based on recent discovery}
 \usage{
 LORD(d, alpha = 0.05, gammai, version = 3, w0, b0, random = TRUE,
   date.format = "\%Y-\%m-\%d")
@@ -41,7 +41,7 @@ function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements the LORD procedure for online FDR control where LORD stands for
+Implements the LORD procedure for online FDR control, where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by
 Javanmard and Montanari (2018) and Ramdas et al. (2017).
 }
@@ -55,7 +55,7 @@ sequentially with no batches.
 The LORD procedure controls FDR for independent p-values. Given an overall
 significance level \eqn{\alpha}, we choose a sequence of
 non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
-\eqn{\gamma_i \geq \gamma_j} for \eqn{i \leq j}.
+\eqn{\gamma_i \ge \gamma_j} for \eqn{i \le j}.
 
 Javanmard and Montanari (2018) present three versions of LORD which
 differ in the way the adjusted significance thresholds \eqn{\alpha_i} are
