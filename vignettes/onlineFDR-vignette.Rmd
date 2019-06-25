@@ -2,7 +2,7 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson and Natasha A. Karp"
-date: "2019-06-06"
+date: "2019-06-25"
 output:
   html_document:
     toc: yes
@@ -101,20 +101,16 @@ Implements the LORD procedure for online FDR control, where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by Javanmard
 and Montanari (2018) and Ramdas et al. (2017). The function provides different
 versions of the procedure for independent p-values, see 
-'Theory behind onlineFDR'.
+'Theory behind onlineFDR'. There is also a version ('dep') that guarantees 
+control for dependent p-values.
 
-3: LORDdep
-Implements the LORD procedure for online FDR control for dependent p-values,
-where LORD stands for (significance) Levels based On Recent Discovery,
-as presented by Javanmard and Montanari (2018).
-
-4: SAFFRON
+3: SAFFRON
 Implements the SAFFROM procedure for online FDR control, where SAFFRON stands 
 for Serial estimate of the Alpha Fraction that is Futiley Rationed On true 
 Null hypotheses, as presented by Ramdas et al. (2018). The procedure provides an
 adaptive method of online FDR control.
 
-5: BonfInfinite
+4: BonfInfinite
 Implements online FDR control using a Bonferroni-like test.
 
 
@@ -309,8 +305,6 @@ where $C \approx 0.07720838$, as proposed by Javanmard and Montanari (2018)
 equation 31.
 
 
-#### LORDdep {#LORDdep}
-
 Javanmard and Montanari (2018) also proposed an adjusted version of LORD that
 is valid for *dependent* p-values. Similarly to LORD 3, the adjusted
 significance thresholds are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where 
@@ -449,15 +443,15 @@ user (as described above, see the formula for $\beta_j$ [here](#LOND_beta)).
 
 ### LORD
 
-The default version of LORD used is version 3, but the user can optionally
+The default version of LORD used is version 2, but the user can optionally
 specify versions 1, 2 and ++ using the `version` argument (see [here](#LORD) for
 further details about the different versions).
 
 ```{r}
 set.seed(1); results.LORD1 <- LORD(sample.df, version=1)
-set.seed(1); results.LORD2 <- LORD(sample.df, version=2)
+set.seed(1); results.LORD2 <- LORD(sample.df, version=3)
 set.seed(1); results.LORD.plus <- LORD(sample.df, version='++')
-set.seed(1); results.LORD3 <- LORD(sample.df)   # default version = 3
+set.seed(1); results.LORD3 <- LORD(sample.df)   # default version = 2
 
 # compare adjusted significance thresholds
 cbind(LORD1 = results.LORD1$alphai,
@@ -473,19 +467,8 @@ that $0 \leq w_0 \leq \alpha$, $b_0 > 0$ and $w_0+b_0 \leq \alpha$.
 
 The value of `gammai` is also supplied by default, but can optionally be 
 specified by the user (as described above, see the formula for $\gamma_j$
-[here](#LORD_gamma)).
-
-
-### LORDdep
-
-
-By default `w0 = alpha/10` and `b0 = alpha - w0`, but can optionally be
-specified by the user subject to the requirements that $w_0 \geq 0$,
-$b_0 > 0$ and $w_0+b_0 \leq \alpha$.
-
-The value of `xi` is also supplied by default, but can optionally be
-specified by the user (as described above, see the formula for
-$\xi_j$ [here](#LORDdep_xi)).
+[here](#LORDdep_xi) for version='dep' and [here](#LORD_gamma) for all other
+versions of LORD).
 
 
 ### SAFFRON
