@@ -10,10 +10,10 @@
 #' dates is provided, then the p-values are treated as being ordered
 #' sequentially with no batches.
 #'
-#' The LORD procedure controls FDR for independent p-values. Given an overall
-#' significance level \eqn{\alpha}, we choose a sequence of
-#' non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
-#' \eqn{\gamma_i \ge \gamma_j} for \eqn{i \le j}.
+#' The LORD procedure controls FDR for independent p-values (see below for the
+#' case with dependent p-values). Given an overall significance level
+#' \eqn{\alpha}, we choose a sequence of non-negative numbers \eqn{\gamma_i} 
+#' such that they sum to 1, and \eqn{\gamma_i \ge \gamma_j} for \eqn{i \le j}.
 #'
 #' Javanmard and Montanari (2018) present three versions of LORD which
 #' differ in the way the adjusted significance thresholds \eqn{\alpha_i} are
@@ -21,7 +21,8 @@
 #' the last discovery (i.e. hypothesis rejection), LORD 2 are based on all
 #' previous discovery times, and LORD 3 are based on the time of the last
 #' discovery as well as the 'wealth' accumulated at that time. LORD 2 was
-#' extended by Ramdas et al. (2017) to give a procedure called LORD++.
+#' extended by Ramdas et al. (2017) to give a procedure called LORD++ (which
+#' is called by setting \code{version='++'}).
 #'
 #' LORD depends on constants \eqn{w_0} and \eqn{b_0}, where
 #' \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the procedure
@@ -31,6 +32,12 @@
 #' Note that FDR control also holds for the LORD procedure if only the p-values
 #' corresponding to true nulls are mutually independent, and independent from
 #' the non-null p-values.
+#' 
+#' For dependent p-values, a modified LORD procedure was proposed in 
+#' Javanmard and Montanari (2018), which is called be setting
+#' \code{version='dep'}. Given an overall significance level \eqn{\alpha},
+#' we choose a sequence of non-negative numbers \eqn{\xi_i} such that they
+#' satisfy a condition given in Javanmard and Montanari (2018), example 3.8.
 #'
 #' Further details of the LORD procedures can be found in Javanmard and
 #' Montanari (2018) and Ramdas et al. (2017).
@@ -44,14 +51,17 @@
 #' is 0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided as
-#' proposed by Javanmard and Montanari (2018), equation 31.
+#' proposed by Javanmard and Montanari (2018), equation 31 for all versions
+#' of LORD except 'dep'. The latter is provided a default to satisfy a 
+#' condition given in Javanmard and Montanari (2018), example 3.8.
 #'
-#' @param version Either an integer from 1 to 3, or the character '++'. This 
-#' specifies the version of LORD to use, and defaults to 3.
+#' @param version Takes values 1, 2, 3, '++' or 'dep'. This 
+#' specifies the version of LORD to use, and defaults to 2.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
 #' 
-#' @param b0 The 'payout' for rejecting a hypothesis in LORD 1/2/3. Defaults to
+#' @param b0 The 'payout' for rejecting a hypothesis in all versions of LORD
+#' except for '++'. Defaults to
 #' \eqn{\alpha - w_0}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
@@ -107,7 +117,7 @@
 #'
 #' @export
 
-LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
+LORD <- function(d, alpha=0.05, gammai, version=2, w0, b0,
                 random=TRUE, date.format="%Y-%m-%d") {
 
     if(!(is.data.frame(d))){
@@ -134,8 +144,8 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
         stop("alpha must be between 0 and 1.")
     }
 
-    if(!(version %in% c(1,2,3,'++'))){
-        stop("version must be 1, 2, 3 or '++'.")
+    if(!(version %in% c(1,2,3,'++','dep'))){
+        stop("version must be 1, 2, 3, '++' or 'dep'.")
     }
 
     if(anyNA(d$pval)){
@@ -147,45 +157,57 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
         stop("The column of p-values contains at least one non-numeric
         element.")
     } else if(any(d$pval>1 | d$pval<0)){
-    stop("All p-values must be between 0 and 1.")
+        stop("All p-values must be between 0 and 1.")
     }
-
-    N <- length(d$pval)
-
-    if(missing(gammai)){
-        gammai <- 0.07720838*log(pmax(seq_len(N),2)) /
-        (seq_len(N)*exp(sqrt(log(seq_len(N)))))
-    } else if (any(gammai<0)){
-        stop("All elements of gammai must be non-negative.")
-    } else if(sum(gammai)>1){
-        stop("The sum of the elements of gammai must not be greater than 1.")
-    }
-
+    
     if(missing(w0)){
         w0 = alpha/10
     } else if(w0 < 0){
         stop("w0 must be non-negative.")
     }
-
-    if(version %in% c(1,2,3)){
-
-    if(missing(b0)){
-        b0 = alpha - w0
-    } else if(b0 <= 0){
-        stop("b0 must be positive.")
-    } else if(w0+b0 > alpha & !(isTRUE(all.equal(w0+b0, alpha)))){
-        stop("The sum of w0 and b0 must not be greater than alpha.")
+    
+    if(version != '++'){
+        if(missing(b0)){
+            b0 = alpha - w0
+        } else if(b0 <= 0){
+            stop("b0 must be positive.")
+        } else if(w0+b0 > alpha & !(isTRUE(all.equal(w0+b0, alpha)))){
+            stop("The sum of w0 and b0 must not be greater than alpha.")
         }
-    }
-
-    if(version == '++'){
+    } else {
         if(w0 > alpha) {
             stop("w0 must not be greater than alpha.")
-        } else {
-            version = 4
+        }
+    }
+    
+    N <- length(d$pval)
+    
+    if(version != 'dep'){
+        if(missing(gammai)){
+            gammai <- 0.07720838*log(pmax(seq_len(N),2)) /
+                (seq_len(N)*exp(sqrt(log(seq_len(N)))))
+        } else if (any(gammai<0)){
+            stop("All elements of gammai must be non-negative.")
+        } else if(sum(gammai)>1){
+            stop("The sum of the elements of gammai must be <= 1.")
+        }
+    } else {
+        if(missing(gammai)){
+            gammai <- 0.139307*alpha/(b0*seq_len(N)*(log(pmax(seq_len(N),2)))^3)
+        } else if (any(gammai<0)){
+            stop("All elements of xi must be non-negative.")
+        } else if(sum(gammai)>alpha/b0){
+            stop("The sum of the elements of gammai must be <= alpha/b0.")
         }
     }
 
+    
+    if(version == '++'){
+        version = 4
+    } else if(version == 'dep'){
+        version = 5
+    }
+    
     if(random){
         d <- randBatch(d)
     }
@@ -272,6 +294,32 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
                 R[i] = pval[i] <= alphai[i]
             }
         }
+        },
+        ## 'dep' = 5
+        {
+        R <- W <- rep(0, N+1)
+        R[1] <- 1
+        W[1] <- w0
+            
+        alphai[1] <- phi <- gammai[1]*w0
+        R[2] <- pval[1] <= alphai[1]
+        W[2] <- w0 - phi + R[2]*b0
+            
+        if(N == 1){
+            R <- R[2]
+            d.out <- data.frame(d, alphai, R)
+            return(d.out)
+        }
+            
+        for (i in (seq_len(N-1)+1)){
+            tau <- max(which(R[seq_len(i)] == 1))
+            alphai[i] <- phi <- gammai[i]*W[tau]
+                
+            R[i+1] <- pval[i] <= alphai[i]
+            W[i+1] <- W[i] - phi + R[i+1]*b0
+        }
+            
+            R <- R[(seq_len(N)+1)]
         })
     
     d.out <- data.frame(d, alphai, R)

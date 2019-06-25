@@ -48,11 +48,11 @@ batches corresponds to multiple instances of the same date. If no column of
 dates is provided, then the p-values are treated as being ordered
 sequentially with no batches.
 
-The LOND algorithm controls FDR for independent p-values. Given an overall
-significance level \eqn{\alpha}, we choose a sequence of
-non-negative numbers \eqn{\beta_i} such that they sum to \eqn{\alpha}. The
-values of the adjusted significance thresholds \eqn{\alpha_i} are chosen as
-follows:
+The LOND algorithm controls FDR for independent p-values (see below for the 
+modification for dependent p-values). Given an overall significance level
+\eqn{\alpha}, we choose a sequence of non-negative numbers \eqn{\beta_i}
+such that they sum to \eqn{\alpha}. The values of the adjusted significance
+thresholds \eqn{\alpha_i} are chosen as follows:
 \deqn{\alpha_i = (D(i-1) + 1)\beta_i}
 where \eqn{D(n)} denotes the number of discoveries in the first \eqn{n}
 hypotheses.
