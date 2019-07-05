@@ -1,10 +1,10 @@
 ## Introduction
 This package allows users to control the false discovery rate for online
 hypothesis testing, where hypotheses arrive sequentially in a stream, as
-presented by Javanmard and Montanari (2015, 2018) and Ramdas et al. 
-(2017, 2018). In this framework, a null hypothesis is rejected based only on
-the previous decisions, as the future p-values and the number of hypotheses to
-be tested are unknown.  
+presented by Javanmard and Montanari (2015, 2018), Ramdas et al. 
+(2017, 2018) and Zrnic et al. (2018). In this framework, a null hypothesis is
+rejected based only on the previous decisions, as the future p-values and the
+number of hypotheses to be tested are unknown.  
 
 ## Installation
 To install the latest (development) version of the onlineFDR package in R,
@@ -29,3 +29,6 @@ decaying memory. *Advances in Neural Information Processing Systems 30*,
 Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control of
 the false discovery rate. *Proceedings of the 35th International Conference in 
 Machine Learning*, 80:4286-4294.
+
+Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses. 
+*arXiv preprint*, https://arxiv.org/abs/1812.05068.

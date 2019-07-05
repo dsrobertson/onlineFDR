@@ -4,7 +4,7 @@
 \alias{LORD}
 \title{LORD: Online FDR control based on recent discovery}
 \usage{
-LORD(d, alpha = 0.05, gammai, version = 2, w0, b0, random = TRUE,
+LORD(d, alpha = 0.05, gammai, version = 3, w0, b0, random = TRUE,
   date.format = "\%Y-\%m-\%d")
 }
 \arguments{
@@ -21,13 +21,12 @@ of LORD except 'dep'. The latter is provided a default to satisfy a
 condition given in Javanmard and Montanari (2018), example 3.8.}
 
 \item{version}{Takes values 1, 2, 3, '++' or 'dep'. This 
-specifies the version of LORD to use, and defaults to 2.}
+specifies the version of LORD to use, and defaults to 3.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
 
 \item{b0}{The 'payout' for rejecting a hypothesis in all versions of LORD
-except for '++'. Defaults to
-\eqn{\alpha - w_0}.}
+except for '++'. Defaults to \eqn{\alpha - w_0}.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
@@ -57,8 +56,8 @@ sequentially with no batches.
 
 The LORD procedure controls FDR for independent p-values (see below for the
 case with dependent p-values). Given an overall significance level
-\eqn{\alpha}, we choose a sequence of non-negative numbers \eqn{\gamma_i} 
-such that they sum to 1, and \eqn{\gamma_i \ge \gamma_j} for \eqn{i \le j}.
+\eqn{\alpha}, we choose a sequence of non-negative non-increasing numbers
+\eqn{\gamma_i} that sum to 1.
 
 Javanmard and Montanari (2018) present three versions of LORD which
 differ in the way the adjusted significance thresholds \eqn{\alpha_i} are
@@ -72,7 +71,7 @@ is called by setting \code{version='++'}).
 LORD depends on constants \eqn{w_0} and \eqn{b_0}, where
 \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the procedure
 and \eqn{b_0 > 0} represents the `payout' for rejecting a hypothesis. 
-We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold for LORD 1/2/3.
+We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
 
 Note that FDR control also holds for the LORD procedure if only the p-values
 corresponding to true nulls are mutually independent, and independent from
@@ -97,7 +96,7 @@ date = as.Date(c(rep("2014-12-01",3),
                 rep("2016-05-19",2),
                 "2016-11-12",
                 rep("2017-03-27",4))),
-pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
@@ -117,6 +116,7 @@ decaying memory. \emph{Advances in Neural Information Processing Systems 30},
 5650-5659.
 }
 \seealso{
-\code{\link{LORDdep}} uses a modified version of the LORD algorithm that is
-valid for \emph{dependent} p-values.
+\code{\link{LORDstar}} presents versions of LORD for \emph{asynchronous}
+testing, i.e. where each hypothesis test can itself be a sequential process
+and the tests can overlap in time.
 }

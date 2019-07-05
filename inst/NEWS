@@ -1,11 +1,21 @@
 # A NEWS File to document package updates
 
 
+CHANGES IN VERSION 1.3.3
+-----------------------
+MODIFICATIONS:
+
+    * added asynchronous online testing algorithms of Zrnic et al. (2018)
+    * added unit tests for LONDstar, LORDstar and SAFFRONstar
+    * updated references
+    * updated authors
+
+
 CHANGES IN VERSION 1.3.2
 -----------------------
 MODIFICATIONS:
 
-    * Deprecate LORDdep and add functionality to LORD
+    * deprecate LORDdep and add functionality to LORD
     
 
 CHANGES IN VERSION 1.3.1

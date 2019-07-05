@@ -278,7 +278,7 @@ where $w_0$ represents the initial 'wealth', and $b_0$ represents the amount
 earned for rejecting a hypothesis.
 
 * **LORD++**: Ramdas et al. (2017) derived a modified version of LORD 2, called
-LORD++, which has at least as high power. The significance thresholds for LORD++
+LORD++, which has higher power. The significance thresholds for LORD++
 are chosen as follows: \[
 \alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} + 
 \alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1} \gamma_{i - \tau_j}
@@ -288,9 +288,8 @@ than those for LORD 2.
 LORD 1 and LORD 2 are instances of monotone generalised alpha investing rules,
 and hence provably control the FDR for independent p-values provided 
 $w_0 + b_0 \leq \alpha$. LORD++ also provable controls the FDR for independent
-p-values provided $w_0 \leq \alpha$. In Javanmard and
-Montanari (2018), the authors demonstrate empirically that LORD 3
-controls the FDR. 
+p-values provided $w_0 \leq \alpha$. In Javanmard and Montanari (2018), the
+authors demonstrate empirically that LORD 3 controls the FDR. 
 
 Note that LORD 1 will always have a lower power than LORD 2 (and hence LORD++) 
 as well as LORD 3, and is included for completeness. In many scenarios with 

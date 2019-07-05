@@ -4,33 +4,37 @@
 \alias{LOND}
 \title{LOND: Online FDR control based on number of discoveries}
 \usage{
-LOND(d, alpha = 0.05, beta, dep = FALSE, random = TRUE,
-  date.format = "\%Y-\%m-\%d")
+LOND(d, alpha = 0.05, betai, dep = FALSE, random = TRUE,
+  date.format = "\%Y-\%m-\%d", original = TRUE)
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
 and p-value (`pval'). If no column of dates is provided, then the p-values
 are treated as being ordered sequentially with no batches.}
 
-\item{alpha}{Overall significance level of the FDR procedure, the default
-is 0.05.}
+\item{alpha}{Overall significance level of the FDR procedure, the default is
+0.05.}
 
-\item{beta}{Optional vector of \eqn{\beta_i}. A default is provided as
+\item{betai}{Optional vector of \eqn{\beta_i}. A default is provided as
 proposed by Javanmard and Montanari (2018), equation 31.}
 
 \item{dep}{Logical. If \code{TRUE}, runs the modified LOND algorithm which
-guarantees FDR control for \emph{dependent} p-values.
-Defaults to \code{FALSE}.}
+guarantees FDR control for \emph{dependent} p-values. Defaults to
+\code{FALSE}.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
+
+\item{original}{Logical. If \code{TRUE}, runs the original LOND algorithm 
+of Javanmard and Montanari (2015), otherwise runs the modified algorithm 
+of Zrnic et al. (2018). Defaults to \code{TRUE}.}
 }
 \value{
-\item{d.out}{ A dataframe with the original dataframe \code{d} (which will
-be reordered if there are batches and \code{random = TRUE}), the
+\item{d.out}{ A dataframe with the original dataframe \code{d} (which
+will be reordered if there are batches and \code{random = TRUE}), the
 LOND-adjusted significance thresholds \eqn{\alpha_i} and the indicator
 function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
@@ -48,21 +52,24 @@ batches corresponds to multiple instances of the same date. If no column of
 dates is provided, then the p-values are treated as being ordered
 sequentially with no batches.
 
-The LOND algorithm controls FDR for independent p-values (see below for the 
-modification for dependent p-values). Given an overall significance level
-\eqn{\alpha}, we choose a sequence of non-negative numbers \eqn{\beta_i}
-such that they sum to \eqn{\alpha}. The values of the adjusted significance
-thresholds \eqn{\alpha_i} are chosen as follows:
-\deqn{\alpha_i = (D(i-1) + 1)\beta_i}
-where \eqn{D(n)} denotes the number of discoveries in the first \eqn{n}
-hypotheses.
+The LOND algorithm controls the FDR for independent p-values (see below for
+the modification for dependent p-values). Given an overall significance level
+\eqn{\alpha}, we choose a sequence of non-negative numbers \eqn{\beta_i} such
+that they sum to \eqn{\alpha}. The values of the adjusted significance
+thresholds \eqn{\alpha_i} are chosen as follows: \deqn{\alpha_i = (D(i-1) +
+1)\beta_i} where \eqn{D(n)} denotes the number of discoveries in the first
+\eqn{n} hypotheses.
 
-For dependent p-values, LOND controls FDR if it is modified with
+A slightly modified version of LOND with thresholds \eqn{\alpha_i =
+max(D(i-1), 1)\beta_i} provably controls the FDR under positive dependence
+(PRDS condition), see Zrnic et al. (2018).
+
+For dependent p-values, LOND controls the FDR if it is modified with
 \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the i-th
 harmonic number.
 
-Further details of the LOND algorithm can be found in Javanmard and
-Montanari (2015).
+Further details of the LOND algorithm can be found in Javanmard and Montanari
+(2015).
 }
 \examples{
 sample.df <- data.frame(
@@ -74,7 +81,7 @@ date = as.Date(c(rep("2014-12-01",3),
                 rep("2016-05-19",2),
                 "2016-11-12",
                 rep("2017-03-27",4))),
-pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
@@ -85,10 +92,18 @@ set.seed(1); LOND(sample.df, alpha=0.1)
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
-Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
+Javanmard, A. and Montanari, A. (2015) On Online Control of False
+Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
 
 Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 46(2):526-554.
+
+Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
+\emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
+}
+\seealso{
+\code{\link{LONDstar}} presents versions of LORD for \emph{synchronous}
+p-values, i.e. where each test can only start when the previous test has
+finished.
 }

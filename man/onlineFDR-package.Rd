@@ -17,8 +17,8 @@ are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 1.3.2\cr
-Date: \tab 2019-06-25\cr
+Version: \tab 1.3.3\cr
+Date: \tab 2019-07-05\cr
 License: \tab GPL-3 \cr
 }
 
@@ -27,25 +27,30 @@ control. The first is LORD, which stands for (significance)
 Levels based On Recent Discovery and is implemented by the function
 \code{\link{LORD}}. This function also includes the extension to the LORD 
 procedure, called LORD++, proposed by Ramdas et al. (2017).
-\code{\link{LORDdep}} provides a modified version of LORD that is valid for
-dependent p-values. 
+Setting \code{version='dep'} provides a modified version of LORD that is
+valid for dependent p-values. 
 
 The second method is LOND, which stands for (significance) Levels based On
 Number of Discoveries and is implemented by the function \code{\link{LOND}}.
 By specifying \code{dep = TRUE}, thus function runs a modified version of
-LOND which is valid for dependent p-values.
+LOND which is valid for arbitrarily dependent p-values.
 
 A related method proposed by Ramdas et al. (2018) is the
 \code{\link{SAFFRON}} procedure, which stands for Serial estimate of the
 Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
 provides an adaptive algorithm for online FDR control.
 
+Zrnic et al. (2018) generalised these algorithms for the context of
+asynchronous online testing, where each hypothesis test can itself be a
+sequential process and the tests can overlap in time. These algorithms
+are designed for the control of the modified FDR (mFDR).
+
 As an alternative to all these methods, a Bonferroni-like test is implemented
 by the function \code{\link{bonfInfinite}}. This procedure is also valid
 for dependent p-values.
 
 Further details on all these procedures can be found in Javanmard and
-Montanari (2015, 2018) and Ramdas et al. (2017).
+Montanari (2015, 2018), Ramdas et al. (2017, 2018) and Zrnic et al. (2018).
 }
 
 \references{
@@ -63,8 +68,12 @@ decaying memory. \emph{Advances in Neural Information Processing Systems 30},
 Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
 of the false discovery rate. \emph{Proceedings of the 35th International 
 Conference in Machine Learning}, 80:4286-4294.
+
+Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
+\emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
 }
 \author{
-David Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}), Adel
-Javanmard, Andrea Montanari and Natasha Karp.
+David S. Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}),
+Adel Javanmard, Aaditya Ramdas, Jinjin Tian, Tijana Zrnic, Andrea Montanari
+and Natasha A. Karp.
 }
