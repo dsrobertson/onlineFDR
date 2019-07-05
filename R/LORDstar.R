@@ -77,7 +77,7 @@
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #' 
-#' Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
+#' Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
 #' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
 #'
 #'

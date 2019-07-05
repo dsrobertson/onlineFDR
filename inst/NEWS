@@ -1,6 +1,14 @@
 # A NEWS File to document package updates
 
 
+CHANGES IN VERSION 1.3.4
+-----------------------
+MODIFICATIONS:
+
+    * added the ADDIS algorithms of Tian and Ramdas (2019)
+    * added unit tests for ADDIS
+
+
 CHANGES IN VERSION 1.3.3
 -----------------------
 MODIFICATIONS:

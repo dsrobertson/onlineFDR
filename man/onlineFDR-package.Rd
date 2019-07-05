@@ -69,7 +69,11 @@ Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control
 of the false discovery rate. \emph{Proceedings of the 35th International 
 Conference in Machine Learning}, 80:4286-4294.
 
-Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+online FDR control with conservative nulls. \emph{arXiv preprint}, 
+\url{https://arxiv.org/abs/1905.11465}. 
+
+Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
 \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
 }
 \author{
