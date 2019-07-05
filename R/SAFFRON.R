@@ -15,14 +15,13 @@
 #'
 #' The SAFFRON procedure controls FDR for independent p-values. Given an overall
 #' significance level \eqn{\alpha}, we choose a sequence of
-#' non-negative numbers \eqn{\gamma_i} such that they sum to 1, and
-#' \eqn{\gamma_i \ge \gamma_j} for \eqn{i \leq j}.
+#' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
 #' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} 
 #' satisfies \eqn{0 \le w_0 \le (1 - \lambda)\alpha} and represents the intial
 #' `wealth' of the procedure, and \eqn{0 < \lambda < 1} represents the
 #' threshold for a `candidate' hypothesis. A `candidate' refers to p-values
-#' smaller than \eqn{\lambda}, since SAFFON will never reject a p-value larger
+#' smaller than \eqn{\lambda}, since SAFFRON will never reject a p-value larger
 #' than \eqn{\lambda}.
 #'
 #' Note that FDR control also holds for the SAFFRON procedure if only the
@@ -71,6 +70,12 @@
 #' of the false discovery rate. \emph{Proceedings of the 35th International 
 #' Conference in Machine Learning}, 80:4286-4294.
 #'
+#' @seealso
+#'
+#' \code{\link{SAFFRONstar}} presents versions of SAFFRON for
+#' \emph{asynchronous} testing, i.e. where each hypothesis test can itself be a
+#' sequential process and the tests can overlap in time.
+#'
 #'
 #' @examples
 #' sample.df <- data.frame(
@@ -78,14 +83,14 @@
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
 #'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
 #' date = as.Date(c(rep("2014-12-01",3),
-#'                 rep("2015-09-21",5),
+#'                rep("2015-09-21",5),
 #'                 rep("2016-05-19",2),
 #'                 "2016-11-12",
-#'                 rep("2017-03-27",4))),
-#' pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
+#'                rep("2017-03-27",4))),
+#' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
-#'
+#' 
 #' SAFFRON(sample.df, random=FALSE)
 #' set.seed(1); SAFFRON(sample.df)
 #' set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
@@ -157,8 +162,10 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
         d <- randBatch(d)
     }
 
-    alphai <- R <- cand <- Cj.plus <- rep(0, N)
     pval <- d$pval
+    
+    alphai <- R <- cand <- Cj.plus <- rep(0, N)
+
     cand.sum <- 0
 
     alphai[1] <- min(gammai[1]*w0, lambda)
@@ -168,8 +175,8 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
 
         K <- sum(R)
         tau <- which(R[seq_len(i-1)] == 1)
-
-        cand[i-1] <- pval[i-1] <= lambda
+        
+        cand[i-1] <- (pval[i-1] <= lambda)
         cand.sum <- cand.sum + cand[i-1]
 
         if (K > 1) {
@@ -181,7 +188,7 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
             Cj.plus.sum <- Cj.plus.sum +
             sum(gammai[i-tau[Kseq] - Cj.plus[Kseq]])
 
-            Cj.plus[K] <- sum(cand[seq_len(i-tau[K]) + tau[K]])
+            Cj.plus[K] <- sum(cand[seq(from=tau[K]+1, to=max(i-1, tau+1))])
             Cj.plus.sum <- Cj.plus.sum + 
             gammai[i-tau[K]-Cj.plus[K]]-gammai[i-tau[1]-Cj.plus[1]]
 
@@ -194,7 +201,7 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
 
         } else if(K == 1){
 
-            Cj.plus[1] <- sum(cand[seq_len(i-tau[1])+tau[1]])
+            Cj.plus[1] <- sum(cand[seq(from=tau+1, to=max(i-1, tau+1))])
 
             alphai.tilde <- gammai[i - cand.sum]*w0 + 
             ((1-lambda)*alpha - w0)*gammai[i-tau-Cj.plus[1]]
