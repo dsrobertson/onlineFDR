@@ -77,9 +77,10 @@
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #' 
-#' Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
-#'
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1812.05068}
+#' 
 #'
 #' @seealso
 #' 
@@ -208,7 +209,7 @@ LORDstar <- function(pval, alpha=0.05, version, gammai, w0,
                     
             } else {
                 alphai[i] <- gammai[i]*w0 + (alpha - w0)*gammai[i-r[1]] +
-                            alpha*sum(gammai[i - r[-1]])
+                            alpha*sum(gammai[i-r[-1]])
                     
                 R[i] = pval[i] <= alphai[i]
             }

@@ -33,7 +33,7 @@ test_that("Correct rejections for version batch", {
 })
 
 
-test_that("Check that LORD is a special case of the LONDstar
+test_that("Check that LORD is a special case of the LORDstar
           algorithms", {
               expect_equal(LORD(test.df, version = '++')$alphai,
                            LORDstar(test.pval, version='async',

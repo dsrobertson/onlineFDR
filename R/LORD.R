@@ -10,21 +10,23 @@
 #' dates is provided, then the p-values are treated as being ordered
 #' sequentially with no batches.
 #'
-#' The LORD procedure controls FDR for independent p-values (see below for the
-#' case with dependent p-values). Given an overall significance level
-#' \eqn{\alpha}, we choose a sequence of non-negative non-increasing numbers
-#' \eqn{\gamma_i} that sum to 1.
+#' The LORD procedure provably controls FDR for independent p-values (see below
+#' for dependent p-values). Given an overall significance level \eqn{\alpha}, we
+#' choose a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
+#' sum to 1.
 #'
-#' Javanmard and Montanari (2018) present three versions of LORD which
-#' differ in the way the adjusted significance thresholds \eqn{\alpha_i} are
-#' calculated. The significance thresholds for LORD 1 are based on the time of
-#' the last discovery (i.e. hypothesis rejection), LORD 2 are based on all
-#' previous discovery times, and LORD 3 are based on the time of the last
-#' discovery as well as the 'wealth' accumulated at that time. LORD 2 was
-#' extended by Ramdas et al. (2017) to give a procedure called LORD++ (which
-#' is called by setting \code{version='++'}).
-#'
-#' LORD depends on constants \eqn{w_0} and \eqn{b_0}, where
+#' Javanmard and Montanari (2018) presented versions of LORD which differ in the
+#' way the adjusted significance thresholds \eqn{\alpha_i} are calculated. The
+#' significance thresholds for LORD 2 are based on all previous discovery times.
+#' LORD 2 has been superceded by the algorithm given in Ramdas et al. (2017),
+#' LORD++ (\code{version='++'}), which is the default version. The significance
+#' thresholds for LORD 3 (\code{version=3}) are based on the time of the last
+#' discovery as well as the 'wealth' accumulated at that time. Finally, Tian and
+#' Ramdas (2019) presented a version of LORD (\code{version='discard'}) that can
+#' improve the power of the procedure in the presence of conservative nulls by
+#' adaptively `discarding' these p-values.
+#' 
+#' LORD depends on constants \eqn{w_0} and (for some versions) \eqn{b_0}, where
 #' \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the procedure
 #' and \eqn{b_0 > 0} represents the `payout' for rejecting a hypothesis. 
 #' We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
@@ -40,7 +42,7 @@
 #' satisfy a condition given in Javanmard and Montanari (2018), example 3.8.
 #'
 #' Further details of the LORD procedures can be found in Javanmard and
-#' Montanari (2018) and Ramdas et al. (2017).
+#' Montanari (2018), Ramdas et al. (2017) and Tian and Ramdas (2019).
 #'
 #'
 #' @param d Dataframe with three columns: an identifier (`id'), date (`date')
@@ -55,13 +57,17 @@
 #' of LORD except 'dep'. The latter is provided a default to satisfy a 
 #' condition given in Javanmard and Montanari (2018), example 3.8.
 #'
-#' @param version Takes values 1, 2, 3, '++' or 'dep'. This 
-#' specifies the version of LORD to use, and defaults to 3.
+#' @param version Takes values '++', 3, 'discard', or 'dep'. This 
+#' specifies the version of LORD to use, and defaults to '++'.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
 #' 
 #' @param b0 The 'payout' for rejecting a hypothesis in all versions of LORD
 #' except for '++'. Defaults to \eqn{\alpha - w_0}.
+#' 
+#' @param tau.discard Optional threshold for hypotheses to be selected for
+#' testing. Must be between 0 and 1, defaults to 0.5. This is required if
+#' \code{version='discard'}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #' p-values in each batch (i.e. those that have exactly the same date) is
@@ -84,11 +90,16 @@
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #' 
-#' Ramdas, A. et al. (2017). Online control of the false discovery rate with 
-#' decaying memory. \emph{Advances in Neural Information Processing Systems 30},
-#' 5650-5659.
+#' Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+#' of the false discovery rate with decaying memory. \emph{Advances in Neural
+#' Information Processing Systems 30}, 5650-5659.
+#' 
+#' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+#' online FDR control with conservative nulls. \emph{arXiv preprint}, 
+#' \url{https://arxiv.org/abs/1905.11465}. 
 #'
-#'@seealso
+#'
+#' @seealso
 #' 
 #' \code{\link{LORDstar}} presents versions of LORD for \emph{asynchronous}
 #' testing, i.e. where each hypothesis test can itself be a sequential process
@@ -110,13 +121,14 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
 #' LORD(sample.df, random=FALSE)
-#' set.seed(1); LORD(sample.df, version='++')
+#' set.seed(1); LORD(sample.df, version='dep')
+#' set.seed(1); LORD(sample.df, version='discard')
 #' set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 #'
 #'
 #' @export
 
-LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
+LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
                 random=TRUE, date.format="%Y-%m-%d") {
 
     if(!(is.data.frame(d))){
@@ -130,8 +142,8 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
     }
 
     if(length(d$date) == 0){
-        warning("No column of dates is provided, so p-values are treated
-        as being ordered sequentially with no batches.")
+        # warning("No column of dates is provided, so p-values are treated
+        # as being ordered sequentially with no batches.")
         random = FALSE
     } else if(any(is.na(as.Date(d$date, date.format)))){
         stop("One or more dates are not in the correct format.")
@@ -142,9 +154,12 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
-
-    if(!(version %in% c(1,2,3,'++','dep'))){
-        stop("version must be 1, 2, 3, '++' or 'dep'.")
+    
+    if(version %in% c(1,2)){
+        stop("LORD 1 and LORD 2 have been superceded by LORD++, 
+             please use version '++' instead.")
+    } else if(!(version %in% c('++',3,'discard','dep'))){
+        stop("version must be '++', 3, 'discard' or 'dep'.")
     }
 
     if(anyNA(d$pval)){
@@ -165,7 +180,7 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
         stop("w0 must be non-negative.")
     }
     
-    if(version != '++'){
+    if(version %in% c(3,'dep')){
         if(missing(b0)){
             b0 = alpha - w0
         } else if(b0 <= 0){
@@ -183,8 +198,8 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
     
     if(version != 'dep'){
         if(missing(gammai)){
-            gammai <- 0.07720838*log(pmax(seq_len(N),2)) /
-                (seq_len(N)*exp(sqrt(log(seq_len(N)))))
+            gammai <- 0.07720838*log(pmax(seq_len(N+1),2)) /
+                (seq_len(N+1)*exp(sqrt(log(seq_len(N+1)))))
         } else if (any(gammai<0)){
             stop("All elements of gammai must be non-negative.")
         } else if(sum(gammai)>1){
@@ -200,11 +215,12 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
         }
     }
 
-    
     if(version == '++'){
-        version = 4
+        version <- 1
+    } else if(version == 'discard'){
+        version <- 2
     } else if(version == 'dep'){
-        version = 5
+        version <- 4
     }
     
     if(random){
@@ -215,42 +231,88 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
     pval <- d$pval
 
     switch(version,
-        ## 1
-        {
-        R <- rep(0, N)
-        
-        for (i in seq_len(N)){
-            tau <- max(0, which(R[seq_len(i-1)] == 1))
-            alphai[i] <- gammai[i]*w0*(tau == 0) + gammai[i-tau]*b0*(tau > 0)
-            R[i] <- pval[i] <= alphai[i]
-            }
-        },
-        ## 2
+        ## '++'
         {
         R <- rep(0, N)
         alphai[1] <- gammai[1]*w0
-        R[1] <- pval[1] <= alphai[1]
+        R[1] <- (pval[1] <= alphai[1])
+        
+        if(N == 1){
+            d.out <- data.frame(d, alphai, R)
+            return(d.out)
+        }
+            
+        for (i in (seq_len(N-1)+1)){
+            tau <- which(R[seq_len(i-1)] == 1)
+                   
+            if(sum(R) <= 1){
+                alphai[i] <- w0*gammai[i] + (alpha - w0)*sum(gammai[i-tau])
+                R[i] <- pval[i] <= alphai[i]
+                       
+            } else {
+                alphai[i] <- w0*gammai[i] + (alpha - w0)*gammai[i-tau[1]] +
+                alpha*sum(gammai[i - tau[-1]])
+
+                R[i] = pval[i] <= alphai[i]
+            }
+        }
+        },
+        ## 'discard'
+        {
+        R <- rep(0,N)
+        alphai[1] <- gammai[1]*w0
+        R[1] <- (pval[1] <= alphai[1])
         
         if(N == 1){
             d.out <- data.frame(d, alphai, R)
             return(d.out)
         }
         
+        selected <- (pval <= tau.discard)
+        S <- cumsum(selected)
+        
         for (i in (seq_len(N-1)+1)){
-            alphai[i] <- gammai[i]*w0 +
-            sum(gammai[i-which(R[seq_len(i-1)] == 1)])*b0
             
-            R[i] <- pval[i] <= alphai[i]
+            kappai <- which(R[seq_len(i-1)] == 1)
+            K <- length(kappai)
+            
+            if(K > 1){
+                
+                kappai.star <- sapply(kappai,
+                                      function(x){sum(selected[seq_len(x)])})
+                
+                alpha.tilde <- w0*gammai[S[i-1]+1] + 
+                    (tau.discard*alpha - w0)*gammai[S[i-1]-kappai.star[1]+1] + 
+                    tau.discard*alpha*sum(gammai[S[i-1]-kappai.star[-1]+1])
+                
+                alphai[i] <- min(tau.discard, alpha.tilde)
+                R[i] <- (pval[i] <= alphai[i])
+                
+            } else if (K==1) {
+                
+                kappai.star <- sum(selected[seq_len(kappai)])
+                
+                alpha.tilde <- w0*gammai[S[i-1]+1] + 
+                    (tau.discard*alpha - w0)*gammai[S[i-1]-kappai.star+1]
+                
+                alphai[i] <- min(tau.discard, alpha.tilde)
+                R[i] <- (pval[i] <= alphai[i])
+                
+            } else {
+                alpha.tilde <- w0*gammai[S[i-1]+1]
+                alphai[i] <- min(tau.discard, alpha.tilde)
+                R[i] <- (pval[i] <= alphai[i])
+            }
         }
         },
-        ## 3
+        ##  3
         {
         R <- W <- rep(0, N+1)
         R[1] <- 1
         W[1] <- w0
         
         alphai[1] <- phi <- gammai[1]*w0
-        R[2] <- pval[1] <= alphai[1]
+        R[2] <- (pval[1] <= alphai[1])
         W[2] <- w0 - phi + R[2]*b0
         
         if(N == 1){
@@ -263,38 +325,12 @@ LORD <- function(d, alpha=0.05, gammai, version=3, w0, b0,
             tau <- max(which(R[seq_len(i)] == 1))
             alphai[i] <- phi <- gammai[i-tau+1]*W[tau]
             
-            R[i+1] <- pval[i] <= alphai[i]
+            R[i+1] <- (pval[i] <= alphai[i])
             W[i+1] <- W[i] - phi + R[i+1]*b0
         }
         R <- R[(seq_len(N)+1)]
         },
-        ## '++' = 4
-        {
-        R <- rep(0, N)
-        alphai[1] <- gammai[1]*w0
-        R[1] <- pval[1] <= alphai[1]
-        
-        if(N == 1){
-            d.out <- data.frame(d, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N-1)+1)){
-            tau <- which(R[seq_len(i-1)] == 1)
-            
-            if(sum(R) <= 1){
-                alphai[i] <- gammai[i]*w0 + (alpha - w0)*sum(gammai[i-tau])
-                R[i] <- pval[i] <= alphai[i]
-            
-            } else {
-                alphai[i] <- gammai[i]*w0 + (alpha - w0)*gammai[i-tau[1]] +
-                alpha*sum(gammai[i - tau[-1]])
-                
-                R[i] = pval[i] <= alphai[i]
-            }
-        }
-        },
-        ## 'dep' = 5
+        ## 'dep'
         {
         R <- W <- rep(0, N+1)
         R[1] <- 1

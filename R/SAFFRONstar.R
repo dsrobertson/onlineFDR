@@ -13,7 +13,11 @@
 #' process, consisting of tests that start and finish at (potentially) random 
 #' times. The discretised finish times of the test correspond to the decision 
 #' times. These decision times are given as the input \code{decision.times}
-#' for this version of the SAFFRONstar algorithm.
+#' for this version of the SAFFRONstar algorithm. For this version of
+#' SAFFRONstar, Tian and Ramdas (2019) presented an algorithm that can
+#' improve the power of the procedure in the presence of conservative nulls by
+#' adaptively `discarding' these p-values. This can be called by setting the 
+#' option \code{discard=TRUE}.
 #' 
 #' 2) \code{version='dep'} is for online testing under local
 #' dependence of the p-values. More precisely, for any \eqn{t>0} we allow the
@@ -33,8 +37,9 @@
 #' w_0 \le (1 - \lambda)\alpha} and represents the intial `wealth' of the
 #' procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
 #' `candidate' hypothesis. A `candidate' refers to p-values smaller than
-#' \eqn{\lambda}, since SAFFRON will never reject a p-value larger than
-#' \eqn{\lambda}.
+#' \eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
+#' \eqn{\lambda}. The algorithms also require a sequence of non-negative
+#' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #' 
 #' Note that these SAFFRONstar algorithms control the \emph{modified} FDR
 #' (mFDR). The `async' version also controls the usual FDR if the p-values are
@@ -50,7 +55,7 @@
 #' is 0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#' \eqn{\gamma_j} proportional to \eqn{1/j^2}.
+#' \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
 #' @param version Takes values 'async', 'dep' or 'batch'. This 
 #' specifies the version of LORDstar to use.
@@ -68,6 +73,13 @@
 #' 
 #' @param batch.sizes A vector of batch sizes, this is required for
 #' \code{version='batch'}.
+#' 
+#' @param discard Logical. If \code{TRUE} then runs the ADDIS algorithm with 
+#' adaptive discarding of conservative nulls. The default is \code{FALSE}.
+#' 
+#' @param tau.discard Optional threshold for hypotheses to be selected for
+#' testing. Must be between 0 and 1, defaults to 0.5. This is required if
+#' \code{discard=TRUE}.
 #'
 #'
 #' @return
@@ -79,8 +91,13 @@
 #'
 #'
 #' @references
-#' Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1812.05068}.
+#' 
+#' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+#' online FDR control with conservative nulls. \emph{arXiv preprint}, 
+#' \url{https://arxiv.org/abs/1905.11465}. 
 #'
 #'
 #' @seealso
@@ -88,6 +105,8 @@
 #' \code{\link{SAFFRON}} presents versions of SAFFRON for \emph{synchronous}
 #' p-values, i.e. where each test can only start when the previous test has
 #' finished.
+#' 
+#' \code{\link{ADDIS}}
 #'
 #'
 #' @examples
@@ -109,7 +128,8 @@
 #' @export
 
 SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
-                        decision.times, lags, batch.sizes) {
+                        decision.times, lags, batch.sizes,
+                        discard=FALSE, tau.discard=0.5) {
 
     # if(!(is.data.frame(d))){
     #     stop("d must be a dataframe.")
@@ -159,16 +179,21 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
     if(!(version %in% c('async', 'dep', 'batch'))){
         stop("version must be 'async', 'dep' or 'batch'.")
     }
-
+    
+    if(version == 'async' && discard){
+        return(ADDIS(pval, alpha, gammai, w0, lambda, tau.discard,
+                 async=TRUE, decision.times))
+    }  
+  
     # N <- length(d$pval)
     N <- length(pval)
 
     if(missing(gammai)){
-        gammai <- 6/(pi^2*seq_len(N)^2)
+      gammai <- 0.4374901658/(seq_len(N+1)^(1.6))
     } else if (any(gammai<0)){
-        stop("All elements of gammai must be non-negative.")
+      stop("All elements of gammai must be non-negative.")
     } else if(sum(gammai)>1){
-        stop("The sum of the elements of gammai must not be greater than 1.")
+      stop("The sum of the elements of gammai must not be greater than 1.")
     }
 
     if(missing(w0)){
@@ -180,11 +205,11 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
     }
     
     if(version == 'async'){
-        version = 1
+        version <- 1
     } else if(version == 'dep'){
-        version = 2
+        version <- 2
     } else {
-        version = 3
+        version <- 3
     }
     
     # pval <- d$pval
@@ -197,7 +222,7 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
         alphai <- R <- cand <- Cj.plus <- rep(0, N)
         
         alphai[1] <- min(gammai[1]*w0, lambda)
-        R[1] <- pval[1] <= alphai[1]
+        R[1] <- (pval[1] <= alphai[1])
                
         if(N == 1){
             # d.out <- data.frame(d, alphai, R)
@@ -221,12 +246,12 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
                 function(x){sum(cand[seq(from=r[x]+1,
                                          to=max(i-1,r[x]+1))] &
                                 E[seq(from=r[x]+1,
-                                      to=max(i-1,r[x]+1))] <= i)})
+                                      to=max(i-1,r[x]+1))] <= i-1)})
             
             Cj.plus.sum <- sum(gammai[i-r[Kseq]-Cj.plus[Kseq]]) -
               gammai[i-r[1]-Cj.plus[1]]
             
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
+            alphai.tilde <- w0*gammai[i - cand.sum] + 
               ((1-lambda)*alpha - w0)*gammai[i-r[1]-Cj.plus[1]] + 
               (1-lambda)*alpha*Cj.plus.sum
             
@@ -238,9 +263,9 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
             Cj.plus[1] <- sum(cand[seq(from=r+1,
                                        to=max(i-1,r+1))] &
                                 E[seq(from=r+1,
-                                      to=max(i-1,r+1))] <= i)
+                                      to=max(i-1,r+1))] <= i-1)
             
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
+            alphai.tilde <- w0*gammai[i - cand.sum] + 
               ((1-lambda)*alpha - w0)*gammai[i-r-Cj.plus[1]]
             
             alphai[i] <- min(lambda, alphai.tilde)
@@ -248,10 +273,9 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
             
           } else {
             
-            alphai.tilde <- gammai[i - cand.sum]*w0
+            alphai.tilde <- w0*gammai[i-cand.sum]
             alphai[i] <- min(lambda, alphai.tilde)
             R[i] <- pval[i] <= alphai[i]
-            
           }
         }
                
@@ -264,8 +288,8 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
         alphai <- R <- cand <- Cj.plus <- rep(0, N)
         cand.sum <- 0
         
-        alphai[1] <- min(gammai[1]*w0, lambda)
-        R[1] <- pval[1] <= alphai[1]
+        alphai[1] <- min(w0*gammai[1], lambda)
+        R[1] <- (pval[1] <= alphai[1])
         
         if(N == 1){
             # d.out <- data.frame(d, alphai, R)
@@ -289,13 +313,15 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
               Kseq <- seq_len(K)
               
               Cj.plus[Kseq] <- sapply(Kseq,
-                  function(x){sum(cand[seq(from=r[x]+1,
-                                           to=max(i-1-L[i],r[x]+1))])})
+                    function(x){sum(cand[seq(from=r[x]+1,
+                                             to=max(i-1,r[x]+1))] &
+                                         seq(from=r[x]+1,
+                                             to=max(i-1,r[x]+1)) <= i-1-L[i])})
               
               Cj.plus.sum <- sum(gammai[i-r[Kseq]-Cj.plus[Kseq]]) -
                               gammai[i-r[1]-Cj.plus[1]]
               
-              alphai.tilde <- gammai[i - cand.sum]*w0 + 
+              alphai.tilde <- w0*gammai[i-cand.sum] + 
                   ((1-lambda)*alpha - w0)*gammai[i-r[1]-Cj.plus[1]] + 
                   (1-lambda)*alpha*Cj.plus.sum
               
@@ -305,9 +331,12 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
             } else if(K == 1){
               
               Cj.plus[1] <- sum(cand[seq(from=r+1,
-                                         to=max(i-1-L[i],r+1))])
+                                         to=max(i-1,r+1))] &
+                                     seq(from=r+1,
+                                         to=max(i-1,r+1)) <= i-L[i]-1)
+
               
-              alphai.tilde <- gammai[i - cand.sum]*w0 + 
+              alphai.tilde <- w0*gammai[i - cand.sum] + 
                 ((1-lambda)*alpha - w0)*gammai[i-r-Cj.plus[1]]
               
               alphai[i] <- min(lambda, alphai.tilde)
@@ -315,10 +344,9 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
               
             } else {
               
-              alphai.tilde <- gammai[i - cand.sum]*w0
+              alphai.tilde <- w0*gammai[i - cand.sum]
               alphai[i] <- min(lambda, alphai.tilde)
               R[i] <- pval[i] <= alphai[i]
-              
             }
         }
                
@@ -337,7 +365,7 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
         for (i in seq_len(n[1])){ 
             cand[i] <- (pval[i] <= lambda)
             alphai[1,i] <- gammai[i]*w0
-            R[1,i] <- pval[i] <= alphai[1,i]
+            R[1,i] <- (pval[i] <= alphai[1,i])
         }
                
         if(length(n) == 1){
@@ -345,7 +373,7 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
             d.out <- data.frame(pval, batch = rep(1, n),
                                 alphai = as.vector(t(alphai)),
                                 R = as.vector(t(R)))
-                   
+        
         return(d.out)
                    
         } else {
@@ -358,7 +386,6 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
           for (b in seq_len(length(n)-1)+1){
             
             Rcum <- cumsum(rowSums(R))
-            
             cand.sum <- sum(Cj)
             
             for (i in seq_len(n[b])){ 
@@ -386,14 +413,14 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
                   gammai[ncum[b-1]+i-ncum[r[1]]-Cj.plus[1]]
                 
                 
-                alphai.tilde <- gammai[ncum[b-1]+i-cand.sum]*w0 +
+                alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum] +
                   ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
                                                    ncum[r[1]]-Cj.plus[1]] +
                   (1-lambda)*alpha*Cj.plus.sum
                 
                 alphai[b,i] <- min(lambda, alphai.tilde)
                 
-                R[b,i] = pval[ncum[b-1]+i] <= alphai[b,i]
+                R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
                 
               } else if(K == 1){
                 
@@ -401,20 +428,19 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
                   Cj.plus[1] <- sum(Cj[seq(from=r+1, to=b-1)])
                 }
                 
-                alphai.tilde <- gammai[ncum[b-1]+i-cand.sum]*w0 + 
+                alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum] + 
                   ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
                                                    ncum[r]-Cj.plus[1]]
                 
                 alphai[b,i] <- min(lambda, alphai.tilde)
                 
-                R[b,i] <- pval[ncum[b-1]+i] <= alphai[b,i]
+                R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
                 
               } else {
                 
-                alphai.tilde <- gammai[ncum[b-1]+i-cand.sum]*w0
+                alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum]
                 alphai[i] <- min(lambda, alphai.tilde)
-                R[i] <- pval[i] <= alphai[i]
-                
+                R[i] <- (pval[i] <= alphai[i])
               }
             }
             

@@ -2,48 +2,33 @@
 #'
 #' Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
 #' an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
-#' and Ramdas (2019).
+#' and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
+#' with conservative nulls, by including both adapativity in the fraction of
+#' null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
+#' SAFFRON).
 #'
-#' The function takes as its input a vector of p-values, as well as a vector
-#' describing the conflict sets for the hypotheses. This takes the form of a
-#' vector of decision times, lags or batch sizes (see below).
+#' The function takes as its input a vector of p-values. Given an overall
+#' significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
+#' \eqn{\lambda} and \eqn{\tau}. \eqn{w_0} represents the intial `wealth' of the
+#' procedure and satisfies \eqn{0 \le w_0 \le \tau \lambda \alpha}. \eqn{\tau
+#' \in (0,1)} represents the threshold for a hypothesis to be selected for
+#' testing: p-values greater than \eqn{\tau} are implicitly `discarded' by the
+#' procedure. Finally, \eqn{\lambda \in (0,1)} sets the treshold for a p-value
+#' to be a candidate for rejection: ADDIS will never reject a p-value larger
+#' than \eqn{\tau \lambda}. The algorithms also require a sequence of
+#' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
+#' 
+#' The ADDIS procedure provably controls FDR for independent p-values. Given an
+#' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+#' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
-#' Tian and Ramdas (2019). present explicit three versions of SAFFRONstar:
-#'
-#' 1) \code{version='async'} is for an asynchoronous testing process, consisting
-#' of tests that start and finish at (potentially) random times. The discretised
-#' finish times of the test correspond to the decision times. These decision
-#' times are given as the input \code{decision.times} for this version of the
-#' SAFFRONstar algorithm.
-#'
-#' 2) \code{version='dep'} is for online testing under local dependence of the
-#' p-values. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t}
-#' have arbitrary dependence on the previous \eqn{L_t} p-values. The fixed
-#' sequence of \eqn{L_t} is referred to as `lags' and is given as the input
-#' \code{lags} for this version of the SAFFRONstar algorithm.
-#'
-#' 3) \code{version='batch'} is for controlling the mFDR in mini-batch testing,
-#' where a mini-batch represents a grouping of tests run asynchronously which
-#' result in dependent p-values. Once a mini-batch of tests is fully completed,
-#' a new one can start, testing hypotheses independent of the previous batch.
-#' The batch sizes are given as the input \code{batch.sizes} for this version of
-#' the SAFFRONstar algorithm.
-#'
-#' Given an overall significance level \eqn{\alpha}, SAFFRONstar depends on
-#' constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
-#' w_0 \le (1 - \lambda)\alpha} and represents the intial `wealth' of the
-#' procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
-#' `candidate' hypothesis. A `candidate' refers to p-values smaller than
-#' \eqn{\lambda}, since SAFFRON will never reject a p-value larger than
-#' \eqn{\lambda}.
-#'
-#' Note that these algorithms control the \emph{modified} FDR
-#' (mFDR). The `async' version also controls the usual FDR if the p-values are
-#' assumed to be independent.
+#' Tian and Ramdas (2019) also presented a version for an asynchoronous testing
+#' process, consisting of tests that start and finish at (potentially) random
+#' times. The discretised finish times of the test correspond to the decision
+#' times. These decision times are given as the input \code{decision.times}.
 #'
 #' Further details of the ADDIS algorithms can be found in Tian and Ramdas
 #' (2019).
-#'
 #'
 #' @param pval A vector of p-values
 #'
@@ -51,24 +36,21 @@
 #' is 0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#' \eqn{\gamma_j} proportional to \eqn{1/j^2}.
-#'
-#' @param version Takes values 'async', 'dep' or 'batch'. This 
-#' specifies the version of LORDstar to use.
+#' \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
 #' 
-#' @param lambda Optional threshold for a `candidate' hypothesis, must be 
-#' between 0 and 1. Defaults to 0.5.
+#' @param lambda Optional parameter that sets the threshold for
+#' `candidate' hypotheses. Must be between 0 and 1, defaults to 0.5.
+#' 
+#' @param tau Optional threshold for hypotheses to be selected for testing.
+#' Must be between 0 and 1, defaults to 0.5.
+#' 
+#' @param async Logical. If \code{TRUE} runs the version for an asynchronous
+#' testing process
 #'
 #' @param decision.times A vector of decision times for the hypothesis tests,
-#' this is required for \code{version='async'}.
-#' 
-#' @param lags A vector of lags or the hypothesis tests, this is required for
-#' \code{version='dep'}.
-#' 
-#' @param batch.sizes A vector of batch sizes, this is required for
-#' \code{version='batch'}.
+#' this is required if \code{async=TRUE}.
 #'
 #'
 #' @return
@@ -87,20 +69,25 @@
 #'
 #' @seealso
 #'
-#' \code{\link{SAFFRON}} 
+#' ADDIS is identical to \code{\link{SAFFRON}} if \code{discard=TRUE}.
 #'
 #'
 #' @examples
-#' pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0174, 0.04723,
+#' pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0154, 0.04723,
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
 #'         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 #'
 #'
+#' ADDIS(pval)
+#' 
+#' ADDIS(pval, async=TRUE, decision.times=seq_len(15)) # Same as above
+#' ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
+#'
 #' @export
 
-ADDIS <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
-                        decision.times, lags, batch.sizes) {
-
+ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
+                  async=FALSE, decision.times) {
+    
     # if(!(is.data.frame(d))){
     #     stop("d must be a dataframe.")
     # }
@@ -136,295 +123,193 @@ ADDIS <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
     # if(random){
     #     d <- randBatch(d)
     # }
-
+    
     
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
-
+    
     if(lambda<=0 || lambda>1){
         stop("lambda must be between 0 and 1.")
     }
     
-    if(!(version %in% c('async', 'dep', 'batch'))){
-        stop("version must be 'async', 'dep' or 'batch'.")
+    if(tau<=0 || tau>1){
+        stop("tau must be between 0 and 1.")
     }
-
+    
     # N <- length(d$pval)
     N <- length(pval)
-
+    
     if(missing(gammai)){
-        gammai <- 6/(pi^2*seq_len(N)^2)
+        gammai <- 0.4374901658/(seq_len(N+1)^(1.6))
     } else if (any(gammai<0)){
         stop("All elements of gammai must be non-negative.")
     } else if(sum(gammai)>1){
         stop("The sum of the elements of gammai must not be greater than 1.")
     }
-
+    
     if(missing(w0)){
-        w0 = (1-lambda)*alpha/2
+        w0 = tau*lambda*alpha/2
     } else if(w0 < 0){
         stop("w0 must be non-negative.")
-    } else if(w0 >= (1-lambda)*alpha){
-        stop("w0 must be less than (1-lambda)*alpha")
-    }
-    
-    if(version == 'async'){
-        version = 1
-    } else if(version == 'dep'){
-        version = 2
-    } else {
-        version = 3
+    } else if(w0 > tau*lambda*alpha){
+        stop("w0 must be less than tau*lambda*alpha")
     }
     
     # pval <- d$pval
     
-    switch(version,
-        ## async = 1
-        {
-        E <- decision.times
+    if(!(async)){
         
         alphai <- R <- cand <- Cj.plus <- rep(0, N)
         
-        alphai[1] <- min(gammai[1]*w0, lambda)
-        R[1] <- pval[1] <= alphai[1]
-               
+        alphai[1] <- w0*gammai[1]
+        R[1] <- (pval[1] <= alphai[1])
+        
         if(N == 1){
             # d.out <- data.frame(d, alphai, R)
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }
-               
-        for (i in (seq_len(N-1)+1)){
-          
-          r <- which(R[seq_len(i-1)] == 1 & E[seq_len(i-1)] <= i-1)
-          K <- length(r)
-          
-          cand[i-1] <- (pval[i-1] <= lambda)
-          cand.sum <- sum(cand[seq_len(i-1)] & E[seq_len(i-1)] <= i-1)
-          
-          if (K > 1) {
-            
-            Kseq <- seq_len(K)
-            
-            Cj.plus[Kseq] <- sapply(Kseq,
-                function(x){sum(cand[seq(from=r[x]+1,
-                                         to=max(i-1,r[x]+1))] &
-                                E[seq(from=r[x]+1,
-                                      to=max(i-1,r[x]+1))] <= i)})
-            
-            Cj.plus.sum <- sum(gammai[i-r[Kseq]-Cj.plus[Kseq]]) -
-              gammai[i-r[1]-Cj.plus[1]]
-            
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
-              ((1-lambda)*alpha - w0)*gammai[i-r[1]-Cj.plus[1]] + 
-              (1-lambda)*alpha*Cj.plus.sum
-            
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
-            
-          } else if(K == 1){
-            
-            Cj.plus[1] <- sum(cand[seq(from=r+1,
-                                       to=max(i-1,r+1))] &
-                                E[seq(from=r+1,
-                                      to=max(i-1,r+1))] <= i)
-            
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
-              ((1-lambda)*alpha - w0)*gammai[i-r-Cj.plus[1]]
-            
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
-            
-          } else {
-            
-            alphai.tilde <- gammai[i - cand.sum]*w0
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
-            
-          }
-        }
-               
-        d.out <- data.frame(pval, alphai, R)
-        },
-        ## dep = 2
-        {
-        L <- lags
-               
-        alphai <- R <- cand <- Cj.plus <- rep(0, N)
+        
         cand.sum <- 0
+        selected <- (pval <= tau)
+        S <- cumsum(selected)
         
-        alphai[1] <- min(gammai[1]*w0, lambda)
-        R[1] <- pval[1] <= alphai[1]
-        
-        if(N == 1){
-            # d.out <- data.frame(d, alphai, R)
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-               
         for (i in (seq_len(N-1)+1)){
             
-            r <- which(R[seq_len(i-1)] == 1 & seq_len(i-1) <= i-1-L[i])
-            K <- length(r)
+            kappai <- which(R[seq_len(i-1)] == 1)
+            K <- length(kappai)
             
-            cand[i-1] <- (pval[i-1] <= lambda)
-            
-            if(i-1-L[i] > 0){
-                cand.sum <- sum(cand[seq_len(i-1-L[i])])
-            }
+            cand[i-1] <- (pval[i-1] <= tau*lambda)
+            cand.sum <- cand.sum + cand[i-1]
             
             if (K > 1) {
-              
-              Kseq <- seq_len(K)
-              
-              Cj.plus[Kseq] <- sapply(Kseq,
-                  function(x){sum(cand[seq(from=r[x]+1,
-                                           to=max(i-1-L[i],r[x]+1))])})
-              
-              Cj.plus.sum <- sum(gammai[i-r[Kseq]-Cj.plus[Kseq]]) -
-                              gammai[i-r[1]-Cj.plus[1]]
-              
-              alphai.tilde <- gammai[i - cand.sum]*w0 + 
-                  ((1-lambda)*alpha - w0)*gammai[i-r[1]-Cj.plus[1]] + 
-                  (1-lambda)*alpha*Cj.plus.sum
-              
-              alphai[i] <- min(lambda, alphai.tilde)
-              R[i] <- pval[i] <= alphai[i]
-              
+                
+                kappai.star <- sapply(kappai,
+                                      function(x){sum(selected[seq_len(x)])})
+                
+                Kseq <- seq_len(K-1)
+                
+                Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i-1]
+                Cj.plus.sum <- sum(gammai[S[i-1]-
+                                          kappai.star[Kseq]-Cj.plus[Kseq]+1])
+                
+                Cj.plus[K] <- sum(cand[seq(from=kappai[K]+1,
+                                           to=max(i-1, kappai+1))])
+                
+                Cj.plus.sum <- Cj.plus.sum + 
+                    gammai[S[i-1]-kappai.star[K]-Cj.plus[K]+1] - 
+                    gammai[S[i-1]-kappai.star[1]-Cj.plus[1]+1]
+                
+                alphai.hat <- w0*gammai[S[i-1]-cand.sum+1] + 
+                    (tau*(1-lambda)*alpha - w0)*
+                    gammai[S[i-1]-kappai.star[1]-Cj.plus[1]+1] + 
+                    tau*(1-lambda)*alpha*Cj.plus.sum
+                
+                alphai[i] <- min(tau*lambda, alphai.hat)
+                R[i] <- (pval[i] <= alphai[i])
+                
             } else if(K == 1){
-              
-              Cj.plus[1] <- sum(cand[seq(from=r+1,
-                                         to=max(i-1-L[i],r+1))])
-              
-              alphai.tilde <- gammai[i - cand.sum]*w0 + 
-                ((1-lambda)*alpha - w0)*gammai[i-r-Cj.plus[1]]
-              
-              alphai[i] <- min(lambda, alphai.tilde)
-              R[i] <- pval[i] <= alphai[i]
-              
+                
+                kappai.star <- sum(selected[seq_len(kappai)])
+                
+                Cj.plus[1] <- sum(cand[seq(from=kappai+1,
+                                           to=max(i-1, kappai+1))])
+                
+                alphai.hat <- w0*gammai[S[i-1]-cand.sum+1] + 
+                    (tau*(1-lambda)*alpha - w0)*
+                    gammai[S[i-1]-kappai.star-Cj.plus[1]+1]
+                
+                alphai[i] <- min(tau*lambda, alphai.hat)
+                R[i] <- (pval[i] <= alphai[i])
+                
             } else {
-              
-              alphai.tilde <- gammai[i - cand.sum]*w0
-              alphai[i] <- min(lambda, alphai.tilde)
-              R[i] <- pval[i] <= alphai[i]
-              
+                
+                alphai.hat <- w0*gammai[S[i-1]-cand.sum+1]
+                alphai[i] <- min(tau*lambda, alphai.hat)
+                R[i] <- (pval[i] <= alphai[i])
             }
         }
-               
-        d.out <- data.frame(pval, lag=lags, alphai, R)
-        },
-        ## mini = 3
-        {
-        n <- batch.sizes
-        ncum <- cumsum(n)
-               
-        alphai <- matrix(NA, nrow = length(n), ncol = max(n))
-        R <- matrix(0, nrow = length(n), ncol = max(n))
-        cand <- rep(0, N)
-        Cj <- rep(0, length(n))
-               
-        for (i in seq_len(n[1])){ 
-            cand[i] <- (pval[i] <= lambda)
-            alphai[1,i] <- gammai[i]*w0
-            R[1,i] <- pval[i] <= alphai[1,i]
-        }
-               
-        if(length(n) == 1){
+        
+    } else {
+        
+        E <- decision.times
+        
+        alphai <- R <- S <- cand <- Cj.plus <- rep(0, N)
+        
+        selected <- (pval <= tau)
+        
+        alphai[1] <- w0*gammai[1]
+        R[1] <- (pval[1] <= alphai[1])
+        
+        if(N == 1){
             # d.out <- data.frame(d, alphai, R)
-            d.out <- data.frame(pval, batch = rep(1, n),
-                                alphai = as.vector(t(alphai)),
-                                R = as.vector(t(R)))
-                   
-        return(d.out)
-                   
-        } else {
-          
-          Cj.plus <- rep(0, length(n))
-          r <- integer(0)
-          
-          Cj[1] <- sum(cand)
-          
-          for (b in seq_len(length(n)-1)+1){
+            d.out <- data.frame(pval, alphai, R)
+            return(d.out)
+        }
+        
+        for (i in (seq_len(N-1)+1)){
             
-            Rcum <- cumsum(rowSums(R))
+            kappai <- which(R[seq_len(i-1)]==1 & E[seq_len(i-1)] <= i-1)
+            K <- length(kappai)
             
-            cand.sum <- sum(Cj)
+            cand[i-1] <- (pval[i-1] <= tau*lambda)
+            cand.sum <- sum(cand[seq_len(i-1)] & E[seq_len(i-1)] <= i-1)
             
-            for (i in seq_len(n[b])){ 
-              
-              cand[ncum[b-1]+i] <- (pval[ncum[b-1]+i] <= lambda)
-              
-              if(max(Rcum)>0){
-                r <- sapply(seq_len(max(Rcum)),
-                            function(x){match(1,Rcum>=x)})
-              }
-              
-              K <- length(r)
-              
-              if(K > 1){
+            S[i-1] <- sum((selected[seq_len(i-1)] & E[seq_len(i-1)] <= i-1) +
+                              (E[seq_len(i-1)] >= i))
+            
+            if (K > 1) {
+                
+                kappai.star <- sapply(kappai,
+                                      function(x){sum(selected[seq_len(x)])})
                 
                 Kseq <- seq_len(K)
                 
                 Cj.plus[Kseq] <- sapply(Kseq,
-                                        function(x){(b-1>=r[x]+1)*(
-                                          sum(Cj[seq(from=r[x]+1,
-                                                     to=b-1)]))})
+                                 function(x){sum(cand[seq(from=kappai[x]+1,
+                                              to=max(i-1,kappai[x]+1))] &
+                                             E[seq(from=kappai[x]+1,
+                                               to=max(i-1,kappai[x]+1))]<=i-1)})
                 
-                Cj.plus.sum <- sum(gammai[ncum[b-1]+i-ncum[r[Kseq]]-
-                                            Cj.plus[Kseq]]) -
-                  gammai[ncum[b-1]+i-ncum[r[1]]-Cj.plus[1]]
+                Cj.plus.sum <- sum(gammai[S[i-1]-
+                                          kappai.star[Kseq]-Cj.plus[Kseq]+1]) -
+                    gammai[S[i-1]-kappai.star[1]-Cj.plus[1]+1]
                 
+                alphai.tilde <- w0*gammai[S[i-1]-cand.sum+1] + 
+                    (tau*(1-lambda)*alpha - w0)*
+                    gammai[S[i-1]-kappai.star[1]-Cj.plus[1]+1] + 
+                    tau*(1-lambda)*alpha*Cj.plus.sum
                 
-                alphai.tilde <- gammai[ncum[b-1]+i-cand.sum]*w0 +
-                  ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
-                                                   ncum[r[1]]-Cj.plus[1]] +
-                  (1-lambda)*alpha*Cj.plus.sum
+                alphai[i] <- min(tau*lambda, alphai.tilde)
+                R[i] <- (pval[i] <= alphai[i])
                 
-                alphai[b,i] <- min(lambda, alphai.tilde)
+            } else if(K == 1){
                 
-                R[b,i] = pval[ncum[b-1]+i] <= alphai[b,i]
+                kappai.star <- sum(selected[seq_len(kappai)])
                 
-              } else if(K == 1){
+                Cj.plus[1] <- sum(cand[seq(from=kappai+1,
+                                           to=max(i-1,kappai+1))] &
+                                      E[seq(from=kappai+1,
+                                            to=max(i-1,kappai+1))] <= i-1)
                 
-                if(b-1>=r+1){
-                  Cj.plus[1] <- sum(Cj[seq(from=r+1, to=b-1)])
-                }
+                alphai.tilde <- w0*gammai[S[i-1]-cand.sum+1] + 
+                    (tau*(1-lambda)*alpha - w0)*
+                    gammai[S[i-1]-kappai.star-Cj.plus[1]+1]
                 
-                alphai.tilde <- gammai[ncum[b-1]+i-cand.sum]*w0 + 
-                  ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
-                                                   ncum[r]-Cj.plus[1]]
+                alphai[i] <- min(tau*lambda, alphai.tilde)
+                R[i] <- (pval[i] <= alphai[i])
                 
-                alphai[b,i] <- min(lambda, alphai.tilde)
+            } else {
                 
-                R[b,i] <- pval[ncum[b-1]+i] <= alphai[b,i]
-                
-              } else {
-                
-                alphai.tilde <- gammai[ncum[b-1]+i-cand.sum]*w0
-                alphai[i] <- min(lambda, alphai.tilde)
-                R[i] <- pval[i] <= alphai[i]
-                
-              }
+                alphai.tilde <- w0*gammai[S[i-1]-cand.sum+1]
+                alphai[i] <- min(tau*lambda, alphai.tilde)
+                R[i] <- (pval[i] <= alphai[i])
             }
-            
-            Cj[b] <- sum(cand[seq(from=ncum[b-1]+1,to=ncum[b])])
-          }
-          
-          alphai <- as.vector(t(alphai))
-          R <- as.vector(t(R))
-          
-          x <- !(is.na(alphai))
-          
-          if(length(x) > 0){
-            alphai <- alphai[x]
-            R <- R[x]
-          }
-          
-          batch.no <- rep(seq_len(length(n)),n)
-          d.out <- data.frame(pval, batch=batch.no, alphai, R)
         }
-        })
+    }
 
+    d.out <- data.frame(pval, alphai, R)
+    
     return(d.out)
 }

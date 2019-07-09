@@ -84,8 +84,8 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     }
 
     if(length(d$date) == 0){
-        warning("No column of dates is provided, so p-values are treated as
-        being ordered sequentially with no batches.")
+        # warning("No column of dates is provided, so p-values are treated as
+        # being ordered sequentially with no batches.")
         random <- FALSE
     } else if(any(is.na(as.Date(d$date, date.format)))){
         stop("One or more dates are not in the correct format.")

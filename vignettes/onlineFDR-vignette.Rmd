@@ -447,16 +447,14 @@ specify versions 1, 2 and ++ using the `version` argument (see [here](#LORD) for
 further details about the different versions).
 
 ```{r}
-set.seed(1); results.LORD1 <- LORD(sample.df, version=1)
-set.seed(1); results.LORD2 <- LORD(sample.df, version=3)
+set.seed(1); results.LORD3 <- LORD(sample.df, version=3)
 set.seed(1); results.LORD.plus <- LORD(sample.df, version='++')
-set.seed(1); results.LORD3 <- LORD(sample.df)   # default version = 2
+set.seed(1); results.LORD.dep <- LORD(sample.df, version='dep') 
 
 # compare adjusted significance thresholds
-cbind(LORD1 = results.LORD1$alphai,
-    LORD2 = results.LORD2$alphai,
-    LORD.plus = results.LORD.plus$alphai,
-    LORD3 = results.LORD3$alphai)
+cbind(LORD.plus = results.LORD.plus$alphai,
+    LORD3 = results.LORD3$alphai,
+    LORD.dep = results.LORD.dep$alphai)
 
 ```
 
@@ -523,14 +521,26 @@ Li, A., and Barber, F.G. (2017). Accumulation Tests for FDR Control in Ordered
 Hypothesis Testing. *Journal of the American Statistical Association*, 
 112(518):837-849.
 
-Ramdas, A. et al. (2017). Online control of the false discovery rate with
-decaying memory. *Advances in Neural Information Processing Systems 30*,
-5650-5659.
+Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+of the false discovery rate with decaying memory. 
+*Advances in Neural Information Processing Systems 30*, 5650-5659.
 
-Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
-of the false discovery rate.
+Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+adaptive algorithm for online control of the false discovery rate. 
 *Proceedings of the 35th International Conference in Machine Learning*,
 80:4286-4294.
 
 Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
 rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
+
+Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
+Online control of the false discovery rate in biomedical research.
+*Bioinformatics*, https://doi.org/10.1093/bioinformatics/btz191.
+
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+online FDR control with conservative nulls. *arXiv preprint*, 
+https://arxiv.org/abs/1905.11465. 
+
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+Multiple Hypotheses. *arXiv preprint*, https://arxiv.org/abs/1812.05068.
+

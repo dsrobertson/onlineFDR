@@ -18,7 +18,7 @@ are unknown.
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
 Version: \tab 1.3.3\cr
-Date: \tab 2019-07-05\cr
+Date: \tab 2019-07-09\cr
 License: \tab GPL-3 \cr
 }
 
@@ -61,17 +61,27 @@ Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 46(2):526-554.
 
-Ramdas, A. et al. (2017). Online control of the false discovery rate with
-decaying memory. \emph{Advances in Neural Information Processing Systems 30},
-5650-5659.
+Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+of the false discovery rate with decaying memory. \emph{Advances in Neural
+Information Processing Systems 30}, 5650-5659.
 
-Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
-of the false discovery rate. \emph{Proceedings of the 35th International 
-Conference in Machine Learning}, 80:4286-4294.
+Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+adaptive algorithm for online control of the false discovery rate.
+\emph{Proceedings of the 35th International Conference in Machine Learning},
+80:4286-4294.
 
-Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
-online FDR control with conservative nulls. \emph{arXiv preprint}, 
-\url{https://arxiv.org/abs/1905.11465}. 
+Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
+discovery rate in biomedical research. \emph{arXiv preprint},
+\url{https://arxiv.org/abs/1809.07292}.
+
+Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
+onlineFDR: an R package to control the false discovery rate for growing data
+repositories. \emph{Bioinformatics},
+\url{https://doi.org/10.1093/bioinformatics/btz191}.
+
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+online FDR control with conservative nulls. \emph{arXiv preprint},
+\url{https://arxiv.org/abs/1905.11465}.
 
 Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
 \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}

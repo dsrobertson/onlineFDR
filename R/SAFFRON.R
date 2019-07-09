@@ -13,10 +13,10 @@
 #' dates is provided, then the p-values are treated as being ordered
 #' sequentially with no batches.
 #'
-#' The SAFFRON procedure controls FDR for independent p-values. Given an overall
-#' significance level \eqn{\alpha}, we choose a sequence of
-#' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
-#'
+#' SAFFRON procedure provably controls FDR for independent p-values. Given an
+#' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+#' non-increasing numbers \eqn{\gamma_i} that sum to 1.
+#' 
 #' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} 
 #' satisfies \eqn{0 \le w_0 \le (1 - \lambda)\alpha} and represents the intial
 #' `wealth' of the procedure, and \eqn{0 < \lambda < 1} represents the
@@ -27,6 +27,11 @@
 #' Note that FDR control also holds for the SAFFRON procedure if only the
 #' p-values corresponding to true nulls are mutually independent, and 
 #' independent from the non-null p-values.
+#' 
+#' The SAFFRON procedure can lose power in the presence of conservative nulls,
+#' which can be compensated for by adaptively `discarding' these p-values.
+#' This option is called by setting \code{discard=TRUE}, which is the same
+#' algorithm as ADDIS.
 #'
 #' Further details of the SAFFRON procedure can be found in 
 #' Ramdas et al. (2018).
@@ -40,7 +45,7 @@
 #' is 0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#' \eqn{\gamma_j} proportional to \eqn{1/j^2}.
+#' \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to 
@@ -48,6 +53,13 @@
 #' 
 #' @param lambda Optional threshold for a `candidate' hypothesis, must be 
 #' between 0 and 1. Defaults to 0.5.
+#' 
+#' @param discard Logical. If \code{TRUE} then runs the ADDIS algorithm with 
+#' adaptive discarding of conservative nulls. The default is \code{FALSE}.
+#' 
+#' @param tau.discard Optional threshold for hypotheses to be selected for
+#' testing. Must be between 0 and 1, defaults to 0.5. This is required if
+#' \code{discard=TRUE}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #' p-values in each batch (i.e. those that have exactly the same date) is
@@ -65,16 +77,18 @@
 #' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references
-#' Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
-#' of the false discovery rate. \emph{Proceedings of the 35th International 
-#' Conference in Machine Learning}, 80:4286-4294.
+#' @references Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
+#' SAFFRON: an adaptive algorithm for online control of the false discovery
+#' rate. \emph{Proceedings of the 35th International Conference in Machine
+#' Learning}, 80:4286-4294.
 #'
 #' @seealso
 #'
 #' \code{\link{SAFFRONstar}} presents versions of SAFFRON for
 #' \emph{asynchronous} testing, i.e. where each hypothesis test can itself be a
 #' sequential process and the tests can overlap in time.
+#' 
+#' If \code{discard=TRUE}, SAFFRON is the same as \code{\link{ADDIS}}.
 #'
 #'
 #' @examples
@@ -95,10 +109,13 @@
 #' set.seed(1); SAFFRON(sample.df)
 #' set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 #'
+#' SAFFRON(sample.df, discard=TRUE, random=FALSE)
+#'
 #' @export
 
 SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
-                    random=TRUE, date.format="%Y-%m-%d") {
+                    random=TRUE, date.format="%Y-%m-%d",
+                    discard=FALSE, tau.discard=0.5) {
 
     if(!(is.data.frame(d))){
         stop("d must be a dataframe.")
@@ -111,8 +128,8 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
     }
 
     if(length(d$date) == 0){
-        warning("No column of dates is provided, so p-values are treated
-        as being ordered sequentially with no batches.")
+        # warning("No column of dates is provided, so p-values are treated
+        # as being ordered sequentially with no batches.")
         random = FALSE
     } else if(any(is.na(as.Date(d$date, date.format)))){
         stop("One or more dates are not in the correct format.")
@@ -140,10 +157,14 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
         stop("All p-values must be between 0 and 1.")
     }
 
+    if(discard==TRUE){
+        return(ADDIS(d$pval, alpha, gammai, w0, lambda, tau.discard))
+    }
+    
     N <- length(d$pval)
 
     if(missing(gammai)){
-        gammai <- 6/(pi^2*seq_len(N)^2)
+        gammai <- 0.4374901658/(seq_len(N)^(1.6))
     } else if (any(gammai<0)){
         stop("All elements of gammai must be non-negative.")
     } else if(sum(gammai)>1){
@@ -169,7 +190,12 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
     cand.sum <- 0
 
     alphai[1] <- min(gammai[1]*w0, lambda)
-    R[1] <- pval[1] <= alphai[1]
+    R[1] <- (pval[1] <= alphai[1])
+    
+    if(N == 1){
+        d.out <- data.frame(d, alphai, R)
+        return(d.out)
+    }
 
     for (i in (seq_len(N-1)+1)){
 
@@ -181,39 +207,37 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
 
         if (K > 1) {
 
-            Cj.plus.sum <- 0
             Kseq <- seq_len(K-1)
 
             Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i-1]
-            Cj.plus.sum <- Cj.plus.sum +
-            sum(gammai[i-tau[Kseq] - Cj.plus[Kseq]])
+            Cj.plus.sum <- sum(gammai[i-tau[Kseq] - Cj.plus[Kseq]])
 
             Cj.plus[K] <- sum(cand[seq(from=tau[K]+1, to=max(i-1, tau+1))])
             Cj.plus.sum <- Cj.plus.sum + 
             gammai[i-tau[K]-Cj.plus[K]]-gammai[i-tau[1]-Cj.plus[1]]
 
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
+            alphai.tilde <- w0*gammai[i-cand.sum] + 
             ((1-lambda)*alpha - w0)*gammai[i-tau[1]-Cj.plus[1]] + 
             (1-lambda)*alpha*Cj.plus.sum
 
             alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
 
         } else if(K == 1){
 
             Cj.plus[1] <- sum(cand[seq(from=tau+1, to=max(i-1, tau+1))])
 
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
+            alphai.tilde <- w0*gammai[i - cand.sum] + 
             ((1-lambda)*alpha - w0)*gammai[i-tau-Cj.plus[1]]
 
             alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
 
         } else {
 
-            alphai.tilde <- gammai[i - cand.sum]*w0
+            alphai.tilde <- w0*gammai[i-cand.sum]
             alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
 
         }
     }

@@ -5,7 +5,7 @@
 \title{SAFFRON: Adaptive online FDR control}
 \usage{
 SAFFRON(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE,
-  date.format = "\%Y-\%m-\%d")
+  date.format = "\%Y-\%m-\%d", discard = FALSE, tau.discard = 0.5)
 }
 \arguments{
 \item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
@@ -16,7 +16,7 @@ are treated as being ordered sequentially with no batches.}
 is 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^2}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to 
 \eqn{(1-\lambda)\alpha/2}. Must be between 0 and \eqn{(1-\lambda)\alpha}.}
@@ -29,6 +29,13 @@ p-values in each batch (i.e. those that have exactly the same date) is
 randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
+
+\item{discard}{Logical. If \code{TRUE} then runs the ADDIS algorithm with 
+adaptive discarding of conservative nulls. The default is \code{FALSE}.}
+
+\item{tau.discard}{Optional threshold for hypotheses to be selected for
+testing. Must be between 0 and 1, defaults to 0.5. This is required if
+\code{discard=TRUE}.}
 }
 \value{
 \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
@@ -53,9 +60,9 @@ batches corresponds to multiple instances of the same date. If no column of
 dates is provided, then the p-values are treated as being ordered
 sequentially with no batches.
 
-The SAFFRON procedure controls FDR for independent p-values. Given an overall
-significance level \eqn{\alpha}, we choose a sequence of
-non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
+SAFFRON procedure provably controls FDR for independent p-values. Given an
+overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
 SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} 
 satisfies \eqn{0 \le w_0 \le (1 - \lambda)\alpha} and represents the intial
@@ -67,6 +74,11 @@ than \eqn{\lambda}.
 Note that FDR control also holds for the SAFFRON procedure if only the
 p-values corresponding to true nulls are mutually independent, and 
 independent from the non-null p-values.
+
+The SAFFRON procedure can lose power in the presence of conservative nulls,
+which can be compensated for by adaptively `discarding' these p-values.
+This option is called by setting \code{discard=TRUE}, which is the same
+algorithm as ADDIS.
 
 Further details of the SAFFRON procedure can be found in 
 Ramdas et al. (2018).
@@ -89,14 +101,19 @@ SAFFRON(sample.df, random=FALSE)
 set.seed(1); SAFFRON(sample.df)
 set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 
+SAFFRON(sample.df, discard=TRUE, random=FALSE)
+
 }
 \references{
-Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
-of the false discovery rate. \emph{Proceedings of the 35th International 
-Conference in Machine Learning}, 80:4286-4294.
+Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
+SAFFRON: an adaptive algorithm for online control of the false discovery
+rate. \emph{Proceedings of the 35th International Conference in Machine
+Learning}, 80:4286-4294.
 }
 \seealso{
 \code{\link{SAFFRONstar}} presents versions of SAFFRON for
 \emph{asynchronous} testing, i.e. where each hypothesis test can itself be a
 sequential process and the tests can overlap in time.
+
+If \code{discard=TRUE}, SAFFRON is the same as \code{\link{ADDIS}}.
 }

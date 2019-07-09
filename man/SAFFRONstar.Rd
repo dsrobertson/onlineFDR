@@ -5,7 +5,8 @@
 \title{SAFFRONstar: Adaptive online mFDR control for asynchronous testing}
 \usage{
 SAFFRONstar(pval, alpha = 0.05, version, gammai, w0, lambda = 0.5,
-  decision.times, lags, batch.sizes)
+  decision.times, lags, batch.sizes, discard = FALSE,
+  tau.discard = 0.5)
 }
 \arguments{
 \item{pval}{A vector of p-values}
@@ -17,7 +18,7 @@ is 0.05.}
 specifies the version of LORDstar to use.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^2}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
 
@@ -32,6 +33,13 @@ this is required for \code{version='async'}.}
 
 \item{batch.sizes}{A vector of batch sizes, this is required for
 \code{version='batch'}.}
+
+\item{discard}{Logical. If \code{TRUE} then runs the ADDIS algorithm with 
+adaptive discarding of conservative nulls. The default is \code{FALSE}.}
+
+\item{tau.discard}{Optional threshold for hypotheses to be selected for
+testing. Must be between 0 and 1, defaults to 0.5. This is required if
+\code{discard=TRUE}.}
 }
 \value{
 \item{d.out}{A dataframe with the original pvalues \code{pval}, the
@@ -55,7 +63,11 @@ Zrnic et al. (2018) present explicit three versions of SAFFRONstar:
 process, consisting of tests that start and finish at (potentially) random 
 times. The discretised finish times of the test correspond to the decision 
 times. These decision times are given as the input \code{decision.times}
-for this version of the SAFFRONstar algorithm.
+for this version of the SAFFRONstar algorithm. For this version of
+SAFFRONstar, Tian and Ramdas (2019) presented an algorithm that can
+improve the power of the procedure in the presence of conservative nulls by
+adaptively `discarding' these p-values. This can be called by setting the 
+option \code{discard=TRUE}.
 
 2) \code{version='dep'} is for online testing under local
 dependence of the p-values. More precisely, for any \eqn{t>0} we allow the
@@ -75,8 +87,9 @@ constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
 w_0 \le (1 - \lambda)\alpha} and represents the intial `wealth' of the
 procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
 `candidate' hypothesis. A `candidate' refers to p-values smaller than
-\eqn{\lambda}, since SAFFRON will never reject a p-value larger than
-\eqn{\lambda}.
+\eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
+\eqn{\lambda}. The algorithms also require a sequence of non-negative
+non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
 Note that these SAFFRONstar algorithms control the \emph{modified} FDR
 (mFDR). The `async' version also controls the usual FDR if the p-values are
@@ -103,11 +116,18 @@ SAFFRONstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
 
 }
 \references{
-Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-\emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+Multiple Hypotheses. \emph{arXiv preprint},
+\url{https://arxiv.org/abs/1812.05068}.
+
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+online FDR control with conservative nulls. \emph{arXiv preprint}, 
+\url{https://arxiv.org/abs/1905.11465}.
 }
 \seealso{
 \code{\link{SAFFRON}} presents versions of SAFFRON for \emph{synchronous}
 p-values, i.e. where each test can only start when the previous test has
 finished.
+
+\code{\link{ADDIS}}
 }

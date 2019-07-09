@@ -69,10 +69,11 @@
 #' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
-#' 
-#' Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
 #'
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{arXiv preprint}, 
+#' \url{https://arxiv.org/abs/1812.05068}
+#' 
 #'
 #' @seealso
 #'
@@ -115,8 +116,8 @@ LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
     }
 
     if(length(d$date) == 0){
-        warning("No column of dates is provided, so p-values are treated as
-        being ordered sequentially with no batches.")
+        # warning("No column of dates is provided, so p-values are treated as
+        # being ordered sequentially with no batches.")
         random = FALSE
     } else if(any(is.na(as.Date(d$date, date.format)))){
         stop("One or more dates are not in the correct format.")

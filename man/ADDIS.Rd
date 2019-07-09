@@ -4,8 +4,8 @@
 \alias{ADDIS}
 \title{ADDIS: Adaptive discarding algorithm for online FDR control}
 \usage{
-ADDIS(pval, alpha = 0.05, version, gammai, w0, lambda = 0.5,
-  decision.times, lags, batch.sizes)
+ADDIS(pval, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
+  async = FALSE, decision.times)
 }
 \arguments{
 \item{pval}{A vector of p-values}
@@ -13,25 +13,22 @@ ADDIS(pval, alpha = 0.05, version, gammai, w0, lambda = 0.5,
 \item{alpha}{Overall significance level of the procedure, the default
 is 0.05.}
 
-\item{version}{Takes values 'async', 'dep' or 'batch'. This 
-specifies the version of LORDstar to use.}
-
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^2}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
 
-\item{lambda}{Optional threshold for a `candidate' hypothesis, must be 
-between 0 and 1. Defaults to 0.5.}
+\item{lambda}{Optional parameter that sets the threshold for
+`candidate' hypotheses. Must be between 0 and 1, defaults to 0.5.}
+
+\item{tau}{Optional threshold for hypotheses to be selected for testing.
+Must be between 0 and 1, defaults to 0.5.}
+
+\item{async}{Logical. If \code{TRUE} runs the version for an asynchronous
+testing process}
 
 \item{decision.times}{A vector of decision times for the hypothesis tests,
-this is required for \code{version='async'}.}
-
-\item{lags}{A vector of lags or the hypothesis tests, this is required for
-\code{version='dep'}.}
-
-\item{batch.sizes}{A vector of batch sizes, this is required for
-\code{version='batch'}.}
+this is required if \code{async=TRUE}.}
 }
 \value{
 \item{d.out}{A dataframe with the original pvalues \code{pval}, the
@@ -43,54 +40,45 @@ function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 \description{
 Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
 an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
-and Ramdas (2019).
+and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
+with conservative nulls, by including both adapativity in the fraction of
+null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
+SAFFRON).
 }
 \details{
-The function takes as its input a vector of p-values, as well as a vector
-describing the conflict sets for the hypotheses. This takes the form of a
-vector of decision times, lags or batch sizes (see below).
+The function takes as its input a vector of p-values. Given an overall
+significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
+\eqn{\lambda} and \eqn{\tau}. \eqn{w_0} represents the intial `wealth' of the
+procedure and satisfies \eqn{0 \le w_0 \le \tau \lambda \alpha}. \eqn{\tau
+\in (0,1)} represents the threshold for a hypothesis to be selected for
+testing: p-values greater than \eqn{\tau} are implicitly `discarded' by the
+procedure. Finally, \eqn{\lambda \in (0,1)} sets the treshold for a p-value
+to be a candidate for rejection: ADDIS will never reject a p-value larger
+than \eqn{\tau \lambda}. The algorithms also require a sequence of
+non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
-Tian and Ramdas (2019). present explicit three versions of SAFFRONstar:
+The ADDIS procedure provably controls FDR for independent p-values. Given an
+overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
-1) \code{version='async'} is for an asynchoronous testing process, consisting
-of tests that start and finish at (potentially) random times. The discretised
-finish times of the test correspond to the decision times. These decision
-times are given as the input \code{decision.times} for this version of the
-SAFFRONstar algorithm.
-
-2) \code{version='dep'} is for online testing under local dependence of the
-p-values. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t}
-have arbitrary dependence on the previous \eqn{L_t} p-values. The fixed
-sequence of \eqn{L_t} is referred to as `lags' and is given as the input
-\code{lags} for this version of the SAFFRONstar algorithm.
-
-3) \code{version='batch'} is for controlling the mFDR in mini-batch testing,
-where a mini-batch represents a grouping of tests run asynchronously which
-result in dependent p-values. Once a mini-batch of tests is fully completed,
-a new one can start, testing hypotheses independent of the previous batch.
-The batch sizes are given as the input \code{batch.sizes} for this version of
-the SAFFRONstar algorithm.
-
-Given an overall significance level \eqn{\alpha}, SAFFRONstar depends on
-constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
-w_0 \le (1 - \lambda)\alpha} and represents the intial `wealth' of the
-procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
-`candidate' hypothesis. A `candidate' refers to p-values smaller than
-\eqn{\lambda}, since SAFFRON will never reject a p-value larger than
-\eqn{\lambda}.
-
-Note that these SAFFRONstar algorithms control the \emph{modified} FDR
-(mFDR). The `async' version also controls the usual FDR if the p-values are
-assumed to be independent.
+Tian and Ramdas (2019) also presented a version for an asynchoronous testing
+process, consisting of tests that start and finish at (potentially) random
+times. The discretised finish times of the test correspond to the decision
+times. These decision times are given as the input \code{decision.times}.
 
 Further details of the ADDIS algorithms can be found in Tian and Ramdas
 (2019).
 }
 \examples{
-pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0174, 0.04723,
+pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0154, 0.04723,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 
+
+ADDIS(pval)
+
+ADDIS(pval, async=TRUE, decision.times=seq_len(15)) # Same as above
+ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
 
 }
 \references{
@@ -99,5 +87,5 @@ online FDR control with conservative nulls. \emph{arXiv preprint},
 \url{https://arxiv.org/abs/1905.11465}.
 }
 \seealso{
-\code{\link{SAFFRON}}
+ADDIS is identical to \code{\link{SAFFRON}} if \code{discard=TRUE}.
 }

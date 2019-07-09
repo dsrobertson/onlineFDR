@@ -96,8 +96,9 @@ Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 46(2):526-554.
 
-Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-\emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+Multiple Hypotheses. \emph{arXiv preprint},
+\url{https://arxiv.org/abs/1812.05068}
 }
 \seealso{
 \code{\link{LOND}} presents versions of LOND for \emph{synchronous} p-values,

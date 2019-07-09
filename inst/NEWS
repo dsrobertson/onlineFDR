@@ -7,6 +7,8 @@ MODIFICATIONS:
 
     * added the ADDIS algorithms of Tian and Ramdas (2019)
     * added unit tests for ADDIS
+    * removed LORD versions 1 and 2
+    * updated references
 
 
 CHANGES IN VERSION 1.3.3
