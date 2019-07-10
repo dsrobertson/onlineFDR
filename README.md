@@ -10,9 +10,11 @@ p-values and the number of hypotheses to be tested are unknown.
 To install the latest (development) version of the onlineFDR package in R,
 please run the following code:
 ```{r}
-library(devtools)
-install_github("dsrobertson/onlineFDR")
+devtools::install_github("dsrobertson/onlineFDR")
 ```
+
+## Documentation
+The documentation is hosted at https://dsrobertson.github.io/onlineFDR/
 
 ## References
 Javanmard, A., and Montanari, A. (2015). On Online Control of False
