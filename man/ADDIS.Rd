@@ -8,21 +8,21 @@ ADDIS(pval, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
   async = FALSE, decision.times)
 }
 \arguments{
-\item{pval}{A vector of p-values}
+\item{pval}{A vector of p-values.}
 
-\item{alpha}{Overall significance level of the procedure, the default
-is 0.05.}
+\item{alpha}{Overall significance level of the procedure, the default is
+0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
 
-\item{lambda}{Optional parameter that sets the threshold for
-`candidate' hypotheses. Must be between 0 and 1, defaults to 0.5.}
+\item{lambda}{Optional parameter that sets the threshold for `candidate'
+hypotheses. Must be between 0 and 1, defaults to 0.5.}
 
-\item{tau}{Optional threshold for hypotheses to be selected for testing.
-Must be between 0 and 1, defaults to 0.5.}
+\item{tau}{Optional threshold for hypotheses to be selected for testing. Must
+be between 0 and 1, defaults to 0.5.}
 
 \item{async}{Logical. If \code{TRUE} runs the version for an asynchronous
 testing process}
@@ -31,11 +31,11 @@ testing process}
 this is required if \code{async=TRUE}.}
 }
 \value{
-\item{d.out}{A dataframe with the original pvalues \code{pval}, the
-adjusted testing levels \eqn{\alpha_i} and the indicator 
-function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-\eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-\code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+\item{d.out}{A dataframe with the original p-values \code{pval}, the
+  adjusted testing levels \eqn{\alpha_i} and the indicator function of
+  discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
+  p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
+  1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
@@ -52,7 +52,7 @@ significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
 procedure and satisfies \eqn{0 \le w_0 \le \tau \lambda \alpha}. \eqn{\tau
 \in (0,1)} represents the threshold for a hypothesis to be selected for
 testing: p-values greater than \eqn{\tau} are implicitly `discarded' by the
-procedure. Finally, \eqn{\lambda \in (0,1)} sets the treshold for a p-value
+procedure. Finally, \eqn{\lambda \in (0,1)} sets the threshold for a p-value
 to be a candidate for rejection: ADDIS will never reject a p-value larger
 than \eqn{\tau \lambda}. The algorithms also require a sequence of
 non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
@@ -82,10 +82,13 @@ ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
 
 }
 \references{
-Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
-online FDR control with conservative nulls. \emph{arXiv preprint}, 
-\url{https://arxiv.org/abs/1905.11465}.
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+  algorithm for online FDR control with conservative nulls. \emph{arXiv
+  preprint}, \url{https://arxiv.org/abs/1905.11465}.
 }
 \seealso{
-ADDIS is identical to \code{\link{SAFFRON}} if \code{discard=TRUE}.
+ADDIS is identical to \code{\link{SAFFRON}} with option \code{discard=TRUE}.
+
+ADDIS with option \code{async=TRUE} is identical to \code{\link{SAFFRONstar}}
+with option \code{discard=TRUE}.
 }

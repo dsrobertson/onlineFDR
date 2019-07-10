@@ -8,7 +8,7 @@ LONDstar(pval, alpha = 0.05, version, betai, decision.times, lags,
   batch.sizes)
 }
 \arguments{
-\item{pval}{A vector of p-values}
+\item{pval}{A vector of p-values.}
 
 \item{alpha}{Overall significance level of the procedure, the default
 is 0.05.}
@@ -29,7 +29,7 @@ this is required for \code{version='async'}.}
 \code{version='batch'}.}
 }
 \value{
-\item{d.out}{A dataframe with the original pvalues \code{pval}, the
+\item{d.out}{A dataframe with the original p-values \code{pval}, the
 adjusted testing levels \eqn{\alpha_i} and the indicator 
 function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
@@ -54,8 +54,8 @@ for this version of the LONDstar algorithm.
 
 2) \code{version='dep'} is for online testing under local
 dependence of the p-values. More precisely, for any \eqn{t>0} we allow the
-p-value \eqn{p_t} have arbitrary dependence on the previous \eqn{L_t}
-p-values. The fixed sequence of \eqn{L_t} is referred to as `lags' and is
+p-value \eqn{p_t} to have arbitrary dependence on the previous \eqn{L_t}
+p-values. The fixed sequence \eqn{L_t} is referred to as `lags', and is
 given as the input \code{lags} for this version of the LONDstar algorithm.
 
 3) \code{version='batch'} is for controlling the mFDR in

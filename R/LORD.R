@@ -1,14 +1,14 @@
 #' LORD: Online FDR control based on recent discovery
 #'
 #' Implements the LORD procedure for online FDR control, where LORD stands for
-#' (significance) Levels based On Recent Discovery, as presented by
-#' Javanmard and Montanari (2018) and Ramdas et al. (2017).
+#' (significance) Levels based On Recent Discovery, as presented by Javanmard
+#' and Montanari (2018) and Ramdas et al. (2017).
 #'
-#' The function takes as its input a dataframe with three columns: an identifier
-#' (`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
-#' batches corresponds to multiple instances of the same date. If no column of
-#' dates is provided, then the p-values are treated as being ordered
-#' sequentially with no batches.
+#' The function takes as its input either a vector of p-values or a dataframe
+#' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+#' The case where p-values arrive in batches corresponds to multiple instances
+#' of the same date. If no column of dates is provided, then the p-values are
+#' treated as being ordered sequentially with no batches.
 #'
 #' The LORD procedure provably controls FDR for independent p-values (see below
 #' for dependent p-values). Given an overall significance level \eqn{\alpha}, we
@@ -25,82 +25,81 @@
 #' Ramdas (2019) presented a version of LORD (\code{version='discard'}) that can
 #' improve the power of the procedure in the presence of conservative nulls by
 #' adaptively `discarding' these p-values.
-#' 
+#'
 #' LORD depends on constants \eqn{w_0} and (for some versions) \eqn{b_0}, where
 #' \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the procedure
-#' and \eqn{b_0 > 0} represents the `payout' for rejecting a hypothesis. 
-#' We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
+#' and \eqn{b_0 > 0} represents the `payout' for rejecting a hypothesis. We
+#' require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
 #'
 #' Note that FDR control also holds for the LORD procedure if only the p-values
 #' corresponding to true nulls are mutually independent, and independent from
 #' the non-null p-values.
-#' 
-#' For dependent p-values, a modified LORD procedure was proposed in 
-#' Javanmard and Montanari (2018), which is called be setting
-#' \code{version='dep'}. Given an overall significance level \eqn{\alpha},
-#' we choose a sequence of non-negative numbers \eqn{\xi_i} such that they
-#' satisfy a condition given in Javanmard and Montanari (2018), example 3.8.
+#'
+#' For dependent p-values, a modified LORD procedure was proposed in Javanmard
+#' and Montanari (2018), which is called be setting \code{version='dep'}. Given
+#' an overall significance level \eqn{\alpha}, we choose a sequence of
+#' non-negative numbers \eqn{\xi_i} such that they satisfy a condition given in
+#' Javanmard and Montanari (2018), example 3.8.
 #'
 #' Further details of the LORD procedures can be found in Javanmard and
 #' Montanari (2018), Ramdas et al. (2017) and Tian and Ramdas (2019).
 #'
 #'
-#' @param d Dataframe with three columns: an identifier (`id'), date (`date')
-#' and p-value (`pval'). If no column of dates is provided, then the p-values
-#' are treated as being ordered sequentially with no batches.
+#' @param d Either a vector of p-values, or a dataframe with three columns: an
+#'   identifier (`id'), date (`date') and p-value (`pval'). If no column of
+#'   dates is provided, then the p-values are treated as being ordered
+#'   sequentially with no batches.
 #'
-#' @param alpha Overall significance level of the FDR procedure, the default
-#' is 0.05.
+#' @param alpha Overall significance level of the FDR procedure, the default is
+#'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided as
-#' proposed by Javanmard and Montanari (2018), equation 31 for all versions
-#' of LORD except 'dep'. The latter is provided a default to satisfy a 
-#' condition given in Javanmard and Montanari (2018), example 3.8.
+#'   proposed by Javanmard and Montanari (2018), equation 31 for all versions of
+#'   LORD except 'dep'. The latter is provided a default to satisfy a condition
+#'   given in Javanmard and Montanari (2018), example 3.8.
 #'
-#' @param version Takes values '++', 3, 'discard', or 'dep'. This 
-#' specifies the version of LORD to use, and defaults to '++'.
+#' @param version Takes values '++', 3, 'discard', or 'dep'. This specifies the
+#'   version of LORD to use, and defaults to '++'.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
-#' 
+#'
 #' @param b0 The 'payout' for rejecting a hypothesis in all versions of LORD
-#' except for '++'. Defaults to \eqn{\alpha - w_0}.
-#' 
+#'   except for '++'. Defaults to \eqn{\alpha - w_0}.
+#'
 #' @param tau.discard Optional threshold for hypotheses to be selected for
-#' testing. Must be between 0 and 1, defaults to 0.5. This is required if
-#' \code{version='discard'}.
+#'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
+#'   \code{version='discard'}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
-#' p-values in each batch (i.e. those that have exactly the same date) is
-#' randomised.
+#'   p-values in each batch (i.e. those that have exactly the same date) is
+#'   randomised.
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return
-#' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
-#' be reordered if there are batches and \code{random = TRUE}), the
-#' LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator 
-#' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#' \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{d.out}{ A dataframe with the original data \code{d} (which
+#'   will be reordered if there are batches and \code{random = TRUE}), the
+#'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+#'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
+#'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
+#'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references
-#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-#' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
-#' 46(2):526-554.
-#' 
+#' @references Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+#' of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+#' Statistics}, 46(2):526-554.
+#'
 #' Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
 #' of the false discovery rate with decaying memory. \emph{Advances in Neural
 #' Information Processing Systems 30}, 5650-5659.
-#' 
-#' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
-#' online FDR control with conservative nulls. \emph{arXiv preprint}, 
-#' \url{https://arxiv.org/abs/1905.11465}. 
+#'
+#' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+#' online FDR control with conservative nulls. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1905.11465}.
 #'
 #'
 #' @seealso
-#' 
+#'
 #' \code{\link{LORDstar}} presents versions of LORD for \emph{asynchronous}
 #' testing, i.e. where each hypothesis test can itself be a sequential process
 #' and the tests can overlap in time.
@@ -124,33 +123,25 @@
 #' set.seed(1); LORD(sample.df, version='dep')
 #' set.seed(1); LORD(sample.df, version='discard')
 #' set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
-#'
+#' 
 #'
 #' @export
 
 LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
                 random=TRUE, date.format="%Y-%m-%d") {
 
-    if(!(is.data.frame(d))){
-        stop("d must be a dataframe.")
-    }
-
-    if(length(d$id) == 0){
-        stop("The dataframe d is missing a column 'id' of identifiers.")
-    } else if(length(d$pval) == 0){
-        stop("The dataframe d is missing a column 'pval' of p-values.")
-    }
-
-    if(length(d$date) == 0){
-        # warning("No column of dates is provided, so p-values are treated
-        # as being ordered sequentially with no batches.")
-        random = FALSE
-    } else if(any(is.na(as.Date(d$date, date.format)))){
-        stop("One or more dates are not in the correct format.")
+    if(is.data.frame(d)){
+        checkdf(d, random, date.format)
+        pval <- d$pval
+    } else if(is.vector(d)){
+        pval <- d
     } else {
-        d <- d[order(as.Date(d$date, format = date.format)),]
+        stop("d must either be a dataframe or a vector of p-values.")
     }
-
+    
+    checkPval(pval)
+    N <- length(pval)
+    
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
@@ -160,18 +151,6 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
              please use version '++' instead.")
     } else if(!(version %in% c('++',3,'discard','dep'))){
         stop("version must be '++', 3, 'discard' or 'dep'.")
-    }
-
-    if(anyNA(d$pval)){
-        warning("Missing p-values were ignored.")
-        d <- stats::na.omit(d)
-    }
-
-    if(!(is.numeric(d$pval))){
-        stop("The column of p-values contains at least one non-numeric
-        element.")
-    } else if(any(d$pval>1 | d$pval<0)){
-        stop("All p-values must be between 0 and 1.")
     }
     
     if(missing(w0)){
@@ -193,8 +172,6 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
             stop("w0 must not be greater than alpha.")
         }
     }
-    
-    N <- length(d$pval)
     
     if(version != 'dep'){
         if(missing(gammai)){
@@ -222,13 +199,8 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
     } else if(version == 'dep'){
         version <- 4
     }
-    
-    if(random){
-        d <- randBatch(d)
-    }
 
     alphai <- rep(0, N)
-    pval <- d$pval
 
     switch(version,
         ## '++'

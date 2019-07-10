@@ -23,7 +23,6 @@ test4dep <- LOND(test.df4, dep=TRUE, random=FALSE)$R
 
 
 test_that("Errors for edge cases", {
-    expect_error(LOND(1e-04), "d must be a dataframe.")
     expect_error(LOND(test.df0), "The dataframe d is missing a column 'id' of identifiers.")
     expect_error(LOND(test.df1), "The dataframe d is missing a column 'pval' of p-values.")
     expect_error(LOND(test.df2), "The dataframe d is missing a column 'pval' of p-values.")

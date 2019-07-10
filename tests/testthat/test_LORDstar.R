@@ -7,7 +7,7 @@ test_that("Correct rejections for version async", {
                      c(1,1,0,1))
     
     expect_identical(LORDstar(test.pval, version='async',
-                              decision.times = rep(4,3))$R,
+                              decision.times = rep(4,4))$R,
                      c(1,0,0,0))
 })
 

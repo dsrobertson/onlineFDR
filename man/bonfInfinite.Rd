@@ -8,12 +8,13 @@ bonfInfinite(d, alpha = 0.05, alphai, random = TRUE,
   date.format = "\%Y-\%m-\%d")
 }
 \arguments{
-\item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
-and p-value (`pval'). If no column of dates is provided, then the p-values
-are treated as being ordered sequentially with no batches.}
+\item{d}{Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), date (`date') and p-value (`pval'). If no column of dates
+is provided, then the p-values are treated as being ordered sequentially
+with no batches.}
 
-\item{alpha}{Overall significance level of the FDR procedure, the default
-is 0.05.}
+\item{alpha}{Overall significance level of the FDR procedure, the default is
+0.05.}
 
 \item{alphai}{Optional vector of \eqn{\alpha_i}, where hypothesis \eqn{i} is
 rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
@@ -27,28 +28,27 @@ randomised.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{d.out}{ A dataframe with the original dataframe \code{d} (which will
-be reordered if there are batches and \code{random = TRUE}),
-the adjusted signifcance thresholds \code{alphai} and the indicator function
-of discoveries \code{R}, where \code{R[i] = 1} corresponds to
-hypothesis \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
+\item{d.out}{ A dataframe with the original data \code{d} (which
+ will be reordered if there are batches and \code{random = TRUE}), the
+ adjusted signifcance thresholds \code{alphai} and the indicator function of
+ discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
+ \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements online FDR control using a Bonferroni-like test.
 }
 \details{
-The function takes as its input a dataframe with three columns: an identifier
-(`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
-batches corresponds to multiple instances of the same date. If no column of
-dates is provided, then the p-values are treated as being ordered
-sequentially with no batches.
+The function takes as its input either a vector of p-values, or a dataframe
+with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+The case where p-values arrive in batches corresponds to multiple instances of
+the same date. If no column of dates is provided, then the p-values are
+treated as being ordered sequentially with no batches.
 
 The procedure controls FDR for a potentially infinite stream of p-values by
 using a Bonferroni-like test. Given an overall significance level
 \eqn{\alpha}, we choose a (potentially infinite) sequence of non-negative
-numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}.
-Hypothesis \eqn{i} is rejected if the \eqn{i}-th p-value is less than or
-equal to \eqn{\alpha_i}.
+numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}. Hypothesis \eqn{i}
+is rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
 }
 \examples{
 sample.df <- data.frame(
@@ -71,7 +71,7 @@ set.seed(1); bonfInfinite(sample.df, alpha=0.1)
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
+ False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+ Statistics}, 46(2):526-554.
 }

@@ -13,11 +13,11 @@
 #' procedure and satisfies \eqn{0 \le w_0 \le \tau \lambda \alpha}. \eqn{\tau
 #' \in (0,1)} represents the threshold for a hypothesis to be selected for
 #' testing: p-values greater than \eqn{\tau} are implicitly `discarded' by the
-#' procedure. Finally, \eqn{\lambda \in (0,1)} sets the treshold for a p-value
+#' procedure. Finally, \eqn{\lambda \in (0,1)} sets the threshold for a p-value
 #' to be a candidate for rejection: ADDIS will never reject a p-value larger
 #' than \eqn{\tau \lambda}. The algorithms also require a sequence of
 #' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
-#' 
+#'
 #' The ADDIS procedure provably controls FDR for independent p-values. Given an
 #' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
@@ -30,46 +30,47 @@
 #' Further details of the ADDIS algorithms can be found in Tian and Ramdas
 #' (2019).
 #'
-#' @param pval A vector of p-values
+#' @param pval A vector of p-values.
 #'
-#' @param alpha Overall significance level of the procedure, the default
-#' is 0.05.
+#' @param alpha Overall significance level of the procedure, the default is
+#'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#' \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
-#' 
-#' @param lambda Optional parameter that sets the threshold for
-#' `candidate' hypotheses. Must be between 0 and 1, defaults to 0.5.
-#' 
-#' @param tau Optional threshold for hypotheses to be selected for testing.
-#' Must be between 0 and 1, defaults to 0.5.
-#' 
+#'
+#' @param lambda Optional parameter that sets the threshold for `candidate'
+#'   hypotheses. Must be between 0 and 1, defaults to 0.5.
+#'
+#' @param tau Optional threshold for hypotheses to be selected for testing. Must
+#'   be between 0 and 1, defaults to 0.5.
+#'
 #' @param async Logical. If \code{TRUE} runs the version for an asynchronous
-#' testing process
+#'   testing process
 #'
 #' @param decision.times A vector of decision times for the hypothesis tests,
-#' this is required if \code{async=TRUE}.
+#'   this is required if \code{async=TRUE}.
 #'
 #'
-#' @return
-#' \item{d.out}{A dataframe with the original pvalues \code{pval}, the
-#' adjusted testing levels \eqn{\alpha_i} and the indicator 
-#' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#' \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{d.out}{A dataframe with the original p-values \code{pval}, the
+#'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
+#'   discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
+#'   p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
+#'   1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references
-#' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
-#' online FDR control with conservative nulls. \emph{arXiv preprint}, 
-#' \url{https://arxiv.org/abs/1905.11465}. 
+#' @references Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+#'   algorithm for online FDR control with conservative nulls. \emph{arXiv
+#'   preprint}, \url{https://arxiv.org/abs/1905.11465}.
 #'
 #'
 #' @seealso
 #'
-#' ADDIS is identical to \code{\link{SAFFRON}} if \code{discard=TRUE}.
+#' ADDIS is identical to \code{\link{SAFFRON}} with option \code{discard=TRUE}.
+#'
+#' ADDIS with option \code{async=TRUE} is identical to \code{\link{SAFFRONstar}}
+#' with option \code{discard=TRUE}.
 #'
 #'
 #' @examples
@@ -79,7 +80,7 @@
 #'
 #'
 #' ADDIS(pval)
-#' 
+#'
 #' ADDIS(pval, async=TRUE, decision.times=seq_len(15)) # Same as above
 #' ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
 #'
@@ -87,43 +88,6 @@
 
 ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
                   async=FALSE, decision.times) {
-    
-    # if(!(is.data.frame(d))){
-    #     stop("d must be a dataframe.")
-    # }
-    # 
-    # if(length(d$id) == 0){
-    #     stop("The dataframe d is missing a column 'id' of identifiers.")
-    # } else if(length(d$pval) == 0){
-    #     stop("The dataframe d is missing a column 'pval' of p-values.")
-    # }
-    # 
-    # if(length(d$date) == 0){
-    #     warning("No column of dates is provided, so p-values are treated
-    #     as being ordered sequentially with no batches.")
-    #     random = FALSE
-    # } else if(any(is.na(as.Date(d$date, date.format)))){
-    #     stop("One or more dates are not in the correct format.")
-    # } else {
-    #     d <- d[order(as.Date(d$date, format = date.format)),]
-    # }
-    # 
-    # if(anyNA(d$pval)){
-    #     warning("Missing p-values were ignored.")
-    #     d <- stats::na.omit(d)
-    # }
-    # 
-    # if(!(is.numeric(d$pval))){
-    #     stop("The column of p-values contains at least one non-numeric
-    #     element.")
-    # } else if(any(d$pval>1 | d$pval<0)){
-    #     stop("All p-values must be between 0 and 1.")
-    # }
-    # 
-    # if(random){
-    #     d <- randBatch(d)
-    # }
-    
     
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
@@ -137,7 +101,7 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
         stop("tau must be between 0 and 1.")
     }
     
-    # N <- length(d$pval)
+    checkPval(pval)
     N <- length(pval)
     
     if(missing(gammai)){
@@ -156,8 +120,6 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
         stop("w0 must be less than tau*lambda*alpha")
     }
     
-    # pval <- d$pval
-    
     if(!(async)){
         
         alphai <- R <- cand <- Cj.plus <- rep(0, N)
@@ -166,7 +128,6 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
         R[1] <- (pval[1] <= alphai[1])
         
         if(N == 1){
-            # d.out <- data.frame(d, alphai, R)
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }
@@ -230,8 +191,11 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
                 R[i] <- (pval[i] <= alphai[i])
             }
         }
-        
     } else {
+        
+        if(length(decision.times) != length(pval)){
+            stop("Please provide a decision time for each p-value.")
+        }
         
         E <- decision.times
         
@@ -243,7 +207,6 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
         R[1] <- (pval[1] <= alphai[1])
         
         if(N == 1){
-            # d.out <- data.frame(d, alphai, R)
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }

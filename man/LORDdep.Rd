@@ -9,9 +9,10 @@ LORDdep(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0,
   random = TRUE, date.format = "\%Y-\%m-\%d")
 }
 \arguments{
-\item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
-and p-value (`pval'). If no column of dates is provided, then the p-values
-are treated as being ordered sequentially with no batches.}
+\item{d}{Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), date (`date') and p-value (`pval'). If no column of
+dates is provided, then the p-values are treated as being ordered
+sequentially with no batches.}
 
 \item{alpha}{Overall significance level of the FDR procedure, the default is
 0.05.}
@@ -21,8 +22,8 @@ the condition given in Javanmard and Montanari (2018), example 3.7.}
 
 \item{w0}{Initial `wealth' of the procedure. Defaults to \eqn{\alpha/10}.}
 
-\item{b0}{The `payout' for rejecting a hypothesis. Defaults to
-\eqn{\alpha - w_0}.}
+\item{b0}{The `payout' for rejecting a hypothesis. Defaults to \eqn{\alpha -
+w_0}.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
@@ -31,15 +32,15 @@ randomised.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{d.out}{ A dataframe with the original dataframe \code{d} (which will
-be reordered if there are batches and \code{random = TRUE}), the
+\item{d.out}{ A dataframe with the original data \code{d} (which
+will be reordered if there are batches and \code{random = TRUE}), the
 LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
 function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
 \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
-This funcion is deprecated, please use \code{\link{LORD}} instead with 
+This funcion is deprecated, please use \code{\link{LORD}} instead with
 \code{version = 'dep'}.
 }
 \details{
@@ -47,27 +48,27 @@ LORDdep implements the LORD procedure for online FDR control for dependent
 p-values, where LORD stands for (significance) Levels based On Recent
 Discovery, as presented by Javanmard and Montanari (2018).
 
-The function takes as its input a dataframe with three columns: an identifier
-(`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
-batches corresponds to multiple instances of the same date. If no column of
-dates is provided, then the p-values are treated as being ordered
-sequentially with no batches.
+The function takes as its input either a vector of p-values or a dataframe
+with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+The case where p-values arrive in batches corresponds to multiple instances
+of the same date. If no column of dates is provided, then the p-values are
+treated as being ordered sequentially with no batches.
 
 This modified LORD procedure controls FDR for dependent p-values. Given an
-overall significance level \eqn{\alpha}, we choose a sequence of
-non-negative numbers \eqn{\xi_i} such that they satisfy a condition given
-in Javanmard and Montanari (2018), example 3.8.
+overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+numbers \eqn{\xi_i} such that they satisfy a condition given in Javanmard and
+Montanari (2018), example 3.8.
 
-The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where
-\eqn{w_0 \ge 0} represents the intial `wealth' and \eqn{b_0 > 0} represents
-the `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha}
-for FDR control to hold.
+The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where \eqn{w_0
+\ge 0} represents the intial `wealth' and \eqn{b_0 > 0} represents the
+`payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha} for
+FDR control to hold.
 
 Further details of the modified LORD procedure can be found in Javanmard and
 Montanari (2018).
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+Statistics}, 46(2):526-554.
 }

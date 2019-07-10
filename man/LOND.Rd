@@ -8,9 +8,10 @@ LOND(d, alpha = 0.05, betai, dep = FALSE, random = TRUE,
   date.format = "\%Y-\%m-\%d", original = TRUE)
 }
 \arguments{
-\item{d}{Dataframe with three columns: an identifier (`id'), date (`date')
-and p-value (`pval'). If no column of dates is provided, then the p-values
-are treated as being ordered sequentially with no batches.}
+\item{d}{Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), date (`date') and p-value (`pval'). If no column of
+dates is provided, then the p-values are treated as being ordered
+sequentially with no batches.}
 
 \item{alpha}{Overall significance level of the FDR procedure, the default is
 0.05.}
@@ -33,7 +34,7 @@ of Javanmard and Montanari (2015), otherwise runs the modified algorithm
 of Zrnic et al. (2018). Defaults to \code{TRUE}.}
 }
 \value{
-\item{d.out}{ A dataframe with the original dataframe \code{d} (which
+\item{d.out}{ A dataframe with the original data \code{d} (which
 will be reordered if there are batches and \code{random = TRUE}), the
 LOND-adjusted significance thresholds \eqn{\alpha_i} and the indicator
 function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
@@ -46,11 +47,11 @@ Implements the LOND algorithm for online FDR control, where LOND stands for
 Javanmard and Montanari (2015).
 }
 \details{
-The function takes as its input a dataframe with three columns: an identifier
-(`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
-batches corresponds to multiple instances of the same date. If no column of
-dates is provided, then the p-values are treated as being ordered
-sequentially with no batches.
+The function takes as its input either a vector of p-values, or a dataframe
+with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+The case where p-values arrive in batches corresponds to multiple instances
+of the same date. If no column of dates is provided, then the p-values are
+treated as being ordered sequentially with no batches.
 
 The LOND algorithm controls the FDR for independent p-values (see below for
 the modification for dependent p-values). Given an overall significance level
@@ -64,9 +65,9 @@ A slightly modified version of LOND with thresholds \eqn{\alpha_i =
 max(D(i-1), 1)\beta_i} provably controls the FDR under positive dependence
 (PRDS condition), see Zrnic et al. (2018).
 
-For dependent p-values, LOND controls the FDR if it is modified with
-\eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the i-th
-harmonic number.
+For arbitrarily dependent p-values, LOND controls the FDR if it is modified
+with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the
+i-th harmonic number.
 
 Further details of the LOND algorithm can be found in Javanmard and Montanari
 (2015).

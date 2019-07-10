@@ -8,13 +8,13 @@ LORDstar(pval, alpha = 0.05, version, gammai, w0, decision.times, lags,
   batch.sizes)
 }
 \arguments{
-\item{pval}{A vector of p-values}
+\item{pval}{A vector of p-values.}
 
-\item{alpha}{Overall significance level of the procedure, the default
-is 0.05.}
+\item{alpha}{Overall significance level of the procedure, the default is
+0.05.}
 
-\item{version}{Takes values 'async', 'dep' or 'batch'. This 
-specifies the version of LORDstar to use.}
+\item{version}{Takes values 'async', 'dep' or 'batch'. This specifies the
+version of LORDstar to use.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided as
 proposed by Javanmard and Montanari (2018), equation 31.}
@@ -31,15 +31,15 @@ this is required for \code{version='async'}.}
 \code{version='batch'}.}
 }
 \value{
-\item{d.out}{A dataframe with the original pvalues \code{pval}, the
-adjusted testing levels \eqn{\alpha_i} and the indicator 
-function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-\eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-\code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+\item{d.out}{A dataframe with the original p-values \code{pval}, the
+adjusted testing levels \eqn{\alpha_i} and the indicator function of
+discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
+p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
+1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements LORD algorithms for asynchronous online testing, as presented 
-by Zrnic et al. (2018).
+Implements LORD algorithms for asynchronous online testing, as presented by
+Zrnic et al. (2018).
 }
 \details{
 The function takes as its input a vector of p-values, as well as a vector
@@ -48,24 +48,24 @@ vector of decision times, lags or batch sizes (see below).
 
 Zrnic et al. (2018) present explicit three versions of LORDstar:
 
-1) \code{version='async'} is for an asynchoronous testing process,
-consisting of tests that start and finish at (potentially) random times. The
-discretised finish times of the test correspond to the decision times. These
-decision times are given as the input \code{decision.times} for this version
-of the LORDstar algorithm.
+1) \code{version='async'} is for an asynchoronous testing process, consisting
+of tests that start and finish at (potentially) random times. The discretised
+finish times of the test correspond to the decision times. These decision
+times are given as the input \code{decision.times} for this version of the
+LORDstar algorithm.
 
-2) \code{version='dep'} is for online testing under local dependence
-of the p-values. More precisely, for any \eqn{t>0} we allow the p-value
-\eqn{p_t} have arbitrary dependence on the previous \eqn{L_t} p-values. The
-fixed sequence of \eqn{L_t} is referred to as `lags' and is given as the
-input \code{lags} for this version of the LORDstar algorithm.
+2) \code{version='dep'} is for online testing under local dependence of the
+p-values. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t} to
+have arbitrary dependence on the previous \eqn{L_t} p-values. The fixed
+sequence \eqn{L_t} is referred to as `lags', and is given as the input
+\code{lags} for this version of the LORDstar algorithm.
 
-3) \code{version='batch'} is for controlling the mFDR in mini-batch
-testing, where a mini-batch represents a grouping of tests run 
-asynchronously which result in dependent p-values. Once a mini-batch of tests
-is fully completed, a new one can start, testing hypotheses independent of
-the previous batch. The batch sizes are given as the input \code{batch.sizes}
-for this version of the LORDstar algorithm.
+3) \code{version='batch'} is for controlling the mFDR in mini-batch testing,
+where a mini-batch represents a grouping of tests run asynchronously which
+result in dependent p-values. Once a mini-batch of tests is fully completed,
+a new one can start, testing hypotheses independent of the previous batch.
+The batch sizes are given as the input \code{batch.sizes} for this version of
+the LORDstar algorithm.
 
 Given an overall significance level \eqn{\alpha}, LORDstar depends on
 \eqn{w_0} (where \eqn{0 \le w_0 \le \alpha}), which represents the intial
@@ -76,8 +76,8 @@ Note that these LORDstar algorithms control the \emph{modified} FDR (mFDR).
 The `async' version also controls the usual FDR if the p-values are assumed
 to be independent.
 
-Further details of the LORDstar algorithms can be found in
-Zrnic et al. (2018).
+Further details of the LORDstar algorithms can be found in Zrnic et al.
+(2018).
 }
 \examples{
 pval = c(2.90e-08, 0.06743, 3.51e-04, 0.00174, 0.04723,
@@ -95,9 +95,9 @@ LORDstar(pval, version='batch', batch.sizes=c(4,6,5)) # Batched
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+Statistics}, 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 Multiple Hypotheses. \emph{arXiv preprint},
