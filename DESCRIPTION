@@ -15,7 +15,8 @@ Description: This package allows users to control the false discovery rate for
   as presented by Javanmard and Montanari (2015, 2018), Ramdas et al.
   (2017, 2018), Tian and Ramdas (2019) and Zrnic et al. (2018). In this
   framework, a null hypothesis is rejected based only on the previous decisions,
-  as the future p-values and the number of hypotheses to be tested are unknown.  
+  as the future p-values and the number of hypotheses to be tested are unknown.
+URL: https://dsrobertson.github.io/onlineFDR/index.html
 License: GPL-3
 RoxygenNote: 6.1.1
 Encoding: UTF-8
