@@ -22,7 +22,6 @@ test4 <- bonfInfinite(test.df4, random=FALSE)$R
 
 
 test_that("Errors for edge cases", {
-    expect_error(bonfInfinite(1e-04), "d must be a dataframe.")
     expect_error(bonfInfinite(test.df0), "The dataframe d is missing a column 'id' of identifiers.")
     expect_error(bonfInfinite(test.df1), "The dataframe d is missing a column 'pval' of p-values.")
     expect_error(bonfInfinite(test.df2), "The dataframe d is missing a column 'pval' of p-values.")

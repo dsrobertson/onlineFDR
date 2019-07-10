@@ -17,8 +17,8 @@
 #' 
 #' 2) \code{version='dep'} is for online testing under local
 #' dependence of the p-values. More precisely, for any \eqn{t>0} we allow the
-#' p-value \eqn{p_t} have arbitrary dependence on the previous \eqn{L_t}
-#' p-values. The fixed sequence of \eqn{L_t} is referred to as `lags' and is
+#' p-value \eqn{p_t} to have arbitrary dependence on the previous \eqn{L_t}
+#' p-values. The fixed sequence \eqn{L_t} is referred to as `lags', and is
 #' given as the input \code{lags} for this version of the LONDstar algorithm.
 #' 
 #' 3) \code{version='batch'} is for controlling the mFDR in
@@ -39,7 +39,7 @@
 #' Zrnic et al. (2018).
 #'
 #'
-#' @param pval A vector of p-values
+#' @param pval A vector of p-values.
 #'
 #' @param alpha Overall significance level of the procedure, the default
 #' is 0.05.
@@ -61,7 +61,7 @@
 #'
 #'
 #' @return
-#' \item{d.out}{A dataframe with the original pvalues \code{pval}, the
+#' \item{d.out}{A dataframe with the original p-values \code{pval}, the
 #' adjusted testing levels \eqn{\alpha_i} and the indicator 
 #' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 #' \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
@@ -73,8 +73,9 @@
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #' 
-#' Zrnic et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1812.05068}
 #'
 #'
 #' @seealso
@@ -103,52 +104,11 @@
 LONDstar <- function(pval, alpha=0.05, version, betai,
                 decision.times, lags, batch.sizes) {
 
-    # if(!(is.data.frame(d))){
-    #     stop("d must be a dataframe.")
-    # }
-    # 
-    # if(length(d$id) == 0){
-    #     stop("The dataframe d is missing a column 'id' of identifiers.")
-    # } else if(length(d$pval) == 0){
-    #     stop("The dataframe d is missing a column 'pval' of p-values.")
-    # }
-    # 
-    # if(length(d$date) == 0){
-    #     warning("No column of dates is provided, so p-values are treated as
-    #     being ordered sequentially with no batches.")
-    #     random = FALSE
-    # } else if(any(is.na(as.Date(d$date, date.format)))){
-    #     stop("One or more dates are not in the correct format.")
-    # } else {
-    #     d <- d[order(as.Date(d$date, format = date.format)),]
-    # }
-    # 
-    # if(anyNA(d$pval)){
-    #     warning("Missing p-values were ignored.")
-    #     d <- stats::na.omit(d)
-    # }
-    # 
-    # if(!(is.numeric(d$pval))){
-    #     stop("The column of p-values contains at least one non-numeric
-    #     element.")
-    # } else if(any(d$pval>1 | d$pval<0)){
-    #     stop("All p-values must be between 0 and 1.")
-    # }
-    # 
-    # if(random){
-    #     d <- randBatch(d)
-    # }
-    
-    
     if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
-    
-    if(!(version %in% c('async', 'dep', 'batch'))){
-        stop("version must be 'async', 'dep' or 'batch'.")
-    }
 
-    # N <- length(d$pval)
+    checkPval(pval)
     N <- length(pval)
 
     if(missing(betai)){
@@ -160,15 +120,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         stop("The sum of the elements of betai must be <= alpha.")
     }
     
-    if(version == 'async'){
-        version = 1
-    } else if(version == 'dep'){
-        version = 2
-    } else {
-        version = 3
-    }
-
-    # pval <- d$pval
+    version <- checkStarVersion(N, version, decision.times, lags, batch.sizes)
     
     switch(version,
         ## async = 1
@@ -181,7 +133,6 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         R[1] <- pval[1] <= alphai[1]
         
         if(N == 1){
-            # d.out <- data.frame(d, alphai, R)
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }
@@ -205,7 +156,6 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         R[1] <- pval[1] <= alphai[1]
         
         if(N == 1){
-            # d.out <- data.frame(d, alphai, R)
             d.out <- data.frame(pval, lag=lags, alphai, R)
             return(d.out)
         }
@@ -233,10 +183,9 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         }
         
         if(length(n) == 1){
-            # d.out <- data.frame(d, alphai, R)
             d.out <- data.frame(pval, batch = rep(1, n),
-                 alphai = as.vector(t(alphai)),
-                 R = as.vector(t(R)))
+                                alphai = as.vector(t(alphai)),
+                                R = as.vector(t(R)))
              
             return(d.out)
             
@@ -248,15 +197,14 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
                        
                 for (i in seq_len(n[b])){ 
             
-                alphai[b,i] <- betai[ncum[b-1]+i]*D
-                R[b,i] <- pval[ncum[b-1]+i] <= alphai[b,i]
+                    alphai[b,i] <- betai[ncum[b-1]+i]*D
+                    R[b,i] <- pval[ncum[b-1]+i] <= alphai[b,i]
                 }
             }
         }
             
         alphai <- as.vector(t(alphai))
         R <- as.vector(t(R))
-             
         x <- !(is.na(alphai))
            
         if(length(x) > 0){

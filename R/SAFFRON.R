@@ -1,80 +1,93 @@
 #' SAFFRON: Adaptive online FDR control
 #'
 #' Implements the SAFFRON procedure for online FDR control, where SAFFRON stands
-#' for Serial estimate of the Alpha Fraction that is Futiley Rationed On true 
+#' for Serial estimate of the Alpha Fraction that is Futiley Rationed On true
 #' Null hypotheses, as presented by Ramdas et al. (2018). The algorithm is based
-#' on an estimate of the proportion of true null hypotheses. More precisely, 
-#' SAFFRON sets the adjusted test levels based on an estimate of the amount of 
+#' on an estimate of the proportion of true null hypotheses. More precisely,
+#' SAFFRON sets the adjusted test levels based on an estimate of the amount of
 #' alpha-wealth that is allocated to testing the true null hypotheses.
 #'
-#' The function takes as its input a dataframe with three columns: an identifier
-#' (`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
-#' batches corresponds to multiple instances of the same date. If no column of
-#' dates is provided, then the p-values are treated as being ordered
-#' sequentially with no batches.
+#' The function takes as its input either a vector of p-values or a dataframe
+#' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+#' The case where p-values arrive in batches corresponds to multiple instances
+#' of the same date. If no column of dates is provided, then the p-values are
+#' treated as being ordered sequentially with no batches.
 #'
-#' The SAFFRON procedure controls FDR for independent p-values. Given an overall
-#' significance level \eqn{\alpha}, we choose a sequence of
-#' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
+#' SAFFRON procedure provably controls FDR for independent p-values. Given an
+#' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+#' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
-#' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} 
+#' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0}
 #' satisfies \eqn{0 \le w_0 \le (1 - \lambda)\alpha} and represents the intial
-#' `wealth' of the procedure, and \eqn{0 < \lambda < 1} represents the
-#' threshold for a `candidate' hypothesis. A `candidate' refers to p-values
-#' smaller than \eqn{\lambda}, since SAFFRON will never reject a p-value larger
-#' than \eqn{\lambda}.
+#' `wealth' of the procedure, and \eqn{0 < \lambda < 1} represents the threshold
+#' for a `candidate' hypothesis. A `candidate' refers to p-values smaller than
+#' \eqn{\lambda}, since SAFFRON will never reject a p-value larger than
+#' \eqn{\lambda}.
 #'
 #' Note that FDR control also holds for the SAFFRON procedure if only the
-#' p-values corresponding to true nulls are mutually independent, and 
+#' p-values corresponding to true nulls are mutually independent, and
 #' independent from the non-null p-values.
 #'
-#' Further details of the SAFFRON procedure can be found in 
-#' Ramdas et al. (2018).
+#' The SAFFRON procedure can lose power in the presence of conservative nulls,
+#' which can be compensated for by adaptively `discarding' these p-values. This
+#' option is called by setting \code{discard=TRUE}, which is the same algorithm
+#' as ADDIS.
+#'
+#' Further details of the SAFFRON procedure can be found in Ramdas et al.
+#' (2018).
 #'
 #'
-#' @param d Dataframe with three columns: an identifier (`id'), date (`date')
-#' and p-value (`pval'). If no column of dates is provided, then the p-values
-#' are treated as being ordered sequentially with no batches.
+#' @param d Either a vector of p-values, or a dataframe with three columns: an
+#'   identifier (`id'), date (`date') and p-value (`pval'). If no column of
+#'   dates is provided, then the p-values are treated as being ordered
+#'   sequentially with no batches.
 #'
-#' @param alpha Overall significance level of the FDR procedure, the default
-#' is 0.05.
+#' @param alpha Overall significance level of the FDR procedure, the default is
+#'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#' \eqn{\gamma_j} proportional to \eqn{1/j^2}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
+#' @param w0 Initial `wealth' of the procedure, defaults to
+#'   \eqn{(1-\lambda)\alpha/2}. Must be between 0 and \eqn{(1-\lambda)\alpha}.
 #'
-#' @param w0 Initial `wealth' of the procedure, defaults to 
-#' \eqn{(1-\lambda)\alpha/2}. Must be between 0 and \eqn{(1-\lambda)\alpha}.
-#' 
-#' @param lambda Optional threshold for a `candidate' hypothesis, must be 
-#' between 0 and 1. Defaults to 0.5.
+#' @param lambda Optional threshold for a `candidate' hypothesis, must be
+#'   between 0 and 1. Defaults to 0.5.
+#'
+#' @param discard Logical. If \code{TRUE} then runs the ADDIS algorithm with
+#'   adaptive discarding of conservative nulls. The default is \code{FALSE}.
+#'
+#' @param tau.discard Optional threshold for hypotheses to be selected for
+#'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
+#'   \code{discard=TRUE}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
-#' p-values in each batch (i.e. those that have exactly the same date) is
-#' randomised.
+#'   p-values in each batch (i.e. those that have exactly the same date) is
+#'   randomised.
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return
-#' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
-#' be reordered if there are batches and \code{random = TRUE}), the
-#' LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator 
-#' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#' \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{d.out}{ A dataframe with the original data \code{d} (which
+#'   will be reordered if there are batches and \code{random = TRUE}), the
+#'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+#'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
+#'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
+#'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references
-#' Ramdas, A. et al. (2018). SAFFRON: an adaptive algorithm for online control 
-#' of the false discovery rate. \emph{Proceedings of the 35th International 
-#' Conference in Machine Learning}, 80:4286-4294.
+#' @references Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
+#'   SAFFRON: an adaptive algorithm for online control of the false discovery
+#'   rate. \emph{Proceedings of the 35th International Conference in Machine
+#'   Learning}, 80:4286-4294.
 #'
 #' @seealso
 #'
 #' \code{\link{SAFFRONstar}} presents versions of SAFFRON for
 #' \emph{asynchronous} testing, i.e. where each hypothesis test can itself be a
 #' sequential process and the tests can overlap in time.
+#'
+#' If option \code{discard=TRUE}, SAFFRON is the same as \code{\link{ADDIS}}.
 #'
 #'
 #' @examples
@@ -90,35 +103,30 @@
 #' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
-#' 
+#'
 #' SAFFRON(sample.df, random=FALSE)
 #' set.seed(1); SAFFRON(sample.df)
 #' set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 #'
+#' SAFFRON(sample.df, discard=TRUE, random=FALSE)
+#'
 #' @export
 
 SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
-                    random=TRUE, date.format="%Y-%m-%d") {
+                    random=TRUE, date.format="%Y-%m-%d",
+                    discard=FALSE, tau.discard=0.5) {
 
-    if(!(is.data.frame(d))){
-        stop("d must be a dataframe.")
-    }
-
-    if(length(d$id) == 0){
-        stop("The dataframe d is missing a column 'id' of identifiers.")
-    } else if(length(d$pval) == 0){
-        stop("The dataframe d is missing a column 'pval' of p-values.")
-    }
-
-    if(length(d$date) == 0){
-        warning("No column of dates is provided, so p-values are treated
-        as being ordered sequentially with no batches.")
-        random = FALSE
-    } else if(any(is.na(as.Date(d$date, date.format)))){
-        stop("One or more dates are not in the correct format.")
+    if(is.data.frame(d)){
+        checkdf(d, random, date.format)
+        pval <- d$pval
+    } else if(is.vector(d)){
+        pval <- d
     } else {
-        d <- d[order(as.Date(d$date, format = date.format)),]
+        stop("d must either be a dataframe or a vector of p-values.")
     }
+    
+    checkPval(pval)
+    N <- length(pval)
 
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
@@ -128,22 +136,12 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
         stop("lambda must be between 0 and 1.")
     }
 
-    if(anyNA(d$pval)){
-        warning("Missing p-values were ignored.")
-        d <- stats::na.omit(d)
+    if(discard==TRUE){
+        return(ADDIS(pval, alpha, gammai, w0, lambda, tau.discard))
     }
-
-    if(!(is.numeric(d$pval))){
-        stop("The column of p-values contains at least one non-numeric
-        element.")
-    } else if(any(d$pval>1 | d$pval<0)){
-        stop("All p-values must be between 0 and 1.")
-    }
-
-    N <- length(d$pval)
 
     if(missing(gammai)){
-        gammai <- 6/(pi^2*seq_len(N)^2)
+        gammai <- 0.4374901658/(seq_len(N)^(1.6))
     } else if (any(gammai<0)){
         stop("All elements of gammai must be non-negative.")
     } else if(sum(gammai)>1){
@@ -158,18 +156,19 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
         stop("w0 must be less than (1-lambda)*alpha")
     }
 
-    if(random){
-        d <- randBatch(d)
-    }
-
-    pval <- d$pval
+    ### Start SAFFRON algorithm
     
     alphai <- R <- cand <- Cj.plus <- rep(0, N)
 
     cand.sum <- 0
 
     alphai[1] <- min(gammai[1]*w0, lambda)
-    R[1] <- pval[1] <= alphai[1]
+    R[1] <- (pval[1] <= alphai[1])
+    
+    if(N == 1){
+        d.out <- data.frame(d, alphai, R)
+        return(d.out)
+    }
 
     for (i in (seq_len(N-1)+1)){
 
@@ -181,44 +180,41 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
 
         if (K > 1) {
 
-            Cj.plus.sum <- 0
             Kseq <- seq_len(K-1)
 
             Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i-1]
-            Cj.plus.sum <- Cj.plus.sum +
-            sum(gammai[i-tau[Kseq] - Cj.plus[Kseq]])
+            Cj.plus.sum <- sum(gammai[i-tau[Kseq] - Cj.plus[Kseq]])
 
             Cj.plus[K] <- sum(cand[seq(from=tau[K]+1, to=max(i-1, tau+1))])
             Cj.plus.sum <- Cj.plus.sum + 
             gammai[i-tau[K]-Cj.plus[K]]-gammai[i-tau[1]-Cj.plus[1]]
 
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
+            alphai.tilde <- w0*gammai[i-cand.sum] + 
             ((1-lambda)*alpha - w0)*gammai[i-tau[1]-Cj.plus[1]] + 
             (1-lambda)*alpha*Cj.plus.sum
 
             alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
 
         } else if(K == 1){
 
             Cj.plus[1] <- sum(cand[seq(from=tau+1, to=max(i-1, tau+1))])
 
-            alphai.tilde <- gammai[i - cand.sum]*w0 + 
+            alphai.tilde <- w0*gammai[i - cand.sum] + 
             ((1-lambda)*alpha - w0)*gammai[i-tau-Cj.plus[1]]
 
             alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
 
         } else {
 
-            alphai.tilde <- gammai[i - cand.sum]*w0
+            alphai.tilde <- w0*gammai[i-cand.sum]
             alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
 
         }
     }
 
     d.out <- data.frame(d, alphai, R)
-
     return(d.out)
 }

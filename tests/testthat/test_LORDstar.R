@@ -7,7 +7,7 @@ test_that("Correct rejections for version async", {
                      c(1,1,0,1))
     
     expect_identical(LORDstar(test.pval, version='async',
-                              decision.times = rep(4,3))$R,
+                              decision.times = rep(4,4))$R,
                      c(1,0,0,0))
 })
 
@@ -33,7 +33,7 @@ test_that("Correct rejections for version batch", {
 })
 
 
-test_that("Check that LORD is a special case of the LONDstar
+test_that("Check that LORD is a special case of the LORDstar
           algorithms", {
               expect_equal(LORD(test.df, version = '++')$alphai,
                            LORDstar(test.pval, version='async',

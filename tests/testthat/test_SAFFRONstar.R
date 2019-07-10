@@ -1,4 +1,4 @@
-test.pval <- c(1e-07, 3e-04, 0.1, 5e-04)
+test.pval <- c(1e-07, 3e-04, 0.1, 6e-04)
 test.df <- data.frame(id = seq_len(4), pval = test.pval)
 
 test_that("Correct rejections for version async", {
@@ -7,7 +7,7 @@ test_that("Correct rejections for version async", {
                      c(1,1,0,1))
     
     expect_identical(SAFFRONstar(test.pval, version='async',
-                              decision.times = rep(4,3))$R,
+                              decision.times = rep(4,4))$R,
                      c(1,1,0,0))
 })
 
@@ -33,7 +33,7 @@ test_that("Correct rejections for version batch", {
 })
 
 
-test_that("Check that LORD is a special case of the LONDstar
+test_that("Check that SAFFRON is a special case of the SAFFRONstar
           algorithms", {
               expect_equal(SAFFRON(test.df)$alphai,
                            SAFFRONstar(test.pval, version='async',
@@ -46,5 +46,4 @@ test_that("Check that LORD is a special case of the LONDstar
               expect_equal(SAFFRON(test.df)$alphai,
                            SAFFRONstar(test.pval, version='batch',
                                     batch.sizes = rep(1,4))$alphai)              
-          })
-
+})

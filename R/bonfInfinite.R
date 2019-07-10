@@ -1,52 +1,50 @@
-#' Online FDR control based on a Bonferroni-like test
+#'Online FDR control based on a Bonferroni-like test
 #'
-#' Implements online FDR control using a Bonferroni-like test.
+#'Implements online FDR control using a Bonferroni-like test.
 #'
-#' The function takes as its input a dataframe with three columns: an identifier
-#' (`id'), date (`date') and p-value (`pval'). The case where p-values arrive in
-#' batches corresponds to multiple instances of the same date. If no column of
-#' dates is provided, then the p-values are treated as being ordered
-#' sequentially with no batches.
+#'The function takes as its input either a vector of p-values, or a dataframe
+#'with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+#'The case where p-values arrive in batches corresponds to multiple instances of
+#'the same date. If no column of dates is provided, then the p-values are
+#'treated as being ordered sequentially with no batches.
 #'
-#' The procedure controls FDR for a potentially infinite stream of p-values by
-#' using a Bonferroni-like test. Given an overall significance level
-#' \eqn{\alpha}, we choose a (potentially infinite) sequence of non-negative
-#' numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}.
-#' Hypothesis \eqn{i} is rejected if the \eqn{i}-th p-value is less than or
-#' equal to \eqn{\alpha_i}.
-#'
-#'
-#' @param d Dataframe with three columns: an identifier (`id'), date (`date')
-#' and p-value (`pval'). If no column of dates is provided, then the p-values
-#' are treated as being ordered sequentially with no batches.
-#'
-#' @param alpha Overall significance level of the FDR procedure, the default
-#' is 0.05.
-#'
-#' @param alphai Optional vector of \eqn{\alpha_i}, where hypothesis \eqn{i} is
-#' rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
-#' A default is provided as proposed by Javanmard and Montanari (2018),
-#' equation 31.
-#'
-#' @param random Logical. If \code{TRUE} (the default), then the order of the
-#' p-values in each batch (i.e. those that have exactly the same date) is
-#' randomised.
-#'
-#' @param date.format Optional string giving the format that is used for dates.
+#'The procedure controls FDR for a potentially infinite stream of p-values by
+#'using a Bonferroni-like test. Given an overall significance level
+#'\eqn{\alpha}, we choose a (potentially infinite) sequence of non-negative
+#'numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}. Hypothesis \eqn{i}
+#'is rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
 #'
 #'
-#' @return
-#' \item{d.out}{ A dataframe with the original dataframe \code{d} (which will
-#' be reordered if there are batches and \code{random = TRUE}),
-#' the adjusted signifcance thresholds \code{alphai} and the indicator function
-#' of discoveries \code{R}, where \code{R[i] = 1} corresponds to
-#' hypothesis \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
+#'@param d Either a vector of p-values, or a dataframe with three columns: an
+#'  identifier (`id'), date (`date') and p-value (`pval'). If no column of dates
+#'  is provided, then the p-values are treated as being ordered sequentially
+#'  with no batches.
+#'
+#'@param alpha Overall significance level of the FDR procedure, the default is
+#'  0.05.
+#'
+#'@param alphai Optional vector of \eqn{\alpha_i}, where hypothesis \eqn{i} is
+#'  rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
+#'  A default is provided as proposed by Javanmard and Montanari (2018),
+#'  equation 31.
+#'
+#'@param random Logical. If \code{TRUE} (the default), then the order of the
+#'  p-values in each batch (i.e. those that have exactly the same date) is
+#'  randomised.
+#'
+#'@param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @references
-#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-#' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
-#' 46(2):526-554.
+#'@return \item{d.out}{ A dataframe with the original data \code{d} (which
+#'  will be reordered if there are batches and \code{random = TRUE}), the
+#'  adjusted signifcance thresholds \code{alphai} and the indicator function of
+#'  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
+#'  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
+#'
+#'
+#'@references Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
+#'  False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+#'  Statistics}, 46(2):526-554.
 #'
 #'
 #' @examples
@@ -73,43 +71,21 @@
 bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
                         date.format="%Y-%m-%d") {
 
-    if(!(is.data.frame(d))){
-        stop("d must be a dataframe.")
-    }
-
-    if(length(d$id) == 0){
-        stop("The dataframe d is missing a column 'id' of identifiers.")
-    } else if(length(d$pval) == 0){
-        stop("The dataframe d is missing a column 'pval' of p-values.")
-    }
-
-    if(length(d$date) == 0){
-        warning("No column of dates is provided, so p-values are treated as
-        being ordered sequentially with no batches.")
-        random <- FALSE
-    } else if(any(is.na(as.Date(d$date, date.format)))){
-        stop("One or more dates are not in the correct format.")
+    if(is.data.frame(d)){
+        checkdf(d, random, date.format)
+        pval <- d$pval
+    } else if(is.vector(d)){
+        pval <- d
     } else {
-        d <- d[order(as.Date(d$date, format = date.format)),]
+        stop("d must either be a dataframe or a vector of p-values.")
     }
+    
+    checkPval(pval)
+    N <- length(pval)
 
     if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
-
-    if(anyNA(d$pval)){
-        warning("Missing p-values were ignored.")
-        d <- stats::na.omit(d)
-    }
-
-    if(!(is.numeric(d$pval))){
-        stop("The column of p-values contains at least one non-numeric
-        element.")
-    } else if(any(d$pval>1 | d$pval<0)){
-        stop("All p-values must be between 0 and 1.")
-    }
-
-    N <- length(d$pval)
 
     if(missing(alphai)){
         alphai <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
@@ -121,11 +97,6 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
         alpha.")
     }
 
-    if(random){
-        d <- randBatch(d)
-    }
-
-    pval <- d$pval
     R <- as.numeric(pval <= alphai)
     d.out <- data.frame(d, alphai, R)
 

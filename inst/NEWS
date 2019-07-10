@@ -1,70 +1,33 @@
 # A NEWS File to document package updates
 
 
-CHANGES IN VERSION 1.3.3
+CHANGES IN VERSION 1.4.0
 -----------------------
 MODIFICATIONS:
 
+    * added the ADDIS algorithms of Tian and Ramdas (2019)
     * added asynchronous online testing algorithms of Zrnic et al. (2018)
-    * added unit tests for LONDstar, LORDstar and SAFFRONstar
+    * added the SAFFRON procedure for online FDR control (Ramdas et al., 2018)
+    * updated vignette
+    * deprecated LORDdep and added functionality to LORD
+    * removed LORD versions 1 and 2
+    * added unit tests for ADDIS, SAFFRON, LONDstar, LORDstar and SAFFRONstar
     * updated references
     * updated authors
 
 
-CHANGES IN VERSION 1.3.2
+CHANGES IN VERSION 1.2.0
 -----------------------
 MODIFICATIONS:
 
-    * deprecate LORDdep and add functionality to LORD
-    
-
-CHANGES IN VERSION 1.3.1
------------------------
-MODIFICATIONS:
-
-    * added the SAFFRON procedure for online FDR control
-    * added unit tests for SAFFRON
-
-
-CHANGES IN VERSION 1.1.3
------------------------
-MODIFICATIONS:
-
-    * updated unit tests for LOND, bonfInfinite and LORDdep
-    
-
-CHANGES IN VERSION 1.1.2
------------------------
-MODIFICATIONS:
-
-    * updated unit test for LORD
-    
-
-CHANGES IN VERSION 1.1.1
------------------------
-MODIFICATIONS:
-
+    * updated unit tests for LOND, LORD, bonfInfinite and LORDdep
     * added the LORD++ procedure for online FDR control
     * updated references
     * updated vignette
     
 
-CHANGES IN VERSION 0.99.7
+CHANGES IN VERSION 1.0.0
 -----------------------
 MODIFICATIONS:
 
-    * randomisation of batches now implemented via the randBatch helper function
-    * updated references
-    * updated vignette
-
-
-CHANGES IN VERSION 0.99.5
------------------------
-MODIFICATIONS:
-
-    * replace date field with hard-coded date in vignette
-    * updating data.frame rows by group now uses 'split-apply-combine'
-    * vectorise part of the LOND function
-    * replace 1:N with seq_len(N)
-    * applied consistent formatting & indentation
-    * added new tests
+    * package added to Bioconductor
