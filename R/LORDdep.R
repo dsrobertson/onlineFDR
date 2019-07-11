@@ -67,7 +67,7 @@
 #' @export
 
 LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
-                    date.format="%Y-%m-%d") {
+                    date.format="%Y-%m-%d") { # nocov start
     
     .Deprecated("LORD", package="onlineFDR",
     msg = "LORDdep is deprecated. Use LORD instead with version='dep'.")
@@ -134,4 +134,4 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
     d.out <- data.frame(d, alphai, R)
 
     return(d.out)
-}
+} # nocov end
