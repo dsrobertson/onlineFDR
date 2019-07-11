@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.org/dsrobertson/onlineFDR)
+
+# onlineFDR
+
 ## Introduction
 This package allows users to control the false discovery rate for online
 hypothesis testing, where hypotheses arrive sequentially in a stream, as
