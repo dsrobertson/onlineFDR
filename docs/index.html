@@ -79,21 +79,27 @@
 <div id="onlinefdr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#onlinefdr" class="anchor"></a>onlineFDR</h1></div>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>This package allows users to control the false discovery rate for online hypothesis testing, where hypotheses arrive sequentially in a stream, as presented by Javanmard and Montanari (2015, 2018), Ramdas et al. (2017, 2018), Tian and Ramdas (2019) and Zrnic et al. (2018). In this framework, a null hypothesis is rejected based only on the previous decisions, as the future p-values and the number of hypotheses to be tested are unknown.</p>
-</div>
+<p>This R package allows users to control the false discovery rate for online hypothesis testing, where hypotheses arrive sequentially in a stream, as presented by Javanmard and Montanari (2015, 2018), Ramdas et al. (2017, 2018), Tian and Ramdas (2019) and Zrnic et al. (2018). In this framework, a null hypothesis is rejected based only on the previous decisions, as the future p-values and the number of hypotheses to be tested are unknown.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>To install the latest (development) version of the onlineFDR package in R, please run the following code:</p>
+<p>To install the latest (development) version of the onlineFDR package from Bioconductor, please run the following code:</p>
+<pre class="{r}"><code>if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# The following initializes usage of Bioc devel
+BiocManager::install(version='devel')
+
+BiocManager::install("onlineFDR")</code></pre>
+<p>Alternatively, you can install the package directly from GitHub:</p>
 <pre class="{r}"><code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github("dsrobertson/onlineFDR")</a></code></pre>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
-<p>The documentation is hosted at <a href="https://dsrobertson.github.io/onlineFDR/" class="uri">https://dsrobertson.github.io/onlineFDR/</a></p>
+<p>Documentation is hosted at <a href="https://dsrobertson.github.io/onlineFDR/" class="uri">https://dsrobertson.github.io/onlineFDR/</a></p>
+<p>To view the vignette for the version of this package installed in your system, start R and enter:</p>
+<pre class="{r}"><code><a href="https://www.rdocumentation.org/packages/utils/topics/browseVignettes">browseVignettes("onlineFDR")</a></code></pre>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
