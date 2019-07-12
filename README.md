@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.org/dsrobertson/onlineFDR)
 [![codecov](https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg)](https://codecov.io/gh/dsrobertson/onlineFDR)
 
+
 # onlineFDR
 
 This R package allows users to control the false discovery rate for online
@@ -10,7 +11,9 @@ Tian and Ramdas (2019) and Zrnic et al. (2018). In this framework, a null
 hypothesis is rejected based only on the previous decisions, as the future
 p-values and the number of hypotheses to be tested are unknown.
 
+
 ## Installation
+
 To install the latest (development) version of the onlineFDR package from Bioconductor,
 please run the following code:
 
@@ -28,10 +31,13 @@ Alternatively, you can install the package directly from GitHub:
 
 ```{r}
 # install.packages("devtools") # If devtools not installed
+
 devtools::install_github("dsrobertson/onlineFDR")
 ```
 
+
 ## Documentation
+
 Documentation is hosted at https://dsrobertson.github.io/onlineFDR/
 
 To view the vignette for the version of this package installed in your system, start R and enter:
