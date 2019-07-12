@@ -3,8 +3,7 @@
 
 # onlineFDR
 
-## Introduction
-This package allows users to control the false discovery rate for online
+This R package allows users to control the false discovery rate for online
 hypothesis testing, where hypotheses arrive sequentially in a stream, as
 presented by Javanmard and Montanari (2015, 2018), Ramdas et al. (2017, 2018),
 Tian and Ramdas (2019) and Zrnic et al. (2018). In this framework, a null
@@ -12,14 +11,30 @@ hypothesis is rejected based only on the previous decisions, as the future
 p-values and the number of hypotheses to be tested are unknown.
 
 ## Installation
-To install the latest (development) version of the onlineFDR package in R,
+To install the latest (development) version of the onlineFDR package from Bioconductor,
 please run the following code:
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# The following initializes usage of Bioc devel
+BiocManager::install(version='devel')
+
+BiocManager::install("onlineFDR")
+```
+
+Alternatively, you can install the package directly from GitHub:
 ```{r}
 devtools::install_github("dsrobertson/onlineFDR")
 ```
 
 ## Documentation
-The documentation is hosted at https://dsrobertson.github.io/onlineFDR/
+Documentation is hosted at https://dsrobertson.github.io/onlineFDR/
+
+To view the vignette for the version of this package installed in your system, start R and enter:
+```{r}
+browseVignettes("onlineFDR")
+```
 
 ## References
 Javanmard, A., and Montanari, A. (2015). On Online Control of False
