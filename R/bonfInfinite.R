@@ -93,8 +93,7 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     } else if (any(alphai<0)){
         stop("All elements of alphai must be non-negative.")
     } else if(sum(alphai)>alpha){
-        stop("The sum of the elements of alphai must not be greater than
-        alpha.")
+        stop("The sum of the elements of alphai must not be greater than alpha.")
     }
 
     R <- as.numeric(pval <= alphai)
