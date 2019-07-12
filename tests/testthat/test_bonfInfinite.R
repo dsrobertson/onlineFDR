@@ -22,9 +22,13 @@ test4 <- bonfInfinite(test.df4, random=FALSE)$R
 
 
 test_that("Errors for edge cases", {
+    expect_error(bonfInfinite(matrix(NA, nrow=2, ncol=2)), "d must either be a dataframe or a vector of p-values.")
     expect_error(bonfInfinite(test.df0), "The dataframe d is missing a column 'id' of identifiers.")
     expect_error(bonfInfinite(test.df1), "The dataframe d is missing a column 'pval' of p-values.")
     expect_error(bonfInfinite(test.df2), "The dataframe d is missing a column 'pval' of p-values.")
+    expect_error(bonfInfinite(0.1, alphai=-1), "All elements of alphai must be non-negative.")
+    expect_error(bonfInfinite(0.1, alphai=1), "The sum of the elements of alphai must not be greater than
+        alpha.")
 })
 
 test_that("Correct rejections for sample dataframes", {
