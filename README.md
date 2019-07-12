@@ -25,6 +25,7 @@ BiocManager::install("onlineFDR")
 
 Alternatively, you can install the package directly from GitHub:
 ```{r}
+# install.packages("devtools") # If devtools not installed
 devtools::install_github("dsrobertson/onlineFDR")
 ```
 
