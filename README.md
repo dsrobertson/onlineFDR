@@ -14,8 +14,8 @@ p-values and the number of hypotheses to be tested are unknown.
 
 ## Installation
 
-To install the latest (development) version of the onlineFDR package from Bioconductor,
-please run the following code:
+To install the latest (development) version of the onlineFDR package from
+Bioconductor, please run the following code:
 
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -40,7 +40,8 @@ devtools::install_github("dsrobertson/onlineFDR")
 
 Documentation is hosted at https://dsrobertson.github.io/onlineFDR/
 
-To view the vignette for the version of this package installed in your system, start R and enter:
+To view the vignette for the version of this package installed in your system,
+start R and enter:
 
 ```{r}
 browseVignettes("onlineFDR")

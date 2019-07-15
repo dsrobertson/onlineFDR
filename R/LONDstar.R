@@ -169,7 +169,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         
         d.out <- data.frame(pval, lag=lags, alphai, R)
         },
-        ## mini = 3
+        ## mini-batch = 3
         {
         n <- batch.sizes
         ncum <- cumsum(n)

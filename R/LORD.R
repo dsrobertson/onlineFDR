@@ -147,8 +147,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
     }
     
     if(version %in% c(1,2)){
-        stop("LORD 1 and LORD 2 have been superceded by LORD++, 
-             please use version '++' instead.")
+        stop("LORD 1 and LORD 2 have been superceded by LORD++, please use version '++' instead.")
     } else if(!(version %in% c('++',3,'discard','dep'))){
         stop("version must be '++', 3, 'discard' or 'dep'.")
     }

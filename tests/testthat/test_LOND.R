@@ -1,39 +1,39 @@
-test.df0 <- data.frame()
-test.df1 <- data.frame(id = 'A')
-
-test.df2 <- data.frame(
-    id = 'A',
-    date = as.Date("2014-12-01")
-)
-
-test.df3 <- data.frame(
+test.df1 <- data.frame(
     id = 'A',
     date = as.Date("2014-12-01"),
     pval = 1e-04
 )
 
-test.df4 <- data.frame(
+test.df2 <- data.frame(
     id = c('A', 'B', 'C'),
     date = as.Date(rep("2014-12-01",3)),
     pval = c(1e-07, 0.1, 6e-04)
 )
 
-test4 <- LOND(test.df4, random=FALSE)$R
-test4dep <- LOND(test.df4, dep=TRUE, random=FALSE)$R
+test2 <- LOND(test.df2, random=FALSE)$R
+test2dep <- LOND(test.df2, dep=TRUE, random=FALSE)$R
 
 
 test_that("Errors for edge cases", {
-    expect_error(LOND(test.df0), "The dataframe d is missing a column 'id' of identifiers.")
-    expect_error(LOND(test.df1), "The dataframe d is missing a column 'pval' of p-values.")
-    expect_error(LOND(test.df2), "The dataframe d is missing a column 'pval' of p-values.")
+    expect_error(LOND(matrix(NA, nrow=2, ncol=2)),
+                 "d must either be a dataframe or a vector of p-values.")
+    
+    expect_error(LOND(0.1, alpha = -0.1),
+                 "alpha must be between 0 and 1.")
+    
+    expect_error(LOND(0.1, betai = -1),
+                 "All elements of betai must be non-negative.")
+    
+    expect_error(LOND(0.1, betai=2),
+    "The sum of the elements of betai must not be greater than alpha.")
 })
 
 test_that("LOND gives same results when dep = TRUE for N = 1", {
-    expect_equal(LOND(test.df3), LOND(test.df3, dep = TRUE))
+    expect_equal(LOND(test.df1), LOND(test.df1, dep = TRUE))
 })
 
-test_that("Correct rejections for sample dataframes", {
-    expect_identical(LOND(test.df3)$R, 1)
-    expect_identical(test4, c(1,0,1))
-    expect_identical(test4dep, c(1,0,0))
+test_that("Correct rejections for sample data", {
+    expect_identical(LOND(test.df1)$R, 1)
+    expect_identical(test2, c(1,0,1))
+    expect_identical(test2dep, c(1,0,0))
 })

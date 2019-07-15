@@ -10,11 +10,11 @@ checkStarVersion <- function(N, version, decision.times, lags, batch.sizes) {
     if(version == 'async'){
         
         if(length(decision.times) != N){
-            stop("Please provide a decision times for all p-values.")
+            stop("Please provide a decision time for all p-values.")
         }
         
         if(any(!is.wholenumber(decision.times))){
-            stop("All decision times should be integers")
+            stop("All decision times should be integers.")
         }
         
         version <- 1
@@ -38,12 +38,11 @@ checkStarVersion <- function(N, version, decision.times, lags, batch.sizes) {
     } else if(version =='batch'){
         
         if(sum(batch.sizes) != N){
-            stop("The sum of the batch sizes must equal the number of p-values
-                 observed.")
+            stop("The sum of the batch sizes must equal the number of p-values observed.")
         }
         
         if(any(!is.wholenumber(batch.sizes))){
-            stop("All batch sizes should be integers")
+            stop("All batch sizes should be integers.")
         }
         
         if(any(batch.sizes <= 0)){

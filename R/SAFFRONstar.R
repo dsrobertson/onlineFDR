@@ -297,7 +297,7 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
                
         d.out <- data.frame(pval, lag=lags, alphai, R)
         },
-        ## mini = 3
+        ## mini-batch = 3
         {
         n <- batch.sizes
         ncum <- cumsum(n)
@@ -368,10 +368,8 @@ SAFFRONstar <- function(pval, alpha=0.05, version, gammai, w0, lambda=0.5,
                 
               } else if(K == 1){
                 
-                if(b-1>=r+1){
-                    Cj.plus[1] <- sum(Cj[seq(from=r+1, to=b-1)])
-                }
-                
+                Cj.plus[1] <- (b-1>=r+1)*sum(Cj[seq(from=r+1, to=b-1)])
+        
                 alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum] + 
                   ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
                                                    ncum[r]-Cj.plus[1]]
