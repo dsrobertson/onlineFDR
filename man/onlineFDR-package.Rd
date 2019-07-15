@@ -17,8 +17,8 @@ are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 1.3.4\cr
-Date: \tab 2019-07-10\cr
+Version: \tab 1.3.5\cr
+Date: \tab 2019-07-15\cr
 License: \tab GPL-3 \cr
 }
 
