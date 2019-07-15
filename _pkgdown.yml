@@ -1,0 +1,7 @@
+url: https://dsrobertson.github.io/onlineFDR/
+
+template:
+  params:
+    docsearch:
+      api_key: 4c638d00ee22961d7aab55c43dd0309d
+      index_name: onlinefdr
