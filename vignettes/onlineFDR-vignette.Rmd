@@ -2,10 +2,11 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson, Aaditya Ramdas and Natasha A. Karp"
-date: "2019-07-10"
+date: "2019-09-18"
 output:
   html_document:
     toc: yes
+    self_contained: no
   pdf_document:
     toc: yes
 vignette: >
@@ -47,19 +48,20 @@ Javanmard and Montanari proposed two procedures, LOND and LORD, to control FDR
 in an online manner (Javanmard and Montanari (2015, 2018)), with the latter
 extended by Ramdas *et al.* (2017). The LOND procedure sets the significance
 level $\alpha_i$  based on the number of  discoveries made so far, while LORD
-sets them according to the time of the most recent discovery. Ramdas et al.
-(2018) also proposed the SAFFRON procedure, which provides an adaptive method of
-online FDR control.
+sets them according to the time of the most recent discovery. Ramdas *et al.*
+(2018) then proposed the SAFFRON procedure, which provides an adaptive method of
+online FDR control. They also proposed a variant of the Alpha-investing
+algorithm of Foster and Stine (2008) that guarantees FDR control, using
+SAFFRON's update rule.
 
 Subsequently, Zrnic *et al.* (2018) proposed procedures to control the modified
 FDR (mFDR) in the context of *asynchronous* testing, i.e. where each hypothesis
 test can itself be a sequential process and the tests can overlap in time. They
-presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a 
-variety of trial settings.
-
-Finally, for both synchronous and asycnhronous testing, Tian and Ramdas (2019)
-proposed the ADDIS algorithms which compensate for the loss in power
-in the presence of conservative nulls by adaptively 'discarding' these p-values.
+presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a
+variety of trial settings. Finally, for both synchronous and asycnhronous
+testing, Tian and Ramdas (2019) proposed the ADDIS algorithms which compensate
+for the loss in power in the presence of conservative nulls by adaptively
+'discarding' these p-values.
 
 This package, onlineFDR, implements all these procedures and provides wrapper
 functions to apply them to a historic or growing dataset. As a comparison, we
@@ -73,8 +75,8 @@ the use of the package and demonstrates a typical workflow.
 
 1. A dataset with three columns (an identifier ('id'), date ('date') and
 p-value ('pval')) is passed to one of the onlineFDR wrapper functions.
-(Alternatively, a vector of p-values can be provided, in which case step 2 is
-skipped).
+Alternatively, a vector of p-values can be provided, in which case step 2 is
+skipped.
 
 2. The function orders the information by date.  If there are multiple p-values
 with the same date (i.e. the same batch), the order of the p-values within each
@@ -131,21 +133,26 @@ with conservative nulls, by including both adapativity in the fraction of
 null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
 SAFFRON).
 
-5: **LONDstar**
+5: **AlphaInvesting**
+Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008)
+that guarantees FDR control, as proposed by Ramdas et al. (2018). This
+procedure uses a variant of SAFFRON's update rule.
+
+6: **BonfInfinite**
+Implements online FDR control using a Bonferroni-like test. This is valid for
+arbitrarily dependent p-values.
+
+7: **LONDstar**
 Implements the LOND algorithm for asynchronous online testing, as presented 
 by Zrnic *et al.* (2018). These algorithms control the mFDR.
 
-6: **LORDstar**
+8: **LORDstar**
 Implements LORD algorithms for asynchronous online testing, as presented by
 Zrnic *et al.* (2018). These algorithms control the mFDR.
 
-7: **SAFFRONstar**
+9: **SAFFRONstar**
 Implements the SAFFRON algorithm for asynchronous online testing, as
 presented by Zrnic *et al.* (2018). These algorithms control the mFDR.
-
-8: **BonfInfinite**
-Implements online FDR control using a Bonferroni-like test. This is valid for
-arbitrarily dependent p-values.
 
 
 ### Quick start
@@ -239,7 +246,9 @@ The first is LOND, which stands for (significance) Levels based On Number of
 Discoveries. The second is LORD, which stands for (significance) Levels based On
 Recent Discovery. LORD was subsequently extended by Ramdas *et al.* (2017).
 Ramdas *et al.* (2018) also proposed the SAFFRON procedure, which provides an
-adaptive method of online FDR control.
+adaptive method of online FDR control, which includes a variant of
+Alpha-investing. Finally, Tian and Ramdas (2019) proposed the ADDIS procedure
+as an improvement of SAFFRON in the presence of conservative nulls.
 
 
 ### LOND {#LOND}
@@ -385,6 +394,15 @@ test levels are chosen as $\alpha_i = \min\{ \lambda, \tilde{\alpha}_i\}$, where
 given by $\gamma_j \propto j^{-1.6}$.
 
 
+### Alpha-investing {#AlphaInvesting}
+
+Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of
+Foster and Stine (2008) that guarantees FDR control. This procedure uses
+SAFFRON's update rule with the constant \eqn{\lambda} replaced by a sequence
+$\lambda_i = \alpha_i$. This is also equivalent to using the ADDIS algorithm
+(see below) with $\tau = 1$ and $\lambda_i = \alpha_i$.
+
+
 ### ADDIS {#ADDIS}
 
 The ADDIS procedure is valid for independent p-values, and was proposed by
@@ -462,7 +480,7 @@ correspond to the decision times.
 
 2: **Online mFDR control under local dependence**: 
 For any $t>0$ we allow the p-value $p_t$ to have arbitrary dependence on the
-previous $L_t$ p-values. The fixed sequence $L_t$ is referred to as `lags'
+previous $L_t$ p-values. The fixed sequence $L_t$ is referred to as `lags'.
 
 3: **mFDR conrol in asynchronous mini-batch testing**: 
 A mini-batch represents a grouping of tests run asynchronously which
@@ -598,6 +616,10 @@ in multiple testing under dependency. *The Annals of Statistics*,
 Bourgon, R., Gentleman, R., and Huber, W. (2010). Independent filtering
 increases detection power for high-throughput experiments. 
 *Proceedings of the National Academy of Sciences*, 107(21), 9546-9551.
+
+Foster, D. and Stine R. (2008). $\alpha$-investing: a procedure for sequential
+control of expected false discoveries.
+*Journal of the Royal Statistical Society (Series B)*, 29(4):429-444.
 
 Ioannidis, J.P.A. (2005). Why most published research findings are false.
 *PLoS Medicine*, 2.8:e124.

@@ -11,8 +11,8 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.3.5\cr
-#' Date: \tab 2019-07-15\cr
+#' Version: \tab 1.3.6\cr
+#' Date: \tab 2019-09-18\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -32,7 +32,9 @@
 #' A related method proposed by Ramdas et al. (2018) is the
 #' \code{\link{SAFFRON}} procedure, which stands for Serial estimate of the
 #' Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
-#' provides an adaptive algorithm for online FDR control.
+#' provides an adaptive algorithm for online FDR control. SAFFRON is related to 
+#' the Alpha-Investing procedure of Foster and Stine (2008), a monotone version
+#' of which is implemented by the function \code{\link{AlphaInvesting}}.
 #' 
 #' Zrnic et al. (2018) generalised these algorithms for the context of
 #' asynchronous online testing, where each hypothesis test can itself be a
@@ -51,6 +53,11 @@
 #' and Natasha A. Karp.
 #'
 #' @references
+#' 
+#' Foster, D. and Stine R. (2008). \eqn{\alpha}-investing: a procedure for 
+#' sequential control of expected false discoveries. \emph{Journal of the Royal
+#' Statistical Society (Series B)}, 29(4):429-444.
+#' 
 #' Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
 #' Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
 #'
@@ -62,26 +69,26 @@
 #' of the false discovery rate with decaying memory. \emph{Advances in Neural
 #' Information Processing Systems 30}, 5650-5659.
 #'
-#'Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
-#'adaptive algorithm for online control of the false discovery rate.
-#'\emph{Proceedings of the 35th International Conference in Machine Learning},
-#'80:4286-4294.
+#' Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+#' adaptive algorithm for online control of the false discovery rate.
+#' \emph{Proceedings of the 35th International Conference in Machine Learning},
+#' 80:4286-4294.
 #'
-#'Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
-#'discovery rate in biomedical research. \emph{arXiv preprint},
-#'\url{https://arxiv.org/abs/1809.07292}.
+#' Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
+#' discovery rate in biomedical research. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1809.07292}.
 #'
-#'Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
-#'onlineFDR: an R package to control the false discovery rate for growing data
-#'repositories. \emph{Bioinformatics},
-#'\url{https://doi.org/10.1093/bioinformatics/btz191}.
+#' Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
+#' onlineFDR: an R package to control the false discovery rate for growing data
+#' repositories. \emph{Bioinformatics},
+#' \url{https://doi.org/10.1093/bioinformatics/btz191}.
 #'
-#'Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
-#'online FDR control with conservative nulls. \emph{arXiv preprint},
-#'\url{https://arxiv.org/abs/1905.11465}.
+#' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+#' online FDR control with conservative nulls. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1905.11465}.
 #'
-#'Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-#'\emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
+#' Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
+#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1812.05068}
 #'
 #' @docType package
 #' @name onlineFDR-package

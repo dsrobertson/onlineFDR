@@ -17,8 +17,8 @@ are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 1.3.5\cr
-Date: \tab 2019-07-15\cr
+Version: \tab 1.3.6\cr
+Date: \tab 2019-09-18\cr
 License: \tab GPL-3 \cr
 }
 
@@ -38,7 +38,9 @@ LOND which is valid for arbitrarily dependent p-values.
 A related method proposed by Ramdas et al. (2018) is the
 \code{\link{SAFFRON}} procedure, which stands for Serial estimate of the
 Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
-provides an adaptive algorithm for online FDR control.
+provides an adaptive algorithm for online FDR control. SAFFRON is related to 
+the Alpha-Investing procedure of Foster and Stine (2008), a monotone version
+of which is implemented by the function \code{\link{AlphaInvesting}}.
 
 Zrnic et al. (2018) generalised these algorithms for the context of
 asynchronous online testing, where each hypothesis test can itself be a
@@ -54,6 +56,10 @@ Montanari (2015, 2018), Ramdas et al. (2017, 2018) and Zrnic et al. (2018).
 }
 
 \references{
+Foster, D. and Stine R. (2008). \eqn{\alpha}-investing: a procedure for 
+sequential control of expected false discoveries. \emph{Journal of the Royal
+Statistical Society (Series B)}, 29(4):429-444.
+
 Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
 Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
 

@@ -8,10 +8,11 @@ MODIFICATIONS:
     * added the ADDIS algorithms of Tian and Ramdas (2019)
     * added asynchronous online testing algorithms of Zrnic et al. (2018)
     * added the SAFFRON procedure for online FDR control (Ramdas et al., 2018)
+    * added the Alpha-investing procedure of Ramdas et al. (2018)
     * updated vignette
     * deprecated LORDdep and added functionality to LORD
     * removed LORD versions 1 and 2
-    * added unit tests for ADDIS, SAFFRON, LONDstar, LORDstar and SAFFRONstar
+    * added unit tests
     * updated references
     * updated authors
 
