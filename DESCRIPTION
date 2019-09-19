@@ -1,6 +1,6 @@
 Package: onlineFDR
-Version: 1.3.5
-Date: 2019-07-15
+Version: 1.3.6
+Date: 2019-09-19
 Title: Online FDR control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),
