@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Managing multiple testing challenges with sequential inference using the onlineFDR package • onlineFDR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Managing multiple testing challenges with sequential inference using the onlineFDR package">
@@ -32,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
       </span>
     </div>
 
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -61,7 +62,7 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -75,13 +76,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Managing multiple testing challenges with sequential inference using the onlineFDR package</h1>
                         <h4 class="author">David S. Robertson, Aaditya Ramdas and Natasha A. Karp</h4>
             
-            <h4 class="date">2019-07-10</h4>
+            <h4 class="date">2019-09-18</h4>
       
       
       <div class="hidden name"><code>onlineFDR-vignette.Rmd</code></div>
@@ -96,9 +98,8 @@
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Multiple hypothesis testing is a fundamental problem in statistical inference. The failure to manage the multiple testing problem has been highlighted as one of the elements contributing to the replicability crisis in science (Ioannidis 2015). Methodologies have been developed for a family of hypotheses to adjust the significance levels to manage the multiple testing situation by controlling error metrics such as the familywise error rate (FWER) or the false discovery rate (FDR).</p>
 <p>Frequently, modern data analysis problems have a further complexity that the hypothesis arrive sequentially in a stream. This introduces the challenge that at each step the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypothesis to be tested, but does have knowledge of the historic decisions to date. The International Mouse Phenotyping Consortium (Koscielny <em>et al.</em>, 2013), provides a concrete example of such a scenario. Here the dataset is constantly growing as new knockout mice lines are generated and phenotyping data uploaded to a database.</p>
-<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the significance level <span class="math inline">\(\alpha_i\)</span> based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas et al. (2018) also proposed the SAFFRON procedure, which provides an adaptive method of online FDR control.</p>
-<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings.</p>
-<p>Finally, for both synchronous and asycnhronous testing, Tian and Ramdas (2019) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
+<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the significance level <span class="math inline">\(\alpha_i\)</span> based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas <em>et al.</em> (2018) then proposed the SAFFRON procedure, which provides an adaptive method of online FDR control. They also proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, using SAFFRON’s update rule.</p>
+<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings. Finally, for both synchronous and asycnhronous testing, Tian and Ramdas (2019) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
 <p>This package, onlineFDR, implements all these procedures and provides wrapper functions to apply them to a historic or growing dataset. As a comparison, we have also provided a wrapper function for implementation of a method based on the Bonferroni procedure adapted to the online scenario. This vignette explains the use of the package and demonstrates a typical workflow.</p>
 <hr>
 </div>
@@ -106,7 +107,7 @@
 <h2 class="hasAnchor">
 <a href="#overview-of-the-process" class="anchor"></a>Overview of the process</h2>
 <ol style="list-style-type: decimal">
-<li><p>A dataset with three columns (an identifier (‘id’), date (‘date’) and p-value (‘pval’)) is passed to one of the onlineFDR wrapper functions. (Alternatively, a vector of p-values can be provided, in which case step 2 is skipped).</p></li>
+<li><p>A dataset with three columns (an identifier (‘id’), date (‘date’) and p-value (‘pval’)) is passed to one of the onlineFDR wrapper functions. Alternatively, a vector of p-values can be provided, in which case step 2 is skipped.</p></li>
 <li><p>The function orders the information by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the <code>set.seed</code> function) before calling the wrapper function (see also step 6).</p></li>
 <li><p>For each hypothesis test, an adjusted significance threshold (<code>alphai</code>) is calculated, which gives the threshold at which the corresponding p-value would be declared significant.</p></li>
 <li><p>Using the p-values provided and the alphai, an indicator of discoveries (<code>R</code>) is calculated, where <code>R[i] = 1</code> corresponds to hypothesis i being rejected (and <code>R[i] = 0</code> otherwise).</p></li>
@@ -120,31 +121,32 @@
 <p>2: <strong>LORD</strong> Implements the LORD procedure for online FDR control, where LORD stands for (significance) Levels based On Recent Discovery, as presented by Javanmard and Montanari (2018), Ramdas <em>et al.</em> (2017) and Tian and Ramdas (2019). The function provides different versions of the procedure valid for independent p-values, see ‘Theory behind onlineFDR’. There is also a version (‘dep’) that guarantees control for dependent p-values.</p>
 <p>3: <strong>SAFFRON</strong> Implements the SAFFRON procedure for online FDR control, where SAFFRON stands for Serial estimate of the Alpha Fraction that is Futiley Rationed On true Null hypotheses, as presented by Ramdas <em>et al.</em> (2018). The procedure provides an adaptive method of online FDR control.</p>
 <p>4: <strong>ADDIS</strong> Implements the ADDIS algorithm for online FDR control, where ADDIS stands for an ADaptive algorithm that DIScards conservative nulls, as presented by Tian and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adapativity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).</p>
-<p>5: <strong>LONDstar</strong> Implements the LOND algorithm for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
-<p>6: <strong>LORDstar</strong> Implements LORD algorithms for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
-<p>7: <strong>SAFFRONstar</strong> Implements the SAFFRON algorithm for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
-<p>8: <strong>BonfInfinite</strong> Implements online FDR control using a Bonferroni-like test. This is valid for arbitrarily dependent p-values.</p>
+<p>5: <strong>AlphaInvesting</strong> Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, as proposed by Ramdas et al. (2018). This procedure uses a variant of SAFFRON’s update rule.</p>
+<p>6: <strong>BonfInfinite</strong> Implements online FDR control using a Bonferroni-like test. This is valid for arbitrarily dependent p-values.</p>
+<p>7: <strong>LONDstar</strong> Implements the LOND algorithm for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
+<p>8: <strong>LORDstar</strong> Implements LORD algorithms for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
+<p>9: <strong>SAFFRONstar</strong> Implements the SAFFRON algorithm for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
 </div>
 <div id="quick-start" class="section level3">
 <h3 class="hasAnchor">
 <a href="#quick-start" class="anchor"></a>Quick start</h3>
 <p>Here we show the steps to achieve online FDR control of a growing dataset. First load a dataframe with the three columns: an identifier (‘id’), date (‘date’) and p-value (‘pval’), and then call the wrapper function of interest. In order for the results to be reproducible, we also set a seed using the <code>set.seed</code> function.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(onlineFDR)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(onlineFDR)</a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3">sample.df &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb1-4" title="4">    <span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</a>
+<a class="sourceLine" id="cb1-3" title="3">sample.df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb1-4" title="4">    <span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</a>
 <a class="sourceLine" id="cb1-5" title="5">        <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</a>
 <a class="sourceLine" id="cb1-6" title="6">        <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span>),</a>
-<a class="sourceLine" id="cb1-7" title="7">    <span class="dt">date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"2014-12-01"</span>,<span class="dv">3</span>),</a>
-<a class="sourceLine" id="cb1-8" title="8">                    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"2015-09-21"</span>,<span class="dv">5</span>),</a>
-<a class="sourceLine" id="cb1-9" title="9">                    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"2016-05-19"</span>,<span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb1-7" title="7">    <span class="dt">date =</span> <span class="kw"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"2014-12-01"</span>,<span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb1-8" title="8">                    <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"2015-09-21"</span>,<span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb1-9" title="9">                    <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"2016-05-19"</span>,<span class="dv">2</span>),</a>
 <a class="sourceLine" id="cb1-10" title="10">                    <span class="st">"2016-11-12"</span>,</a>
-<a class="sourceLine" id="cb1-11" title="11">                    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"2017-03-27"</span>,<span class="dv">4</span>))),</a>
-<a class="sourceLine" id="cb1-12" title="12">    <span class="dt">pval =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</a>
+<a class="sourceLine" id="cb1-11" title="11">                    <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"2017-03-27"</span>,<span class="dv">4</span>))),</a>
+<a class="sourceLine" id="cb1-12" title="12">    <span class="dt">pval =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</a>
 <a class="sourceLine" id="cb1-13" title="13">            <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</a>
 <a class="sourceLine" id="cb1-14" title="14">            <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span>))</a>
 <a class="sourceLine" id="cb1-15" title="15"></a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-16" title="16"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb1-17" title="17">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df)</a>
 <a class="sourceLine" id="cb1-18" title="18">results</a>
 <a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt;        id       date       pval       alphai R</span></a>
@@ -198,7 +200,7 @@
 0 &amp; \text{otherwise} &amp; (\text{accept } H_i)
 \end{cases} \]</span></p>
 <p>In <em>online</em> testing, the significance thresholds can only be functions of the prior decisions, i.e. <span class="math inline">\(\alpha_i = \alpha_i(R_1, R_2, \ldots, R_{i-1})\)</span>.</p>
-<p>Javanmard and Montanari (2015, 2018) proposed two procedures for online control. The first is LOND, which stands for (significance) Levels based On Number of Discoveries. The second is LORD, which stands for (significance) Levels based On Recent Discovery. LORD was subsequently extended by Ramdas <em>et al.</em> (2017). Ramdas <em>et al.</em> (2018) also proposed the SAFFRON procedure, which provides an adaptive method of online FDR control.</p>
+<p>Javanmard and Montanari (2015, 2018) proposed two procedures for online control. The first is LOND, which stands for (significance) Levels based On Number of Discoveries. The second is LORD, which stands for (significance) Levels based On Recent Discovery. LORD was subsequently extended by Ramdas <em>et al.</em> (2017). Ramdas <em>et al.</em> (2018) also proposed the SAFFRON procedure, which provides an adaptive method of online FDR control, which includes a variant of Alpha-investing. Finally, Tian and Ramdas (2019) proposed the ADDIS procedure as an improvement of SAFFRON in the presence of conservative nulls.</p>
 </div>
 <div id="LOND" class="section level3">
 <h3 class="hasAnchor">
@@ -265,6 +267,11 @@ S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
 </ol>
 <p><a name="SAFFRON_gamma"></a> The default sequence of <span class="math inline">\(\gamma\)</span> for SAFFRON is given by <span class="math inline">\(\gamma_j \propto j^{-1.6}\)</span>.</p>
 </div>
+<div id="AlphaInvesting" class="section level3">
+<h3 class="hasAnchor">
+<a href="#AlphaInvesting" class="anchor"></a>Alpha-investing</h3>
+<p>Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control. This procedure uses SAFFRON’s update rule with the constant  replaced by a sequence <span class="math inline">\(\lambda_i = \alpha_i\)</span>. This is also equivalent to using the ADDIS algorithm (see below) with <span class="math inline">\(\tau = 1\)</span> and <span class="math inline">\(\lambda_i = \alpha_i\)</span>.</p>
+</div>
 <div id="ADDIS" class="section level3">
 <h3 class="hasAnchor">
 <a href="#ADDIS" class="anchor"></a>ADDIS</h3>
@@ -304,7 +311,7 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 <a href="#asynchronous-testing" class="anchor"></a>Asynchronous testing</h2>
 <p>Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings, including the following:</p>
 <p>1: <strong>Asynchronous online mFDR control</strong>: This is for an asynchoronous testing process, consisting of tests that start and finish at (potentially) random times. The discretised finish times of the test correspond to the decision times.</p>
-<p>2: <strong>Online mFDR control under local dependence</strong>: For any <span class="math inline">\(t&gt;0\)</span> we allow the p-value <span class="math inline">\(p_t\)</span> to have arbitrary dependence on the previous <span class="math inline">\(L_t\)</span> p-values. The fixed sequence <span class="math inline">\(L_t\)</span> is referred to as `lags’</p>
+<p>2: <strong>Online mFDR control under local dependence</strong>: For any <span class="math inline">\(t&gt;0\)</span> we allow the p-value <span class="math inline">\(p_t\)</span> to have arbitrary dependence on the previous <span class="math inline">\(L_t\)</span> p-values. The fixed sequence <span class="math inline">\(L_t\)</span> is referred to as `lags’.</p>
 <p>3: <strong>mFDR conrol in asynchronous mini-batch testing</strong>: A mini-batch represents a grouping of tests run asynchronously which result in dependent p-values. Once a mini-batch of tests is fully completed, a new one can start, testing hypotheses independent of the previous batch.</p>
 <hr>
 </div>
@@ -324,11 +331,11 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 <h3 class="hasAnchor">
 <a href="#lond" class="anchor"></a>LOND</h3>
 <p>As a default, the <code>dep</code> argument is set to <code>FALSE</code>. Alternatively, this can be set to <code>TRUE</code> and will implement the LOND procedure to guarantee FDR control for arbitrarily dependent p-values. This method will in general be more conservative.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>); results.indep &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LOND.html">LOND</a></span>(sample.df)    <span class="co"># for independent p-values</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>); results.dep &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LOND.html">LOND</a></span>(sample.df, <span class="dt">dep=</span><span class="ot">TRUE</span>)   <span class="co"># for dependent p-values</span></a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>); results.indep &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LOND.html">LOND</a></span>(sample.df)    <span class="co"># for independent p-values</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>); results.dep &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LOND.html">LOND</a></span>(sample.df, <span class="dt">dep=</span><span class="ot">TRUE</span>)   <span class="co"># for dependent p-values</span></a>
 <a class="sourceLine" id="cb2-3" title="3"></a>
 <a class="sourceLine" id="cb2-4" title="4"><span class="co"># compare adjusted significance thresholds</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(<span class="dt">independent =</span> results.indep<span class="op">$</span>alphai, <span class="dt">dependent =</span> results.dep<span class="op">$</span>alphai)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="dt">independent =</span> results.indep<span class="op">$</span>alphai, <span class="dt">dependent =</span> results.dep<span class="op">$</span>alphai)</a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt;        independent    dependent</span></a>
 <a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;  [1,] 0.0026758385 0.0026758385</span></a>
 <a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt;  [2,] 0.0011638206 0.0007758804</span></a>
@@ -351,13 +358,13 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 <h3 class="hasAnchor">
 <a href="#lord" class="anchor"></a>LORD</h3>
 <p>The default version of LORD used is version ‘++’, but the user can optionally specify versions 3, ‘discard’ and ‘dep’ using the <code>version</code> argument (see <a href="#LORD">here</a> for further details about the different versions).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>); results.LORD.plus &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>); results.LORD3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df, <span class="dt">version=</span><span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>); results.LORD.discard &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df, <span class="dt">version=</span><span class="st">'discard'</span>)</a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>); results.LORD.dep &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df, <span class="dt">version=</span><span class="st">'dep'</span>) </a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>); results.LORD.plus &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>); results.LORD3 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df, <span class="dt">version=</span><span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>); results.LORD.discard &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df, <span class="dt">version=</span><span class="st">'discard'</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">1</span>); results.LORD.dep &lt;-<span class="st"> </span><span class="kw"><a href="../reference/LORD.html">LORD</a></span>(sample.df, <span class="dt">version=</span><span class="st">'dep'</span>) </a>
 <a class="sourceLine" id="cb3-5" title="5"></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co"># compare adjusted significance thresholds</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cbind">cbind</a></span>(<span class="dt">LORD.plus =</span> results.LORD.plus<span class="op">$</span>alphai,</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="dt">LORD.plus =</span> results.LORD.plus<span class="op">$</span>alphai,</a>
 <a class="sourceLine" id="cb3-8" title="8">    <span class="dt">LORD3 =</span> results.LORD3<span class="op">$</span>alphai,</a>
 <a class="sourceLine" id="cb3-9" title="9">    <span class="dt">LORD.discard  =</span> results.LORD.discard<span class="op">$</span>alphai,</a>
 <a class="sourceLine" id="cb3-10" title="10">    <span class="dt">LORD.dep =</span> results.LORD.dep<span class="op">$</span>alphai)</a>
@@ -404,6 +411,7 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 <a href="#references" class="anchor"></a>References</h2>
 <p>Benjamini, Y., and Yekutieli, D. (2001). The control of the false discovery rate in multiple testing under dependency. <em>The Annals of Statistics</em>, 29(4):1165-1188.</p>
 <p>Bourgon, R., Gentleman, R., and Huber, W. (2010). Independent filtering increases detection power for high-throughput experiments. <em>Proceedings of the National Academy of Sciences</em>, 107(21), 9546-9551.</p>
+<p>Foster, D. and Stine R. (2008). <span class="math inline">\(\alpha\)</span>-investing: a procedure for sequential control of expected false discoveries. <em>Journal of the Royal Statistical Society (Series B)</em>, 29(4):429-444.</p>
 <p>Ioannidis, J.P.A. (2005). Why most published research findings are false. <em>PLoS Medicine</em>, 2.8:e124.</p>
 <p>Javanmard, A., and Montanari, A. (2015). On Online Control of False Discovery Rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1502.06197" class="uri">https://arxiv.org/abs/1502.06197</a>.</p>
 <p>Javanmard, A., and Montanari, A. (2018). Online Rules for Control of False Discovery Rate and False Discovery Exceedance. <em>Annals of Statistics</em>, 46(2):526-554.</p>
@@ -419,6 +427,7 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -438,13 +447,15 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by David S. Robertson, Aaditya Ramdas, Adel Javanmard, Andrea Montanari, Jinjin Tian, Tijana Zrnic, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
