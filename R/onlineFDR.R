@@ -12,7 +12,7 @@
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
 #' Version: \tab 1.3.6\cr
-#' Date: \tab 2019-09-18\cr
+#' Date: \tab 2019-09-19\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'

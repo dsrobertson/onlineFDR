@@ -22,7 +22,7 @@ CHANGES IN VERSION 1.2.0
 MODIFICATIONS:
 
     * updated unit tests for LOND, LORD, bonfInfinite and LORDdep
-    * added the LORD++ procedure for online FDR control
+    * added the LORD++ procedure for online FDR control (Ramdas et al., 2017)
     * updated references
     * updated vignette
     

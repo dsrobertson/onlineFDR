@@ -12,6 +12,9 @@ test.df2 <- data.frame(
 
 test2 <- AlphaInvesting(test.df2, random=FALSE)$R
 
+test.pval <- c(1e-07, 3e-04, 0.1, 6e-04)
+test3 <- AlphaInvesting(test.pval)$R
+
 
 test_that("Errors for edge cases", {
    
@@ -37,6 +40,6 @@ test_that("Errors for edge cases", {
 test_that("Correct rejections for sample dataframes", {
     expect_identical(AlphaInvesting(test.df1)$R, 1)
     expect_identical(test2, c(1,0,1))
-    
+    expect_identical(test3, c(1,1,0,1))
     expect_identical(AlphaInvesting(c(0.1,0.1))$R, c(0,0))
 })
