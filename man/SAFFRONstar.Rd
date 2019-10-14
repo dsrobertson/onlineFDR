@@ -103,13 +103,18 @@ pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0174, 0.04723,
         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 
 SAFFRONstar(pval, version='async', decision.times=seq_len(15)) # Synchronous
+
 SAFFRONstar(pval, version='async', decision.times=seq_len(15)+1)
 # Asynchronous
 
+
 SAFFRONstar(pval, version='dep', lags=rep(0,15)) # Synchronous
+
 SAFFRONstar(pval, version='dep', lags=rep(1,15)) # Locally dependent
 
+
 SAFFRONstar(pval, version='batch', batch.size=rep(1,15)) # Synchronous
+
 SAFFRONstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
 
 }

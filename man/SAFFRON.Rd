@@ -99,7 +99,9 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 SAFFRON(sample.df, random=FALSE)
+
 set.seed(1); SAFFRON(sample.df)
+
 set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 
 SAFFRON(sample.df, discard=TRUE, random=FALSE)

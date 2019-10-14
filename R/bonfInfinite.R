@@ -1,18 +1,20 @@
-#'Online FDR control based on a Bonferroni-like test
+#' Online FDR control based on a Bonferroni-like test
 #'
-#'Implements online FDR control using a Bonferroni-like test.
+#' This funcion is deprecated, please use \code{\link{AlphaSpending}} instead.
 #'
-#'The function takes as its input either a vector of p-values, or a dataframe
-#'with three columns: an identifier (`id'), date (`date') and p-value (`pval').
-#'The case where p-values arrive in batches corresponds to multiple instances of
-#'the same date. If no column of dates is provided, then the p-values are
-#'treated as being ordered sequentially with no batches.
+#' Implements online FDR control using a Bonferroni-like test.
 #'
-#'The procedure controls FDR for a potentially infinite stream of p-values by
-#'using a Bonferroni-like test. Given an overall significance level
-#'\eqn{\alpha}, we choose a (potentially infinite) sequence of non-negative
-#'numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}. Hypothesis \eqn{i}
-#'is rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
+#' The function takes as its input either a vector of p-values, or a dataframe
+#' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+#' The case where p-values arrive in batches corresponds to multiple instances of
+#' the same date. If no column of dates is provided, then the p-values are
+#' treated as being ordered sequentially with no batches.
+#'
+#' The procedure controls FDR for a potentially infinite stream of p-values by
+#' using a Bonferroni-like test. Given an overall significance level
+#' \eqn{\alpha}, we choose a (potentially infinite) sequence of non-negative
+#' numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}. Hypothesis \eqn{i}
+#' is rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
 #'
 #'
 #'@param d Either a vector of p-values, or a dataframe with three columns: an
@@ -46,30 +48,13 @@
 #'  False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 #'  Statistics}, 46(2):526-554.
 #'
-#'
-#' @examples
-#' sample.df <- data.frame(
-#' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
-#'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
-#'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-#' date = as.Date(c(rep("2014-12-01",3),
-#'                 rep("2015-09-21",5),
-#'                 rep("2016-05-19",2),
-#'                 "2016-11-12",
-#'                 rep("2017-03-27",4))),
-#' pval = c(2.90e-17, 0.06743, 0.01514, 0.08174, 0.00171,
-#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
-#'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
-#'
-#' set.seed(1); bonfInfinite(sample.df)
-#' bonfInfinite(sample.df, random=FALSE)
-#' set.seed(1); bonfInfinite(sample.df, alpha=0.1)
-#'
-#'
 #'@export
 
 bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
-                        date.format="%Y-%m-%d") {
+                        date.format="%Y-%m-%d") { # nocov start
+    
+    .Deprecated("bonfInfinite", package="onlineFDR",
+                msg = "bonfInfinite is deprecated, please use AlphaSpending instead.")
 
     if(is.data.frame(d)){
         checkdf(d, random, date.format)
@@ -100,4 +85,4 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     d.out <- data.frame(d, alphai, R)
 
     return(d.out)
-}
+} # nocov end

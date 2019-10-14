@@ -87,14 +87,15 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 set.seed(1); LOND(sample.df)
-LOND(sample.df, random=FALSE)
-set.seed(1); LOND(sample.df, alpha=0.1)
 
+LOND(sample.df, random=FALSE)
+
+set.seed(1); LOND(sample.df, alpha=0.1)
 
 }
 \references{
 Javanmard, A. and Montanari, A. (2015) On Online Control of False
-Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
+Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}.
 
 Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
@@ -102,7 +103,7 @@ Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 Multiple Hypotheses. \emph{arXiv preprint}, 
-\url{https://arxiv.org/abs/1812.05068}
+\url{https://arxiv.org/abs/1812.05068}.
 }
 \seealso{
 \code{\link{LONDstar}} presents versions of LORD for \emph{synchronous}

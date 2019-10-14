@@ -77,7 +77,7 @@
 #'
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 #' Multiple Hypotheses. \emph{arXiv preprint},
-#' \url{https://arxiv.org/abs/1812.05068}
+#' \url{https://arxiv.org/abs/1812.05068}.
 #'
 #'
 #' @seealso
@@ -92,12 +92,17 @@
 #'         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 #'
 #' LORDstar(pval, version='async', decision.times=seq_len(15)) # Synchronous
+#' 
 #' LORDstar(pval, version='async', decision.times=seq_len(15)+1) # Asynchronous
+#' 
 #'
 #' LORDstar(pval, version='dep', lags=rep(0,15)) # Synchronous
+#' 
 #' LORDstar(pval, version='dep', lags=rep(1,15)) # Locally dependent
 #'
+#'
 #' LORDstar(pval, version='batch', batch.sizes=rep(1,15)) # Synchronous
+#' 
 #' LORDstar(pval, version='batch', batch.sizes=c(4,6,5)) # Batched
 #'
 #' @export

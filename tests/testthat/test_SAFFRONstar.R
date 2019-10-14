@@ -10,7 +10,6 @@ test_that("Errors for edge cases", {
     expect_error(SAFFRONstar(0.1, version='async', decision.times=1, lambda=2),
                  "lambda must be between 0 and 1.")
     
-    
     expect_error(SAFFRONstar(0.1, version='async', decision.times=1, gammai = -1),
                  "All elements of gammai must be non-negative.")
     
@@ -19,6 +18,9 @@ test_that("Errors for edge cases", {
     
     expect_error(SAFFRONstar(0.1, version='async', decision.times=1, w0 = -0.01),
                  "w0 must be non-negative.")
+    
+    # expect_error(SAFFRONstar(0.1, version='async', decision.times=1, w0 = 1),
+    #              "w0 must be less than (1-lambda)*alpha")
 
 })
 

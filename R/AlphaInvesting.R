@@ -81,7 +81,9 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
 #' AlphaInvesting(sample.df, random=FALSE)
+#' 
 #' set.seed(1); AlphaInvesting(sample.df)
+#' 
 #' set.seed(1); AlphaInvesting(sample.df, alpha=0.1, w0=0.025)
 #' 
 #' @export
@@ -90,7 +92,7 @@ AlphaInvesting <- function(d, alpha=0.05, gammai, w0,
                     random=TRUE, date.format="%Y-%m-%d") {
 
     if(is.data.frame(d)){
-        checkdf(d, random, date.format)
+        d <- checkdf(d, random, date.format)
         pval <- d$pval
     } else if(is.vector(d)){
         pval <- d
@@ -121,7 +123,7 @@ AlphaInvesting <- function(d, alpha=0.05, gammai, w0,
         stop("w0 must be less than alpha.")
     }
 
-    ### Start AI algorithm
+    ### Start algorithm
     
     alphai <- R <- cand <- Cj.plus <- rep(0, N)
 

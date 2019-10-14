@@ -14,6 +14,7 @@
   \itemize{
 
     \item{LORDdep: \code{\link{LORD}} with version='dep'}
+    \item{bonfInfinite: \code{\link{AlphaSpending}}}
 
   }
 }

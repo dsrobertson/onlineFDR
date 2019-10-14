@@ -43,10 +43,10 @@
 
 <meta property="og:title" content="onlineFDR: A package for online FDR control — onlineFDR-package" />
 <meta property="og:description" content="The onlineFDR package provides methods to control the false discovery rate
-(FDR) for online hypothesis testing, where hypotheses arrive sequentially
-in a stream. A null hypothesis is rejected based only on the previous
-decisions, as the future p-values and the number of hypotheses to be tested
-are unknown." />
+(FDR) or familywise error rate (FWER) for online hypothesis testing, where
+hypotheses arrive sequentially in a stream. A null hypothesis is rejected
+based only on the previous decisions, as the future p-values and the number
+of hypotheses to be tested are unknown." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -79,7 +79,7 @@ are unknown." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.7</span>
       </span>
     </div>
 
@@ -135,10 +135,10 @@ are unknown." />
 
     <div class="ref-description">
     <p>The onlineFDR package provides methods to control the false discovery rate
-(FDR) for online hypothesis testing, where hypotheses arrive sequentially
-in a stream. A null hypothesis is rejected based only on the previous
-decisions, as the future p-values and the number of hypotheses to be tested
-are unknown.</p>
+(FDR) or familywise error rate (FWER) for online hypothesis testing, where
+hypotheses arrive sequentially in a stream. A null hypothesis is rejected
+based only on the previous decisions, as the future p-values and the number
+of hypotheses to be tested are unknown.</p>
     </div>
 
 
@@ -151,45 +151,92 @@ are unknown.</p>
 <table class='table'>
 <tr><td>Package:</td><td>onlineFDR</td></tr>
 <tr><td>Type:</td><td>Package</td></tr>
-<tr><td>Version:</td><td>1.3.6</td></tr>
-<tr><td>Date:</td><td>2019-09-18</td></tr>
+<tr><td>Version:</td><td>1.3.7</td></tr>
+<tr><td>Date:</td><td>2019-10-14</td></tr>
 <tr><td>License:</td><td>GPL-3</td></tr>
 </table>
 
 
 <p>Javanmard and Montanari (2015, 2018) proposed two methods for online FDR
-control. The first is LORD, which stands for (significance)
-Levels based On Recent Discovery and is implemented by the function
-<code><a href='LORD.html'>LORD</a></code>. This function also includes the extension to the LORD 
-procedure, called LORD++, proposed by Ramdas et al. (2017).
-Setting <code>version='dep'</code> provides a modified version of LORD that is
-valid for dependent p-values.</p>
+control. The first is LORD, which stands for (significance) Levels based On
+Recent Discovery and is implemented by the function <code><a href='LORD.html'>LORD</a></code>. This
+function also includes the extension to the LORD procedure, called LORD++
+(<code>version='++'</code>), proposed by Ramdas et al. (2017). Setting
+<code>version='discard'</code> implements a modified version of LORD that can
+improve the power of the procedure in the presence of conservative nulls by
+adaptively `discarding' these p-values, as proposed by Tian and Ramdas
+(2019a). All these LORD procedures provably control the FDR under
+independence of the p-values. However, setting <code>version='dep'</code> provides
+a modified version of LORD that is valid for arbitrarily dependent p-values.</p>
 <p>The second method is LOND, which stands for (significance) Levels based On
 Number of Discoveries and is implemented by the function <code><a href='LOND.html'>LOND</a></code>.
-By specifying <code>dep = TRUE</code>, thus function runs a modified version of
-LOND which is valid for arbitrarily dependent p-values.</p>
-<p>A related method proposed by Ramdas et al. (2018) is the
+This procedure controls the FDR under independence of the p-values, but the
+slightly modified version of LOND proposed by Zrnic et al. (2018) also
+provably controls the FDR under positive dependence (PRDS conditioN). In
+addition, by specifying <code>dep = TRUE</code>, thus function runs a modified
+version of LOND which is valid for arbitrarily dependent p-values.</p>
+<p>Another method for online FDR control proposed by Ramdas et al. (2018) is the
 <code><a href='SAFFRON.html'>SAFFRON</a></code> procedure, which stands for Serial estimate of the
 Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
 provides an adaptive algorithm for online FDR control. SAFFRON is related to 
 the Alpha-Investing procedure of Foster and Stine (2008), a monotone version
-of which is implemented by the function <code><a href='AlphaInvesting.html'>AlphaInvesting</a></code>.</p>
-<p>Zrnic et al. (2018) generalised these algorithms for the context of
-asynchronous online testing, where each hypothesis test can itself be a
-sequential process and the tests can overlap in time. These algorithms
-are designed for the control of the modified FDR (mFDR).</p>
-<p>As an alternative to all these methods, a Bonferroni-like test is implemented
-by the function <code><a href='bonfInfinite.html'>bonfInfinite</a></code>. This procedure is also valid
-for dependent p-values.</p>
+of which is implemented by the function <code><a href='AlphaInvesting.html'>AlphaInvesting</a></code>. Both 
+these procedure provably control the FDR under independence of the p-values.</p>
+<p>Zrnic et al. (2018) generalised these algorithms (i.e. LOND, LORD and
+SAFFRON) for the context of asynchronous online testing, where each
+hypothesis test can itself be a sequential process and the tests can overlap
+in time. These algorithms are designed for the control of the modified FDR
+(mFDR). They are implemented by the functions <code><a href='LONDstar.html'>LONDstar</a></code>,
+<code><a href='LORDstar.html'>LORDstar</a></code> and <code><a href='SAFFRONstar.html'>SAFFRONstar</a></code>. Zrnic et al. (2018)
+presented three explicit versions of these algorithms:</p>
+<p>1) <code>version='async'</code> is for an asynchoronous testing
+process, consisting of tests that start and finish at (potentially) random 
+times. The discretised finish times of the test correspond to the decision 
+times.</p>
+<p>2) <code>version='dep'</code> is for online testing under local
+dependence of the p-values. More precisely, for any \(t&gt;0\) we allow the
+p-value \(p_t\) to have arbitrary dependence on the previous \(L_t\)
+p-values. The fixed sequence \(L_t\) is referred to as `lags'.</p>
+<p>3) <code>version='batch'</code> is for controlling the mFDR in
+mini-batch testing, where a mini-batch represents a grouping of tests run
+asynchronously which result in dependent p-values. Once a mini-batch of tests
+is fully completed, a new one can start, testing hypotheses independent of
+the previous batch.</p>
+<p>Meanwhile, Tian and Ramdas (2019a) proposed the <code><a href='ADDIS.html'>ADDIS</a></code>
+algorithm, which stands for an ADaptive algorithm that DIScards conservative
+nulls. The algorithm compensates for the power loss of SAFFRON with
+conservative nulls, by including both adapativity in the fraction of null
+hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
+The ADDIS procedure provably controls the FDR for independent p-values. Tian
+and Ramdas (2019) also presented a version for an asynchoronous testing
+process, consisting of tests that start and finish at (potentially) random
+times.</p>
+<p>Finally, Tian and Ramdas (2019b) proposed a number of algorithms for online
+FWER control. The only previously existing procedure for online FWER control
+is Alpha-spending, which is an online analog of the Bonferroni procedure.
+This is implemented by the function <code><a href='AlphaSpending.html'>AlphaSpending</a></code>, and provides
+strong FWER control for arbitrarily dependent p-values. A uniformly more
+powerful method is <code><a href='AlphaSaving.html'>AlphaSaving</a></code>, whcich again strongly controls
+the FWER even under arbitrary dependence amongst the p-values. The
+<code><a href='ADDIS.spending.html'>ADDIS.spending</a></code> procedure compensates for the power loss of
+Alpha-spending and Alpha-saving, by including both adapativity in the
+fraction of null hypotheses and the conservativeness of nulls. This procedure
+controls the FWER in the strong sense for independent p-values. Tian and
+Ramdas (2019b) also presented a version for handling local dependence, which
+can be specified by setting <code>dep=TRUE</code>.</p>
 <p>Further details on all these procedures can be found in Javanmard and
-Montanari (2015, 2018), Ramdas et al. (2017, 2018) and Zrnic et al. (2018).</p>
+Montanari (2015, 2018), Ramdas et al. (2017, 2018), Robertson and Wason
+(2018), Tian and Ramdas (2019a, 2019b) and Zrnic et al. (2018).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Foster, D. and Stine R. (2008). \(\alpha\)-investing: a procedure for 
+    <p>Aharoni, E. and Rosset, S. (2014). Generalized \(\alpha\)-investing:
+definitions, optimality results and applications to publci databases.
+<em>Journal of the Royal Statistical Society (Series B)</em>, 76(4):771--794.</p>
+<p>Foster, D. and Stine R. (2008). \(\alpha\)-investing: a procedure for 
 sequential control of expected false discoveries. <em>Journal of the Royal
 Statistical Society (Series B)</em>, 29(4):429-444.</p>
 <p>Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
-Rate. <em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1502.06197'>https://arxiv.org/abs/1502.06197</a></p>
+Rate. <em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1502.06197'>https://arxiv.org/abs/1502.06197</a>.</p>
 <p>Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. <em>Annals of Statistics</em>,
 46(2):526-554.</p>
@@ -207,11 +254,13 @@ discovery rate in biomedical research. <em>arXiv preprint</em>,
 onlineFDR: an R package to control the false discovery rate for growing data
 repositories. <em>Bioinformatics</em>,
 <a href='https://doi.org/10.1093/bioinformatics/btz191'>https://doi.org/10.1093/bioinformatics/btz191</a>.</p>
-<p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+<p>Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for
 online FDR control with conservative nulls. <em>arXiv preprint</em>,
 <a href='https://arxiv.org/abs/1905.11465'>https://arxiv.org/abs/1905.11465</a>.</p>
+<p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
+<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
 <p>Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1812.05068'>https://arxiv.org/abs/1812.05068</a></p>
+<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1812.05068'>https://arxiv.org/abs/1812.05068</a>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

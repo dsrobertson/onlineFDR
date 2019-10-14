@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SAFFRON: Adaptive online FDR control — SAFFRON • onlineFDR</title>
+<title>Alpha-saving for online FWER control — AlphaSaving • onlineFDR</title>
 
 
 <!-- jquery -->
@@ -41,13 +41,9 @@
 
 
 
-<meta property="og:title" content="SAFFRON: Adaptive online FDR control — SAFFRON" />
-<meta property="og:description" content="Implements the SAFFRON procedure for online FDR control, where SAFFRON stands
-for Serial estimate of the Alpha Fraction that is Futiley Rationed On true
-Null hypotheses, as presented by Ramdas et al. (2018). The algorithm is based
-on an estimate of the proportion of true null hypotheses. More precisely,
-SAFFRON sets the adjusted test levels based on an estimate of the amount of
-alpha-wealth that is allocated to testing the true null hypotheses." />
+<meta property="og:title" content="Alpha-saving for online FWER control — AlphaSaving" />
+<meta property="og:description" content="Implements the Alpha-saving algorithm of Tian and Ramdas (2019b), which
+guarantees strong FWER control under arbitrary dependence of the p-values." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -129,22 +125,18 @@ alpha-wealth that is allocated to testing the true null hypotheses." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>SAFFRON: Adaptive online FDR control</h1>
+    <h1>Alpha-saving for online FWER control</h1>
     
-    <div class="hidden name"><code>SAFFRON.Rd</code></div>
+    <div class="hidden name"><code>AlphaSaving.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implements the SAFFRON procedure for online FDR control, where SAFFRON stands
-for Serial estimate of the Alpha Fraction that is Futiley Rationed On true
-Null hypotheses, as presented by Ramdas et al. (2018). The algorithm is based
-on an estimate of the proportion of true null hypotheses. More precisely,
-SAFFRON sets the adjusted test levels based on an estimate of the amount of
-alpha-wealth that is allocated to testing the true null hypotheses.</p>
+    <p>Implements the Alpha-saving algorithm of Tian and Ramdas (2019b), which
+guarantees strong FWER control under arbitrary dependence of the p-values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>SAFFRON</span>(<span class='no'>d</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='no'>w0</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>date.format</span> <span class='kw'>=</span> <span class='st'>"%Y-%m-%d"</span>, <span class='kw'>discard</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tau.discard</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</pre>
+    <pre class="usage"><span class='fu'>AlphaSaving</span>(<span class='no'>d</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>date.format</span> <span class='kw'>=</span> <span class='st'>"%Y-%m-%d"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,16 +159,6 @@ sequentially with no batches.</p></td>
 \(\gamma_j\) proportional to \(1/j^(1.6)\).</p></td>
     </tr>
     <tr>
-      <th>w0</th>
-      <td><p>Initial `wealth' of the procedure, defaults to \(\alpha/2\). Must
-be between 0 and \(\alpha\).</p></td>
-    </tr>
-    <tr>
-      <th>lambda</th>
-      <td><p>Optional threshold for a `candidate' hypothesis, must be
-between 0 and 1. Defaults to 0.5.</p></td>
-    </tr>
-    <tr>
       <th>random</th>
       <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
@@ -186,25 +168,14 @@ randomised.</p></td>
       <th>date.format</th>
       <td><p>Optional string giving the format that is used for dates.</p></td>
     </tr>
-    <tr>
-      <th>discard</th>
-      <td><p>Logical. If <code>TRUE</code> then runs the ADDIS algorithm with
-adaptive discarding of conservative nulls. The default is <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>tau.discard</th>
-      <td><p>Optional threshold for hypotheses to be selected for
-testing. Must be between 0 and 1, defaults to 0.5. This is required if
-<code>discard=TRUE</code>.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
 
-<dt>d.out</dt><dd><p>A dataframe with the original data <code>d</code> (which
-  will be reordered if there are batches and <code>random = TRUE</code>), the
+<dt>d.out</dt><dd><p>A dataframe with the original data <code>d</code> (which will
+  be reordered if there are batches and <code>random = TRUE</code>), the
   LORD-adjusted significance thresholds \(\alpha_i\) and the indicator
   function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
   \(i\)-th p-value is less than or equal to \(\alpha_i\), in which case
@@ -216,37 +187,20 @@ testing. Must be between 0 and 1, defaults to 0.5. This is required if
 with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
-treated as being ordered sequentially with no batches.</p>
-<p>SAFFRON procedure provably controls FDR for independent p-values. Given an
-overall significance level \(\alpha\), we choose a sequence of non-negative
+treated as being ordered sequentially with no batches. Given an overall
+significance level \(\alpha\), we choose a sequence of non-negative
 non-increasing numbers \(\gamma_i\) that sum to 1.</p>
-<p>SAFFRON depends on constants \(w_0\) and \(\lambda\), where \(w_0\)
-satisfies \(0 \le w_0 \le \alpha\) and represents the intial `wealth' of
-the procedure, and \(0 &lt; \lambda &lt; 1\) represents the threshold for a
-`candidate' hypothesis. A `candidate' refers to p-values smaller than
-\(\lambda\), since SAFFRON will never reject a p-value larger than
-\(\lambda\).</p>
-<p>Note that FDR control also holds for the SAFFRON procedure if only the
-p-values corresponding to true nulls are mutually independent, and
-independent from the non-null p-values.</p>
-<p>The SAFFRON procedure can lose power in the presence of conservative nulls,
-which can be compensated for by adaptively `discarding' these p-values. This
-option is called by setting <code>discard=TRUE</code>, which is the same algorithm
-as ADDIS.</p>
-<p>Further details of the SAFFRON procedure can be found in Ramdas et al.
-(2018).</p>
+<p>The Alpha-saving procedure provides a uniformly more powerful method than
+Alpha-spending, by saving the significance level of a previous rejection.
+More specifically, Alpha-saving tests hypothesis \(H_i\) at level
+$$\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}$$ where \(R_i =
+1\{p_i \leq \alpha_i\}\) denotes a rejected hypothesis.</p>
+<p>Further details of the Alpha-saving procedure can be found in Tian and
+Ramdas (2019b).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
-  SAFFRON: an adaptive algorithm for online control of the false discovery
-  rate. <em>Proceedings of the 35th International Conference in Machine
-  Learning</em>, 80:4286-4294.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='SAFFRONstar.html'>SAFFRONstar</a></code> presents versions of SAFFRON for
-<em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a
-sequential process and the tests can overlap in time.</p>
-<p>If option <code>discard=TRUE</code>, SAFFRON is the same as <code><a href='ADDIS.html'>ADDIS</a></code>.</p></div>
+    <p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
+<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>sample.df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
@@ -262,70 +216,54 @@ sequential process and the tests can overlap in time.</p>
         <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-08</span>,
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span>))
 
-<span class='fu'>SAFFRON</span>(<span class='no'>sample.df</span>, <span class='kw'>random</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 0.005468627 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 0.010937254 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 0.010937254 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02 0.010937254 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 0.010937254 1
-#&gt; 6  C38292 2015-09-21 3.6000e-05 0.021874508 1
-#&gt; 7  A30619 2015-09-21 7.9149e-01 0.032811762 0
-#&gt; 8  D46627 2015-09-21 2.7201e-01 0.010823845 0
-#&gt; 9  E29198 2016-05-19 2.8295e-01 0.010823845 0
-#&gt; 10 A41418 2016-05-19 7.5900e-08 0.010823845 1
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.021761099 0
-#&gt; 12 C88669 2017-03-27 3.0443e-01 0.009265591 0
-#&gt; 13 E03673 2017-03-27 1.3600e-03 0.009265591 1
-#&gt; 14 A63155 2017-03-27 7.2342e-01 0.020202846 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01 0.009064367 0</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>SAFFRON</span>(<span class='no'>sample.df</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 0.005468627 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 0.010937254 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 0.010937254 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02 0.010937254 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 0.010937254 1
-#&gt; 6  D46627 2015-09-21 2.7201e-01 0.021874508 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05 0.021874508 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01 0.032811762 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08 0.010823845 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01 0.021761099 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.021761099 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01 0.009265591 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01 0.005456418 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01 0.005456418 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03 0.003688669 1</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>SAFFRON</span>(<span class='no'>sample.df</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.1</span>, <span class='kw'>w0</span><span class='kw'>=</span><span class='fl'>0.025</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 0.005468627 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 0.021874508 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 0.021874508 1
-#&gt; 4  B49731 2015-09-21 8.1740e-02 0.043749017 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 0.043749017 1
-#&gt; 6  D46627 2015-09-21 2.7201e-01 0.065623525 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05 0.065623525 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01 0.087498033 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08 0.028863587 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01 0.050738095 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.050738095 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01 0.022302945 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01 0.013293195 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01 0.013293195 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03 0.009042997 1</div><div class='input'>
-<span class='fu'>SAFFRON</span>(<span class='no'>sample.df</span>, <span class='kw'>discard</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>random</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.002734314 1
-#&gt; 2  6.7430e-02 0.005468627 0
-#&gt; 3  1.5140e-02 0.005468627 0
-#&gt; 4  8.1740e-02 0.005468627 0
-#&gt; 5  1.7100e-03 0.005468627 1
-#&gt; 6  3.6000e-05 0.010937254 1
-#&gt; 7  7.9149e-01 0.016405881 0
-#&gt; 8  2.7201e-01 0.016405881 0
-#&gt; 9  2.8295e-01 0.005411923 0
-#&gt; 10 7.5900e-08 0.002828822 1
-#&gt; 11 6.9274e-01 0.008297449 0
-#&gt; 12 3.0443e-01 0.008297449 0
-#&gt; 13 1.3600e-03 0.003589243 1
-#&gt; 14 7.2342e-01 0.009057870 0
-#&gt; 15 5.4757e-01 0.009057870 0</div><div class='input'>
+<span class='fu'>AlphaSaving</span>(<span class='no'>sample.df</span>, <span class='kw'>random</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0026758385 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0032577488 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0004956249 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004121803 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0003494435 0
+#&gt; 6  C38292 2015-09-21 3.6000e-05 0.0003022950 1
+#&gt; 7  A30619 2015-09-21 7.9149e-01 0.0005682672 0
+#&gt; 8  D46627 2015-09-21 2.7201e-01 0.0002372613 0
+#&gt; 9  E29198 2016-05-19 2.8295e-01 0.0002140474 0
+#&gt; 10 A41418 2016-05-19 7.5900e-08 0.0001949126 1
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0003737922 0
+#&gt; 12 C88669 2017-03-27 3.0443e-01 0.0001652568 0
+#&gt; 13 E03673 2017-03-27 1.3600e-03 0.0001535420 0
+#&gt; 14 A63155 2017-03-27 7.2342e-01 0.0001433627 0
+#&gt; 15 B66033 2017-03-27 5.4757e-01 0.0001344368 0</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaSaving</span>(<span class='no'>sample.df</span>)</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0026758385 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0032577488 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0004956249 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004121803 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0003494435 0
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0003022950 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0002659722 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0005032335 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0002140474 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0004089600 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0001788796 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0001652568 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0001535420 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0001433627 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0001344368 0</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaSaving</span>(<span class='no'>sample.df</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.1</span>)</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0053516771 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0065154977 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0009912499 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0008243606 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0006988870 0
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0006045900 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0005319444 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0010064670 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0004280949 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0008179201 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0003577593 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0003305137 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0003070841 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0002867254 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0002688736 0</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -335,7 +273,6 @@ sequential process and the tests can overlap in time.</p>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

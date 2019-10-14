@@ -79,7 +79,7 @@ the ADDIS algorithm with \(\tau = 1\) and \(\lambda_i = \alpha_i\)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.7</span>
       </span>
     </div>
 
@@ -249,37 +249,39 @@ constant \(\lambda\).</p></div>
 #&gt; 12 C88669 2017-03-27 3.0443e-01 0.011205456 0
 #&gt; 13 E03673 2017-03-27 1.3600e-03 0.006863124 1
 #&gt; 14 A63155 2017-03-27 7.2342e-01 0.027979664 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01 0.011945806 0</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaInvesting</span>(<span class='no'>sample.df</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
+#&gt; 15 B66033 2017-03-27 5.4757e-01 0.011945806 0</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaInvesting</span>(<span class='no'>sample.df</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
 #&gt; 1  A15432 2014-12-01 2.9000e-08 0.010818925 1
 #&gt; 2  B90969 2014-12-01 6.7430e-02 0.021406257 0
 #&gt; 3  C18705 2014-12-01 1.5140e-02 0.007164201 0
 #&gt; 4  B49731 2015-09-21 8.1740e-02 0.003757589 0
 #&gt; 5  E99902 2015-09-21 1.7100e-03 0.002374706 1
-#&gt; 6  C38292 2015-09-21 3.6000e-05 0.023680499 1
-#&gt; 7  A30619 2015-09-21 7.9149e-01 0.044095287 0
-#&gt; 8  D46627 2015-09-21 2.7201e-01 0.015842430 0
-#&gt; 9  E29198 2016-05-19 2.8295e-01 0.008711190 0
-#&gt; 10 A41418 2016-05-19 7.5900e-08 0.005700295 1
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.026865786 0
-#&gt; 12 C88669 2017-03-27 3.0443e-01 0.011205456 0
-#&gt; 13 E03673 2017-03-27 1.3600e-03 0.006863124 1
-#&gt; 14 A63155 2017-03-27 7.2342e-01 0.027979664 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01 0.011945806 0</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaInvesting</span>(<span class='no'>sample.df</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.1</span>, <span class='kw'>w0</span><span class='kw'>=</span><span class='fl'>0.025</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.023680499 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.008803369 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.029838354 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.012084065 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.032981505 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.014137539 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.008529625 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.005905508 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.004412045 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.003461425 1</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaInvesting</span>(<span class='no'>sample.df</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.1</span>, <span class='kw'>w0</span><span class='kw'>=</span><span class='fl'>0.025</span>)</div><div class='output co'>#&gt;        id       date       pval      alphai R
 #&gt; 1  A15432 2014-12-01 2.9000e-08 0.010818925 1
 #&gt; 2  B90969 2014-12-01 6.7430e-02 0.041915265 0
 #&gt; 3  C18705 2014-12-01 1.5140e-02 0.014226480 0
 #&gt; 4  B49731 2015-09-21 8.1740e-02 0.007487045 0
 #&gt; 5  E99902 2015-09-21 1.7100e-03 0.004738159 1
-#&gt; 6  C38292 2015-09-21 3.6000e-05 0.046265410 1
-#&gt; 7  A30619 2015-09-21 7.9149e-01 0.084466020 0
-#&gt; 8  D46627 2015-09-21 2.7201e-01 0.031190724 0
-#&gt; 9  E29198 2016-05-19 2.8295e-01 0.017271921 0
-#&gt; 10 A41418 2016-05-19 7.5900e-08 0.011335971 1
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.052325798 0
-#&gt; 12 C88669 2017-03-27 3.0443e-01 0.022162571 0
-#&gt; 13 E03673 2017-03-27 1.3600e-03 0.013632685 1
-#&gt; 14 A63155 2017-03-27 7.2342e-01 0.054436220 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01 0.023609576 0</div><div class='input'>
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.046265410 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.017453092 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.057947646 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.023879569 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.063856912 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.027880910 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.016914972 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.011741675 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.008785330 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.006898971 1</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -65,7 +65,7 @@
 #'
 #'
 #' @references Javanmard, A. and Montanari, A. (2015) On Online Control of False
-#' Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}
+#' Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}.
 #'
 #' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
@@ -73,7 +73,7 @@
 #'
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 #' Multiple Hypotheses. \emph{arXiv preprint}, 
-#' \url{https://arxiv.org/abs/1812.05068}
+#' \url{https://arxiv.org/abs/1812.05068}.
 #' 
 #'
 #' @seealso
@@ -97,9 +97,10 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
 #' set.seed(1); LOND(sample.df)
+#' 
 #' LOND(sample.df, random=FALSE)
+#' 
 #' set.seed(1); LOND(sample.df, alpha=0.1)
-#'
 #'
 #' @export
 
@@ -107,7 +108,7 @@ LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
                 date.format="%Y-%m-%d", original=TRUE) {
 
     if(is.data.frame(d)){
-        checkdf(d, random, date.format)
+        d <- checkdf(d, random, date.format)
         pval <- d$pval
     } else if(is.vector(d)){
         pval <- d
