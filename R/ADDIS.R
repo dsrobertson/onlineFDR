@@ -15,18 +15,15 @@
 #' testing: p-values greater than \eqn{\tau} are implicitly `discarded' by the
 #' procedure. Finally, \eqn{\lambda \in (0,1)} sets the threshold for a p-value
 #' to be a candidate for rejection: ADDIS will never reject a p-value larger
-#' than \eqn{\tau \lambda}. The algorithms also require a sequence of
+#' than \eqn{\tau \lambda}. The algorithm also require a sequence of
 #' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
-#' The ADDIS procedure provably controls FDR for independent p-values. Given an
-#' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
-#' non-increasing numbers \eqn{\gamma_i} that sum to 1.
-#'
-#' Tian and Ramdas (2019) also presented a version for an asynchoronous testing
+#' The ADDIS procedure provably controls the FDR for independent p-values. Tian
+#' and Ramdas (2019) also presented a version for an asynchoronous testing
 #' process, consisting of tests that start and finish at (potentially) random
 #' times. The discretised finish times of the test correspond to the decision
 #' times. These decision times are given as the input \code{decision.times}.
-#'
+#' 
 #' Further details of the ADDIS algorithms can be found in Tian and Ramdas
 #' (2019).
 #'
@@ -38,7 +35,8 @@
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
 #'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
-#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
+#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\tau \lambda
+#'   \alpha/2}.
 #'
 #' @param lambda Optional parameter that sets the threshold for `candidate'
 #'   hypotheses. Must be between 0 and 1, defaults to 0.5.
@@ -78,10 +76,10 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
 #'         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 #'
-#'
 #' ADDIS(pval)
 #'
 #' ADDIS(pval, async=TRUE, decision.times=seq_len(15)) # Same as above
+#' 
 #' ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
 #'
 #' @export

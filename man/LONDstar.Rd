@@ -81,14 +81,18 @@ pval = c(2.90e-08, 0.06743, 3.51e-04, 5.74e-04, 0.04723,
         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 
 LONDstar(pval, version='async', decision.times=seq_len(15)) # Synchronous
+
 LONDstar(pval, version='async', decision.times=seq_len(15)+1) # Asynchronous
 
+
 LONDstar(pval, version='dep', lags=rep(0,15)) # Synchronous
+
 LONDstar(pval, version='dep', lags=rep(1,15)) # Locally dependent
 
-LONDstar(pval, version='batch', batch.size=rep(1,15)) # Synchronous
-LONDstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
 
+LONDstar(pval, version='batch', batch.size=rep(1,15)) # Synchronous
+
+LONDstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
 
 }
 \references{
@@ -98,7 +102,7 @@ Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 Multiple Hypotheses. \emph{arXiv preprint},
-\url{https://arxiv.org/abs/1812.05068}
+\url{https://arxiv.org/abs/1812.05068}.
 }
 \seealso{
 \code{\link{LOND}} presents versions of LOND for \emph{synchronous} p-values,

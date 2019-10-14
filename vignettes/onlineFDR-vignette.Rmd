@@ -2,7 +2,7 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson, Aaditya Ramdas and Natasha A. Karp"
-date: "2019-09-18"
+date: "2019-10-14"
 output:
   html_document:
     toc: yes
@@ -44,30 +44,37 @@ provides a concrete example of such a scenario. Here the dataset is constantly
 growing as new knockout mice lines are generated and phenotyping data uploaded
 to a database. 
 
-Javanmard and Montanari proposed two procedures, LOND and LORD, to control FDR
-in an online manner (Javanmard and Montanari (2015, 2018)), with the latter
-extended by Ramdas *et al.* (2017). The LOND procedure sets the significance
-level $\alpha_i$  based on the number of  discoveries made so far, while LORD
-sets them according to the time of the most recent discovery. Ramdas *et al.*
-(2018) then proposed the SAFFRON procedure, which provides an adaptive method of
-online FDR control. They also proposed a variant of the Alpha-investing
-algorithm of Foster and Stine (2008) that guarantees FDR control, using
-SAFFRON's update rule.
+Javanmard and Montanari proposed two procedures, LOND and LORD, to control the
+FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter
+extended by Ramdas *et al.* (2017). The LOND procedure sets the adjusted
+significance thresholds  based on the number of discoveries made so far, while
+LORD sets them according to the time of the most recent discovery. Ramdas
+*et al.* (2018) then proposed the SAFFRON procedure, which provides an adaptive
+method of online FDR control. They also proposed a variant of the
+Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR
+control, using SAFFRON's update rule.
 
 Subsequently, Zrnic *et al.* (2018) proposed procedures to control the modified
 FDR (mFDR) in the context of *asynchronous* testing, i.e. where each hypothesis
 test can itself be a sequential process and the tests can overlap in time. They
 presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a
-variety of trial settings. Finally, for both synchronous and asycnhronous
-testing, Tian and Ramdas (2019) proposed the ADDIS algorithms which compensate
-for the loss in power in the presence of conservative nulls by adaptively
-'discarding' these p-values.
+variety of trial settings. For both synchronous and asynchronous testing, Tian
+& Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss
+in power in the presence of conservative nulls by adaptively 'discarding' these
+p-values.
 
-This package, onlineFDR, implements all these procedures and provides wrapper
+Finally, Tian & Ramdas (2019b) proposed procedures that provide online control
+of the FWER. One procedure, Alpha-saving, gives a uniform improvement to the
+naive Alpha-spending procedure (see below). The ADDIS-spending procedure
+compensates for the power loss of these procedures by including both adapativity
+in the fraction of null hypotheses and the conservativeness of nulls.
+
+The onlineFDR package implements all these procedures and provides wrapper
 functions to apply them to a historic or growing dataset. As a comparison, we
-have also provided a wrapper function for implementation of a method based on
-the Bonferroni procedure adapted to the online scenario. This vignette explains
-the use of the package and demonstrates a typical workflow.
+have also provided a function for implementation of the Alpha-spending
+procedure, which is based on the Bonferroni procedure adapted to the online
+scenario. This vignette explains the use of the package and demonstrates a
+typical workflow.
 
 ---
 
@@ -114,45 +121,60 @@ guarantees control for arbitrarily dependent p-values.
 2: **LORD**
 Implements the LORD procedure for online FDR control, where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by Javanmard and
-Montanari (2018), Ramdas *et al.* (2017) and Tian and Ramdas (2019). The
+Montanari (2018), Ramdas *et al.* (2017) and Tian & Ramdas (2019). The
 function provides different versions of the procedure valid for independent
 p-values, see 'Theory behind onlineFDR'. There is also a version ('dep') that
 guarantees control for dependent p-values.
 
 3: **SAFFRON**
 Implements the SAFFRON procedure for online FDR control, where SAFFRON stands
-for Serial estimate of the Alpha Fraction that is Futiley Rationed On true Null
+for Serial estimate of the Alpha Fraction that is Futilely Rationed On true Null
 hypotheses, as presented by Ramdas *et al.* (2018). The procedure provides an
 adaptive method of online FDR control.
 
 4: **ADDIS**
 Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
 an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
-and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
+& Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
 with conservative nulls, by including both adapativity in the fraction of
 null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
-SAFFRON).
+SAFFRON). This procedure controls the FDR for independent p-values.
 
 5: **AlphaInvesting**
 Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008)
-that guarantees FDR control, as proposed by Ramdas et al. (2018). This
-procedure uses a variant of SAFFRON's update rule.
+that guarantees FDR control, as proposed by Ramdas et al. (2018). This procedure
+uses a variant of SAFFRON's update rule. This procedure controls the FDR for
+independent p-values.
 
-6: **BonfInfinite**
-Implements online FDR control using a Bonferroni-like test. This is valid for
-arbitrarily dependent p-values.
-
-7: **LONDstar**
+6: **LONDstar**
 Implements the LOND algorithm for asynchronous online testing, as presented 
 by Zrnic *et al.* (2018). These algorithms control the mFDR.
 
-8: **LORDstar**
+7: **LORDstar**
 Implements LORD algorithms for asynchronous online testing, as presented by
 Zrnic *et al.* (2018). These algorithms control the mFDR.
 
-9: **SAFFRONstar**
+8: **SAFFRONstar**
 Implements the SAFFRON algorithm for asynchronous online testing, as
 presented by Zrnic *et al.* (2018). These algorithms control the mFDR.
+
+9: **AlphaSpending**
+Implements online FWER control using a Bonferroni-like test. Alpha-spending
+provides strong FWER control for arbitrarily dependent p-values.
+
+10: **AlphaSaving**
+Implements the Alpha-saving algorithm for online FWER control, as proposed by
+Tian & Ramdas (2019b). Alpha-saving is a uniformly more powerful method than
+Alpha-spending, as it saves the significance level of a previous rejection.
+Alpha-saving strongly controls the FWER for arbitrarily dependent p-values.
+
+11: **ADDIS-spending**
+Implements the ADDIS-spending algorithm for online FWER control, as proposed by
+Tian & Ramdas (2019b). The algorithm compensates for the power loss of
+Alpha-spending, by including both adapativity in the fraction of null hypotheses
+and the conservativeness of nulls. ADDIS-spending provides strong FWER control
+for independent p-values. Tian & Ramdas (2019b) also presented a version for
+handling local dependence.
 
 
 ### Quick start
@@ -247,7 +269,7 @@ Discoveries. The second is LORD, which stands for (significance) Levels based On
 Recent Discovery. LORD was subsequently extended by Ramdas *et al.* (2017).
 Ramdas *et al.* (2018) also proposed the SAFFRON procedure, which provides an
 adaptive method of online FDR control, which includes a variant of
-Alpha-investing. Finally, Tian and Ramdas (2019) proposed the ADDIS procedure
+Alpha-investing. Finally, Tian & Ramdas (2019) proposed the ADDIS procedure
 as an improvement of SAFFRON in the presence of conservative nulls.
 
 
@@ -265,7 +287,7 @@ LOND can be adjusted to also control FDR under arbitrarily dependent $p$-values.
 To do so, it is modified with $\tilde{\beta}_i = \beta_i/H(i)$ in place of
 $\beta_i$, where $H(i) = \sum_{j=1}^i \frac{1}{j}$ is the $i$-th harmonic
 number. Note that this leads to a substantial loss in power compared to the
-unadjusted LOND procedure. The correction factor is similat to the classical one
+unadjusted LOND procedure. The correction factor is similar to the classical one
 used by Benjamini and Yekutieli (2001), except that in this case the $i$-th
 hypothesis among $N$ is penalised by a factor of $H(i)$ to give consistent
 results across time (as compared to a factor $H(N)$ for the Benjamini and
@@ -293,8 +315,8 @@ rejecting a hypothesis. We require $w_0+b_0 \leq \alpha$ for FDR control to
 hold.
 
 Javanmard and Montanari (2018) presented three different versions of LORD, which
-have different definitions of the adjusted signifcance thresholds $\alpha_i$. 
-Versions 1 and 2 have since been superceded by the LORD++ procedure of
+have different definitions of the adjusted significance thresholds $\alpha_i$. 
+Versions 1 and 2 have since been superseded by the LORD++ procedure of
 Ramdas *et al.* (2017), so we do not describe them here.
 
 * **LORD++**: The significance thresholds for LORD++ are chosen as follows: \[
@@ -331,7 +353,7 @@ S^t = \sum_{i < t} 1 \{p_i \leq \tau \}
 \]
 
 LORD++ is an instance of a monotone rule, and provably controls the FDR for
-independent p-values procided $w_0 \leq \alpha$. LORD 3 is a non-monotone rule,
+independent p-values provided $w_0 \leq \alpha$. LORD 3 is a non-monotone rule,
 and FDR control is only demonstrated empirically. In some scenarios with large
 $N$, LORD 3 will have a slightly higher power than LORD++ (see Robertson *et
 al.*, 2018), but since it is a non-monotone rule we would recommend using LORD++
@@ -360,14 +382,14 @@ power compared with the LORD procedures described above.
 
 ### SAFFRON {#SAFFRON}
 
-The SAFFRON procedure is valid for independent p-values, and was proposed by
-Ramdas *et al.* (2018). The algorithm is based on an estimate of the proportion
-of true null hypotheses. More precisely, SAFFRON sets the adjusted test levels
-based on an estimate of the amount of alpha-wealth that is allocated to testing
-the true null hypotheses.
+The SAFFRON procedure controls the FDR for independent p-values, and was
+proposed by Ramdas *et al.* (2018). The algorithm is based on an estimate of the
+proportion of true null hypotheses. More precisely, SAFFRON sets the adjusted
+test levels based on an estimate of the amount of alpha-wealth that is allocated
+to testing the true null hypotheses.
 
 SAFFRON depends on constants $w_0$ and $\lambda$, where $w_0$ satisfies 
-$0 \leq w_0 < (1 - \lambda)\alpha$ and represents the intial 'wealth' of the
+$0 \leq w_0 < (1 - \lambda)\alpha$ and represents the initial 'wealth' of the
 procedure, and $\lambda \in (0,1)$ represents the threshold for a 'candidate'
 hypothesis. A 'candidate' refers to p-values smaller than $\lambda$, since
 SAFFRON will never reject a p-value larger than $\lambda$. These candidates can
@@ -397,22 +419,21 @@ given by $\gamma_j \propto j^{-1.6}$.
 ### Alpha-investing {#AlphaInvesting}
 
 Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of
-Foster and Stine (2008) that guarantees FDR control. This procedure uses
-SAFFRON's update rule with the constant \eqn{\lambda} replaced by a sequence
-$\lambda_i = \alpha_i$. This is also equivalent to using the ADDIS algorithm
-(see below) with $\tau = 1$ and $\lambda_i = \alpha_i$.
+Foster and Stine (2008) that guarantees FDR control for independent p-values.
+This procedure uses SAFFRON's update rule with the constant \eqn{\lambda}
+replaced by a sequence $\lambda_i = \alpha_i$. This is also equivalent to using
+the ADDIS algorithm (see below) with $\tau = 1$ and $\lambda_i = \alpha_i$.
 
 
 ### ADDIS {#ADDIS}
 
-The ADDIS procedure is valid for independent p-values, and was proposed by
-Tian and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-with conservative nulls, by including both adapativity in the fraction of
-null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
-SAFFRON).
+The ADDIS procedure controls the FDR for independent p-values, and was proposed
+by Tian & Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
+with conservative nulls, by including both adapativity in the fraction of null
+hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
 
 ADDIS depends on constants $w_0, \lambda$ and $\tau$. $w_0$ represents the
-intial `wealth' of the procedure and satisfies $0 \leq w_0 \leq \tau \lambda
+initial `wealth' of the procedure and satisfies $0 \leq w_0 \leq \tau \lambda
 \alpha$. $\tau \in (0,1)$ represents the threshold for a hypothesis to be
 selected for testing: p-values greater than $\tau$ are implicitly 'discarded' by
 the procedure. Finally, $\lambda \in (0,1)$ sets the threshold for a p-value to
@@ -433,34 +454,75 @@ S^t = \sum_{i < t} 1 \{p_i \leq \tau \}, \;
 C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 \]
 
-The default sequence of $\gamma$ for ADDIS is the same as for SAFFRON.
+The default sequence of $\gamma$ for ADDIS is the same as for SAFFRON given 
+[here](#SAFFRON_gamma).
 
 
-### Bonferroni-like procedure (BonfInfinite) {#BonfInfinite}
+### Alpha-spending {#Alpha-spending}
 
-The procedure controls the FDR (as well as the FWER) for a potentially infinite
-stream of p-values using a Bonferroni-like test. Given an overall significance
-level $\alpha$, the significance thresholds are chosen as
+The Alpha-spending procedure controls the FWER for a potentially infinite stream
+of p-values using a Bonferroni-like test. Given an overall significance level
+$\alpha$, the significance thresholds are chosen as
 \[\alpha_i = \alpha \gamma_i\]
-where $\sum_{i=1}^{\infty} \gamma_i = 1$ and $\gamma_i \geq 0$. Note that the
-procedure is also valid for dependent p-values.
+where $\sum_{i=1}^{\infty} \gamma_i = 1$ and $\gamma_i \geq 0$. The procedure
+strongly controls the FWER for arbitrarily dependent p-values.
+
+Note that the procedure also controls the generalised familywise error rate
+(k-FWER) for $k > 1$ if $\alpha$ is replaced by $\min(1,k\alpha)$.
 
 The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
-[here](#LORD_gamma). 
+[here](#LORD_gamma).
+
+
+### Alpha-saving {#Alpha-saving}
+
+The Alpha-saving procedure of Tian & Ramdas (2019b) provides a uniformly more
+powerful method than Alpha-spending, by saving the significance level of a
+previous rejection. More specifically, Alpha-saving tests hypothesis $H_i$ at
+level \[\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}\] where $R_i = 1\{p_i
+\leq \alpha_i\}$ denotes a rejected hypothesis. The procedure strongly controls
+the FWER for arbitrarily dependent p-values.
+
+The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
+[here](#LORD_gamma).
+
+
+### ADDIS-spending {#ADDIS-spending}
+
+The ADDIS-spending procedure strongly controls the FWER for independent
+p-values, and was proposed by Tian & Ramdas (2019b). The procedure compensates
+for the power loss of Alpha-spending, by including both adapativity in the
+fraction of null hypotheses and the conservativeness of nulls.
+
+ADDIS depends on constants $\lambda$ and $\tau$, where $\lambda < \tau$. Here
+$\tau \in (0,1)$ represents the threshold for a hypothesis to be selected for
+testing: p-values greater than $\tau$ are implicitly `discarded' by the
+procedure, while $\lambda \in (0,1)$ sets the threshold for a p-value to be a
+candidate for rejection: ADDIS-spending will never reject a p-value larger than
+$\lambda$.
+
+Note that the procedure controls the generalised familywise error rate (k-FWER)
+for $k > 1$ if $\alpha$ is replaced by $\min(1,k\alpha)$. Tian and Ramdas
+(2019b) also presented a version for handling local dependence, see the Section
+on Asynchronous testing below.
+
+The default sequence of $\gamma$ for ADDIS-spending is the same as for SAFFRON
+given [here](#SAFFRON_gamma).
 
 
 ### Accounting for dependent p-values
 
-As noted above, the LORD procedures and SAFFRON assume independent p-values,
-while the LOND procedure is also valid under postive dependencies (like the
-Benjamini and Hochberg method, see below). Adjusted versions of LOND and LORD
-available for arbitrarily dependent p-values. The Bonferroni-like procedure also
-controls the FDR for arbitarily dependent p-values.
+As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume
+independent p-values, while the LOND procedure is also valid under positive
+dependencies (like the Benjamini-Hochberg method, see below). Adjusted
+versions of LOND and LORD available for arbitrarily dependent p-values.
+Alpha-spending and Alpha-saving also control the FWER and FDR for arbitrarily
+dependent p-values.
 
-By way of comparison, the usual Benjamini and Hochberg method for controlling
+By way of comparison, the usual Benjamini-Hochberg method for controlling
 the FDR assumes that the p-values are positively dependent (PRDS). As an
 example, the PRDS is satisfied for multivariate normal test statistics with a
-positive correlation matrix). See Benjamini and Yekutieli (2001) for further
+positive correlation matrix). See Benjamini & Yekutieli (2001) for further
 technical details.
 
 ---
@@ -474,7 +536,7 @@ presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a
 variety of trial settings, including the following:
 
 1: **Asynchronous online mFDR control**: 
-This is for an asynchoronous testing process, consisting of tests that start and
+This is for an asynchronous testing process, consisting of tests that start and
 finish at (potentially) random times. The discretised finish times of the test
 correspond to the decision times.
 
@@ -482,7 +544,7 @@ correspond to the decision times.
 For any $t>0$ we allow the p-value $p_t$ to have arbitrary dependence on the
 previous $L_t$ p-values. The fixed sequence $L_t$ is referred to as `lags'.
 
-3: **mFDR conrol in asynchronous mini-batch testing**: 
+3: **mFDR control in asynchronous mini-batch testing**: 
 A mini-batch represents a grouping of tests run asynchronously which
 result in dependent p-values. Once a mini-batch of tests is fully completed,
 a new one can start, testing hypotheses independent of the previous batch.
@@ -500,13 +562,13 @@ consider amending for their analysis.
 ### Common arguments
 
 As a default, the `alpha` argument is set to 0.05, where `alpha` sets the
-overall significance level of the FDR procedure. As a community the standard
-significance level utilised is the 5%.  However,  there are applications where
-an alternate threshold could be considered.  For example, a more stringent
-threshold might be appropriate when there are limited resources to follow up
-significant findings. A less stringent threshold might be appropriate when the 
-downstream analysis is a global analysis which can tolerate a higher proportion
-of false positives. 
+overall significance level of the FDR of FWER controlling procedure. By
+convention, the standard significance level utilised is the 5%.  However, there
+are applications where an alternate threshold could be considered. For example,
+a more stringent threshold might be appropriate when there are limited resources
+to follow up significant findings. A less stringent threshold might be
+appropriate when the downstream analysis is a global analysis which can tolerate
+a higher proportion of false positives.
 
 To ensure correct interpretation of the dates provided there is a date.format 
 argument. As a default, the date format is set to receive dates as 
@@ -584,19 +646,36 @@ versions of LORD).
 
 ### SAFFRON
 
-By default $w_0 = (1-\lambda)\alpha/2$ and $\lambda = 0.5$, but these parameters 
-can optionally be specificed by the user, subject to the requirements that
-$0 \leq w_0 < (1-\lambda)\alpha$ and $0 < \lambda < 1$.
-
-The valuse of `gammai` is also supplied by default, but can optionally be
-specified by the user (as described above, see the formula for $\gamma_j$
-[here](#SAFFRON_gamma)).
+By default $w_0 = \alpha/2$ and $\lambda = 0.5$, but these parameters can
+optionally be specified by the user subject to the requirements that
+$0 \leq w_0 < \alpha$ and $0 < \lambda < 1$. The values of `gammai` are also
+supplied by default, but can optionally be specified by the user (as described
+above, see the formula for $\gamma_j$ [here](#SAFFRON_gamma)).
 
 
-### BonfInfinite
+### ADDIS
 
-The significance thresholds `alphai` are supplied by default, but can optionally
-be specified by the user (as described above, see [here](#BonfInfinite)).
+By default $w_0 = \tau \lambda \alpha/2$ and $\lambda = \tau = 0.5$, but these
+parameters can optionally be specified by the user subject to the requirements
+that $0 \leq w_0 < \tau \lambda \alpha$, $0 < \lambda < 1$ and $0 < \tau < 1$.
+The values of `gammai` are also supplied by default, but can optionally be
+specified by the user.
+
+
+### Alpha-spending and Alpha-saving
+
+The values of `gammai` are supplied by default, but can optionally
+be specified by the user.
+
+
+### ADDIS-spending
+
+By default $\lambda = 0.25$ and $\tau = 0.5$, but these
+parameters can optionally be specified by the user subject to the requirements
+that $\lambda < \tau$, $0 < \lambda < 1$ and $0 < \tau < 1$.
+The values of `gammai` are also supplied by default, but can optionally be
+specified by the user.
+
 
 ---
 
@@ -608,6 +687,10 @@ Mashhadi) for useful discussions during the development of the package.
 ---
 
 ## References
+
+Aharoni, E. and Rosset, S. (2014). Generalized $\alpha$-investing: definitions, 
+optimality results and applications to public databases.
+*Journal of the Royal Statistical Society (Series B)*, 76(4):771--794.
 
 Benjamini, Y., and Yekutieli, D. (2001). The control of the false discovery rate
 in multiple testing under dependency. *The Annals of Statistics*,
@@ -655,9 +738,12 @@ Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 Online control of the false discovery rate in biomedical research.
 *Bioinformatics*, https://doi.org/10.1093/bioinformatics/btz191.
 
-Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for 
 online FDR control with conservative nulls. *arXiv preprint*, 
-https://arxiv.org/abs/1905.11465. 
+https://arxiv.org/abs/1905.11465.
+
+Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
+*arXiv preprint*, https://arxiv.org/abs/1910.04900.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 Multiple Hypotheses. *arXiv preprint*, https://arxiv.org/abs/1812.05068.

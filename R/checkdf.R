@@ -19,4 +19,6 @@ checkdf <- function(d, random, date.format) {
     if(random){
         d <- randBatch(d)
     }
+    
+    return(d)
 }

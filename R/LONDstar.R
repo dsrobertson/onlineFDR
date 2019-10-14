@@ -75,7 +75,7 @@
 #' 
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 #' Multiple Hypotheses. \emph{arXiv preprint},
-#' \url{https://arxiv.org/abs/1812.05068}
+#' \url{https://arxiv.org/abs/1812.05068}.
 #'
 #'
 #' @seealso
@@ -90,14 +90,18 @@
 #'         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
 #'
 #' LONDstar(pval, version='async', decision.times=seq_len(15)) # Synchronous
+#' 
 #' LONDstar(pval, version='async', decision.times=seq_len(15)+1) # Asynchronous
 #' 
+#' 
 #' LONDstar(pval, version='dep', lags=rep(0,15)) # Synchronous
+#' 
 #' LONDstar(pval, version='dep', lags=rep(1,15)) # Locally dependent
 #' 
+#' 
 #' LONDstar(pval, version='batch', batch.size=rep(1,15)) # Synchronous
+#' 
 #' LONDstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
-#'
 #'
 #' @export
 
@@ -130,7 +134,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         R <- alphai <- rep(0, N)
         
         alphai[1] <- betai[1]
-        R[1] <- pval[1] <= alphai[1]
+        R[1] <- (pval[1] <= alphai[1])
         
         if(N == 1){
             d.out <- data.frame(pval, alphai, R)
@@ -141,7 +145,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
             D <- max(sum(R[seq_len(i-1)] == 1 & E[seq_len(i-1)] <= i-1), 1)
             
             alphai[i] <- betai[i]*D
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
         }       
         
         d.out <- data.frame(pval, alphai, R)
@@ -153,7 +157,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         R <- alphai <- rep(0, N)
         
         alphai[1] <- betai[1]
-        R[1] <- pval[1] <= alphai[1]
+        R[1] <- (pval[1] <= alphai[1])
         
         if(N == 1){
             d.out <- data.frame(pval, lag=lags, alphai, R)
@@ -164,7 +168,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
             D <- max(sum(R[seq_len(i-1)] == 1 & seq_len(i-1) <= i-1-L[i]), 1)
             
             alphai[i] <- betai[i]*D
-            R[i] <- pval[i] <= alphai[i]
+            R[i] <- (pval[i] <= alphai[i])
         }       
         
         d.out <- data.frame(pval, lag=lags, alphai, R)
@@ -179,7 +183,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
         
         for (i in seq_len(n[1])){ 
             alphai[1,i] <- betai[i]
-            R[1,i] <- pval[i] <= alphai[1,i]
+            R[1,i] <- (pval[i] <= alphai[1,i])
         }
         
         if(length(n) == 1){
@@ -198,7 +202,7 @@ LONDstar <- function(pval, alpha=0.05, version, betai,
                 for (i in seq_len(n[b])){ 
             
                     alphai[b,i] <- betai[ncum[b-1]+i]*D
-                    R[b,i] <- pval[ncum[b-1]+i] <= alphai[b,i]
+                    R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
                 }
             }
         }

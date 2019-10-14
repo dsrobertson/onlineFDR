@@ -70,7 +70,7 @@ LORDdep <- function(d, alpha=0.05, xi, w0=alpha/10, b0=alpha - w0, random=TRUE,
                     date.format="%Y-%m-%d") { # nocov start
     
     .Deprecated("LORD", package="onlineFDR",
-    msg = "LORDdep is deprecated. Use LORD instead with version='dep'.")
+    msg = "LORDdep is deprecated, please use LORD instead with version='dep'.")
 
     if(is.data.frame(d)){
         checkdf(d, random, date.format)

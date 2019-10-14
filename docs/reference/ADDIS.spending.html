@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ADDIS: Adaptive discarding algorithm for online FDR control — ADDIS • onlineFDR</title>
+<title>ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS.spending • onlineFDR</title>
 
 
 <!-- jquery -->
@@ -41,13 +41,12 @@
 
 
 
-<meta property="og:title" content="ADDIS: Adaptive discarding algorithm for online FDR control — ADDIS" />
-<meta property="og:description" content="Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
-an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
-and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-with conservative nulls, by including both adapativity in the fraction of
-null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
-SAFFRON)." />
+<meta property="og:title" content="ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS.spending" />
+<meta property="og:description" content="Implements the ADDIS algorithm for online FWER control, where ADDIS stands
+for an ADaptive algorithm that DIScards conservative nulls, as presented by
+Tian and Ramdas (2019b). The procedure compensates for the power loss of
+Alpha-spending, by including both adapativity in the fraction of null
+hypotheses and the conservativeness of nulls." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -129,22 +128,21 @@ SAFFRON)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ADDIS: Adaptive discarding algorithm for online FDR control</h1>
+    <h1>ADDIS-spending: Adaptive discarding algorithm for online FWER control</h1>
     
-    <div class="hidden name"><code>ADDIS.Rd</code></div>
+    <div class="hidden name"><code>ADDIS.spending.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
-an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
-and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-with conservative nulls, by including both adapativity in the fraction of
-null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
-SAFFRON).</p>
+    <p>Implements the ADDIS algorithm for online FWER control, where ADDIS stands
+for an ADaptive algorithm that DIScards conservative nulls, as presented by
+Tian and Ramdas (2019b). The procedure compensates for the power loss of
+Alpha-spending, by including both adapativity in the fraction of null
+hypotheses and the conservativeness of nulls.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ADDIS</span>(<span class='no'>pval</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='no'>w0</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>async</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>decision.times</span>)</pre>
+    <pre class="usage"><span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>dep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>lags</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,14 +162,9 @@ SAFFRON).</p>
 \(\gamma_j\) proportional to \(1/j^(1.6)\).</p></td>
     </tr>
     <tr>
-      <th>w0</th>
-      <td><p>Initial `wealth' of the procedure, defaults to \(\tau \lambda
-\alpha/2\).</p></td>
-    </tr>
-    <tr>
       <th>lambda</th>
       <td><p>Optional parameter that sets the threshold for `candidate'
-hypotheses. Must be between 0 and 1, defaults to 0.5.</p></td>
+hypotheses. Must be between 0 and 1, defaults to 0.25.</p></td>
     </tr>
     <tr>
       <th>tau</th>
@@ -179,14 +172,14 @@ hypotheses. Must be between 0 and 1, defaults to 0.5.</p></td>
 be between 0 and 1, defaults to 0.5.</p></td>
     </tr>
     <tr>
-      <th>async</th>
-      <td><p>Logical. If <code>TRUE</code> runs the version for an asynchronous
-testing process</p></td>
+      <th>dep</th>
+      <td><p>Logical. If <code>TRUE</code> runs the version for locally dependent 
+p-values</p></td>
     </tr>
     <tr>
-      <th>decision.times</th>
-      <td><p>A vector of decision times for the hypothesis tests,
-this is required if <code>async=TRUE</code>.</p></td>
+      <th>lags</th>
+      <td><p>A vector of lags or the hypothesis tests, this is required if
+<code>dep=TRUE</code>.</p></td>
     </tr>
     </table>
 
@@ -203,86 +196,86 @@ this is required if <code>async=TRUE</code>.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function takes as its input a vector of p-values. Given an overall
-significance level \(\alpha\), ADDIS depends on constants \(w_0\)
-\(\lambda\) and \(\tau\). \(w_0\) represents the intial `wealth' of the
-procedure and satisfies \(0 \le w_0 \le \tau \lambda \alpha\). \(\tau
-\in (0,1)\) represents the threshold for a hypothesis to be selected for
-testing: p-values greater than \(\tau\) are implicitly `discarded' by the
-procedure. Finally, \(\lambda \in (0,1)\) sets the threshold for a p-value
-to be a candidate for rejection: ADDIS will never reject a p-value larger
-than \(\tau \lambda\). The algorithm also require a sequence of
-non-negative non-increasing numbers \(\gamma_i\) that sum to 1.</p>
-<p>The ADDIS procedure provably controls the FDR for independent p-values. Tian
-and Ramdas (2019) also presented a version for an asynchoronous testing
-process, consisting of tests that start and finish at (potentially) random
-times. The discretised finish times of the test correspond to the decision
-times. These decision times are given as the input <code>decision.times</code>.</p>
-<p>Further details of the ADDIS algorithms can be found in Tian and Ramdas
-(2019).</p>
+significance level \(\alpha\), ADDIS depends on constants \(\lambda\) and
+\(\tau\), where \(\lambda &lt; \tau\). Here \(\tau \in (0,1)\) represents
+the threshold for a hypothesis to be selected for testing: p-values greater
+than \(\tau\) are implicitly `discarded' by the procedure, while
+\(\lambda \in (0,1)\) sets the threshold for a p-value to be a candidate
+for rejection: ADDIS-spending will never reject a p-value larger than
+\(\lambda\). The algorithms also require a sequence of non-negative
+non-increasing numbers \(\gamma_i\) that sum to 1.</p>
+<p>The ADDIS-spending procedure provably controls the FWER in the strong sense
+for independent p-values. Note that the procedure also controls the
+generalised familywise error rate (k-FWER) for \(k &gt; 1\) if \(\alpha\) is
+replaced by min(\(1, k\alpha\)).</p>
+<p>Tian and Ramdas (2019b) also presented a version for handling local
+dependence. More precisely, for any \(t&gt;0\) we allow the p-value \(p_t\)
+to have arbitrary dependence on the previous \(L_t\) p-values. The fixed
+sequence \(L_t\) is referred to as `lags', and is given as the input
+<code>lags</code> for this version of the ADDIS-spending algorithm.</p>
+<p>Further details of the ADDIS-spending algorithms can be found in Tian and
+Ramdas (2019b).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
-  algorithm for online FDR control with conservative nulls. <em>arXiv
-  preprint</em>, <a href='https://arxiv.org/abs/1905.11465'>https://arxiv.org/abs/1905.11465</a>.</p>
+    <p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
+<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>ADDIS is identical to <code><a href='SAFFRON.html'>SAFFRON</a></code> with option <code>discard=TRUE</code>.</p>
-<p>ADDIS with option <code>async=TRUE</code> is identical to <code><a href='SAFFRONstar.html'>SAFFRONstar</a></code>
-with option <code>discard=TRUE</code>.</p></div>
+    <div class='dont-index'><p><code><a href='ADDIS.html'>ADDIS</a></code> provides online control of the FDR.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>pval</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.90e-08</span>, <span class='fl'>0.06743</span>, <span class='fl'>3.51e-04</span>, <span class='fl'>0.0154</span>, <span class='fl'>0.04723</span>,
         <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-06</span>,
-        <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.82342</span>, <span class='fl'>0.54757</span>)
+        <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.82342</span>, <span class='fl'>5.4757e-04</span>)
 
-<span class='fu'>ADDIS</span>(<span class='no'>pval</span>)</div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.002734314 1
-#&gt; 2  6.7430e-02 0.005468627 0
-#&gt; 3  3.5100e-04 0.005468627 1
-#&gt; 4  1.5400e-02 0.010937254 0
-#&gt; 5  4.7230e-02 0.010937254 0
-#&gt; 6  3.6000e-05 0.010937254 1
-#&gt; 7  7.9149e-01 0.016405881 0
-#&gt; 8  2.7201e-01 0.016405881 0
-#&gt; 9  2.8295e-01 0.005411923 0
-#&gt; 10 7.5900e-06 0.002828822 1
-#&gt; 11 6.9274e-01 0.008297449 0
-#&gt; 12 3.0443e-01 0.008297449 0
-#&gt; 13 1.3600e-03 0.003589243 1
-#&gt; 14 8.2342e-01 0.009057870 0
-#&gt; 15 5.4757e-01 0.009057870 0</div><div class='input'>
-<span class='fu'>ADDIS</span>(<span class='no'>pval</span>, <span class='kw'>async</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>decision.times</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span>(<span class='fl'>15</span>)) <span class='co'># Same as above</span></div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.002734314 1
-#&gt; 2  6.7430e-02 0.005468627 0
-#&gt; 3  3.5100e-04 0.005468627 1
-#&gt; 4  1.5400e-02 0.010937254 0
-#&gt; 5  4.7230e-02 0.010937254 0
-#&gt; 6  3.6000e-05 0.010937254 1
-#&gt; 7  7.9149e-01 0.016405881 0
-#&gt; 8  2.7201e-01 0.016405881 0
-#&gt; 9  2.8295e-01 0.005411923 0
-#&gt; 10 7.5900e-06 0.002828822 1
-#&gt; 11 6.9274e-01 0.008297449 0
-#&gt; 12 3.0443e-01 0.008297449 0
-#&gt; 13 1.3600e-03 0.003589243 1
-#&gt; 14 8.2342e-01 0.009057870 0
-#&gt; 15 5.4757e-01 0.009057870 0</div><div class='input'>
-<span class='fu'>ADDIS</span>(<span class='no'>pval</span>, <span class='kw'>async</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>decision.times</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span>(<span class='fl'>15</span>)+<span class='fl'>1</span>) <span class='co'># Asynchronous</span></div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0027343135 1
-#&gt; 2  6.7430e-02 0.0009019871 0
+<span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>)</div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0054686271 1
+#&gt; 2  6.7430e-02 0.0054686271 0
+#&gt; 3  3.5100e-04 0.0054686271 1
+#&gt; 4  1.5400e-02 0.0054686271 0
+#&gt; 5  4.7230e-02 0.0054686271 0
+#&gt; 6  3.6000e-05 0.0054686271 1
+#&gt; 7  7.9149e-01 0.0054686271 0
+#&gt; 8  2.7201e-01 0.0054686271 0
+#&gt; 9  2.8295e-01 0.0018039742 0
+#&gt; 10 7.5900e-06 0.0009429405 1
+#&gt; 11 6.9274e-01 0.0009429405 0
+#&gt; 12 3.0443e-01 0.0009429405 0
+#&gt; 13 1.3600e-03 0.0005950895 0
+#&gt; 14 8.2342e-01 0.0005950895 0
+#&gt; 15 5.4757e-04 0.0005950895 1</div><div class='input'>
+<span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>, <span class='kw'>dep</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lags</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>15</span>)) <span class='co'># Same as above</span></div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0054686271 1
+#&gt; 2  6.7430e-02 0.0054686271 0
+#&gt; 3  3.5100e-04 0.0054686271 1
+#&gt; 4  1.5400e-02 0.0054686271 0
+#&gt; 5  4.7230e-02 0.0054686271 0
+#&gt; 6  3.6000e-05 0.0054686271 1
+#&gt; 7  7.9149e-01 0.0054686271 0
+#&gt; 8  2.7201e-01 0.0054686271 0
+#&gt; 9  2.8295e-01 0.0018039742 0
+#&gt; 10 7.5900e-06 0.0009429405 1
+#&gt; 11 6.9274e-01 0.0009429405 0
+#&gt; 12 3.0443e-01 0.0009429405 0
+#&gt; 13 1.3600e-03 0.0005950895 0
+#&gt; 14 8.2342e-01 0.0005950895 0
+#&gt; 15 5.4757e-04 0.0005950895 1</div><div class='input'>
+<span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>, <span class='kw'>dep</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lags</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>15</span>)) <span class='co'># Locally dependent</span></div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0054686271 1
+#&gt; 2  6.7430e-02 0.0018039742 0
 #&gt; 3  3.5100e-04 0.0018039742 1
 #&gt; 4  1.5400e-02 0.0018039742 0
-#&gt; 5  4.7230e-02 0.0036079483 0
-#&gt; 6  3.6000e-05 0.0036079483 1
-#&gt; 7  7.9149e-01 0.0036079483 0
-#&gt; 8  2.7201e-01 0.0054119225 0
-#&gt; 9  2.8295e-01 0.0054119225 0
-#&gt; 10 7.5900e-06 0.0028288216 1
-#&gt; 11 6.9274e-01 0.0017852686 0
-#&gt; 12 3.0443e-01 0.0035892428 0
-#&gt; 13 1.3600e-03 0.0035892428 1
-#&gt; 14 8.2342e-01 0.0021921853 0
-#&gt; 15 5.4757e-01 0.0039961595 0</div><div class='input'>
+#&gt; 5  4.7230e-02 0.0018039742 0
+#&gt; 6  3.6000e-05 0.0018039742 1
+#&gt; 7  7.9149e-01 0.0018039742 0
+#&gt; 8  2.7201e-01 0.0018039742 0
+#&gt; 9  2.8295e-01 0.0018039742 0
+#&gt; 10 7.5900e-06 0.0009429405 1
+#&gt; 11 6.9274e-01 0.0005950895 0
+#&gt; 12 3.0443e-01 0.0005950895 0
+#&gt; 13 1.3600e-03 0.0005950895 0
+#&gt; 14 8.2342e-01 0.0004164149 0
+#&gt; 15 5.4757e-04 0.0004164149 0</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

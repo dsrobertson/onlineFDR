@@ -4,12 +4,11 @@
 
 # onlineFDR
 
-This R package allows users to control the false discovery rate for online
-hypothesis testing, where hypotheses arrive sequentially in a stream, as
-presented by Javanmard and Montanari (2015, 2018), Ramdas et al. (2017, 2018),
-Tian and Ramdas (2019) and Zrnic et al. (2018). In this framework, a null
-hypothesis is rejected based only on the previous decisions, as the future
-p-values and the number of hypotheses to be tested are unknown.
+This R package allows users to control the false discovery rate (FDR) or
+familywise error rate (FWER) for online hypothesis testing, where hypotheses
+arrive sequentially in a stream. In this framework, a null hypothesis is
+rejected based only on the previous decisions, as the future p-values and the
+number of hypotheses to be tested are unknown.
 
 
 ## Installation
@@ -48,6 +47,14 @@ browseVignettes("onlineFDR")
 ```
 
 ## References
+Aharoni, E. and Rosset, S. (2014). Generalized alpha-investing: definitions, 
+optimality results and applications to public databases.
+*Journal of the Royal Statistical Society (Series B)*, 76(4):771--794.
+
+Foster, D. and Stine R. (2008). alpha-investing: a procedure for 
+sequential control of expected false discoveries.
+*Journal of the Royal Statistical Society (Series B)*, 29(4):429-444.
+
 Javanmard, A., and Montanari, A. (2015). On Online Control of False
 Discovery Rate. *arXiv preprint*, https://arxiv.org/abs/1502.06197.
 
@@ -71,9 +78,12 @@ Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019). onlineFDR:
 an R package to control the false discovery rate for growing data repositories.
 *Bioinformatics*, https://doi.org/10.1093/bioinformatics/btz191.
 
-Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for 
 online FDR control with conservative nulls. *arXiv preprint*, 
-https://arxiv.org/abs/1905.11465. 
+https://arxiv.org/abs/1905.11465.
+
+Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
+*arXiv preprint*, https://arxiv.org/abs/1910.04900.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
 Multiple Hypotheses. *arXiv preprint*, https://arxiv.org/abs/1812.05068.

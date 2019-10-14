@@ -21,6 +21,9 @@ test_that("Errors for edge cases", {
   expect_error(ADDIS(0.1, w0 = -0.01),
                "w0 must be non-negative.")
   
+  # expect_error(ADDIS(0.1, w0 = 1),
+  #              "w0 must be less than tau*lambda*alpha")
+  
   expect_error(ADDIS(c(0.1,0.1), async=TRUE, decision.times=1),
               "Please provide a decision time for each p-value.")
 })

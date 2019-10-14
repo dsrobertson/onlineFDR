@@ -105,7 +105,9 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
 #' SAFFRON(sample.df, random=FALSE)
+#' 
 #' set.seed(1); SAFFRON(sample.df)
+#' 
 #' set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 #'
 #' SAFFRON(sample.df, discard=TRUE, random=FALSE)
@@ -117,7 +119,7 @@ SAFFRON <- function(d, alpha=0.05, gammai, w0, lambda=0.5,
                     discard=FALSE, tau.discard=0.5) {
 
     if(is.data.frame(d)){
-        checkdf(d, random, date.format)
+        d <- checkdf(d, random, date.format)
         pval <- d$pval
     } else if(is.vector(d)){
         pval <- d

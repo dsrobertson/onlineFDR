@@ -75,10 +75,13 @@ Ramdas (2019) presented a version of LORD (\code{version='discard'}) that can
 improve the power of the procedure in the presence of conservative nulls by
 adaptively `discarding' these p-values.
 
-LORD depends on constants \eqn{w_0} and (for some versions) \eqn{b_0}, where
-\eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the procedure
-and \eqn{b_0 > 0} represents the `payout' for rejecting a hypothesis. We
-require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
+LORD depends on constants \eqn{w_0} and (for versions 3 and 'dep') \eqn{b_0},
+where \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the
+procedure and \eqn{b_0 > 0} represents the `payout' for rejecting a
+hypothesis. We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
+Version 'discard' also depends on a constant \eqn{\tau}, where \eqn{\tau \in
+(0,1)} represents the threshold for a hypothesis to be selected for testing:
+p-values greater than \eqn{\tau} are implicitly `discarded' by the procedure.
 
 Note that FDR control also holds for the LORD procedure if only the p-values
 corresponding to true nulls are mutually independent, and independent from
@@ -108,8 +111,11 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 LORD(sample.df, random=FALSE)
+
 set.seed(1); LORD(sample.df, version='dep')
+
 set.seed(1); LORD(sample.df, version='discard')
+
 set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 
 
