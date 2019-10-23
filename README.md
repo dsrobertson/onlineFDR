@@ -76,7 +76,7 @@ rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
 
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019). onlineFDR:
 an R package to control the false discovery rate for growing data repositories.
-*Bioinformatics*, https://doi.org/10.1093/bioinformatics/btz191.
+*Bioinformatics*, 35:4196-4199,  https://doi.org/10.1093/bioinformatics/btz191.
 
 Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for 
 online FDR control with conservative nulls. *arXiv preprint*, 

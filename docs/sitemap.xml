@@ -13,9 +13,6 @@
     <loc>https://dsrobertson.github.io/onlineFDR//reference/AlphaInvesting.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/AlphaSaving.html</loc>
-  </url>
-  <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/AlphaSpending.html</loc>
   </url>
   <url>
@@ -35,6 +32,9 @@
   </url>
   <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/LORDstar.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFallback.html</loc>
   </url>
   <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFDR-deprecated.html</loc>

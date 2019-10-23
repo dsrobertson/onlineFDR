@@ -1,6 +1,6 @@
-#' Alpha-saving for online FWER control
+#' Online fallback procedure for FWER control
 #'
-#' Implements the Alpha-saving algorithm of Tian and Ramdas (2019b), which
+#' Implements the online fallback procedure of Tian and Ramdas (2019b), which
 #' guarantees strong FWER control under arbitrary dependence of the p-values.
 #'
 #' The function takes as its input either a vector of p-values or a dataframe
@@ -11,13 +11,13 @@
 #' significance level \eqn{\alpha}, we choose a sequence of non-negative
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #' 
-#' The Alpha-saving procedure provides a uniformly more powerful method than
+#' The online fallback procedure provides a uniformly more powerful method than
 #' Alpha-spending, by saving the significance level of a previous rejection.
-#' More specifically, Alpha-saving tests hypothesis \eqn{H_i} at level
+#' More specifically, the procedure tests hypothesis \eqn{H_i} at level
 #' \deqn{\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}} where \eqn{R_i =
 #' 1\{p_i \leq \alpha_i\}} denotes a rejected hypothesis.
 #'
-#' Further details of the Alpha-saving procedure can be found in Tian and
+#' Further details of the online fallback procedure can be found in Tian and
 #' Ramdas (2019b).
 #'
 #'
@@ -65,15 +65,15 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
-#' AlphaSaving(sample.df, random=FALSE)
+#' onlineFallback(sample.df, random=FALSE)
 #' 
-#' set.seed(1); AlphaSaving(sample.df)
+#' set.seed(1); onlineFallback(sample.df)
 #' 
-#' set.seed(1); AlphaSaving(sample.df, alpha=0.1)
+#' set.seed(1); onlineFallback(sample.df, alpha=0.1)
 #' 
 #' @export
 
-AlphaSaving <- function(d, alpha=0.05, gammai,
+onlineFallback <- function(d, alpha=0.05, gammai,
                     random=TRUE, date.format="%Y-%m-%d") {
 
     if(is.data.frame(d)){

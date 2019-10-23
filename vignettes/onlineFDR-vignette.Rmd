@@ -2,7 +2,7 @@
 title: Managing multiple testing challenges with sequential inference using the onlineFDR
   package
 author: "David S. Robertson, Aaditya Ramdas and Natasha A. Karp"
-date: "2019-10-14"
+date: "2019-10-23"
 output:
   html_document:
     toc: yes
@@ -64,7 +64,7 @@ in power in the presence of conservative nulls by adaptively 'discarding' these
 p-values.
 
 Finally, Tian & Ramdas (2019b) proposed procedures that provide online control
-of the FWER. One procedure, Alpha-saving, gives a uniform improvement to the
+of the FWER. One procedure, online fallback, gives a uniform improvement to the
 naive Alpha-spending procedure (see below). The ADDIS-spending procedure
 compensates for the power loss of these procedures by including both adapativity
 in the fraction of null hypotheses and the conservativeness of nulls.
@@ -162,11 +162,11 @@ presented by Zrnic *et al.* (2018). These algorithms control the mFDR.
 Implements online FWER control using a Bonferroni-like test. Alpha-spending
 provides strong FWER control for arbitrarily dependent p-values.
 
-10: **AlphaSaving**
-Implements the Alpha-saving algorithm for online FWER control, as proposed by
-Tian & Ramdas (2019b). Alpha-saving is a uniformly more powerful method than
+10: **onlineFallback**
+Implements the online fallback algorithm for FWER control, as proposed by
+Tian & Ramdas (2019b). Online fallback is a uniformly more powerful method than
 Alpha-spending, as it saves the significance level of a previous rejection.
-Alpha-saving strongly controls the FWER for arbitrarily dependent p-values.
+Online fallback strongly controls the FWER for arbitrarily dependent p-values.
 
 11: **ADDIS-spending**
 Implements the ADDIS-spending algorithm for online FWER control, as proposed by
@@ -474,11 +474,11 @@ The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
 [here](#LORD_gamma).
 
 
-### Alpha-saving {#Alpha-saving}
+### Online Fallback {#onlineFallback}
 
-The Alpha-saving procedure of Tian & Ramdas (2019b) provides a uniformly more
+The online fallback procedure of Tian & Ramdas (2019b) provides a uniformly more
 powerful method than Alpha-spending, by saving the significance level of a
-previous rejection. More specifically, Alpha-saving tests hypothesis $H_i$ at
+previous rejection. More specifically, online fallback tests hypothesis $H_i$ at
 level \[\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}\] where $R_i = 1\{p_i
 \leq \alpha_i\}$ denotes a rejected hypothesis. The procedure strongly controls
 the FWER for arbitrarily dependent p-values.
@@ -516,7 +516,7 @@ As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume
 independent p-values, while the LOND procedure is also valid under positive
 dependencies (like the Benjamini-Hochberg method, see below). Adjusted
 versions of LOND and LORD available for arbitrarily dependent p-values.
-Alpha-spending and Alpha-saving also control the FWER and FDR for arbitrarily
+Alpha-spending and online fallback also control the FWER and FDR for arbitrarily
 dependent p-values.
 
 By way of comparison, the usual Benjamini-Hochberg method for controlling
@@ -662,7 +662,7 @@ The values of `gammai` are also supplied by default, but can optionally be
 specified by the user.
 
 
-### Alpha-spending and Alpha-saving
+### Alpha-spending and online fallback
 
 The values of `gammai` are supplied by default, but can optionally
 be specified by the user.
@@ -736,7 +736,7 @@ rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
 
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 Online control of the false discovery rate in biomedical research.
-*Bioinformatics*, https://doi.org/10.1093/bioinformatics/btz191.
+*Bioinformatics*, 35:4196-4199, https://doi.org/10.1093/bioinformatics/btz191.
 
 Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for 
 online FDR control with conservative nulls. *arXiv preprint*, 

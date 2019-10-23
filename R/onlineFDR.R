@@ -12,7 +12,7 @@
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
 #' Version: \tab 1.3.7\cr
-#' Date: \tab 2019-10-14\cr
+#' Date: \tab 2019-10-23\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -83,10 +83,10 @@
 #' is Alpha-spending, which is an online analog of the Bonferroni procedure.
 #' This is implemented by the function \code{\link{AlphaSpending}}, and provides
 #' strong FWER control for arbitrarily dependent p-values. A uniformly more
-#' powerful method is \code{\link{AlphaSaving}}, whcich again strongly controls
-#' the FWER even under arbitrary dependence amongst the p-values. The
+#' powerful method is \code{\link{onlineFallback}}, which again strongly
+#' controls the FWER even under arbitrary dependence amongst the p-values. The
 #' \code{\link{ADDIS.spending}} procedure compensates for the power loss of
-#' Alpha-spending and Alpha-saving, by including both adapativity in the
+#' Alpha-spending and online fallback, by including both adapativity in the
 #' fraction of null hypotheses and the conservativeness of nulls. This procedure
 #' controls the FWER in the strong sense for independent p-values. Tian and
 #' Ramdas (2019b) also presented a version for handling local dependence, which
@@ -132,7 +132,7 @@
 #'
 #' Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 #' onlineFDR: an R package to control the false discovery rate for growing data
-#' repositories. \emph{Bioinformatics},
+#' repositories. \emph{Bioinformatics}, 35:4196-4199, 
 #' \url{https://doi.org/10.1093/bioinformatics/btz191}.
 #'
 #' Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for

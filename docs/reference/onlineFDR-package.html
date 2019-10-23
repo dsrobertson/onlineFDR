@@ -152,7 +152,7 @@ of hypotheses to be tested are unknown.</p>
 <tr><td>Package:</td><td>onlineFDR</td></tr>
 <tr><td>Type:</td><td>Package</td></tr>
 <tr><td>Version:</td><td>1.3.7</td></tr>
-<tr><td>Date:</td><td>2019-10-14</td></tr>
+<tr><td>Date:</td><td>2019-10-23</td></tr>
 <tr><td>License:</td><td>GPL-3</td></tr>
 </table>
 
@@ -216,10 +216,10 @@ FWER control. The only previously existing procedure for online FWER control
 is Alpha-spending, which is an online analog of the Bonferroni procedure.
 This is implemented by the function <code><a href='AlphaSpending.html'>AlphaSpending</a></code>, and provides
 strong FWER control for arbitrarily dependent p-values. A uniformly more
-powerful method is <code><a href='AlphaSaving.html'>AlphaSaving</a></code>, whcich again strongly controls
-the FWER even under arbitrary dependence amongst the p-values. The
+powerful method is <code><a href='onlineFallback.html'>onlineFallback</a></code>, which again strongly
+controls the FWER even under arbitrary dependence amongst the p-values. The
 <code><a href='ADDIS.spending.html'>ADDIS.spending</a></code> procedure compensates for the power loss of
-Alpha-spending and Alpha-saving, by including both adapativity in the
+Alpha-spending and online fallback, by including both adapativity in the
 fraction of null hypotheses and the conservativeness of nulls. This procedure
 controls the FWER in the strong sense for independent p-values. Tian and
 Ramdas (2019b) also presented a version for handling local dependence, which
@@ -252,7 +252,7 @@ discovery rate in biomedical research. <em>arXiv preprint</em>,
 <a href='https://arxiv.org/abs/1809.07292'>https://arxiv.org/abs/1809.07292</a>.</p>
 <p>Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 onlineFDR: an R package to control the false discovery rate for growing data
-repositories. <em>Bioinformatics</em>,
+repositories. <em>Bioinformatics</em>, 35:4196-4199, 
 <a href='https://doi.org/10.1093/bioinformatics/btz191'>https://doi.org/10.1093/bioinformatics/btz191</a>.</p>
 <p>Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for
 online FDR control with conservative nulls. <em>arXiv preprint</em>,
