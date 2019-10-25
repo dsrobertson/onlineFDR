@@ -69,16 +69,16 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
-#' set.seed(1); AlphaSpending(sample.df)
+#' set.seed(1); Alpha_spending(sample.df)
 #' 
-#' AlphaSpending(sample.df, random=FALSE)
+#' Alpha_spending(sample.df, random=FALSE)
 #' 
-#' set.seed(1); AlphaSpending(sample.df, alpha=0.1)
+#' set.seed(1); Alpha_spending(sample.df, alpha=0.1)
 #'
 #'
 #'@export
 
-AlphaSpending <- function(d, alpha=0.05, gammai, random=TRUE,
+Alpha_spending <- function(d, alpha=0.05, gammai, random=TRUE,
                         date.format="%Y-%m-%d") {
 
     if(is.data.frame(d)){

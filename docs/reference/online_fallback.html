@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Alpha-spending for online FWER control — AlphaSpending • onlineFDR</title>
+<title>Online fallback procedure for FWER control — online_fallback • onlineFDR</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,9 @@
 
 
 
-<meta property="og:title" content="Alpha-spending for online FWER control — AlphaSpending" />
-<meta property="og:description" content="Implements online FWER control using a Bonferroni-like test." />
+<meta property="og:title" content="Online fallback procedure for FWER control — online_fallback" />
+<meta property="og:description" content="Implements the online fallback procedure of Tian and Ramdas (2019b), which
+guarantees strong FWER control under arbitrary dependence of the p-values." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -124,16 +125,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Alpha-spending for online FWER control</h1>
+    <h1>Online fallback procedure for FWER control</h1>
     
-    <div class="hidden name"><code>AlphaSpending.Rd</code></div>
+    <div class="hidden name"><code>online_fallback.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implements online FWER control using a Bonferroni-like test.</p>
+    <p>Implements the online fallback procedure of Tian and Ramdas (2019b), which
+guarantees strong FWER control under arbitrary dependence of the p-values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>AlphaSpending</span>(<span class='no'>d</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>online_fallback</span>(<span class='no'>d</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>date.format</span> <span class='kw'>=</span> <span class='st'>"%Y-%m-%d"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -142,9 +144,9 @@
     <tr>
       <th>d</th>
       <td><p>Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), date (`date') and p-value (`pval'). If no column of dates
-is provided, then the p-values are treated as being ordered sequentially
-with no batches.</p></td>
+identifier (`id'), date (`date') and p-value (`pval'). If no column of
+dates is provided, then the p-values are treated as being ordered
+sequentially with no batches.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
@@ -153,10 +155,8 @@ with no batches.</p></td>
     </tr>
     <tr>
       <th>gammai</th>
-      <td><p>Optional vector of \(\gamma_i\), where hypothesis \(i\) is
-rejected if the \(i\)-th p-value is less than or equal to \(\alpha
-\gamma_i\). A default is provided as proposed by Javanmard and Montanari
-(2018), equation 31.</p></td>
+      <td><p>Optional vector of \(\gamma_i\). A default is provided with
+\(\gamma_j\) proportional to \(1/j^(1.6)\).</p></td>
     </tr>
     <tr>
       <th>random</th>
@@ -175,33 +175,31 @@ randomised.</p></td>
     
 
 <dt>d.out</dt><dd><p>A dataframe with the original data <code>d</code> (which will
- be reordered if there are batches and <code>random = TRUE</code>), the adjusted
- signifcance thresholds <code>alphai</code> and the indicator function of
- discoveries <code>R</code>, where <code>R[i] = 1</code> corresponds to hypothesis
- \(i\) being rejected (otherwise <code>R[i] = 0</code>).</p></dd>
+  be reordered if there are batches and <code>random = TRUE</code>), the
+  LORD-adjusted significance thresholds \(\alpha_i\) and the indicator
+  function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
+  \(i\)-th p-value is less than or equal to \(\alpha_i\), in which case
+  <code>R[i] = 1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function takes as its input either a vector of p-values, or a dataframe
+    <p>The function takes as its input either a vector of p-values or a dataframe
 with three columns: an identifier (`id'), date (`date') and p-value (`pval').
-The case where p-values arrive in batches corresponds to multiple instances of
-the same date. If no column of dates is provided, then the p-values are
-treated as being ordered sequentially with no batches.</p>
-<p>Alpha-spending provides strong FWER control for a potentially infinite stream
-of p-values by using a Bonferroni-like test. Given an overall significance
-level \(\alpha\), we choose a (potentially infinite) sequence of
-non-negative numbers \(\gamma_i\) such that they sum to 1. Hypothesis
-\(i\) is rejected if the \(i\)-th p-value is less than or equal to
-\(\alpha \gamma_i\).</p>
-<p>Note that the procedure controls the generalised familywise error rate
-(k-FWER) for \(k &gt; 1\) if \(\alpha\) is replaced by min(\(1,
-k\alpha\)).</p>
+The case where p-values arrive in batches corresponds to multiple instances
+of the same date. If no column of dates is provided, then the p-values are
+treated as being ordered sequentially with no batches. Given an overall
+significance level \(\alpha\), we choose a sequence of non-negative
+non-increasing numbers \(\gamma_i\) that sum to 1.</p>
+<p>The online fallback procedure provides a uniformly more powerful method than
+Alpha-spending, by saving the significance level of a previous rejection.
+More specifically, the procedure tests hypothesis \(H_i\) at level
+$$\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}$$ where \(R_i =
+1\{p_i \leq \alpha_i\}\) denotes a rejected hypothesis.</p>
+<p>Further details of the online fallback procedure can be found in Tian and
+Ramdas (2019b).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
- False Discovery Rate and False Discovery Exceedance. <em>Annals of
- Statistics</em>, 46(2):526-554.</p>
-<p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
+    <p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
 <em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -210,63 +208,62 @@ k\alpha\)).</p>
     <span class='st'>'C38292'</span>, <span class='st'>'A30619'</span>, <span class='st'>'D46627'</span>, <span class='st'>'E29198'</span>, <span class='st'>'A41418'</span>,
     <span class='st'>'D51456'</span>, <span class='st'>'C88669'</span>, <span class='st'>'E03673'</span>, <span class='st'>'A63155'</span>, <span class='st'>'B66033'</span>),
 <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"2014-12-01"</span>,<span class='fl'>3</span>),
-                <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"2015-09-21"</span>,<span class='fl'>5</span>),
+               <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"2015-09-21"</span>,<span class='fl'>5</span>),
                 <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"2016-05-19"</span>,<span class='fl'>2</span>),
                 <span class='st'>"2016-11-12"</span>,
-                <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"2017-03-27"</span>,<span class='fl'>4</span>))),
-<span class='kw'>pval</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.90e-17</span>, <span class='fl'>0.06743</span>, <span class='fl'>0.01514</span>, <span class='fl'>0.08174</span>, <span class='fl'>0.00171</span>,
+               <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"2017-03-27"</span>,<span class='fl'>4</span>))),
+<span class='kw'>pval</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2.90e-08</span>, <span class='fl'>0.06743</span>, <span class='fl'>0.01514</span>, <span class='fl'>0.08174</span>, <span class='fl'>0.00171</span>,
         <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-08</span>,
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span>))
 
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaSpending</span>(<span class='no'>sample.df</span>)</div><div class='output co'>#&gt;        id       date       pval alpha...gammai R
-#&gt; 1  A15432 2014-12-01 2.9000e-17   0.0026758385 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02   0.0005819103 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02   0.0004956249 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02   0.0004121803 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03   0.0003494435 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01   0.0003022950 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05   0.0002659722 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01   0.0002372613 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08   0.0002140474 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01   0.0001949126 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01   0.0001788796 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01   0.0001652568 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01   0.0001535420 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01   0.0001433627 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03   0.0001344368 0</div><div class='input'>
-<span class='fu'>AlphaSpending</span>(<span class='no'>sample.df</span>, <span class='kw'>random</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;        id       date       pval alpha...gammai R
-#&gt; 1  A15432 2014-12-01 2.9000e-17   0.0026758385 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02   0.0005819103 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02   0.0004956249 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02   0.0004121803 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03   0.0003494435 0
-#&gt; 6  C38292 2015-09-21 3.6000e-05   0.0003022950 1
-#&gt; 7  A30619 2015-09-21 7.9149e-01   0.0002659722 0
-#&gt; 8  D46627 2015-09-21 2.7201e-01   0.0002372613 0
-#&gt; 9  E29198 2016-05-19 2.8295e-01   0.0002140474 0
-#&gt; 10 A41418 2016-05-19 7.5900e-08   0.0001949126 1
-#&gt; 11 D51456 2016-11-12 6.9274e-01   0.0001788796 0
-#&gt; 12 C88669 2017-03-27 3.0443e-01   0.0001652568 0
-#&gt; 13 E03673 2017-03-27 1.3600e-03   0.0001535420 0
-#&gt; 14 A63155 2017-03-27 7.2342e-01   0.0001433627 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01   0.0001344368 0</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>AlphaSpending</span>(<span class='no'>sample.df</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.1</span>)</div><div class='output co'>#&gt;        id       date       pval alpha...gammai R
-#&gt; 1  A15432 2014-12-01 2.9000e-17   0.0053516771 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02   0.0011638206 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02   0.0009912499 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02   0.0008243606 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03   0.0006988870 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01   0.0006045900 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05   0.0005319444 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01   0.0004745225 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08   0.0004280949 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01   0.0003898252 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01   0.0003577593 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01   0.0003305137 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01   0.0003070841 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01   0.0002867254 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03   0.0002688736 0</div><div class='input'>
-
+<span class='fu'>online_fallback</span>(<span class='no'>sample.df</span>, <span class='kw'>random</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0026758385 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0032577488 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0004956249 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004121803 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0003494435 0
+#&gt; 6  C38292 2015-09-21 3.6000e-05 0.0003022950 1
+#&gt; 7  A30619 2015-09-21 7.9149e-01 0.0005682672 0
+#&gt; 8  D46627 2015-09-21 2.7201e-01 0.0002372613 0
+#&gt; 9  E29198 2016-05-19 2.8295e-01 0.0002140474 0
+#&gt; 10 A41418 2016-05-19 7.5900e-08 0.0001949126 1
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0003737922 0
+#&gt; 12 C88669 2017-03-27 3.0443e-01 0.0001652568 0
+#&gt; 13 E03673 2017-03-27 1.3600e-03 0.0001535420 0
+#&gt; 14 A63155 2017-03-27 7.2342e-01 0.0001433627 0
+#&gt; 15 B66033 2017-03-27 5.4757e-01 0.0001344368 0</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>online_fallback</span>(<span class='no'>sample.df</span>)</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0026758385 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0032577488 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0004956249 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004121803 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0003494435 0
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0003022950 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0002659722 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0005032335 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0002140474 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0004089600 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0001788796 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0001652568 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0001535420 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0001433627 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0001344368 0</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>); <span class='fu'>online_fallback</span>(<span class='no'>sample.df</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>0.1</span>)</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0053516771 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0065154977 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0009912499 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0008243606 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0006988870 0
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0006045900 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0005319444 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0010064670 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0004280949 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0008179201 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0003577593 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0003305137 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0003070841 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0002867254 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0002688736 0</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

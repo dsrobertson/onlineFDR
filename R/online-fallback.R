@@ -65,15 +65,15 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
-#' onlineFallback(sample.df, random=FALSE)
+#' online_fallback(sample.df, random=FALSE)
 #' 
-#' set.seed(1); onlineFallback(sample.df)
+#' set.seed(1); online_fallback(sample.df)
 #' 
-#' set.seed(1); onlineFallback(sample.df, alpha=0.1)
+#' set.seed(1); online_fallback(sample.df, alpha=0.1)
 #' 
 #' @export
 
-onlineFallback <- function(d, alpha=0.05, gammai,
+online_fallback <- function(d, alpha=0.05, gammai,
                     random=TRUE, date.format="%Y-%m-%d") {
 
     if(is.data.frame(d)){

@@ -72,15 +72,15 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
 #'         0.69274, 0.30443, 0.00136, 0.82342, 5.4757e-04)
 #'
-#' ADDIS.spending(pval)
+#' ADDIS_spending(pval)
 #'
-#' ADDIS.spending(pval, dep=TRUE, lags=rep(0,15)) # Same as above
+#' ADDIS_spending(pval, dep=TRUE, lags=rep(0,15)) # Same as above
 #' 
-#' ADDIS.spending(pval, dep=TRUE, lags=rep(1,15)) # Locally dependent
+#' ADDIS_spending(pval, dep=TRUE, lags=rep(1,15)) # Locally dependent
 #'
 #' @export
 
-ADDIS.spending <- function(pval, alpha=0.05, gammai, lambda=0.25, tau=0.5,
+ADDIS_spending <- function(pval, alpha=0.05, gammai, lambda=0.25, tau=0.5,
                   dep=FALSE, lags) {
     
     if(alpha<=0 || alpha>1){

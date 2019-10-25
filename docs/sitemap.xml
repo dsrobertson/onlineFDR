@@ -7,13 +7,13 @@
     <loc>https://dsrobertson.github.io/onlineFDR//reference/ADDIS.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/ADDIS.spending.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/ADDIS_spending.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/AlphaInvesting.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/Alpha_investing.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/AlphaSpending.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/Alpha_spending.html</loc>
   </url>
   <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/bonfInfinite.html</loc>
@@ -34,13 +34,13 @@
     <loc>https://dsrobertson.github.io/onlineFDR//reference/LORDstar.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFallback.html</loc>
-  </url>
-  <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFDR-deprecated.html</loc>
   </url>
   <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFDR-package.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/online_fallback.html</loc>
   </url>
   <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRON.html</loc>

@@ -80,15 +80,15 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #'
-#' AlphaInvesting(sample.df, random=FALSE)
+#' Alpha_investing(sample.df, random=FALSE)
 #' 
-#' set.seed(1); AlphaInvesting(sample.df)
+#' set.seed(1); Alpha_investing(sample.df)
 #' 
-#' set.seed(1); AlphaInvesting(sample.df, alpha=0.1, w0=0.025)
+#' set.seed(1); Alpha_investing(sample.df, alpha=0.1, w0=0.025)
 #' 
 #' @export
 
-AlphaInvesting <- function(d, alpha=0.05, gammai, w0,
+Alpha_investing <- function(d, alpha=0.05, gammai, w0,
                     random=TRUE, date.format="%Y-%m-%d") {
 
     if(is.data.frame(d)){

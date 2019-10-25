@@ -79,7 +79,7 @@ of hypotheses to be tested are unknown." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.8</span>
       </span>
     </div>
 
@@ -151,8 +151,8 @@ of hypotheses to be tested are unknown.</p>
 <table class='table'>
 <tr><td>Package:</td><td>onlineFDR</td></tr>
 <tr><td>Type:</td><td>Package</td></tr>
-<tr><td>Version:</td><td>1.3.7</td></tr>
-<tr><td>Date:</td><td>2019-10-23</td></tr>
+<tr><td>Version:</td><td>1.3.8</td></tr>
+<tr><td>Date:</td><td>2019-10-25</td></tr>
 <tr><td>License:</td><td>GPL-3</td></tr>
 </table>
 
@@ -179,8 +179,8 @@ version of LOND which is valid for arbitrarily dependent p-values.</p>
 <code><a href='SAFFRON.html'>SAFFRON</a></code> procedure, which stands for Serial estimate of the
 Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
 provides an adaptive algorithm for online FDR control. SAFFRON is related to 
-the Alpha-Investing procedure of Foster and Stine (2008), a monotone version
-of which is implemented by the function <code><a href='AlphaInvesting.html'>AlphaInvesting</a></code>. Both 
+the Alpha-investing procedure of Foster and Stine (2008), a monotone version
+of which is implemented by the function <code><a href='Alpha_investing.html'>Alpha_investing</a></code>. Both 
 these procedure provably control the FDR under independence of the p-values.</p>
 <p>Zrnic et al. (2018) generalised these algorithms (i.e. LOND, LORD and
 SAFFRON) for the context of asynchronous online testing, where each
@@ -214,11 +214,11 @@ times.</p>
 <p>Finally, Tian and Ramdas (2019b) proposed a number of algorithms for online
 FWER control. The only previously existing procedure for online FWER control
 is Alpha-spending, which is an online analog of the Bonferroni procedure.
-This is implemented by the function <code><a href='AlphaSpending.html'>AlphaSpending</a></code>, and provides
-strong FWER control for arbitrarily dependent p-values. A uniformly more
-powerful method is <code><a href='onlineFallback.html'>onlineFallback</a></code>, which again strongly
+This is implemented by the function <code><a href='Alpha_spending.html'>Alpha_spending</a></code>, and
+provides strong FWER control for arbitrarily dependent p-values. A uniformly
+more powerful method is <code><a href='online_fallback.html'>online_fallback</a></code>, which again strongly
 controls the FWER even under arbitrary dependence amongst the p-values. The
-<code><a href='ADDIS.spending.html'>ADDIS.spending</a></code> procedure compensates for the power loss of
+<code><a href='ADDIS_spending.html'>ADDIS_spending</a></code> procedure compensates for the power loss of
 Alpha-spending and online fallback, by including both adapativity in the
 fraction of null hypotheses and the conservativeness of nulls. This procedure
 controls the FWER in the strong sense for independent p-values. Tian and

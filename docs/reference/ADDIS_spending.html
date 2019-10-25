@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS.spending • onlineFDR</title>
+<title>ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS_spending • onlineFDR</title>
 
 
 <!-- jquery -->
@@ -41,7 +41,7 @@
 
 
 
-<meta property="og:title" content="ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS.spending" />
+<meta property="og:title" content="ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS_spending" />
 <meta property="og:description" content="Implements the ADDIS algorithm for online FWER control, where ADDIS stands
 for an ADaptive algorithm that DIScards conservative nulls, as presented by
 Tian and Ramdas (2019b). The procedure compensates for the power loss of
@@ -130,7 +130,7 @@ hypotheses and the conservativeness of nulls." />
     <div class="page-header">
     <h1>ADDIS-spending: Adaptive discarding algorithm for online FWER control</h1>
     
-    <div class="hidden name"><code>ADDIS.spending.Rd</code></div>
+    <div class="hidden name"><code>ADDIS_spending.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -141,7 +141,7 @@ Alpha-spending, by including both adapativity in the fraction of null
 hypotheses and the conservativeness of nulls.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+    <pre class="usage"><span class='fu'>ADDIS_spending</span>(<span class='no'>pval</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='no'>gammai</span>, <span class='kw'>lambda</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
   <span class='kw'>dep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>lags</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -228,7 +228,7 @@ Ramdas (2019b).</p>
         <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-06</span>,
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.82342</span>, <span class='fl'>5.4757e-04</span>)
 
-<span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>)</div><div class='output co'>#&gt;          pval       alphai R
+<span class='fu'>ADDIS_spending</span>(<span class='no'>pval</span>)</div><div class='output co'>#&gt;          pval       alphai R
 #&gt; 1  2.9000e-08 0.0054686271 1
 #&gt; 2  6.7430e-02 0.0054686271 0
 #&gt; 3  3.5100e-04 0.0054686271 1
@@ -244,7 +244,7 @@ Ramdas (2019b).</p>
 #&gt; 13 1.3600e-03 0.0005950895 0
 #&gt; 14 8.2342e-01 0.0005950895 0
 #&gt; 15 5.4757e-04 0.0005950895 1</div><div class='input'>
-<span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>, <span class='kw'>dep</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lags</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>15</span>)) <span class='co'># Same as above</span></div><div class='output co'>#&gt;          pval       alphai R
+<span class='fu'>ADDIS_spending</span>(<span class='no'>pval</span>, <span class='kw'>dep</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lags</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>15</span>)) <span class='co'># Same as above</span></div><div class='output co'>#&gt;          pval       alphai R
 #&gt; 1  2.9000e-08 0.0054686271 1
 #&gt; 2  6.7430e-02 0.0054686271 0
 #&gt; 3  3.5100e-04 0.0054686271 1
@@ -260,7 +260,7 @@ Ramdas (2019b).</p>
 #&gt; 13 1.3600e-03 0.0005950895 0
 #&gt; 14 8.2342e-01 0.0005950895 0
 #&gt; 15 5.4757e-04 0.0005950895 1</div><div class='input'>
-<span class='fu'>ADDIS.spending</span>(<span class='no'>pval</span>, <span class='kw'>dep</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lags</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>15</span>)) <span class='co'># Locally dependent</span></div><div class='output co'>#&gt;          pval       alphai R
+<span class='fu'>ADDIS_spending</span>(<span class='no'>pval</span>, <span class='kw'>dep</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>lags</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>15</span>)) <span class='co'># Locally dependent</span></div><div class='output co'>#&gt;          pval       alphai R
 #&gt; 1  2.9000e-08 0.0054686271 1
 #&gt; 2  6.7430e-02 0.0018039742 0
 #&gt; 3  3.5100e-04 0.0018039742 1

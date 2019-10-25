@@ -35,7 +35,7 @@ randomised.}
  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 }
 \description{
-This funcion is deprecated, please use \code{\link{AlphaSpending}} instead.
+This funcion is deprecated, please use \code{\link{Alpha_spending}} instead.
 }
 \details{
 Implements online FDR control using a Bonferroni-like test.

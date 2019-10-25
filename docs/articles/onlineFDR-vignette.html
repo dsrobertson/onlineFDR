@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.8</span>
       </span>
     </div>
 
@@ -122,12 +122,12 @@
 <p>2: <strong>LORD</strong> Implements the LORD procedure for online FDR control, where LORD stands for (significance) Levels based On Recent Discovery, as presented by Javanmard and Montanari (2018), Ramdas <em>et al.</em> (2017) and Tian &amp; Ramdas (2019). The function provides different versions of the procedure valid for independent p-values, see ‘Theory behind onlineFDR’. There is also a version (‘dep’) that guarantees control for dependent p-values.</p>
 <p>3: <strong>SAFFRON</strong> Implements the SAFFRON procedure for online FDR control, where SAFFRON stands for Serial estimate of the Alpha Fraction that is Futilely Rationed On true Null hypotheses, as presented by Ramdas <em>et al.</em> (2018). The procedure provides an adaptive method of online FDR control.</p>
 <p>4: <strong>ADDIS</strong> Implements the ADDIS algorithm for online FDR control, where ADDIS stands for an ADaptive algorithm that DIScards conservative nulls, as presented by Tian &amp; Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adapativity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON). This procedure controls the FDR for independent p-values.</p>
-<p>5: <strong>AlphaInvesting</strong> Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, as proposed by Ramdas et al. (2018). This procedure uses a variant of SAFFRON’s update rule. This procedure controls the FDR for independent p-values.</p>
+<p>5: <strong>Alpha_investing</strong> Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, as proposed by Ramdas et al. (2018). This procedure uses a variant of SAFFRON’s update rule. This procedure controls the FDR for independent p-values.</p>
 <p>6: <strong>LONDstar</strong> Implements the LOND algorithm for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
 <p>7: <strong>LORDstar</strong> Implements LORD algorithms for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
 <p>8: <strong>SAFFRONstar</strong> Implements the SAFFRON algorithm for asynchronous online testing, as presented by Zrnic <em>et al.</em> (2018). These algorithms control the mFDR.</p>
-<p>9: <strong>AlphaSpending</strong> Implements online FWER control using a Bonferroni-like test. Alpha-spending provides strong FWER control for arbitrarily dependent p-values.</p>
-<p>10: <strong>onlineFallback</strong> Implements the online fallback algorithm for FWER control, as proposed by Tian &amp; Ramdas (2019b). Online fallback is a uniformly more powerful method than Alpha-spending, as it saves the significance level of a previous rejection. Online fallback strongly controls the FWER for arbitrarily dependent p-values.</p>
+<p>9: <strong>Alpha_spending</strong> Implements online FWER control using a Bonferroni-like test. Alpha-spending provides strong FWER control for arbitrarily dependent p-values.</p>
+<p>10: <strong>online_fallback</strong> Implements the online fallback algorithm for FWER control, as proposed by Tian &amp; Ramdas (2019b). Online fallback is a uniformly more powerful method than Alpha-spending, as it saves the significance level of a previous rejection. Online fallback strongly controls the FWER for arbitrarily dependent p-values.</p>
 <p>11: <strong>ADDIS-spending</strong> Implements the ADDIS-spending algorithm for online FWER control, as proposed by Tian &amp; Ramdas (2019b). The algorithm compensates for the power loss of Alpha-spending, by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls. ADDIS-spending provides strong FWER control for independent p-values. Tian &amp; Ramdas (2019b) also presented a version for handling local dependence.</p>
 </div>
 <div id="quick-start" class="section level3">

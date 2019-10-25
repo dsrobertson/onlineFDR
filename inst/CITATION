@@ -12,7 +12,7 @@ citEntry(entry = "manual",
         person(c("Natasha", "A."), "Karp")),
   title = "onlineFDR: Online error control",
   year = "2019",
-  note = meta$Version,
+  note = paste0("R package ", meta$Version),
   textVersion = "Robertson DS, Ramdas A, Javanmard A, Montanari A, Tian J, Zrnic T, Karp NA (2019). onlineFDR: Online FDR control. R package version 1.4.0, <URL: https://doi.org/doi:10.18129/B9.bioc.onlineFDR>."
 )
 

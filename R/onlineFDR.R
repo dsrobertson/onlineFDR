@@ -11,8 +11,8 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.3.7\cr
-#' Date: \tab 2019-10-23\cr
+#' Version: \tab 1.3.8\cr
+#' Date: \tab 2019-10-25\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -40,8 +40,8 @@
 #' \code{\link{SAFFRON}} procedure, which stands for Serial estimate of the
 #' Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
 #' provides an adaptive algorithm for online FDR control. SAFFRON is related to 
-#' the Alpha-Investing procedure of Foster and Stine (2008), a monotone version
-#' of which is implemented by the function \code{\link{AlphaInvesting}}. Both 
+#' the Alpha-investing procedure of Foster and Stine (2008), a monotone version
+#' of which is implemented by the function \code{\link{Alpha_investing}}. Both 
 #' these procedure provably control the FDR under independence of the p-values.
 #' 
 #' Zrnic et al. (2018) generalised these algorithms (i.e. LOND, LORD and
@@ -81,11 +81,11 @@
 #' Finally, Tian and Ramdas (2019b) proposed a number of algorithms for online
 #' FWER control. The only previously existing procedure for online FWER control
 #' is Alpha-spending, which is an online analog of the Bonferroni procedure.
-#' This is implemented by the function \code{\link{AlphaSpending}}, and provides
-#' strong FWER control for arbitrarily dependent p-values. A uniformly more
-#' powerful method is \code{\link{onlineFallback}}, which again strongly
+#' This is implemented by the function \code{\link{Alpha_spending}}, and
+#' provides strong FWER control for arbitrarily dependent p-values. A uniformly
+#' more powerful method is \code{\link{online_fallback}}, which again strongly
 #' controls the FWER even under arbitrary dependence amongst the p-values. The
-#' \code{\link{ADDIS.spending}} procedure compensates for the power loss of
+#' \code{\link{ADDIS_spending}} procedure compensates for the power loss of
 #' Alpha-spending and online fallback, by including both adapativity in the
 #' fraction of null hypotheses and the conservativeness of nulls. This procedure
 #' controls the FWER in the strong sense for independent p-values. Tian and
@@ -95,7 +95,7 @@
 #' Further details on all these procedures can be found in Javanmard and
 #' Montanari (2015, 2018), Ramdas et al. (2017, 2018), Robertson and Wason
 #' (2018), Tian and Ramdas (2019a, 2019b) and Zrnic et al. (2018).
-#'
+#' 
 #' @author David S. Robertson (\email{david.robertson@@mrc-bsu.cam.ac.uk}),
 #' Adel Javanmard, Aaditya Ramdas, Jinjin Tian, Tijana Zrnic, Andrea Montanari
 #' and Natasha A. Karp.

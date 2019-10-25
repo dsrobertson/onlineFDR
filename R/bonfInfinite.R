@@ -1,6 +1,6 @@
 #' Online FDR control based on a Bonferroni-like test
 #'
-#' This funcion is deprecated, please use \code{\link{AlphaSpending}} instead.
+#' This funcion is deprecated, please use \code{\link{Alpha_spending}} instead.
 #'
 #' Implements online FDR control using a Bonferroni-like test.
 #'
@@ -54,7 +54,7 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
                         date.format="%Y-%m-%d") { # nocov start
     
     .Deprecated("bonfInfinite", package="onlineFDR",
-                msg = "bonfInfinite is deprecated, please use AlphaSpending instead.")
+                msg = "bonfInfinite is deprecated, please use Alpha_spending instead.")
 
     if(is.data.frame(d)){
         checkdf(d, random, date.format)
