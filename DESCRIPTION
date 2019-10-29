@@ -1,5 +1,5 @@
 Package: onlineFDR
-Version: 1.4.0
+Version: 1.5.0
 Date: 2019-10-25
 Title: Online error control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
