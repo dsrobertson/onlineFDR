@@ -3,7 +3,7 @@
 #' Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
 #' an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
 #' and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-#' with conservative nulls, by including both adapativity in the fraction of
+#' with conservative nulls, by including both adaptivity in the fraction of
 #' null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
 #' SAFFRON).
 #'
