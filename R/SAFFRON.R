@@ -1,7 +1,7 @@
 #' SAFFRON: Adaptive online FDR control
 #'
 #' Implements the SAFFRON procedure for online FDR control, where SAFFRON stands
-#' for Serial estimate of the Alpha Fraction that is Futiley Rationed On true
+#' for Serial estimate of the Alpha Fraction that is Futilely Rationed On true
 #' Null hypotheses, as presented by Ramdas et al. (2018). The algorithm is based
 #' on an estimate of the proportion of true null hypotheses. More precisely,
 #' SAFFRON sets the adjusted test levels based on an estimate of the amount of
