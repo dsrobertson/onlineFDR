@@ -12,7 +12,7 @@ test.df2 <- data.frame(
 
 test2plus <- LORD(test.df2, version='++', random=FALSE)$R
 test2discard <- LORD(test.df2, version='discard', random=FALSE)$R
-test2v3 <- LORD(test.df2, version=3, random=FALSE)$R
+test2v3 <- LORD(test.df2, version='3', random=FALSE)$R
 test2dep <- LORD(test.df2, version='dep', random=FALSE)$R
 
 
@@ -38,10 +38,10 @@ test_that("Errors for edge cases", {
     expect_error(LORD(0.1, w0 = -0.01),
                  "w0 must be non-negative.")
     
-    expect_error(LORD(0.1, version=3, b0 = -0.01),
+    expect_error(LORD(0.1, version='3', b0 = -0.01),
                  "b0 must be positive.")
     
-    expect_error(LORD(0.1, version=3, alpha=0.05, b0=0.02, w0=0.04),
+    expect_error(LORD(0.1, version='3', alpha=0.05, b0=0.02, w0=0.04),
                  "The sum of w0 and b0 must not be greater than alpha.")
     
     expect_error(LORD(0.1, alpha=0.05, w0=0.06),
@@ -49,7 +49,7 @@ test_that("Errors for edge cases", {
 })
 
 test_that("LORD gives same results when N = 1", {
-    expect_equal(LORD(test.df1), LORD(test.df1, version=3))
+    expect_equal(LORD(test.df1), LORD(test.df1, version='3'))
 })
 
 test_that("Correct rejections for sample data", {

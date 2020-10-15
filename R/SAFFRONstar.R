@@ -57,7 +57,7 @@
 #'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
 #' @param version Takes values 'async', 'dep' or 'batch'. This specifies the
-#'   version of LORDstar to use.
+#'   version of SAFFRONstar to use.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
 #'

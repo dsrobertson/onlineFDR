@@ -48,7 +48,7 @@
 #' proposed by Javanmard and Montanari (2018), equation 31.
 #'
 #' @param version Takes values 'async', 'dep' or 'batch'. This 
-#' specifies the version of LORDstar to use.
+#' specifies the version of LONDstar to use.
 #'
 #' @param decision.times A vector of decision times for the hypothesis tests,
 #' this is required for \code{version='async'}.

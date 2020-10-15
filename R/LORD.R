@@ -154,7 +154,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
     
     if(version %in% c(1,2)){
         stop("LORD 1 and LORD 2 have been superceded by LORD++, please use version '++' instead.")
-    } else if(!(version %in% c('++',3,'discard','dep'))){
+    } else if(!(version %in% c('++','3','discard','dep'))){
         stop("version must be '++', 3, 'discard' or 'dep'.")
     }
     
@@ -164,7 +164,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
         stop("w0 must be non-negative.")
     }
     
-    if(version %in% c(3,'dep')){
+    if(version %in% c('3','dep')){
         if(missing(b0)){
             b0 = alpha - w0
         } else if(b0 <= 0){
@@ -201,7 +201,10 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
         version <- 1
     } else if(version == 'discard'){
         version <- 2
-    } else if(version == 'dep'){
+    } else if(version == '3'){
+        version <- 3
+    } 
+    else if(version == 'dep'){
         version <- 4
     }
 
