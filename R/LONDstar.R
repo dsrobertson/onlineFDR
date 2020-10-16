@@ -9,7 +9,7 @@
 #'
 #' Zrnic et al. (2018) present explicit three versions of LONDstar:
 #'
-#' 1) \code{version='async'} is for an asynchoronous testing
+#' 1) \code{version='async'} is for an asynchronous testing
 #' process, consisting of tests that start and finish at (potentially) random 
 #' times. The discretised finish times of the test correspond to the decision 
 #' times. These decision times are given as the input \code{decision.times}

@@ -18,7 +18,7 @@
 #' Javanmard and Montanari (2018) presented versions of LORD which differ in the
 #' way the adjusted significance thresholds \eqn{\alpha_i} are calculated. The
 #' significance thresholds for LORD 2 are based on all previous discovery times.
-#' LORD 2 has been superceded by the algorithm given in Ramdas et al. (2017),
+#' LORD 2 has been superseded by the algorithm given in Ramdas et al. (2017),
 #' LORD++ (\code{version='++'}), which is the default version. The significance
 #' thresholds for LORD 3 (\code{version=3}) are based on the time of the last
 #' discovery as well as the 'wealth' accumulated at that time. Finally, Tian and
@@ -27,7 +27,7 @@
 #' adaptively `discarding' these p-values.
 #'
 #' LORD depends on constants \eqn{w_0} and (for versions 3 and 'dep') \eqn{b_0},
-#' where \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the
+#' where \eqn{0 \le w_0 \le \alpha} represents the initial `wealth' of the
 #' procedure and \eqn{b_0 > 0} represents the `payout' for rejecting a
 #' hypothesis. We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
 #' Version 'discard' also depends on a constant \eqn{\tau}, where \eqn{\tau \in
@@ -144,7 +144,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }
-    
+
     checkPval(pval)
     N <- length(pval)
     
@@ -154,7 +154,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
     
     if(version %in% c(1,2)){
         stop("LORD 1 and LORD 2 have been superceded by LORD++, please use version '++' instead.")
-    } else if(!(version %in% c('++','3','discard','dep'))){
+    } else if(!(version %in% c('++', 3, '3','discard','dep'))){
         stop("version must be '++', 3, 'discard' or 'dep'.")
     }
     
@@ -164,7 +164,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
         stop("w0 must be non-negative.")
     }
     
-    if(version %in% c('3','dep')){
+    if(version %in% c(3, '3','dep')){
         if(missing(b0)){
             b0 = alpha - w0
         } else if(b0 <= 0){
@@ -201,7 +201,7 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
         version <- 1
     } else if(version == 'discard'){
         version <- 2
-    } else if(version == '3'){
+    } else if(version == '3' || version == 3){
         version <- 3
     } 
     else if(version == 'dep'){
