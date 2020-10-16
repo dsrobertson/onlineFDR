@@ -107,7 +107,7 @@
 
 LONDstar <- function(pval, alpha=0.05, version, betai,
                 decision.times, lags, batch.sizes) {
-
+    
     if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
