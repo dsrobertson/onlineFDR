@@ -1,4 +1,4 @@
-#' LORDstar: Asychronous online mFDR control based on recent discovery
+#' LORDstar: Asynchronous online mFDR control based on recent discovery
 #'
 #' Implements LORD algorithms for asynchronous online testing, as presented by
 #' Zrnic et al. (2018).
@@ -9,7 +9,7 @@
 #'
 #' Zrnic et al. (2018) present explicit three versions of LORDstar:
 #'
-#' 1) \code{version='async'} is for an asynchoronous testing process, consisting
+#' 1) \code{version='async'} is for an asynchronous testing process, consisting
 #' of tests that start and finish at (potentially) random times. The discretised
 #' finish times of the test correspond to the decision times. These decision
 #' times are given as the input \code{decision.times} for this version of the

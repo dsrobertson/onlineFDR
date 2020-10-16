@@ -3,7 +3,7 @@
 #' Implements the ADDIS algorithm for online FWER control, where ADDIS stands
 #' for an ADaptive algorithm that DIScards conservative nulls, as presented by
 #' Tian and Ramdas (2019b). The procedure compensates for the power loss of
-#' Alpha-spending, by including both adapativity in the fraction of null
+#' Alpha-spending, by including both adaptivity in the fraction of null
 #' hypotheses and the conservativeness of nulls.
 #'
 #' The function takes as its input a vector of p-values. Given an overall

@@ -16,7 +16,7 @@
 #' Given an overall significance level \eqn{\alpha}, we choose a sequence of
 #' non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #' Alpha-investing depends on a constant \eqn{w_0}, which satisfies \eqn{0 \le
-#' w_0 \le \alpha} and represents the intial `wealth' of the procedure.
+#' w_0 \le \alpha} and represents the initial `wealth' of the procedure.
 #' 
 #' Further details of the Alpha-investing procedure and its modification can be
 #' found in Foster and Stine (2008) and Ramdas et al. (2018).

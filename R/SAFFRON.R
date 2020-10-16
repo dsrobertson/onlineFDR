@@ -18,7 +18,7 @@
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
 #' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0}
-#' satisfies \eqn{0 \le w_0 \le \alpha} and represents the intial `wealth' of
+#' satisfies \eqn{0 \le w_0 \le \alpha} and represents the initial `wealth' of
 #' the procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
 #' `candidate' hypothesis. A `candidate' refers to p-values smaller than
 #' \eqn{\lambda}, since SAFFRON will never reject a p-value larger than
