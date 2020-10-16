@@ -2,14 +2,32 @@ Package: onlineFDR
 Version: 1.5.0
 Date: 2019-10-25
 Title: Online error control
-Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
-                    email = "david.robertson@mrc-bsu.cam.ac.uk"),
-             person("Aaditya", "Ramdas", role = "aut"),
-             person("Adel", "Javanmard", role = "aut"),
-             person("Andrea", "Montanari", role = "aut"),
-             person("Jinjin", "Tian", role = "aut"),
-             person("Tijana", "Zrnic", role = "aut"),
-             person(c("Natasha", "A."), "Karp", role = "aut"))
+Authors@R: 
+    c(person(given = c("David", "S."),
+             family = "Robertson",
+             role = c("aut", "cre"),
+             email = "david.robertson@mrc-bsu.cam.ac.uk"),
+      person(given = "Aaditya",
+             family = "Ramdas",
+             role = "aut"),
+      person(given = "Adel",
+             family = "Javanmard",
+             role = "aut"),
+      person(given = "Andrea",
+             family = "Montanari",
+             role = "aut"),
+      person(given = "Jinjin",
+             family = "Tian",
+             role = "aut"),
+      person(given = "Tijana",
+             family = "Zrnic",
+             role = "aut"),
+      person(given = c("Natasha", "A."),
+             family = "Karp",
+             role = "aut"),
+      person(given = "Lathan",
+             family = "Liou",
+             role = "aut"))
 Description: This package allows users to control the false discovery rate (FDR)
   or familywise error rate (FWER) for online hypothesis testing, where
   hypotheses arrive sequentially in a stream. In this framework, a null
@@ -26,3 +44,5 @@ Suggests: knitr,
     covr
 VignetteBuilder: knitr
 biocViews: MultipleComparison, Software, StatisticalMethod
+LinkingTo: 
+    Rcpp
