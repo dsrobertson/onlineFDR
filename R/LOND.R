@@ -105,8 +105,8 @@
 #' @export
 
 LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
-                date.format="%Y-%m-%d", original=TRUE) {
-
+                 date.format="%Y-%m-%d", original=TRUE) {
+    
     if(is.data.frame(d)){
         d <- checkdf(d, random, date.format)
         pval <- d$pval
@@ -118,32 +118,32 @@ LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
     
     checkPval(pval)
     N <- length(pval)
-
+    
     if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
-
+    
     if(missing(betai)){
         betai <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
-                (seq_len(N)*exp(sqrt(log(seq_len(N)))))
+            (seq_len(N)*exp(sqrt(log(seq_len(N)))))
     } else if (any(betai<0)){
         stop("All elements of betai must be non-negative.")
     } else if(sum(betai)>alpha){
         stop("The sum of the elements of betai must not be greater than alpha.")
     }
-
+    
     if(dep) {
         den <- cumsum(1 / seq_len(N))
         betai <- betai / den
     }
-
+    
     ### Start LOND procedure
-
+    
     R <- alphai <- rep(0, N)
     
     alphai[1] <- betai[1]
     R[1] <- pval[1] <= alphai[1]
-
+    
     if(N == 1){
         d.out <- data.frame(d, alphai, R)
         return(d.out)
@@ -166,7 +166,7 @@ LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
             D <- D + R[i]
         }
     }
-
+    
     d.out <- data.frame(d, alphai, R)
     return(d.out)
 }

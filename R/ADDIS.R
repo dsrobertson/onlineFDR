@@ -7,8 +7,10 @@
 #' null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
 #' SAFFRON).
 #'
-#' The function takes as its input a vector of p-values. Given an overall
-#' significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
+#' The function takes as its input either a vector of p-values, or a dataframe
+#' with three columns: an identifier (`id'),
+#' p-value (`pval'), and decision times, if the asynchronous version is specified (see below). 
+#' Given an overall significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
 #' \eqn{\lambda} and \eqn{\tau}. \eqn{w_0} represents the intial `wealth' of the
 #' procedure and satisfies \eqn{0 \le w_0 \le \tau \lambda \alpha}. \eqn{\tau
 #' \in (0,1)} represents the threshold for a hypothesis to be selected for
@@ -27,7 +29,10 @@
 #' Further details of the ADDIS algorithms can be found in Tian and Ramdas
 #' (2019).
 #'
-#' @param pval A vector of p-values.
+#' @param d Either a vector of p-values, or a dataframe with three columns: an
+#'   identifier (`id'), 
+#'   p-value (`pval'), and decision times 
+#'   (`decision.times').
 #'
 #' @param alpha Overall significance level of the procedure, the default is
 #'   0.05.
@@ -46,10 +51,6 @@
 #'
 #' @param async Logical. If \code{TRUE} runs the version for an asynchronous
 #'   testing process
-#'
-#' @param decision.times A vector of decision times for the hypothesis tests,
-#'   this is required if \code{async=TRUE}.
-#'
 #'
 #' @return \item{d.out}{A dataframe with the original p-values \code{pval}, the
 #'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
@@ -72,20 +73,31 @@
 #'
 #'
 #' @examples
-#' pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0154, 0.04723,
-#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
-#'         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
+#' sample.df <- data.frame(
+#' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+#'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+#'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+#' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+#'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+#' decision.times = seq_len(15) + 1)
 #'
-#' ADDIS(pval)
-#'
-#' ADDIS(pval, async=TRUE, decision.times=seq_len(15)) # Same as above
+#' ADDIS(sample.df, async = TRUE) # Asynchronous
 #' 
-#' ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
+#' ADDIS(sample.df, async = FALSE) # Synchronous
 #'
 #' @export
 
-ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
-                  async=FALSE, decision.times) {
+ADDIS <- function(d, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
+                  async=FALSE) {
+    
+    if(is.data.frame(d)){
+        pval <- d$pval
+    } else if(is.vector(d)){
+        pval <- d
+    } else {
+        stop("d must either be a dataframe or a vector of p-values.")
+    }
     
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
@@ -151,7 +163,7 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
                 
                 Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i-1]
                 Cj.plus.sum <- sum(gammai[S[i-1]-
-                                          kappai.star[Kseq]-Cj.plus[Kseq]+1])
+                                              kappai.star[Kseq]-Cj.plus[Kseq]+1])
                 
                 Cj.plus[K] <- sum(cand[seq(from=kappai[K]+1,
                                            to=max(i-1, kappai+1))])
@@ -191,11 +203,11 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
         }
     } else {
         
-        if(length(decision.times) != length(pval)){
+        if(any(is.na(d$decision.times))){
             stop("Please provide a decision time for each p-value.")
         }
         
-        E <- decision.times
+        E <- d$decision.times
         
         alphai <- R <- S <- cand <- Cj.plus <- rep(0, N)
         
@@ -228,13 +240,13 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
                 Kseq <- seq_len(K)
                 
                 Cj.plus[Kseq] <- sapply(Kseq,
-                                 function(x){sum(cand[seq(from=kappai[x]+1,
-                                              to=max(i-1,kappai[x]+1))] &
-                                             E[seq(from=kappai[x]+1,
-                                               to=max(i-1,kappai[x]+1))]<=i-1)})
+                                        function(x){sum(cand[seq(from=kappai[x]+1,
+                                                                 to=max(i-1,kappai[x]+1))] &
+                                                            E[seq(from=kappai[x]+1,
+                                                                  to=max(i-1,kappai[x]+1))]<=i-1)})
                 
                 Cj.plus.sum <- sum(gammai[S[i-1]-
-                                          kappai.star[Kseq]-Cj.plus[Kseq]+1]) -
+                                              kappai.star[Kseq]-Cj.plus[Kseq]+1]) -
                     gammai[S[i-1]-kappai.star[1]-Cj.plus[1]+1]
                 
                 alphai.tilde <- w0*gammai[S[i-1]-cand.sum+1] + 
@@ -269,7 +281,7 @@ ADDIS <- function(pval, alpha=0.05, gammai, w0, lambda=0.5, tau=0.5,
             }
         }
     }
-
+    
     d.out <- data.frame(pval, alphai, R)
     
     return(d.out)

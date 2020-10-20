@@ -6,8 +6,10 @@
 #' Alpha-spending, by including both adaptivity in the fraction of null
 #' hypotheses and the conservativeness of nulls.
 #'
-#' The function takes as its input a vector of p-values. Given an overall
-#' significance level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and
+#' The function takes as its input either a vector of p-values, or a dataframe
+#' with three columns: an identifier (`id'),
+#' p-value (`pval'), and lags, if the dependent version is specified (see below). 
+#' Given an overall significance level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and
 #' \eqn{\tau}, where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1)} represents
 #' the threshold for a hypothesis to be selected for testing: p-values greater
 #' than \eqn{\tau} are implicitly `discarded' by the procedure, while
@@ -30,7 +32,10 @@
 #' Further details of the ADDIS-spending algorithms can be found in Tian and
 #' Ramdas (2019b).
 #'
-#' @param pval A vector of p-values.
+#' @param d Either a vector of p-values, or a dataframe with three columns: an
+#'   identifier (`id'), 
+#'   p-value (`pval'), and lags 
+#'   (`lags').
 #'
 #' @param alpha Overall significance level of the procedure, the default is
 #'   0.05.
@@ -46,9 +51,6 @@
 #'
 #' @param dep Logical. If \code{TRUE} runs the version for locally dependent 
 #' p-values
-#'
-#' @param lags A vector of lags or the hypothesis tests, this is required if
-#'   \code{dep=TRUE}.
 #'
 #'
 #' @return \item{d.out}{A dataframe with the original p-values \code{pval}, the
@@ -68,20 +70,31 @@
 #'
 #'
 #' @examples
-#' pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0154, 0.04723,
-#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
-#'         0.69274, 0.30443, 0.00136, 0.82342, 5.4757e-04)
-#'
-#' ADDIS_spending(pval)
-#'
-#' ADDIS_spending(pval, dep=TRUE, lags=rep(0,15)) # Same as above
+#' sample.df <- data.frame(
+#' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+#'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+#'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+#' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+#'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+#' lags = rep(1,15))
 #' 
-#' ADDIS_spending(pval, dep=TRUE, lags=rep(1,15)) # Locally dependent
+#' ADDIS_spending(test.df) #independent
+#' 
+#' ADDIS_spending(test.df, dep = TRUE) #Locally dependent
 #'
 #' @export
 
-ADDIS_spending <- function(pval, alpha=0.05, gammai, lambda=0.25, tau=0.5,
-                  dep=FALSE, lags) {
+ADDIS_spending <- function(d, alpha=0.05, gammai, lambda=0.25, tau=0.5,
+                  dep=FALSE) {
+    
+    if(is.data.frame(d)){
+        pval <- d$pval
+    } else if(is.vector(d)){
+        pval <- d
+    } else {
+        stop("d must either be a dataframe or a vector of p-values.")
+    }
     
     if(alpha<=0 || alpha>1){
         stop("alpha must be between 0 and 1.")
@@ -137,9 +150,9 @@ ADDIS_spending <- function(pval, alpha=0.05, gammai, lambda=0.25, tau=0.5,
         }
     } else {
         
-        checkStarVersion(N, 'dep', lags=lags)
+        checkStarVersion(d, N, 'dep')
         
-        L <- lags
+        L <- d$lags
         
         R <- select <- cand <- alphai <- rep(0, N)
         
