@@ -124,7 +124,7 @@ this case, the p-values are treated as being ordered sequentially with no
 batches.
 
 ### What happens to the input data
-The function orders the information by date.  If there are multiple p-values
+The function orders the information by date. If there are multiple p-values
 with the same date (i.e. the same batch), the order of the p-values within each
 batch is randomised by default. Generally, users should randomise unless they have an *a priori* 
 belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected
