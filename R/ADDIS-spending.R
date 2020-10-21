@@ -79,9 +79,9 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
 #' lags = rep(1,15))
 #' 
-#' ADDIS_spending(test.df) #independent
+#' ADDIS_spending(sample.df) #independent
 #' 
-#' ADDIS_spending(test.df, dep = TRUE) #Locally dependent
+#' ADDIS_spending(sample.df, dep = TRUE) #Locally dependent
 #'
 #' @export
 
