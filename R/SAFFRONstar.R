@@ -150,6 +150,16 @@ SAFFRONstar <- function(d, alpha=0.05, version, gammai, w0, lambda=0.5, batch.si
   if(is.data.frame(d)){
     checkSTARdf(d, version)
     pval <- d$pval
+    if(version == "async") {
+      if(!("decision.times" %in% colnames(d))) {
+        stop("d needs to have a column of decision.times")
+      }
+    }
+    else if(version == "dep") {
+      if(!("lags" %in% colnames(d))) {
+        stop("d needs to have a column of lags")
+      }
+    }
   } else if(is.vector(d)){
     pval <- d
   } else {
