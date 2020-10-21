@@ -124,181 +124,176 @@
 #'
 #' @export
 
-LORDstar <- function(d, alpha=0.05, version, gammai, w0, batch.sizes) {
-
-    if(is.data.frame(d)){
+LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
+    
+    if (is.data.frame(d)) {
         checkSTARdf(d, version)
         pval <- d$pval
-        if(version == "async") {
-            if(!("decision.times" %in% colnames(d))) {
+        if (version == "async") {
+            if (!("decision.times" %in% colnames(d))) {
                 stop("d needs to have a column of decision.times")
             }
-        }
-        else if(version == "dep") {
-            if(!("lags" %in% colnames(d))) {
+        } else if (version == "dep") {
+            if (!("lags" %in% colnames(d))) {
                 stop("d needs to have a column of lags")
             }
         }
-    } else if(is.vector(d)){
+    } else if (is.vector(d)) {
         pval <- d
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    if(alpha<=0 || alpha>1){
+    if (alpha <= 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
     
-    if(missing(w0)){
+    if (missing(w0)) {
         w0 = alpha/10
-    } else if(w0 < 0){
+    } else if (w0 < 0) {
         stop("w0 must be non-negative.")
-    } else if(w0 > alpha) {
+    } else if (w0 > alpha) {
         stop("w0 must not be greater than alpha.")
     }
     
     checkPval(pval)
     N <- length(pval)
     
-    if(missing(gammai)){
-        gammai <- 0.07720838*log(pmax(seq_len(N),2)) /
-            (seq_len(N)*exp(sqrt(log(seq_len(N)))))
-    } else if (any(gammai<0)){
+    if (missing(gammai)) {
+        gammai <- 0.07720838 * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
+    } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if(sum(gammai)>1){
+    } else if (sum(gammai) > 1) {
         stop("The sum of the elements of gammai must be <= 1.")
     }
     
     version <- checkStarVersion(d, N, version, batch.sizes)
     
-    switch(version,
-           ## async = 1
-           {
-               E <- d$decision.times
-               alphai <- R <- rep(0, N)
-               
-               alphai[1] <- gammai[1]*w0
-               R[1] <- pval[1] <= alphai[1]
-               
-               if(N == 1){
-                   d.out <- data.frame(pval, alphai, R)
-                   return(d.out)
-               }
-               
-               for (i in (seq_len(N-1)+1)){
-                   
-                   r <- which(R[seq_len(i-1)] == 1 & E[seq_len(i-1)] <= i-1)
-                   
-                   if(length(r) <= 1){
-                       alphai[i] <- gammai[i]*w0 + (alpha - w0)*sum(gammai[i-r])
-                       R[i] <- pval[i] <= alphai[i]
-                       
-                   } else {
-                       alphai[i] <- gammai[i]*w0 + (alpha - w0)*gammai[i-r[1]] +
-                           alpha*sum(gammai[i-r[-1]])
-                       
-                       R[i] = pval[i] <= alphai[i]
-                   }
-               }
-               
-               d.out <- data.frame(pval, alphai, R)
-           },
-           ## dep = 2
-           {
-               L <- d$lags
-               
-               alphai <- R <- rep(0, N)
-               
-               alphai[1] <- gammai[1]*w0
-               R[1] <- pval[1] <= alphai[1]
-               
-               if(N == 1){
-                   d.out <- data.frame(pval, lag=L, alphai, R)
-                   return(d.out)
-               }
-               
-               for (i in (seq_len(N-1)+1)){
-                   
-                   r <- which(R[seq_len(i-1)] == 1 & seq_len(i-1) <= i-1-L[i])
-                   
-                   if(length(r) <= 1){
-                       alphai[i] <- gammai[i]*w0 + (alpha - w0)*sum(gammai[i-r])
-                       R[i] <- pval[i] <= alphai[i]
-                       
-                   } else {
-                       alphai[i] <- gammai[i]*w0 + (alpha - w0)*gammai[i-r[1]] +
-                           alpha*sum(gammai[i - r[-1]])
-                       
-                       R[i] = pval[i] <= alphai[i]
-                   }
-               }
-               
-               d.out <- data.frame(pval, lag=L, alphai, R)
-           },
-           ## mini-batch = 3
-           {
-               n <- batch.sizes
-               ncum <- cumsum(n)
-               
-               alphai <- matrix(NA, nrow = length(n), ncol = max(n))
-               R <- matrix(0, nrow = length(n), ncol = max(n))
-               
-               for (i in seq_len(n[1])){ 
-                   alphai[1,i] <- gammai[i]*w0
-                   R[1,i] <- pval[i] <= alphai[1,i]
-               }
-               
-               if(length(n) == 1){
-                   d.out <- data.frame(pval, batch = rep(1, n),
-                                       alphai = as.vector(t(alphai)),
-                                       R = as.vector(t(R)))
-                   
-                   return(d.out)
-                   
-               } else {
-                   
-                   r <- integer(0)
-                   
-                   for (b in seq_len(length(n)-1)+1){
-                       
-                       Rcum <- cumsum(rowSums(R))
-                       
-                       for (i in seq_len(n[b])){ 
-                           
-                           if(max(Rcum)>0){
-                               r <- sapply(seq_len(max(Rcum)),
-                                           function(x){match(1,Rcum>=x)})
-                           }
-                           
-                           if(length(r) <= 1){
-                               alphai[b,i] <- gammai[ncum[b-1]+i]*w0 + 
-                                   (alpha - w0)*sum(gammai[ncum[b-1] + i - ncum[r]])
-                               
-                               R[b,i] <- pval[ncum[b-1]+i] <= alphai[b,i]
-                               
-                           } else {
-                               alphai[b,i] <- gammai[ncum[b-1]+i]*w0 +
-                                   (alpha - w0)*gammai[ncum[b-1]+ i - ncum[r[1]]] +
-                                   alpha*sum(gammai[ncum[b-1] + i - ncum[r[-1]]])
-                               
-                               R[b,i] = pval[ncum[b-1]+i] <= alphai[b,i]
-                           }
-                       }
-                   }
-                   
-                   alphai <- as.vector(t(alphai))
-                   R <- as.vector(t(R))
-                   x <- !(is.na(alphai))
-                   
-                   if(length(x) > 0){
-                       alphai <- alphai[x]
-                       R <- R[x]
-                   }
-                   
-                   batch.no <- rep(seq_len(length(n)),n)
-                   d.out <- data.frame(pval, batch=batch.no, alphai, R)
-               }
-           })
+    switch(version, {
+        ## async = 1
+        E <- d$decision.times
+        alphai <- R <- rep(0, N)
+        
+        alphai[1] <- gammai[1] * w0
+        R[1] <- pval[1] <= alphai[1]
+        
+        if (N == 1) {
+            d.out <- data.frame(pval, alphai, R)
+            return(d.out)
+        }
+        
+        for (i in (seq_len(N - 1) + 1)) {
+            
+            r <- which(R[seq_len(i - 1)] == 1 & E[seq_len(i - 1)] <= i - 1)
+            
+            if (length(r) <= 1) {
+                alphai[i] <- gammai[i] * w0 + (alpha - w0) * sum(gammai[i - r])
+                R[i] <- pval[i] <= alphai[i]
+                
+            } else {
+                alphai[i] <- gammai[i] * w0 + (alpha - w0) * gammai[i - r[1]] + alpha * 
+                  sum(gammai[i - r[-1]])
+                
+                R[i] = pval[i] <= alphai[i]
+            }
+        }
+        
+        d.out <- data.frame(pval, alphai, R)
+    }, {
+        ## dep = 2
+        L <- d$lags
+        
+        alphai <- R <- rep(0, N)
+        
+        alphai[1] <- gammai[1] * w0
+        R[1] <- pval[1] <= alphai[1]
+        
+        if (N == 1) {
+            d.out <- data.frame(pval, lag = L, alphai, R)
+            return(d.out)
+        }
+        
+        for (i in (seq_len(N - 1) + 1)) {
+            
+            r <- which(R[seq_len(i - 1)] == 1 & seq_len(i - 1) <= i - 1 - L[i])
+            
+            if (length(r) <= 1) {
+                alphai[i] <- gammai[i] * w0 + (alpha - w0) * sum(gammai[i - r])
+                R[i] <- pval[i] <= alphai[i]
+                
+            } else {
+                alphai[i] <- gammai[i] * w0 + (alpha - w0) * gammai[i - r[1]] + alpha * 
+                  sum(gammai[i - r[-1]])
+                
+                R[i] = pval[i] <= alphai[i]
+            }
+        }
+        
+        d.out <- data.frame(pval, lag = L, alphai, R)
+    }, {
+        ## mini-batch = 3
+        n <- batch.sizes
+        ncum <- cumsum(n)
+        
+        alphai <- matrix(NA, nrow = length(n), ncol = max(n))
+        R <- matrix(0, nrow = length(n), ncol = max(n))
+        
+        for (i in seq_len(n[1])) {
+            alphai[1, i] <- gammai[i] * w0
+            R[1, i] <- pval[i] <= alphai[1, i]
+        }
+        
+        if (length(n) == 1) {
+            d.out <- data.frame(pval, batch = rep(1, n), alphai = as.vector(t(alphai)), 
+                R = as.vector(t(R)))
+            
+            return(d.out)
+            
+        } else {
+            
+            r <- integer(0)
+            
+            for (b in seq_len(length(n) - 1) + 1) {
+                
+                Rcum <- cumsum(rowSums(R))
+                
+                for (i in seq_len(n[b])) {
+                  
+                  if (max(Rcum) > 0) {
+                    r <- sapply(seq_len(max(Rcum)), function(x) {
+                      match(1, Rcum >= x)
+                    })
+                  }
+                  
+                  if (length(r) <= 1) {
+                    alphai[b, i] <- gammai[ncum[b - 1] + i] * w0 + (alpha - w0) * 
+                      sum(gammai[ncum[b - 1] + i - ncum[r]])
+                    
+                    R[b, i] <- pval[ncum[b - 1] + i] <= alphai[b, i]
+                    
+                  } else {
+                    alphai[b, i] <- gammai[ncum[b - 1] + i] * w0 + (alpha - w0) * 
+                      gammai[ncum[b - 1] + i - ncum[r[1]]] + alpha * sum(gammai[ncum[b - 
+                      1] + i - ncum[r[-1]]])
+                    
+                    R[b, i] = pval[ncum[b - 1] + i] <= alphai[b, i]
+                  }
+                }
+            }
+            
+            alphai <- as.vector(t(alphai))
+            R <- as.vector(t(R))
+            x <- !(is.na(alphai))
+            
+            if (length(x) > 0) {
+                alphai <- alphai[x]
+                R <- R[x]
+            }
+            
+            batch.no <- rep(seq_len(length(n)), n)
+            d.out <- data.frame(pval, batch = batch.no, alphai, R)
+        }
+    })
     
     return(d.out)
 }

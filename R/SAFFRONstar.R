@@ -144,303 +144,289 @@
 #'
 #' @export
 
-SAFFRONstar <- function(d, alpha=0.05, version, gammai, w0, lambda=0.5, batch.sizes,
-                        discard=FALSE, tau.discard=0.5) {
-  
-  if(is.data.frame(d)){
-    checkSTARdf(d, version)
-    pval <- d$pval
-    if(version == "async") {
-      if(!("decision.times" %in% colnames(d))) {
-        stop("d needs to have a column of decision.times")
-      }
+SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batch.sizes, 
+    discard = FALSE, tau.discard = 0.5) {
+    
+    if (is.data.frame(d)) {
+        checkSTARdf(d, version)
+        pval <- d$pval
+        if (version == "async") {
+            if (!("decision.times" %in% colnames(d))) {
+                stop("d needs to have a column of decision.times")
+            }
+        } else if (version == "dep") {
+            if (!("lags" %in% colnames(d))) {
+                stop("d needs to have a column of lags")
+            }
+        }
+    } else if (is.vector(d)) {
+        pval <- d
+    } else {
+        stop("d must either be a dataframe or a vector of p-values.")
     }
-    else if(version == "dep") {
-      if(!("lags" %in% colnames(d))) {
-        stop("d needs to have a column of lags")
-      }
+    
+    if (alpha <= 0 || alpha > 1) {
+        stop("alpha must be between 0 and 1.")
     }
-  } else if(is.vector(d)){
-    pval <- d
-  } else {
-    stop("d must either be a dataframe or a vector of p-values.")
-  }
-  
-  if(alpha<=0 || alpha>1){
-    stop("alpha must be between 0 and 1.")
-  }
-  
-  if(lambda<=0 || lambda>1){
-    stop("lambda must be between 0 and 1.")
-  }
-  
-  if(version == 'async' && discard){
-    return(ADDIS(d, alpha, gammai, w0, lambda, tau.discard,
-                 async=TRUE))
-    }  
-  
+    
+    if (lambda <= 0 || lambda > 1) {
+        stop("lambda must be between 0 and 1.")
+    }
+    
+    if (version == "async" && discard) {
+        return(ADDIS(d, alpha, gammai, w0, lambda, tau.discard, async = TRUE))
+    }
+    
     checkPval(pval)
     N <- length(pval)
-
-    if(missing(gammai)){
-      gammai <- 0.4374901658/(seq_len(N+1)^(1.6))
-    } else if (any(gammai<0)){
-      stop("All elements of gammai must be non-negative.")
-    } else if(sum(gammai)>1){
-      stop("The sum of the elements of gammai must not be greater than 1.")
+    
+    if (missing(gammai)) {
+        gammai <- 0.4374901658/(seq_len(N + 1)^(1.6))
+    } else if (any(gammai < 0)) {
+        stop("All elements of gammai must be non-negative.")
+    } else if (sum(gammai) > 1) {
+        stop("The sum of the elements of gammai must not be greater than 1.")
     }
-
-    if(missing(w0)){
-        w0 = (1-lambda)*alpha/2
-    } else if(w0 < 0){
+    
+    if (missing(w0)) {
+        w0 = (1 - lambda) * alpha/2
+    } else if (w0 < 0) {
         stop("w0 must be non-negative.")
-    } else if(w0 >= (1-lambda)*alpha){
+    } else if (w0 >= (1 - lambda) * alpha) {
         stop("w0 must be less than (1-lambda)*alpha")
     }
     
     version <- checkStarVersion(d, N, version, batch.sizes)
     
-    switch(version,
+    switch(version, {
         ## async = 1
-        {
         E <- d$decision.times
         
         alphai <- R <- cand <- Cj.plus <- rep(0, N)
         
-        alphai[1] <- min(gammai[1]*w0, lambda)
+        alphai[1] <- min(gammai[1] * w0, lambda)
         R[1] <- (pval[1] <= alphai[1])
-               
-        if(N == 1){
+        
+        if (N == 1) {
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }
-               
-        for (i in (seq_len(N-1)+1)){
-          
-          r <- which(R[seq_len(i-1)] == 1 & E[seq_len(i-1)] <= i-1)
-          K <- length(r)
-          
-          cand[i-1] <- (pval[i-1] <= lambda)
-          cand.sum <- sum(cand[seq_len(i-1)] & E[seq_len(i-1)] <= i-1)
-          
-          if (K > 1) {
+        
+        for (i in (seq_len(N - 1) + 1)) {
             
-            Kseq <- seq_len(K)
+            r <- which(R[seq_len(i - 1)] == 1 & E[seq_len(i - 1)] <= i - 1)
+            K <- length(r)
             
-            Cj.plus[Kseq] <- sapply(Kseq,
-                function(x){sum(cand[seq(from=r[x]+1,
-                                         to=max(i-1,r[x]+1))] &
-                                E[seq(from=r[x]+1,
-                                      to=max(i-1,r[x]+1))] <= i-1)})
+            cand[i - 1] <- (pval[i - 1] <= lambda)
+            cand.sum <- sum(cand[seq_len(i - 1)] & E[seq_len(i - 1)] <= i - 1)
             
-            Cj.plus.sum <- sum(gammai[i-r[Kseq]-Cj.plus[Kseq]]) -
-              gammai[i-r[1]-Cj.plus[1]]
-            
-            alphai.tilde <- w0*gammai[i - cand.sum] + 
-              ((1-lambda)*alpha - w0)*gammai[i-r[1]-Cj.plus[1]] + 
-              (1-lambda)*alpha*Cj.plus.sum
-            
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
-            
-          } else if(K == 1){
-            
-            Cj.plus[1] <- sum(cand[seq(from=r+1,
-                                       to=max(i-1,r+1))] &
-                                E[seq(from=r+1,
-                                      to=max(i-1,r+1))] <= i-1)
-            
-            alphai.tilde <- w0*gammai[i - cand.sum] + 
-              ((1-lambda)*alpha - w0)*gammai[i-r-Cj.plus[1]]
-            
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
-            
-          } else {
-            
-            alphai.tilde <- w0*gammai[i-cand.sum]
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- pval[i] <= alphai[i]
-          }
+            if (K > 1) {
+                
+                Kseq <- seq_len(K)
+                
+                Cj.plus[Kseq] <- sapply(Kseq, function(x) {
+                  sum(cand[seq(from = r[x] + 1, to = max(i - 1, r[x] + 1))] & E[seq(from = r[x] + 
+                    1, to = max(i - 1, r[x] + 1))] <= i - 1)
+                })
+                
+                Cj.plus.sum <- sum(gammai[i - r[Kseq] - Cj.plus[Kseq]]) - gammai[i - 
+                  r[1] - Cj.plus[1]]
+                
+                alphai.tilde <- w0 * gammai[i - cand.sum] + ((1 - lambda) * alpha - 
+                  w0) * gammai[i - r[1] - Cj.plus[1]] + (1 - lambda) * alpha * Cj.plus.sum
+                
+                alphai[i] <- min(lambda, alphai.tilde)
+                R[i] <- pval[i] <= alphai[i]
+                
+            } else if (K == 1) {
+                
+                Cj.plus[1] <- sum(cand[seq(from = r + 1, to = max(i - 1, r + 1))] & 
+                  E[seq(from = r + 1, to = max(i - 1, r + 1))] <= i - 1)
+                
+                alphai.tilde <- w0 * gammai[i - cand.sum] + ((1 - lambda) * alpha - 
+                  w0) * gammai[i - r - Cj.plus[1]]
+                
+                alphai[i] <- min(lambda, alphai.tilde)
+                R[i] <- pval[i] <= alphai[i]
+                
+            } else {
+                
+                alphai.tilde <- w0 * gammai[i - cand.sum]
+                alphai[i] <- min(lambda, alphai.tilde)
+                R[i] <- pval[i] <= alphai[i]
+            }
         }
-               
+        
         d.out <- data.frame(pval, alphai, R)
-        },
+    }, {
         ## dep = 2
-        {
         L <- d$lags
-               
+        
         alphai <- R <- cand <- Cj.plus <- rep(0, N)
         cand.sum <- 0
         
-        alphai[1] <- min(w0*gammai[1], lambda)
+        alphai[1] <- min(w0 * gammai[1], lambda)
         R[1] <- (pval[1] <= alphai[1])
         
-        if(N == 1){
+        if (N == 1) {
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }
-               
-        for (i in (seq_len(N-1)+1)){
+        
+        for (i in (seq_len(N - 1) + 1)) {
             
-            r <- which(R[seq_len(i-1)] == 1 & seq_len(i-1) <= i-1-L[i])
+            r <- which(R[seq_len(i - 1)] == 1 & seq_len(i - 1) <= i - 1 - L[i])
             K <- length(r)
             
-            cand[i-1] <- (pval[i-1] <= lambda)
+            cand[i - 1] <- (pval[i - 1] <= lambda)
             
-            if(i-1-L[i] > 0){
-                cand.sum <- sum(cand[seq_len(i-1-L[i])])
+            if (i - 1 - L[i] > 0) {
+                cand.sum <- sum(cand[seq_len(i - 1 - L[i])])
             }
             
             if (K > 1) {
-              
-              Kseq <- seq_len(K)
-              
-              Cj.plus[Kseq] <- sapply(Kseq,
-                    function(x){sum(cand[seq(from=r[x]+1,
-                                             to=max(i-1,r[x]+1))] &
-                                         seq(from=r[x]+1,
-                                             to=max(i-1,r[x]+1)) <= i-1-L[i])})
-              
-              Cj.plus.sum <- sum(gammai[i-r[Kseq]-Cj.plus[Kseq]]) -
-                              gammai[i-r[1]-Cj.plus[1]]
-              
-              alphai.tilde <- w0*gammai[i-cand.sum] + 
-                  ((1-lambda)*alpha - w0)*gammai[i-r[1]-Cj.plus[1]] + 
-                  (1-lambda)*alpha*Cj.plus.sum
-              
-              alphai[i] <- min(lambda, alphai.tilde)
-              R[i] <- pval[i] <= alphai[i]
-              
-            } else if(K == 1){
-              
-              Cj.plus[1] <- sum(cand[seq(from=r+1,
-                                         to=max(i-1,r+1))] &
-                                     seq(from=r+1,
-                                         to=max(i-1,r+1)) <= i-L[i]-1)
-
-              
-              alphai.tilde <- w0*gammai[i - cand.sum] + 
-                ((1-lambda)*alpha - w0)*gammai[i-r-Cj.plus[1]]
-              
-              alphai[i] <- min(lambda, alphai.tilde)
-              R[i] <- pval[i] <= alphai[i]
-              
+                
+                Kseq <- seq_len(K)
+                
+                Cj.plus[Kseq] <- sapply(Kseq, function(x) {
+                  sum(cand[seq(from = r[x] + 1, to = max(i - 1, r[x] + 1))] & seq(from = r[x] + 
+                    1, to = max(i - 1, r[x] + 1)) <= i - 1 - L[i])
+                })
+                
+                Cj.plus.sum <- sum(gammai[i - r[Kseq] - Cj.plus[Kseq]]) - gammai[i - 
+                  r[1] - Cj.plus[1]]
+                
+                alphai.tilde <- w0 * gammai[i - cand.sum] + ((1 - lambda) * alpha - 
+                  w0) * gammai[i - r[1] - Cj.plus[1]] + (1 - lambda) * alpha * Cj.plus.sum
+                
+                alphai[i] <- min(lambda, alphai.tilde)
+                R[i] <- pval[i] <= alphai[i]
+                
+            } else if (K == 1) {
+                
+                Cj.plus[1] <- sum(cand[seq(from = r + 1, to = max(i - 1, r + 1))] & 
+                  seq(from = r + 1, to = max(i - 1, r + 1)) <= i - L[i] - 1)
+                
+                
+                alphai.tilde <- w0 * gammai[i - cand.sum] + ((1 - lambda) * alpha - 
+                  w0) * gammai[i - r - Cj.plus[1]]
+                
+                alphai[i] <- min(lambda, alphai.tilde)
+                R[i] <- pval[i] <= alphai[i]
+                
             } else {
-              
-              alphai.tilde <- w0*gammai[i - cand.sum]
-              alphai[i] <- min(lambda, alphai.tilde)
-              R[i] <- pval[i] <= alphai[i]
+                
+                alphai.tilde <- w0 * gammai[i - cand.sum]
+                alphai[i] <- min(lambda, alphai.tilde)
+                R[i] <- pval[i] <= alphai[i]
             }
         }
-               
-        d.out <- data.frame(pval, lag=L, alphai, R)
-        },
+        
+        d.out <- data.frame(pval, lag = L, alphai, R)
+    }, {
         ## mini-batch = 3
-        {
         n <- batch.sizes
         ncum <- cumsum(n)
-               
+        
         alphai <- matrix(NA, nrow = length(n), ncol = max(n))
         R <- matrix(0, nrow = length(n), ncol = max(n))
         cand <- rep(0, N)
         Cj <- rep(0, length(n))
-               
-        for (i in seq_len(n[1])){ 
+        
+        for (i in seq_len(n[1])) {
             cand[i] <- (pval[i] <= lambda)
-            alphai[1,i] <- gammai[i]*w0
-            R[1,i] <- (pval[i] <= alphai[1,i])
+            alphai[1, i] <- gammai[i] * w0
+            R[1, i] <- (pval[i] <= alphai[1, i])
         }
-               
-        if(length(n) == 1){
-            d.out <- data.frame(pval, batch = rep(1, n),
-                                alphai = as.vector(t(alphai)),
-                                R = as.vector(t(R)))
         
-        return(d.out)
-                   
+        if (length(n) == 1) {
+            d.out <- data.frame(pval, batch = rep(1, n), alphai = as.vector(t(alphai)), 
+                R = as.vector(t(R)))
+            
+            return(d.out)
+            
         } else {
-          
-          Cj.plus <- rep(0, length(n))
-          r <- integer(0)
-          
-          Cj[1] <- sum(cand)
-          
-          for (b in seq_len(length(n)-1)+1){
             
-            Rcum <- cumsum(rowSums(R))
-            cand.sum <- sum(Cj)
+            Cj.plus <- rep(0, length(n))
+            r <- integer(0)
             
-            for (i in seq_len(n[b])){ 
-              
-              cand[ncum[b-1]+i] <- (pval[ncum[b-1]+i] <= lambda)
-              
-              if(max(Rcum)>0){
-                r <- sapply(seq_len(max(Rcum)),
-                            function(x){match(1,Rcum>=x)})
-              }
-              
-              K <- length(r)
-              
-              if(K > 1){
+            Cj[1] <- sum(cand)
+            
+            for (b in seq_len(length(n) - 1) + 1) {
                 
-                Kseq <- seq_len(K)
+                Rcum <- cumsum(rowSums(R))
+                cand.sum <- sum(Cj)
                 
-                Cj.plus[Kseq] <- sapply(Kseq,
-                                        function(x){(b-1>=r[x]+1)*(
-                                          sum(Cj[seq(from=r[x]+1,
-                                                     to=b-1)]))})
+                for (i in seq_len(n[b])) {
+                  
+                  cand[ncum[b - 1] + i] <- (pval[ncum[b - 1] + i] <= lambda)
+                  
+                  if (max(Rcum) > 0) {
+                    r <- sapply(seq_len(max(Rcum)), function(x) {
+                      match(1, Rcum >= x)
+                    })
+                  }
+                  
+                  K <- length(r)
+                  
+                  if (K > 1) {
+                    
+                    Kseq <- seq_len(K)
+                    
+                    Cj.plus[Kseq] <- sapply(Kseq, function(x) {
+                      (b - 1 >= r[x] + 1) * (sum(Cj[seq(from = r[x] + 1, to = b - 
+                        1)]))
+                    })
+                    
+                    Cj.plus.sum <- sum(gammai[ncum[b - 1] + i - ncum[r[Kseq]] - Cj.plus[Kseq]]) - 
+                      gammai[ncum[b - 1] + i - ncum[r[1]] - Cj.plus[1]]
+                    
+                    
+                    alphai.tilde <- w0 * gammai[ncum[b - 1] + i - cand.sum] + ((1 - 
+                      lambda) * alpha - w0) * gammai[ncum[b - 1] + i - ncum[r[1]] - 
+                      Cj.plus[1]] + (1 - lambda) * alpha * Cj.plus.sum
+                    
+                    alphai[b, i] <- min(lambda, alphai.tilde)
+                    
+                    R[b, i] <- (pval[ncum[b - 1] + i] <= alphai[b, i])
+                    
+                  } else if (K == 1) {
+                    
+                    Cj.plus[1] <- (b - 1 >= r + 1) * sum(Cj[seq(from = r + 1, to = b - 
+                      1)])
+                    
+                    alphai.tilde <- w0 * gammai[ncum[b - 1] + i - cand.sum] + ((1 - 
+                      lambda) * alpha - w0) * gammai[ncum[b - 1] + i - ncum[r] - 
+                      Cj.plus[1]]
+                    
+                    alphai[b, i] <- min(lambda, alphai.tilde)
+                    
+                    R[b, i] <- (pval[ncum[b - 1] + i] <= alphai[b, i])
+                    
+                  } else {
+                    
+                    alphai.tilde <- w0 * gammai[ncum[b - 1] + i - cand.sum]
+                    alphai[i] <- min(lambda, alphai.tilde)
+                    R[i] <- (pval[i] <= alphai[i])
+                  }
+                }
                 
-                Cj.plus.sum <- sum(gammai[ncum[b-1]+i-ncum[r[Kseq]]-
-                                            Cj.plus[Kseq]]) -
-                  gammai[ncum[b-1]+i-ncum[r[1]]-Cj.plus[1]]
-                
-                
-                alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum] +
-                  ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
-                                                   ncum[r[1]]-Cj.plus[1]] +
-                  (1-lambda)*alpha*Cj.plus.sum
-                
-                alphai[b,i] <- min(lambda, alphai.tilde)
-                
-                R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
-                
-              } else if(K == 1){
-                
-                Cj.plus[1] <- (b-1>=r+1)*sum(Cj[seq(from=r+1, to=b-1)])
-        
-                alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum] + 
-                  ((1-lambda)*alpha - w0)*gammai[ncum[b-1]+i-
-                                                   ncum[r]-Cj.plus[1]]
-                
-                alphai[b,i] <- min(lambda, alphai.tilde)
-                
-                R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
-                
-              } else {
-                
-                alphai.tilde <- w0*gammai[ncum[b-1]+i-cand.sum]
-                alphai[i] <- min(lambda, alphai.tilde)
-                R[i] <- (pval[i] <= alphai[i])
-              }
+                Cj[b] <- sum(cand[seq(from = ncum[b - 1] + 1, to = ncum[b])])
             }
             
-            Cj[b] <- sum(cand[seq(from=ncum[b-1]+1,to=ncum[b])])
-          }
-          
-          alphai <- as.vector(t(alphai))
-          R <- as.vector(t(R))
-          x <- !(is.na(alphai))
-          
-          if(length(x) > 0){
-            alphai <- alphai[x]
-            R <- R[x]
-          }
-          
-          batch.no <- rep(seq_len(length(n)),n)
-          d.out <- data.frame(pval, batch=batch.no, alphai, R)
+            alphai <- as.vector(t(alphai))
+            R <- as.vector(t(R))
+            x <- !(is.na(alphai))
+            
+            if (length(x) > 0) {
+                alphai <- alphai[x]
+                R <- R[x]
+            }
+            
+            batch.no <- rep(seq_len(length(n)), n)
+            d.out <- data.frame(pval, batch = batch.no, alphai, R)
         }
-        })
-
+    })
+    
     return(d.out)
 }

@@ -85,53 +85,52 @@
 #'
 #' @export
 
-ADDIS_spending <- function(d, alpha=0.05, gammai, lambda=0.25, tau=0.5,
-                  dep=FALSE) {
+ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE) {
     
-    if(is.data.frame(d)){
+    if (is.data.frame(d)) {
         pval <- d$pval
-    } else if(is.vector(d)){
+    } else if (is.vector(d)) {
         pval <- d
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    if(alpha<=0 || alpha>1){
+    if (alpha <= 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
     
-    if(lambda<=0 || lambda>1){
+    if (lambda <= 0 || lambda > 1) {
         stop("lambda must be between 0 and 1.")
     }
     
-    if(tau<=0 || tau>1){
+    if (tau <= 0 || tau > 1) {
         stop("tau must be between 0 and 1.")
     }
     
-    if(lambda >= tau){
+    if (lambda >= tau) {
         stop("lambda must be less than tau.")
     }
     
     checkPval(pval)
     N <- length(pval)
     
-    if(missing(gammai)){
+    if (missing(gammai)) {
         gammai <- 0.4374901658/(seq_len(N)^(1.6))
-    } else if (any(gammai<0)){
+    } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if(sum(gammai)>1){
+    } else if (sum(gammai) > 1) {
         stop("The sum of the elements of gammai must not be greater than 1.")
     }
     
     
-    if(!(dep)){
+    if (!(dep)) {
         
         alphai <- R <- rep(0, N)
         
-        alphai[1] <- alpha*(tau - lambda)*gammai[1]
+        alphai[1] <- alpha * (tau - lambda) * gammai[1]
         R[1] <- (pval[1] <= alphai[1])
         
-        if(N == 1){
+        if (N == 1) {
             d.out <- data.frame(pval, alphai, R)
             return(d.out)
         }
@@ -139,9 +138,9 @@ ADDIS_spending <- function(d, alpha=0.05, gammai, lambda=0.25, tau=0.5,
         select.sum <- (pval[1] <= tau)
         cand.sum <- (pval[1] <= lambda)
         
-        for (i in (seq_len(N-1)+1)){
+        for (i in (seq_len(N - 1) + 1)) {
             
-            alphai[i] <- alpha*(tau - lambda)*gammai[1 + select.sum - cand.sum]
+            alphai[i] <- alpha * (tau - lambda) * gammai[1 + select.sum - cand.sum]
             R[i] <- (pval[i] <= alphai[i])
             
             select.sum <- select.sum + (pval[i] <= tau)
@@ -150,37 +149,38 @@ ADDIS_spending <- function(d, alpha=0.05, gammai, lambda=0.25, tau=0.5,
         }
     } else {
         
-        checkStarVersion(d, N, 'dep')
+        checkStarVersion(d, N, "dep")
         
         L <- d$lags
         
         R <- select <- cand <- alphai <- rep(0, N)
         
-        alphai[1] <- alpha*(tau - lambda)*gammai[1]
+        alphai[1] <- alpha * (tau - lambda) * gammai[1]
         R[1] <- pval[1] <= alphai[1]
         
-        if(N == 1){
-            d.out <- data.frame(pval, lag=lags, alphai, R)
+        if (N == 1) {
+            d.out <- data.frame(pval, lag = lags, alphai, R)
             return(d.out)
         }
         
         select[1] <- (pval[1] <= tau)
         cand[1] <- (pval[1] <= lambda)
         
-        for (i in (seq_len(N-1)+1)){
+        for (i in (seq_len(N - 1) + 1)) {
             
-            alphai[i] <- alpha*(tau - lambda)*
-                gammai[1 + min(L[i],i-1) + sum(select[seq_len(max(0,i-L[i]-1))])
-                      - sum(cand[seq_len(max(0,i-L[i]-1))])]
+            alphai[i] <- alpha * (tau - lambda) * gammai[1 + min(L[i], i - 1) + sum(select[seq_len(max(0, 
+                i - L[i] - 1))]) - sum(cand[seq_len(max(0, i - L[i] - 1))])]
             
             R[i] <- (pval[i] <= alphai[i])
             
             select[i] <- (pval[i] <= tau)
             cand[i] <- (pval[i] <= lambda)
-        }       
+        }
     }
-
+    
     d.out <- data.frame(pval, alphai, R)
     
     return(d.out)
 }
+TRUE
+TRUE
