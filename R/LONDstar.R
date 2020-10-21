@@ -3,9 +3,11 @@
 #' Implements the LOND algorithm for asynchronous online testing, as presented 
 #' by Zrnic et al. (2018).
 #'
-#' The function takes as its input a vector of p-values, as well as a vector
-#' describing the conflict sets for the hypotheses. This takes the form of a
-#' vector of decision times, lags or batch sizes (see below).
+#' The function takes as its input either a vector of p-values, or a dataframe
+#' with three columns: an identifier (`id'),
+#' p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+#' This takes the form of a vector of decision times or lags. Batch sizes can be 
+#' specified as a separate argument (see below).
 #'
 #' Zrnic et al. (2018) present explicit three versions of LONDstar:
 #'
@@ -39,7 +41,11 @@
 #' Zrnic et al. (2018).
 #'
 #'
-#' @param pval A vector of p-values.
+#' @param d Either a vector of p-values, or a dataframe with three columns: an
+#'   identifier (`id'), 
+#'   p-value (`pval'), and either 
+#'   `decision.times', or
+#'   `lags', depending on which version you're using. See version for more details.
 #'
 #' @param alpha Overall significance level of the procedure, the default
 #' is 0.05.
@@ -48,17 +54,13 @@
 #' proposed by Javanmard and Montanari (2018), equation 31.
 #'
 #' @param version Takes values 'async', 'dep' or 'batch'. This 
-#' specifies the version of LONDstar to use.
-#'
-#' @param decision.times A vector of decision times for the hypothesis tests,
-#' this is required for \code{version='async'}.
-#' 
-#' @param lags A vector of lags or the hypothesis tests, this is required for
-#' \code{version='dep'}.
+#' specifies the version of LONDstar to use. \code{version='async'} requires a 
+#' column of decision times (`decision.times'). \code{version='dep'} requires a
+#' column of lags (`lags').
+#' \code{version='batch'} requires a vector of batch sizes (`batch.sizes').
 #' 
 #' @param batch.sizes A vector of batch sizes, this is required for
-#' \code{version='batch'}.
-#'
+#'   \code{version='batch'}.
 #'
 #' @return
 #' \item{d.out}{A dataframe with the original p-values \code{pval}, the
@@ -85,140 +87,161 @@
 #'
 #'
 #' @examples
-#' pval = c(2.90e-08, 0.06743, 3.51e-04, 5.74e-04, 0.04723,
-#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
-#'         0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
+#' sample.df <- data.frame(
+#' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+#'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+#'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+#' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+#'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+#' decision.times = seq_len(15) + 1)
 #'
-#' LONDstar(pval, version='async', decision.times=seq_len(15)) # Synchronous
+#' LONDstar(sample.df, version='async')
 #' 
-#' LONDstar(pval, version='async', decision.times=seq_len(15)+1) # Asynchronous
+#' sample.df2 <- data.frame(
+#' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+#'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+#'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+#' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+#'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+#' lags = rep(1,15))
 #' 
+#' LONDstar(sample.df2, version='dep')
 #' 
-#' LONDstar(pval, version='dep', lags=rep(0,15)) # Synchronous
-#' 
-#' LONDstar(pval, version='dep', lags=rep(1,15)) # Locally dependent
-#' 
-#' 
-#' LONDstar(pval, version='batch', batch.size=rep(1,15)) # Synchronous
-#' 
-#' LONDstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
+#' sample.df3 <- data.frame(
+#' #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+#'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+#'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+#' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+#'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+#'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
+#' LONDstar(sample.df3, version='batch', batch.sizes = c(4,6,5))
 #'
 #' @export
 
-LONDstar <- function(pval, alpha=0.05, version, betai,
-                decision.times, lags, batch.sizes) {
-
+LONDstar <- function(d, alpha=0.05, version, betai, batch.sizes) {
+    
+    if(is.data.frame(d)){
+        checkSTARdf(d, version)
+        pval <- d$pval
+    } else if(is.vector(d)){
+        pval <- d
+    } else {
+        stop("d must either be a dataframe or a vector of p-values.")
+    }
+    
     if(alpha<0 || alpha>1){
         stop("alpha must be between 0 and 1.")
     }
-
+    
     checkPval(pval)
     N <- length(pval)
-
+    
     if(missing(betai)){
         betai <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
-                (seq_len(N)*exp(sqrt(log(seq_len(N)))))
+            (seq_len(N)*exp(sqrt(log(seq_len(N)))))
     } else if (any(betai<0)){
         stop("All elements of betai must be non-negative.")
     } else if(sum(betai)>alpha){
         stop("The sum of the elements of betai must be <= alpha.")
     }
     
-    version <- checkStarVersion(N, version, decision.times, lags, batch.sizes)
+    version <- checkStarVersion(d, N, version, batch.sizes)
     
     switch(version,
-        ## async = 1
-        {
-        E <- decision.times
-        
-        R <- alphai <- rep(0, N)
-        
-        alphai[1] <- betai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if(N == 1){
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N-1)+1)){
-            D <- max(sum(R[seq_len(i-1)] == 1 & E[seq_len(i-1)] <= i-1), 1)
-            
-            alphai[i] <- betai[i]*D
-            R[i] <- (pval[i] <= alphai[i])
-        }       
-        
-        d.out <- data.frame(pval, alphai, R)
-        },
-        ## dep = 2
-        {
-        L <- lags
-        
-        R <- alphai <- rep(0, N)
-        
-        alphai[1] <- betai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if(N == 1){
-            d.out <- data.frame(pval, lag=lags, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N-1)+1)){
-            D <- max(sum(R[seq_len(i-1)] == 1 & seq_len(i-1) <= i-1-L[i]), 1)
-            
-            alphai[i] <- betai[i]*D
-            R[i] <- (pval[i] <= alphai[i])
-        }       
-        
-        d.out <- data.frame(pval, lag=lags, alphai, R)
-        },
-        ## mini-batch = 3
-        {
-        n <- batch.sizes
-        ncum <- cumsum(n)
-        
-        alphai <- matrix(NA, nrow = length(n), ncol = max(n))
-        R <- matrix(0, nrow = length(n), ncol = max(n))
-        
-        for (i in seq_len(n[1])){ 
-            alphai[1,i] <- betai[i]
-            R[1,i] <- (pval[i] <= alphai[1,i])
-        }
-        
-        if(length(n) == 1){
-            d.out <- data.frame(pval, batch = rep(1, n),
-                                alphai = as.vector(t(alphai)),
-                                R = as.vector(t(R)))
-             
-            return(d.out)
-            
-        } else {
-
-            for (b in seq_len(length(n)-1)+1){
+           ## async = 1
+           {
+               E <- d$decision.times
+               
+               R <- alphai <- rep(0, N)
+               
+               alphai[1] <- betai[1]
+               R[1] <- (pval[1] <= alphai[1])
+               
+               if(N == 1){
+                   d.out <- data.frame(pval, alphai, R)
+                   return(d.out)
+               }
+               
+               for (i in (seq_len(N-1)+1)){
+                   D <- max(sum(R[seq_len(i-1)] == 1 & E[seq_len(i-1)] <= i-1), 1)
+                   
+                   alphai[i] <- betai[i]*D
+                   R[i] <- (pval[i] <= alphai[i])
+               }       
+               
+               d.out <- data.frame(pval, alphai, R)
+           },
+           ## dep = 2
+           {
+               L <- d$lags
+               
+               R <- alphai <- rep(0, N)
+               
+               alphai[1] <- betai[1]
+               R[1] <- (pval[1] <= alphai[1])
+               
+               if(N == 1){
+                   d.out <- data.frame(pval, lag=L, alphai, R)
+                   return(d.out)
+               }
+               
+               for (i in (seq_len(N-1)+1)){
+                   D <- max(sum(R[seq_len(i-1)] == 1 & seq_len(i-1) <= i-1-L[i]), 1)
+                   
+                   alphai[i] <- betai[i]*D
+                   R[i] <- (pval[i] <= alphai[i])
+               }       
+               
+               d.out <- data.frame(pval, lag=L, alphai, R)
+           },
+           ## mini-batch = 3
+           {
+               n <- batch.sizes
+               ncum <- cumsum(n)
+               
+               alphai <- matrix(NA, nrow = length(n), ncol = max(n))
+               R <- matrix(0, nrow = length(n), ncol = max(n))
+               
+               for (i in seq_len(n[1])){ 
+                   alphai[1,i] <- betai[i]
+                   R[1,i] <- (pval[i] <= alphai[1,i])
+               }
+               
+               if(length(n) == 1){
+                   d.out <- data.frame(pval, batch = rep(1, n),
+                                       alphai = as.vector(t(alphai)),
+                                       R = as.vector(t(R)))
+                   
+                   return(d.out)
+                   
+               } else {
+                   
+                   for (b in seq_len(length(n)-1)+1){
                        
-                D <- max(sum(R[seq_len(b-1),]), 1)
+                       D <- max(sum(R[seq_len(b-1),]), 1)
                        
-                for (i in seq_len(n[b])){ 
-            
-                    alphai[b,i] <- betai[ncum[b-1]+i]*D
-                    R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
-                }
-            }
-        }
-            
-        alphai <- as.vector(t(alphai))
-        R <- as.vector(t(R))
-        x <- !(is.na(alphai))
-           
-        if(length(x) > 0){
-            alphai <- alphai[x]
-            R <- R[x]
-        }
-           
-        batch.no <- rep(seq_len(length(n)),n)
-        d.out <- data.frame(pval, batch=batch.no, alphai, R)
-        })
-
+                       for (i in seq_len(n[b])){ 
+                           
+                           alphai[b,i] <- betai[ncum[b-1]+i]*D
+                           R[b,i] <- (pval[ncum[b-1]+i] <= alphai[b,i])
+                       }
+                   }
+               }
+               
+               alphai <- as.vector(t(alphai))
+               R <- as.vector(t(R))
+               x <- !(is.na(alphai))
+               
+               if(length(x) > 0){
+                   alphai <- alphai[x]
+                   R <- R[x]
+               }
+               
+               batch.no <- rep(seq_len(length(n)),n)
+               d.out <- data.frame(pval, batch=batch.no, alphai, R)
+           })
+    
     return(d.out)
 }
