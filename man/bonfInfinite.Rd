@@ -4,8 +4,13 @@
 \alias{bonfInfinite}
 \title{Online FDR control based on a Bonferroni-like test}
 \usage{
-bonfInfinite(d, alpha = 0.05, alphai, random = TRUE,
-  date.format = "\%Y-\%m-\%d")
+bonfInfinite(
+  d,
+  alpha = 0.05,
+  alphai,
+  random = TRUE,
+  date.format = "\%Y-\%m-\%d"
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an

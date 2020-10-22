@@ -1,6 +1,15 @@
 # A NEWS File to document package updates
 
 
+CHANGES IN VERSION 1.8.0
+-----------------------
+MODIFICATIONS:
+
+    * harmonised inputs to algorithms
+    * added unit tests
+    * updated authors
+    
+
 CHANGES IN VERSION 1.4.0
 -----------------------
 MODIFICATIONS:

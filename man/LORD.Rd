@@ -4,8 +4,17 @@
 \alias{LORD}
 \title{LORD: Online FDR control based on recent discovery}
 \usage{
-LORD(d, alpha = 0.05, gammai, version = "++", w0, b0,
-  tau.discard = 0.5, random = TRUE, date.format = "\%Y-\%m-\%d")
+LORD(
+  d,
+  alpha = 0.05,
+  gammai,
+  version = "++",
+  w0,
+  b0,
+  tau.discard = 0.5,
+  random = TRUE,
+  date.format = "\%Y-\%m-\%d"
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
@@ -67,7 +76,7 @@ sum to 1.
 Javanmard and Montanari (2018) presented versions of LORD which differ in the
 way the adjusted significance thresholds \eqn{\alpha_i} are calculated. The
 significance thresholds for LORD 2 are based on all previous discovery times.
-LORD 2 has been superceded by the algorithm given in Ramdas et al. (2017),
+LORD 2 has been superseded by the algorithm given in Ramdas et al. (2017),
 LORD++ (\code{version='++'}), which is the default version. The significance
 thresholds for LORD 3 (\code{version=3}) are based on the time of the last
 discovery as well as the 'wealth' accumulated at that time. Finally, Tian and
@@ -76,7 +85,7 @@ improve the power of the procedure in the presence of conservative nulls by
 adaptively `discarding' these p-values.
 
 LORD depends on constants \eqn{w_0} and (for versions 3 and 'dep') \eqn{b_0},
-where \eqn{0 \le w_0 \le \alpha} represents the intial `wealth' of the
+where \eqn{0 \le w_0 \le \alpha} represents the initial `wealth' of the
 procedure and \eqn{b_0 > 0} represents the `payout' for rejecting a
 hypothesis. We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
 Version 'discard' also depends on a constant \eqn{\tau}, where \eqn{\tau \in
@@ -101,11 +110,11 @@ sample.df <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-date = as.Date(c(rep("2014-12-01",3),
-                rep("2015-09-21",5),
-                rep("2016-05-19",2),
-                "2016-11-12",
-                rep("2017-03-27",4))),
+date = as.Date(c(rep('2014-12-01',3),
+                rep('2015-09-21',5),
+                rep('2016-05-19',2),
+                '2016-11-12',
+                rep('2017-03-27',4))),
 pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))

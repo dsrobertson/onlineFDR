@@ -1,9 +1,10 @@
 Package: onlineFDR
-Version: 1.5.0
-Date: 2019-10-25
+Version: 1.7.1
+Date: 2020-10-22
 Title: Online error control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),
+             person("Lathan", "Liou", role = "aut"),
              person("Aaditya", "Ramdas", role = "aut"),
              person("Adel", "Javanmard", role = "aut"),
              person("Andrea", "Montanari", role = "aut"),
@@ -17,7 +18,7 @@ Description: This package allows users to control the false discovery rate (FDR)
   p-values and the number of hypotheses to be tested are unknown.
 URL: https://dsrobertson.github.io/onlineFDR/index.html
 License: GPL-3
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Encoding: UTF-8
 Imports: stats
 Suggests: knitr,

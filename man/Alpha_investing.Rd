@@ -4,8 +4,14 @@
 \alias{Alpha_investing}
 \title{Alpha-investing for online FDR control}
 \usage{
-Alpha_investing(d, alpha = 0.05, gammai, w0, random = TRUE,
-  date.format = "\%Y-\%m-\%d")
+Alpha_investing(
+  d,
+  alpha = 0.05,
+  gammai,
+  w0,
+  random = TRUE,
+  date.format = "\%Y-\%m-\%d"
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
@@ -54,7 +60,7 @@ The Alpha-investing procedure provably controls FDR for independent p-values.
 Given an overall significance level \eqn{\alpha}, we choose a sequence of
 non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 Alpha-investing depends on a constant \eqn{w_0}, which satisfies \eqn{0 \le
-w_0 \le \alpha} and represents the intial `wealth' of the procedure.
+w_0 \le \alpha} and represents the initial `wealth' of the procedure.
 
 Further details of the Alpha-investing procedure and its modification can be
 found in Foster and Stine (2008) and Ramdas et al. (2018).
@@ -64,11 +70,11 @@ sample.df <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-date = as.Date(c(rep("2014-12-01",3),
-               rep("2015-09-21",5),
-                rep("2016-05-19",2),
-                "2016-11-12",
-               rep("2017-03-27",4))),
+date = as.Date(c(rep('2014-12-01',3),
+               rep('2015-09-21',5),
+                rep('2016-05-19',2),
+                '2016-11-12',
+               rep('2017-03-27',4))),
 pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))

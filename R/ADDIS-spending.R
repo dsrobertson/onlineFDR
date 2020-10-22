@@ -159,7 +159,7 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
         R[1] <- pval[1] <= alphai[1]
         
         if (N == 1) {
-            d.out <- data.frame(pval, lag = lags, alphai, R)
+            d.out <- data.frame(pval, lag = L, alphai, R)
             return(d.out)
         }
         
