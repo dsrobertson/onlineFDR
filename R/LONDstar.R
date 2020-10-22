@@ -127,6 +127,12 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
         pval <- d$pval
     } else if (is.vector(d)) {
         pval <- d
+        if(version == "async") {
+            stop("d needs to be a dataframe with a column of decision.times")
+        }
+        else if(version == "dep") {
+            stop("d needs to be a dataframe with a column of lags")
+        }
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }

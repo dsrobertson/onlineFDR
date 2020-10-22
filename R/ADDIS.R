@@ -99,6 +99,9 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = 
         }
     } else if (is.vector(d)) {
         pval <- d
+        if (async) {
+            stop("d needs to be a dataframe with a column of decision.times")
+        }
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }

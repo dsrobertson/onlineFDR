@@ -129,17 +129,14 @@ LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
     if (is.data.frame(d)) {
         checkSTARdf(d, version)
         pval <- d$pval
-        if (version == "async") {
-            if (!("decision.times" %in% colnames(d))) {
-                stop("d needs to have a column of decision.times")
-            }
-        } else if (version == "dep") {
-            if (!("lags" %in% colnames(d))) {
-                stop("d needs to have a column of lags")
-            }
-        }
     } else if (is.vector(d)) {
         pval <- d
+        if(version == "async") {
+            stop("d needs to be a dataframe with a column of decision.times")
+        }
+        else if(version == "dep") {
+            stop("d needs to be a dataframe with a column of lags")
+        }
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }
