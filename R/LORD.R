@@ -113,11 +113,11 @@
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
 #'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-#' date = as.Date(c(rep("2014-12-01",3),
-#'                 rep("2015-09-21",5),
-#'                 rep("2016-05-19",2),
-#'                 "2016-11-12",
-#'                 rep("2017-03-27",4))),
+#' date = as.Date(c(rep('2014-12-01',3),
+#'                 rep('2015-09-21',5),
+#'                 rep('2016-05-19',2),
+#'                 '2016-11-12',
+#'                 rep('2017-03-27',4))),
 #' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
@@ -133,117 +133,114 @@
 #'
 #' @export
 
-LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
-                random=TRUE, date.format="%Y-%m-%d") {
-
-    if(is.data.frame(d)){
+LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 0.5, 
+    random = TRUE, date.format = "%Y-%m-%d") {
+    
+    if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
-    } else if(is.vector(d)){
+    } else if (is.vector(d)) {
         pval <- d
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }
-
+    
     checkPval(pval)
     N <- length(pval)
     
-    if(alpha<=0 || alpha>1){
+    if (alpha <= 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
     
-    if(version %in% c(1,2)){
+    if (version %in% c(1, 2)) {
         stop("LORD 1 and LORD 2 have been superceded by LORD++, please use version '++' instead.")
-    } else if(!(version %in% c('++', 3, '3','discard','dep'))){
+    } else if (!(version %in% c("++", 3, "3", "discard", "dep"))) {
         stop("version must be '++', 3, 'discard' or 'dep'.")
     }
     
-    if(missing(w0)){
+    if (missing(w0)) {
         w0 = alpha/10
-    } else if(w0 < 0){
+    } else if (w0 < 0) {
         stop("w0 must be non-negative.")
     }
     
-    if(version %in% c(3, '3','dep')){
-        if(missing(b0)){
+    if (version %in% c(3, "3", "dep")) {
+        if (missing(b0)) {
             b0 = alpha - w0
-        } else if(b0 <= 0){
+        } else if (b0 <= 0) {
             stop("b0 must be positive.")
-        } else if(w0+b0 > alpha & !(isTRUE(all.equal(w0+b0, alpha)))){
+        } else if (w0 + b0 > alpha & !(isTRUE(all.equal(w0 + b0, alpha)))) {
             stop("The sum of w0 and b0 must not be greater than alpha.")
         }
     } else {
-        if(w0 > alpha) {
+        if (w0 > alpha) {
             stop("w0 must not be greater than alpha.")
         }
     }
     
-    if(version != 'dep'){
-        if(missing(gammai)){
-            gammai <- 0.07720838*log(pmax(seq_len(N+1),2)) /
-                (seq_len(N+1)*exp(sqrt(log(seq_len(N+1)))))
-        } else if (any(gammai<0)){
+    if (version != "dep") {
+        if (missing(gammai)) {
+            gammai <- 0.07720838 * log(pmax(seq_len(N + 1), 2))/(seq_len(N + 1) * 
+                exp(sqrt(log(seq_len(N + 1)))))
+        } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if(sum(gammai)>1){
+        } else if (sum(gammai) > 1) {
             stop("The sum of the elements of gammai must be <= 1.")
         }
     } else {
-        if(missing(gammai)){
-            gammai <- 0.139307*alpha/(b0*seq_len(N)*(log(pmax(seq_len(N),2)))^3)
-        } else if (any(gammai<0)){
+        if (missing(gammai)) {
+            gammai <- 0.139307 * alpha/(b0 * seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
+        } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if(sum(gammai)>alpha/b0){
+        } else if (sum(gammai) > alpha/b0) {
             stop("The sum of the elements of gammai must be <= alpha/b0.")
         }
     }
-
-    if(version == '++'){
+    
+    if (version == "++") {
         version <- 1
-    } else if(version == 'discard'){
+    } else if (version == "discard") {
         version <- 2
-    } else if(version == '3' || version == 3){
+    } else if (version == "3" || version == 3) {
         version <- 3
-    } 
-    else if(version == 'dep'){
+    } else if (version == "dep") {
         version <- 4
     }
-
+    
     alphai <- rep(0, N)
-
-    switch(version,
+    
+    switch(version, {
         ## '++'
-        {
         R <- rep(0, N)
-        alphai[1] <- gammai[1]*w0
+        alphai[1] <- gammai[1] * w0
         R[1] <- (pval[1] <= alphai[1])
         
-        if(N == 1){
+        if (N == 1) {
             d.out <- data.frame(d, alphai, R)
             return(d.out)
         }
+        
+        for (i in (seq_len(N - 1) + 1)) {
+            tau <- which(R[seq_len(i - 1)] == 1)
             
-        for (i in (seq_len(N-1)+1)){
-            tau <- which(R[seq_len(i-1)] == 1)
-                   
-            if(sum(R) <= 1){
-                alphai[i] <- w0*gammai[i] + (alpha - w0)*sum(gammai[i-tau])
+            if (sum(R) <= 1) {
+                alphai[i] <- w0 * gammai[i] + (alpha - w0) * sum(gammai[i - tau])
                 R[i] <- pval[i] <= alphai[i]
-                       
+                
             } else {
-                alphai[i] <- w0*gammai[i] + (alpha - w0)*gammai[i-tau[1]] +
-                alpha*sum(gammai[i - tau[-1]])
-
+                alphai[i] <- w0 * gammai[i] + (alpha - w0) * gammai[i - tau[1]] + 
+                  alpha * sum(gammai[i - tau[-1]])
+                
                 R[i] = pval[i] <= alphai[i]
             }
         }
-        },
+    }, {
         ## 'discard'
-        {
-        R <- rep(0,N)
-        alphai[1] <- gammai[1]*w0
+        R <- rep(0, N)
+        alphai[1] <- gammai[1] * w0
         R[1] <- (pval[1] <= alphai[1])
         
-        if(N == 1){
+        if (N == 1) {
             d.out <- data.frame(d, alphai, R)
             return(d.out)
         }
@@ -251,93 +248,92 @@ LORD <- function(d, alpha=0.05, gammai, version='++', w0, b0, tau.discard=0.5,
         selected <- (pval <= tau.discard)
         S <- cumsum(selected)
         
-        for (i in (seq_len(N-1)+1)){
+        for (i in (seq_len(N - 1) + 1)) {
             
-            kappai <- which(R[seq_len(i-1)] == 1)
+            kappai <- which(R[seq_len(i - 1)] == 1)
             K <- length(kappai)
             
-            if(K > 1){
+            if (K > 1) {
                 
-                kappai.star <- sapply(kappai,
-                                      function(x){sum(selected[seq_len(x)])})
+                kappai.star <- sapply(kappai, function(x) {
+                  sum(selected[seq_len(x)])
+                })
                 
-                alpha.tilde <- w0*gammai[S[i-1]+1] + 
-                    (tau.discard*alpha - w0)*gammai[S[i-1]-kappai.star[1]+1] + 
-                    tau.discard*alpha*sum(gammai[S[i-1]-kappai.star[-1]+1])
+                alpha.tilde <- w0 * gammai[S[i - 1] + 1] + (tau.discard * alpha - 
+                  w0) * gammai[S[i - 1] - kappai.star[1] + 1] + tau.discard * alpha * 
+                  sum(gammai[S[i - 1] - kappai.star[-1] + 1])
                 
                 alphai[i] <- min(tau.discard, alpha.tilde)
                 R[i] <- (pval[i] <= alphai[i])
                 
-            } else if (K==1) {
+            } else if (K == 1) {
                 
                 kappai.star <- sum(selected[seq_len(kappai)])
                 
-                alpha.tilde <- w0*gammai[S[i-1]+1] + 
-                    (tau.discard*alpha - w0)*gammai[S[i-1]-kappai.star+1]
+                alpha.tilde <- w0 * gammai[S[i - 1] + 1] + (tau.discard * alpha - 
+                  w0) * gammai[S[i - 1] - kappai.star + 1]
                 
                 alphai[i] <- min(tau.discard, alpha.tilde)
                 R[i] <- (pval[i] <= alphai[i])
                 
             } else {
-                alpha.tilde <- w0*gammai[S[i-1]+1]
+                alpha.tilde <- w0 * gammai[S[i - 1] + 1]
                 alphai[i] <- min(tau.discard, alpha.tilde)
                 R[i] <- (pval[i] <= alphai[i])
             }
         }
-        },
-        ##  3
-        {
-        R <- W <- rep(0, N+1)
+    }, {
+        ## 3
+        R <- W <- rep(0, N + 1)
         R[1] <- 1
         W[1] <- w0
         
-        alphai[1] <- phi <- gammai[1]*w0
+        alphai[1] <- phi <- gammai[1] * w0
         R[2] <- (pval[1] <= alphai[1])
-        W[2] <- w0 - phi + R[2]*b0
+        W[2] <- w0 - phi + R[2] * b0
         
-        if(N == 1){
+        if (N == 1) {
             R <- R[2]
             d.out <- data.frame(d, alphai, R)
             return(d.out)
         }
         
-        for (i in (seq_len(N-1)+1)){
+        for (i in (seq_len(N - 1) + 1)) {
             tau <- max(which(R[seq_len(i)] == 1))
-            alphai[i] <- phi <- gammai[i-tau+1]*W[tau]
+            alphai[i] <- phi <- gammai[i - tau + 1] * W[tau]
             
-            R[i+1] <- (pval[i] <= alphai[i])
-            W[i+1] <- W[i] - phi + R[i+1]*b0
+            R[i + 1] <- (pval[i] <= alphai[i])
+            W[i + 1] <- W[i] - phi + R[i + 1] * b0
         }
-        R <- R[(seq_len(N)+1)]
-        },
+        R <- R[(seq_len(N) + 1)]
+    }, {
         ## 'dep'
-        {
-        R <- W <- rep(0, N+1)
+        R <- W <- rep(0, N + 1)
         R[1] <- 1
         W[1] <- w0
-            
-        alphai[1] <- phi <- gammai[1]*w0
+        
+        alphai[1] <- phi <- gammai[1] * w0
         R[2] <- pval[1] <= alphai[1]
-        W[2] <- w0 - phi + R[2]*b0
-            
-        if(N == 1){
+        W[2] <- w0 - phi + R[2] * b0
+        
+        if (N == 1) {
             R <- R[2]
             d.out <- data.frame(d, alphai, R)
             return(d.out)
         }
-            
-        for (i in (seq_len(N-1)+1)){
+        
+        for (i in (seq_len(N - 1) + 1)) {
             tau <- max(which(R[seq_len(i)] == 1))
-            alphai[i] <- phi <- gammai[i]*W[tau]
-                
-            R[i+1] <- pval[i] <= alphai[i]
-            W[i+1] <- W[i] - phi + R[i+1]*b0
-        }
+            alphai[i] <- phi <- gammai[i] * W[tau]
             
-            R <- R[(seq_len(N)+1)]
-        })
+            R[i + 1] <- pval[i] <= alphai[i]
+            W[i + 1] <- W[i] - phi + R[i + 1] * b0
+        }
+        
+        R <- R[(seq_len(N) + 1)]
+    })
     
     d.out <- data.frame(d, alphai, R)
-
+    
     return(d.out)
 }

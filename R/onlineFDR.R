@@ -148,3 +148,5 @@
 #' @docType package
 #' @name onlineFDR-package
 NULL
+TRUE
+TRUE

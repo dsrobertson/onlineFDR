@@ -50,16 +50,15 @@
 #'
 #'@export
 
-bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
-                        date.format="%Y-%m-%d") { # nocov start
+bonfInfinite <- function(d, alpha = 0.05, alphai, random = TRUE, date.format = "%Y-%m-%d") {
+    # nocov start
     
-    .Deprecated("bonfInfinite", package="onlineFDR",
-                msg = "bonfInfinite is deprecated, please use Alpha_spending instead.")
-
-    if(is.data.frame(d)){
+    .Deprecated("bonfInfinite", package = "onlineFDR", msg = "bonfInfinite is deprecated, please use Alpha_spending instead.")
+    
+    if (is.data.frame(d)) {
         checkdf(d, random, date.format)
         pval <- d$pval
-    } else if(is.vector(d)){
+    } else if (is.vector(d)) {
         pval <- d
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
@@ -67,22 +66,23 @@ bonfInfinite <- function(d, alpha=0.05, alphai, random=TRUE,
     
     checkPval(pval)
     N <- length(pval)
-
-    if(alpha<0 || alpha>1){
+    
+    if (alpha < 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
-
-    if(missing(alphai)){
-        alphai <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
-                    ((seq_len(N))*exp(sqrt(log(seq_len(N)))))
-    } else if (any(alphai<0)){
+    
+    if (missing(alphai)) {
+        alphai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
+    } else if (any(alphai < 0)) {
         stop("All elements of alphai must be non-negative.")
-    } else if(sum(alphai)>alpha){
+    } else if (sum(alphai) > alpha) {
         stop("The sum of the elements of alphai must not be greater than alpha.")
     }
-
+    
     R <- as.numeric(pval <= alphai)
     d.out <- data.frame(d, alphai, R)
-
+    
     return(d.out)
-} # nocov end
+}  # nocov end
+TRUE
+TRUE
