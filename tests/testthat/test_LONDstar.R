@@ -68,3 +68,10 @@ test_that("Check that LOND is a special case of the LONDstar
                  LONDstar(test.pval, version='batch',
                           batch.sizes = rep(1,4))$alphai)              
 })
+
+test_that("LONDstar inputs are correct when given vector input", {
+    expect_error(LONDstar(test.pval, version="async"),
+                 "d needs to be a dataframe with a column of decision.times")
+    expect_error(LONDstar(test.pval, version="dep"),
+                 "d needs to be a dataframe with a column of lags")
+})

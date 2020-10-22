@@ -54,3 +54,10 @@ test_that("Check that ADDIS gives same results as SAFFRON and SAFFRONstar
               expect_equal(ADDIS(test.df3, async=TRUE)$alphai,
                            SAFFRONstar(test.df3, version='async', discard=TRUE)$alphai)
 })
+
+test_that("ADDIS inputs are correct with async=TRUE", {
+  expect_error(ADDIS(test.df, async=TRUE),
+               "d needs to have a column of decision.times")
+  expect_error(ADDIS(c(0.1, 0.1), async=TRUE),
+               "d needs to be a dataframe with a column of decision.times")
+})
