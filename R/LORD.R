@@ -207,7 +207,7 @@ myLORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard 
         version <- 4
     }
     
-    sourceCpp("R/lord.cpp")
+    sourceCpp("lord.cpp")
     lord_faster(pval, gammai, version)
 }
 

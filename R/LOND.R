@@ -138,7 +138,7 @@ myLOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.form
     
     ### Start LOND procedure
     
-    sourceCpp("R/lond.cpp")
+    sourceCpp("lond.cpp")
     lond_faster(pval, betai, original = original)
 }
 TRUE

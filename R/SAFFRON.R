@@ -158,7 +158,7 @@ mySAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, 
     }
     
     ### Start SAFFRON algorithm
-    sourceCpp("R/saffron.cpp")
+    sourceCpp("saffron.cpp")
     saffron_faster(pval)
 
 }

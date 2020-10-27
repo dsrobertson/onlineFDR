@@ -19,10 +19,13 @@ URL: https://dsrobertson.github.io/onlineFDR/index.html
 License: GPL-3
 RoxygenNote: 6.1.1
 Encoding: UTF-8
-Imports: stats
+Imports: stats,
+	Rcpp
 Suggests: knitr,
     rmarkdown,
     testthat,
     covr
+LinkingTo: Rcpp
+
 VignetteBuilder: knitr
 biocViews: MultipleComparison, Software, StatisticalMethod
