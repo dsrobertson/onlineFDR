@@ -219,7 +219,7 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
             d.out <- data.frame(d, alphai, R)
             return(d.out)
         }
-        
+
         for (i in (seq_len(N - 1) + 1)) {
             tau <- which(R[seq_len(i - 1)] == 1)
             
