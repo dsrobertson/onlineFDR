@@ -88,7 +88,7 @@
 #'
 #' @export
 
-ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE) {
+myADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE) {
     
     if (is.data.frame(d)) {
         pval <- d$pval
@@ -137,76 +137,9 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = 
         stop("w0 must be less than tau*lambda*alpha")
     }
     
+    sourceCpp("R/addis.cpp")
     if (!(async)) {
-        
-        alphai <- R <- cand <- Cj.plus <- rep(0, N)
-        
-        alphai[1] <- w0 * gammai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-        
-        cand.sum <- 0
-        selected <- (pval <= tau)
-        S <- cumsum(selected)
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            kappai <- which(R[seq_len(i - 1)] == 1)
-            K <- length(kappai)
-            
-            cand[i - 1] <- (pval[i - 1] <= tau * lambda)
-            cand.sum <- cand.sum + cand[i - 1]
-            
-            if (K > 1) {
-                
-                kappai.star <- sapply(kappai, function(x) {
-                  sum(selected[seq_len(x)])
-                })
-                
-                Kseq <- seq_len(K - 1)
-                
-                Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i - 1]
-                Cj.plus.sum <- sum(gammai[S[i - 1] - kappai.star[Kseq] - Cj.plus[Kseq] + 
-                  1])
-                
-                Cj.plus[K] <- sum(cand[seq(from = kappai[K] + 1, to = max(i - 1, 
-                  kappai + 1))])
-                
-                Cj.plus.sum <- Cj.plus.sum + gammai[S[i - 1] - kappai.star[K] - Cj.plus[K] + 
-                  1] - gammai[S[i - 1] - kappai.star[1] - Cj.plus[1] + 1]
-                
-                alphai.hat <- w0 * gammai[S[i - 1] - cand.sum + 1] + (tau * (1 - 
-                  lambda) * alpha - w0) * gammai[S[i - 1] - kappai.star[1] - Cj.plus[1] + 
-                  1] + tau * (1 - lambda) * alpha * Cj.plus.sum
-                
-                alphai[i] <- min(tau * lambda, alphai.hat)
-                R[i] <- (pval[i] <= alphai[i])
-                
-            } else if (K == 1) {
-                
-                kappai.star <- sum(selected[seq_len(kappai)])
-                
-                Cj.plus[1] <- sum(cand[seq(from = kappai + 1, to = max(i - 1, kappai + 
-                  1))])
-                
-                alphai.hat <- w0 * gammai[S[i - 1] - cand.sum + 1] + (tau * (1 - 
-                  lambda) * alpha - w0) * gammai[S[i - 1] - kappai.star - Cj.plus[1] + 
-                  1]
-                
-                alphai[i] <- min(tau * lambda, alphai.hat)
-                R[i] <- (pval[i] <= alphai[i])
-                
-            } else {
-                
-                alphai.hat <- w0 * gammai[S[i - 1] - cand.sum + 1]
-                alphai[i] <- min(tau * lambda, alphai.hat)
-                R[i] <- (pval[i] <= alphai[i])
-            }
-        }
+            addis_sync_faster(pval)
     } else {
         
         if (any(is.na(d$decision.times))) {
@@ -215,80 +148,8 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = 
         
         E <- d$decision.times
         
-        alphai <- R <- S <- cand <- Cj.plus <- rep(0, N)
-        
-        selected <- (pval <= tau)
-        
-        alphai[1] <- w0 * gammai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            kappai <- which(R[seq_len(i - 1)] == 1 & E[seq_len(i - 1)] <= i - 1)
-            K <- length(kappai)
-            
-            cand[i - 1] <- (pval[i - 1] <= tau * lambda)
-            cand.sum <- sum(cand[seq_len(i - 1)] & E[seq_len(i - 1)] <= i - 1)
-            
-            S[i - 1] <- sum((selected[seq_len(i - 1)] & E[seq_len(i - 1)] <= i - 
-                1) + (E[seq_len(i - 1)] >= i))
-            
-            if (K > 1) {
-                
-                kappai.star <- sapply(kappai, function(x) {
-                  sum(selected[seq_len(x)])
-                })
-                
-                Kseq <- seq_len(K)
-                
-                Cj.plus[Kseq] <- sapply(Kseq, function(x) {
-                  sum(cand[seq(from = kappai[x] + 1, to = max(i - 1, kappai[x] + 
-                    1))] & E[seq(from = kappai[x] + 1, to = max(i - 1, kappai[x] + 
-                    1))] <= i - 1)
-                })
-                
-                Cj.plus.sum <- sum(gammai[S[i - 1] - kappai.star[Kseq] - Cj.plus[Kseq] + 
-                  1]) - gammai[S[i - 1] - kappai.star[1] - Cj.plus[1] + 1]
-                
-                alphai.tilde <- w0 * gammai[S[i - 1] - cand.sum + 1] + (tau * (1 - 
-                  lambda) * alpha - w0) * gammai[S[i - 1] - kappai.star[1] - Cj.plus[1] + 
-                  1] + tau * (1 - lambda) * alpha * Cj.plus.sum
-                
-                alphai[i] <- min(tau * lambda, alphai.tilde)
-                R[i] <- (pval[i] <= alphai[i])
-                
-            } else if (K == 1) {
-                
-                kappai.star <- sum(selected[seq_len(kappai)])
-                
-                Cj.plus[1] <- sum(cand[seq(from = kappai + 1, to = max(i - 1, kappai + 
-                  1))] & E[seq(from = kappai + 1, to = max(i - 1, kappai + 1))] <= 
-                  i - 1)
-                
-                alphai.tilde <- w0 * gammai[S[i - 1] - cand.sum + 1] + (tau * (1 - 
-                  lambda) * alpha - w0) * gammai[S[i - 1] - kappai.star - Cj.plus[1] + 
-                  1]
-                
-                alphai[i] <- min(tau * lambda, alphai.tilde)
-                R[i] <- (pval[i] <= alphai[i])
-                
-            } else {
-                
-                alphai.tilde <- w0 * gammai[S[i - 1] - cand.sum + 1]
-                alphai[i] <- min(tau * lambda, alphai.tilde)
-                R[i] <- (pval[i] <= alphai[i])
-            }
-        }
+        addis_async_faster(pval, E)
     }
-    
-    d.out <- data.frame(pval, alphai, R)
-    
-    return(d.out)
 }
 TRUE
 TRUE
