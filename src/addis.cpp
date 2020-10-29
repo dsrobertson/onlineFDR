@@ -4,21 +4,21 @@
 using namespace Rcpp;
 using std::endl;
 
-void printVec(NumericVector vec) {
-	for (int i = 0; i < vec.size(); i++)
-		Rcout << vec[i] << " ";
-	Rcout << endl;
-}
-void printVec(IntegerVector vec) {
-	for (int i = 0; i < vec.size(); i++)
-		Rcout << vec[i] << " ";
-	Rcout << endl;
-}
-void printVec(LogicalVector vec) {
-	for (int i = 0; i < vec.size(); i++)
-		Rcout << vec[i] << " ";
-	Rcout << endl;
-}
+// void printVec(NumericVector vec) {
+// 	for (int i = 0; i < vec.size(); i++)
+// 		Rcout << vec[i] << " ";
+// 	Rcout << endl;
+// }
+// void printVec(IntegerVector vec) {
+// 	for (int i = 0; i < vec.size(); i++)
+// 		Rcout << vec[i] << " ";
+// 	Rcout << endl;
+// }
+// void printVec(LogicalVector vec) {
+// 	for (int i = 0; i < vec.size(); i++)
+// 		Rcout << vec[i] << " ";
+// 	Rcout << endl;
+// }
 
 // [[Rcpp::export]]
 DataFrame addis_sync_faster(NumericVector pval,
