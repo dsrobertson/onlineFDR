@@ -8,7 +8,7 @@ output:
     toc: yes
     toc_depth: 2
     vignette: >
-      %\VignetteIndexEntry{Using the onlineFDR package}
+      %\VignetteIndexEntry{Advanced usage of onlineFDR}
       %\VignetteEncoding{UTF-8}
       %\VignetteEngine{knitr::rmarkdown}
 ---
