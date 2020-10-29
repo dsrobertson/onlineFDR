@@ -4,8 +4,17 @@
 \alias{SAFFRON}
 \title{SAFFRON: Adaptive online FDR control}
 \usage{
-SAFFRON(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE,
-  date.format = "\%Y-\%m-\%d", discard = FALSE, tau.discard = 0.5)
+SAFFRON(
+  d,
+  alpha = 0.05,
+  gammai,
+  w0,
+  lambda = 0.5,
+  random = TRUE,
+  date.format = "\%Y-\%m-\%d",
+  discard = FALSE,
+  tau.discard = 0.5
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
@@ -48,7 +57,7 @@ testing. Must be between 0 and 1, defaults to 0.5. This is required if
 }
 \description{
 Implements the SAFFRON procedure for online FDR control, where SAFFRON stands
-for Serial estimate of the Alpha Fraction that is Futiley Rationed On true
+for Serial estimate of the Alpha Fraction that is Futilely Rationed On true
 Null hypotheses, as presented by Ramdas et al. (2018). The algorithm is based
 on an estimate of the proportion of true null hypotheses. More precisely,
 SAFFRON sets the adjusted test levels based on an estimate of the amount of
@@ -66,7 +75,7 @@ overall significance level \eqn{\alpha}, we choose a sequence of non-negative
 non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
 SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0}
-satisfies \eqn{0 \le w_0 \le \alpha} and represents the intial `wealth' of
+satisfies \eqn{0 \le w_0 \le \alpha} and represents the initial `wealth' of
 the procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
 `candidate' hypothesis. A `candidate' refers to p-values smaller than
 \eqn{\lambda}, since SAFFRON will never reject a p-value larger than
@@ -89,11 +98,11 @@ sample.df <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-date = as.Date(c(rep("2014-12-01",3),
-               rep("2015-09-21",5),
-                rep("2016-05-19",2),
-                "2016-11-12",
-               rep("2017-03-27",4))),
+date = as.Date(c(rep('2014-12-01',3),
+               rep('2015-09-21',5),
+                rep('2016-05-19',2),
+                '2016-11-12',
+               rep('2017-03-27',4))),
 pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))

@@ -71,11 +71,11 @@
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
 #'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-#' date = as.Date(c(rep("2014-12-01",3),
-#'                rep("2015-09-21",5),
-#'                 rep("2016-05-19",2),
-#'                 "2016-11-12",
-#'                rep("2017-03-27",4))),
+#' date = as.Date(c(rep('2014-12-01',3),
+#'                rep('2015-09-21',5),
+#'                 rep('2016-05-19',2),
+#'                 '2016-11-12',
+#'                rep('2017-03-27',4))),
 #' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
@@ -88,13 +88,12 @@
 #' 
 #' @export
 
-Alpha_investing <- function(d, alpha=0.05, gammai, w0,
-                    random=TRUE, date.format="%Y-%m-%d") {
-
-    if(is.data.frame(d)){
+Alpha_investing <- function(d, alpha = 0.05, gammai, w0, random = TRUE, date.format = "%Y-%m-%d") {
+    
+    if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
-    } else if(is.vector(d)){
+    } else if (is.vector(d)) {
         pval <- d
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
@@ -102,85 +101,87 @@ Alpha_investing <- function(d, alpha=0.05, gammai, w0,
     
     checkPval(pval)
     N <- length(pval)
-
-    if(alpha<=0 || alpha>1){
+    
+    if (alpha <= 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
-
-    if(missing(gammai)){
+    
+    if (missing(gammai)) {
         gammai <- 0.4374901658/(seq_len(N)^(1.6))
-    } else if (any(gammai<0)){
+    } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if(sum(gammai)>1){
+    } else if (sum(gammai) > 1) {
         stop("The sum of the elements of gammai must not be greater than 1.")
     }
-
-    if(missing(w0)){
+    
+    if (missing(w0)) {
         w0 = alpha/2
-    } else if(w0 < 0){
+    } else if (w0 < 0) {
         stop("w0 must be non-negative.")
-    } else if(w0 >= alpha){
+    } else if (w0 >= alpha) {
         stop("w0 must be less than alpha.")
     }
-
+    
     ### Start algorithm
     
     alphai <- R <- cand <- Cj.plus <- rep(0, N)
-
+    
     cand.sum <- 0
-
-    alphai[1] <- gammai[1]*w0/(1 + gammai[1]*w0)
+    
+    alphai[1] <- gammai[1] * w0/(1 + gammai[1] * w0)
     R[1] <- (pval[1] <= alphai[1])
     
-    if(N == 1){
+    if (N == 1) {
         d.out <- data.frame(d, alphai, R)
         return(d.out)
     }
-
-    for (i in (seq_len(N-1)+1)){
-
-        K <- sum(R)
-        tau <- which(R[seq_len(i-1)] == 1)
+    
+    for (i in (seq_len(N - 1) + 1)) {
         
-        cand[i-1] <- (pval[i-1] <= alphai[i-1])
-        cand.sum <- cand.sum + cand[i-1]
-
+        K <- sum(R)
+        tau <- which(R[seq_len(i - 1)] == 1)
+        
+        cand[i - 1] <- (pval[i - 1] <= alphai[i - 1])
+        cand.sum <- cand.sum + cand[i - 1]
+        
         if (K > 1) {
-
-            Kseq <- seq_len(K-1)
-
-            Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i-1]
-            Cj.plus.sum <- sum(gammai[i-tau[Kseq] - Cj.plus[Kseq]])
-
-            Cj.plus[K] <- sum(cand[seq(from=tau[K]+1, to=max(i-1, tau+1))])
-            Cj.plus.sum <- Cj.plus.sum + 
-            gammai[i-tau[K]-Cj.plus[K]]-gammai[i-tau[1]-Cj.plus[1]]
-
-            alphai.tilde <- w0*gammai[i-cand.sum] + 
-            (alpha - w0)*gammai[i-tau[1]-Cj.plus[1]] + alpha*Cj.plus.sum
-
+            
+            Kseq <- seq_len(K - 1)
+            
+            Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i - 1]
+            Cj.plus.sum <- sum(gammai[i - tau[Kseq] - Cj.plus[Kseq]])
+            
+            Cj.plus[K] <- sum(cand[seq(from = tau[K] + 1, to = max(i - 1, tau + 1))])
+            Cj.plus.sum <- Cj.plus.sum + gammai[i - tau[K] - Cj.plus[K]] - gammai[i - 
+                tau[1] - Cj.plus[1]]
+            
+            alphai.tilde <- w0 * gammai[i - cand.sum] + (alpha - w0) * gammai[i - 
+                tau[1] - Cj.plus[1]] + alpha * Cj.plus.sum
+            
             alphai[i] <- alphai.tilde/(1 + alphai.tilde)
             R[i] <- (pval[i] <= alphai[i])
-
-        } else if(K == 1){
-
-            Cj.plus[1] <- sum(cand[seq(from=tau+1, to=max(i-1, tau+1))])
-
-            alphai.tilde <- w0*gammai[i - cand.sum] + 
-            (alpha - w0)*gammai[i-tau-Cj.plus[1]]
-
+            
+        } else if (K == 1) {
+            
+            Cj.plus[1] <- sum(cand[seq(from = tau + 1, to = max(i - 1, tau + 1))])
+            
+            alphai.tilde <- w0 * gammai[i - cand.sum] + (alpha - w0) * gammai[i - 
+                tau - Cj.plus[1]]
+            
             alphai[i] <- alphai.tilde/(1 + alphai.tilde)
             R[i] <- (pval[i] <= alphai[i])
-
+            
         } else {
-
-            alphai.tilde <- w0*gammai[i-cand.sum]
+            
+            alphai.tilde <- w0 * gammai[i - cand.sum]
             alphai[i] <- alphai.tilde/(1 + alphai.tilde)
             R[i] <- (pval[i] <= alphai[i])
-
+            
         }
     }
-
+    
     d.out <- data.frame(d, alphai, R)
     return(d.out)
 }
+TRUE
+TRUE

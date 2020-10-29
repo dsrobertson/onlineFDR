@@ -87,11 +87,11 @@
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
 #'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-#' date = as.Date(c(rep("2014-12-01",3),
-#'                 rep("2015-09-21",5),
-#'                 rep("2016-05-19",2),
-#'                 "2016-11-12",
-#'                 rep("2017-03-27",4))),
+#' date = as.Date(c(rep('2014-12-01',3),
+#'                 rep('2015-09-21',5),
+#'                 rep('2016-05-19',2),
+#'                 '2016-11-12',
+#'                 rep('2017-03-27',4))),
 #' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
@@ -104,13 +104,13 @@
 #'
 #' @export
 
-LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
-                date.format="%Y-%m-%d", original=TRUE) {
-
-    if(is.data.frame(d)){
+LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format = "%Y-%m-%d", 
+    original = TRUE) {
+    
+    if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
-    } else if(is.vector(d)){
+    } else if (is.vector(d)) {
         pval <- d
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
@@ -118,55 +118,56 @@ LOND <- function(d, alpha=0.05, betai, dep=FALSE, random=TRUE,
     
     checkPval(pval)
     N <- length(pval)
-
-    if(alpha<0 || alpha>1){
+    
+    if (alpha < 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
-
-    if(missing(betai)){
-        betai <- 0.07720838*alpha*log(pmax(seq_len(N),2)) /
-                (seq_len(N)*exp(sqrt(log(seq_len(N)))))
-    } else if (any(betai<0)){
+    
+    if (missing(betai)) {
+        betai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
+    } else if (any(betai < 0)) {
         stop("All elements of betai must be non-negative.")
-    } else if(sum(betai)>alpha){
+    } else if (sum(betai) > alpha) {
         stop("The sum of the elements of betai must not be greater than alpha.")
     }
-
-    if(dep) {
-        den <- cumsum(1 / seq_len(N))
-        betai <- betai / den
+    
+    if (dep) {
+        den <- cumsum(1/seq_len(N))
+        betai <- betai/den
     }
-
+    
     ### Start LOND procedure
-
+    
     R <- alphai <- rep(0, N)
     
     alphai[1] <- betai[1]
     R[1] <- pval[1] <= alphai[1]
-
-    if(N == 1){
+    
+    if (N == 1) {
         d.out <- data.frame(d, alphai, R)
         return(d.out)
     }
     
     D <- R[1]
     
-    if(!(original)){
-        for (i in (seq_len(N-1)+1)){
+    if (!(original)) {
+        for (i in (seq_len(N - 1) + 1)) {
             
-            alphai[i] <- betai[i]*max(D,1)
+            alphai[i] <- betai[i] * max(D, 1)
             R[i] <- pval[i] <= alphai[i]
             D <- D + R[i]
         }
     } else {
-        for (i in (seq_len(N-1)+1)){
+        for (i in (seq_len(N - 1) + 1)) {
             
-            alphai[i] <- betai[i]*(D+1)
+            alphai[i] <- betai[i] * (D + 1)
             R[i] <- pval[i] <= alphai[i]
             D <- D + R[i]
         }
     }
-
+    
     d.out <- data.frame(d, alphai, R)
     return(d.out)
 }
+TRUE
+TRUE

@@ -4,11 +4,13 @@
 \alias{ADDIS}
 \title{ADDIS: Adaptive discarding algorithm for online FDR control}
 \usage{
-ADDIS(pval, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
-  async = FALSE, decision.times)
+ADDIS(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE)
 }
 \arguments{
-\item{pval}{A vector of p-values.}
+\item{d}{Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), 
+p-value (`pval'), and decision times 
+(`decision.times').}
 
 \item{alpha}{Overall significance level of the procedure, the default is
 0.05.}
@@ -27,9 +29,6 @@ be between 0 and 1, defaults to 0.5.}
 
 \item{async}{Logical. If \code{TRUE} runs the version for an asynchronous
 testing process}
-
-\item{decision.times}{A vector of decision times for the hypothesis tests,
-this is required if \code{async=TRUE}.}
 }
 \value{
 \item{d.out}{A dataframe with the original p-values \code{pval}, the
@@ -42,13 +41,15 @@ this is required if \code{async=TRUE}.}
 Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
 an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
 and Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-with conservative nulls, by including both adapativity in the fraction of
+with conservative nulls, by including both adaptivity in the fraction of
 null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
 SAFFRON).
 }
 \details{
-The function takes as its input a vector of p-values. Given an overall
-significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
+The function takes as its input either a vector of p-values, or a dataframe
+with three columns: an identifier (`id'),
+p-value (`pval'), and decision times, if the asynchronous version is specified (see below). 
+Given an overall significance level \eqn{\alpha}, ADDIS depends on constants \eqn{w_0}
 \eqn{\lambda} and \eqn{\tau}. \eqn{w_0} represents the intial `wealth' of the
 procedure and satisfies \eqn{0 \le w_0 \le \tau \lambda \alpha}. \eqn{\tau
 \in (0,1)} represents the threshold for a hypothesis to be selected for
@@ -59,7 +60,7 @@ than \eqn{\tau \lambda}. The algorithm also require a sequence of
 non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
 The ADDIS procedure provably controls the FDR for independent p-values. Tian
-and Ramdas (2019) also presented a version for an asynchoronous testing
+and Ramdas (2019) also presented a version for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random
 times. The discretised finish times of the test correspond to the decision
 times. These decision times are given as the input \code{decision.times}.
@@ -68,15 +69,18 @@ Further details of the ADDIS algorithms can be found in Tian and Ramdas
 (2019).
 }
 \examples{
-pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0154, 0.04723,
-        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
-        0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
+sample.df <- data.frame(
+id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+        0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+decision.times = seq_len(15) + 1)
 
-ADDIS(pval)
+ADDIS(sample.df, async = TRUE) # Asynchronous
 
-ADDIS(pval, async=TRUE, decision.times=seq_len(15)) # Same as above
-
-ADDIS(pval, async=TRUE, decision.times=seq_len(15)+1) # Asynchronous
+ADDIS(sample.df, async = FALSE) # Synchronous
 
 }
 \references{

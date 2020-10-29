@@ -1,33 +1,16 @@
 Package: onlineFDR
-Version: 1.5.0
-Date: 2019-10-25
+Version: 1.7.1
+Date: 2020-10-22
 Title: Online error control
-Authors@R: 
-    c(person(given = c("David", "S."),
-             family = "Robertson",
-             role = c("aut", "cre"),
-             email = "david.robertson@mrc-bsu.cam.ac.uk"),
-      person(given = "Aaditya",
-             family = "Ramdas",
-             role = "aut"),
-      person(given = "Adel",
-             family = "Javanmard",
-             role = "aut"),
-      person(given = "Andrea",
-             family = "Montanari",
-             role = "aut"),
-      person(given = "Jinjin",
-             family = "Tian",
-             role = "aut"),
-      person(given = "Tijana",
-             family = "Zrnic",
-             role = "aut"),
-      person(given = c("Natasha", "A."),
-             family = "Karp",
-             role = "aut"),
-      person(given = "Lathan",
-             family = "Liou",
-             role = "aut"))
+Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
+                    email = "david.robertson@mrc-bsu.cam.ac.uk"),
+             person("Lathan", "Liou", role = "aut"),
+             person("Aaditya", "Ramdas", role = "aut"),
+             person("Adel", "Javanmard", role = "aut"),
+             person("Andrea", "Montanari", role = "aut"),
+             person("Jinjin", "Tian", role = "aut"),
+             person("Tijana", "Zrnic", role = "aut"),
+             person(c("Natasha", "A."), "Karp", role = "aut"))
 Description: This package allows users to control the false discovery rate (FDR)
   or familywise error rate (FWER) for online hypothesis testing, where
   hypotheses arrive sequentially in a stream. In this framework, a null
@@ -35,7 +18,7 @@ Description: This package allows users to control the false discovery rate (FDR)
   p-values and the number of hypotheses to be tested are unknown.
 URL: https://dsrobertson.github.io/onlineFDR/index.html
 License: GPL-3
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Encoding: UTF-8
 Imports: stats
 Suggests: knitr,

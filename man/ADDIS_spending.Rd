@@ -4,11 +4,13 @@
 \alias{ADDIS_spending}
 \title{ADDIS-spending: Adaptive discarding algorithm for online FWER control}
 \usage{
-ADDIS_spending(pval, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5,
-  dep = FALSE, lags)
+ADDIS_spending(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE)
 }
 \arguments{
-\item{pval}{A vector of p-values.}
+\item{d}{Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), 
+p-value (`pval'), and lags 
+(`lags').}
 
 \item{alpha}{Overall significance level of the procedure, the default is
 0.05.}
@@ -24,9 +26,6 @@ be between 0 and 1, defaults to 0.5.}
 
 \item{dep}{Logical. If \code{TRUE} runs the version for locally dependent 
 p-values}
-
-\item{lags}{A vector of lags or the hypothesis tests, this is required if
-\code{dep=TRUE}.}
 }
 \value{
 \item{d.out}{A dataframe with the original p-values \code{pval}, the
@@ -39,12 +38,14 @@ p-values}
 Implements the ADDIS algorithm for online FWER control, where ADDIS stands
 for an ADaptive algorithm that DIScards conservative nulls, as presented by
 Tian and Ramdas (2019b). The procedure compensates for the power loss of
-Alpha-spending, by including both adapativity in the fraction of null
+Alpha-spending, by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls.
 }
 \details{
-The function takes as its input a vector of p-values. Given an overall
-significance level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and
+The function takes as its input either a vector of p-values, or a dataframe
+with three columns: an identifier (`id'),
+p-value (`pval'), and lags, if the dependent version is specified (see below). 
+Given an overall significance level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and
 \eqn{\tau}, where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1)} represents
 the threshold for a hypothesis to be selected for testing: p-values greater
 than \eqn{\tau} are implicitly `discarded' by the procedure, while
@@ -68,15 +69,18 @@ Further details of the ADDIS-spending algorithms can be found in Tian and
 Ramdas (2019b).
 }
 \examples{
-pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0154, 0.04723,
-        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
-        0.69274, 0.30443, 0.00136, 0.82342, 5.4757e-04)
+sample.df <- data.frame(
+id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+        0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+lags = rep(1,15))
 
-ADDIS_spending(pval)
+ADDIS_spending(sample.df) #independent
 
-ADDIS_spending(pval, dep=TRUE, lags=rep(0,15)) # Same as above
-
-ADDIS_spending(pval, dep=TRUE, lags=rep(1,15)) # Locally dependent
+ADDIS_spending(sample.df, dep = TRUE) #Locally dependent
 
 }
 \references{

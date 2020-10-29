@@ -11,8 +11,8 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.3.8\cr
-#' Date: \tab 2019-10-25\cr
+#' Version: \tab 1.8.0\cr
+#' Date: \tab 2020-10-22\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -97,8 +97,8 @@
 #' (2018), Tian and Ramdas (2019a, 2019b) and Zrnic et al. (2018).
 #' 
 #' @author David S. Robertson (\email{david.robertson@@mrc-bsu.cam.ac.uk}),
-#' Adel Javanmard, Aaditya Ramdas, Jinjin Tian, Tijana Zrnic, Andrea Montanari
-#' and Natasha A. Karp.
+#' Lathan Liou, Adel Javanmard, Aaditya Ramdas, Jinjin Tian, Tijana Zrnic,
+#' Andrea Montanari and Natasha A. Karp.
 #'
 #' @references
 #' 
@@ -148,3 +148,5 @@
 #' @docType package
 #' @name onlineFDR-package
 NULL
+TRUE
+TRUE
