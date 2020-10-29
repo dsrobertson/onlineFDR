@@ -26,6 +26,5 @@ Suggests: knitr,
     testthat,
     covr
 LinkingTo: Rcpp
-
 VignetteBuilder: knitr
 biocViews: MultipleComparison, Software, StatisticalMethod
