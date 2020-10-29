@@ -1,5 +1,7 @@
 ---
 title: "The theory behind onlineFDR"
+header-includes:
+   - \usepackage{amsmath}
 output:
   pdf_document:
     toc: yes
@@ -7,10 +9,11 @@ output:
   rmarkdown::html_vignette:
     toc: yes
     toc_depth: 2
-    vignette: >
-      %\VignetteIndexEntry{The theory behind onlineFDR}
-      %\VignetteEncoding{UTF-8}
-      %\VignetteEngine{knitr::rmarkdown}
+    vignette: |
+      %\VignetteIndexEntry{The theory behind onlineFDR} %\VignetteEncoding{UTF-8} %\VignetteEngine{knitr::rmarkdown}
+  word_document:
+    toc: yes
+    toc_depth: '2'
 ---
 
 ```{r setup, include=FALSE}
@@ -18,6 +21,9 @@ knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>"
 )
+
+options(tinytex.verbose = TRUE)
+
 library(onlineFDR)
 
 sample.df <- data.frame(
@@ -44,10 +50,12 @@ Consider a sequence of hypotheses $H_1, H_2, H_3, \ldots$ that arrive
 sequentially in a stream, with corresponding $p$-values
 $(p_1, p_2, p_3, \ldots)$. A testing procedure provides a sequence of adjusted
 significance thresholds $\alpha_i$, with corresponding decision rule:
-\[ R_i = \begin{cases}
+\[
+R_i = \left\{\begin{array}{ccc}
 1 & \text{if } p_i \leq \alpha_i & (\text{reject } H_i)\\
-0 & \text{otherwise} & (\text{accept } H_i)
-\end{cases} \]
+0 & \text{otherwise } & (\text{accept } H_i)
+\end{array}\right\}
+\]
 
 In *online* testing, the significance thresholds can only be functions of
 the prior decisions, i.e. $\alpha_i = \alpha_i(R_1, R_2, \ldots, R_{i-1})$.
@@ -83,7 +91,7 @@ results across time (as compared to a factor $H(N)$ for the Benjamini and
 Yekutieli method).
 
 <a name="LOND_beta"></a> The default sequence of $\beta$ is given by
-\[\beta_j = C \alpha \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\] where 
+\[\beta_j = C \alpha \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\] where
 $C \approx 0.07720838$, as proposed by Javanmard and Montanari (2018)
 equation 31.
 
@@ -92,26 +100,26 @@ equation 31.
 
 The LORD procedure controls the FDR for independent $p$-values. We first fix a
 sequence of non-negative numbers $\gamma = (\gamma_i)_{i \in \mathbb{N}}$ such
-that $\gamma_i \geq \gamma_j$ for 
-$i \leq j$ and $\sum_{i=1}^{\infty} \gamma_i = 1$. At each time $i$, let 
+that $\gamma_i \geq \gamma_j$ for
+$i \leq j$ and $\sum_{i=1}^{\infty} \gamma_i = 1$. At each time $i$, let
 $\tau_i$ be the last time a discovery was made before $i$: \[
 \tau_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
 \]
 
 LORD depends on constants $w_0$ and $b_0$, where $w_0 \geq 0$ represents the
-initial 'wealth' of the procedure and $b_0 > 0$ represents the 'payout' for 
+initial 'wealth' of the procedure and $b_0 > 0$ represents the 'payout' for
 rejecting a hypothesis. We require $w_0+b_0 \leq \alpha$ for FDR control to
 hold.
 
 Javanmard and Montanari (2018) presented three different versions of LORD, which
-have different definitions of the adjusted significance thresholds $\alpha_i$. 
+have different definitions of the adjusted significance thresholds $\alpha_i$.
 Versions 1 and 2 have since been superseded by the LORD++ procedure of
 Ramdas *et al.* (2017), so we do not describe them here.
 
 * **LORD++**: The significance thresholds for LORD++ are chosen as follows: \[
-\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} + 
+\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} +
 \alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1} \gamma_{i - \tau_j}
-\] 
+\]
 
 * **LORD 3**: The significance thresholds depend on the time of the last
 discovery time and the wealth accumulated at that time, with
@@ -119,23 +127,25 @@ discovery time and the wealth accumulated at that time, with
 \alpha_i  = \gamma_{i - \tau_i} W(\tau_i)
 \]
 where $\tau_1 = 0$. Here $\{W(j)\}_{j \geq 0}$ represents the 'wealth' available
-at time $j$, and is defined recursively: \[
-\begin{align}
-W(0) & = w_0 \nonumber \\
-W(j) & = W(j-1) - \alpha_{j-1} + b_0 R_j
-\end{align}
+at time $j$, and is defined recursively: 
+
+\[
+\begin{aligned}
+W(0) &= w_0 \\
+W(j) &= W(j-1) - \alpha_{j-1} + b_0 R_j
+\end{aligned}
 \]
 
 * **D-LORD**: This is equivalent to the LORD++ procedure with discarding. Given
 a discarding threshold $\tau \in (0,1)$ and initial wealth $w_0 \leq \tau\alpha$
-the significance thresholds are chosen as follows: \[ 
+the significance thresholds are chosen as follows: \[
 \alpha_t = \min\{\tau, \tilde{\alpha}_t\}
 \] where \[
 \tilde{\alpha}_t = w_0 \gamma_{S^t} +
-(\tau\alpha - w_0)\gamma_{S^t - \kappa_1^*} + 
+(\tau\alpha - w_0)\gamma_{S^t - \kappa_1^*} +
 \tau\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^*}
 \] and \[
-\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i} 
+\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i < t} 1 \{p_i \leq \tau \}
@@ -150,19 +160,19 @@ al.*, 2018), but since it is a non-monotone rule we would recommend using LORD++
 control.
 
 <a name="LORD_gamma"></a> In all versions, the default sequence of $\gamma$ is
-given by \[\gamma_j = C \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\] 
+given by \[\gamma_j = C \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\]
 where $C \approx 0.07720838$, as proposed by Javanmard and Montanari (2018)
 equation 31.
 
 
 Javanmard and Montanari (2018) also proposed an adjusted version of LORD that
 is valid for arbitrarily *dependent* p-values. Similarly to LORD 3, the adjusted
-significance thresholds are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where 
-(assuming $w_0 \leq b_0$), 
+significance thresholds are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where
+(assuming $w_0 \leq b_0$),
 $\sum_{j=1}^{\infty} \xi_i (1 + \log(j)) \leq \alpha / b_0$
 
 <a name="LORDdep_xi"></a> The default sequence of $\xi$ is given by
-\[ \xi_j  = \frac{C \alpha }{b_0 j \log(\max(j, 2))^3}\] 
+\[ \xi_j  = \frac{C \alpha }{b_0 j \log(\max(j, 2))^3}\]
 where $C \approx 0.139307$.
 
 Note that allowing for dependent p-values can lead to a substantial loss in
@@ -177,7 +187,7 @@ proportion of true null hypotheses. More precisely, SAFFRON sets the adjusted
 test levels based on an estimate of the amount of alpha-wealth that is allocated
 to testing the true null hypotheses.
 
-SAFFRON depends on constants $w_0$ and $\lambda$, where $w_0$ satisfies 
+SAFFRON depends on constants $w_0$ and $\lambda$, where $w_0$ satisfies
 $0 \leq w_0 < (1 - \lambda)\alpha$ and represents the initial 'wealth' of the
 procedure, and $\lambda \in (0,1)$ represents the threshold for a 'candidate'
 hypothesis. A 'candidate' refers to p-values smaller than $\lambda$, since
@@ -192,12 +202,12 @@ The SAFFRON procedure runs as follows:
 as \[ C_{k+} = C_{k+}(i) = \sum_{j = \tau_k + 1}^{i-1} C_j\]
 where $C_j = 1\{p_j \leq \lambda \}$ is the indicator for candidacy.
 
-3. SAFFRON starts with $\alpha_1 = \min\{\gamma_1 w_0, \lambda\}$. Subsequent 
+3. SAFFRON starts with $\alpha_1 = \min\{\gamma_1 w_0, \lambda\}$. Subsequent
 test levels are chosen as $\alpha_i = \min\{ \lambda, \tilde{\alpha}_i\}$, where
 \[
-\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} + 
+\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} +
 ((1-\lambda)\alpha - w_0)\gamma_{i-\tau_1-C_{1+}} +
-(1-\lambda)\alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1} 
+(1-\lambda)\alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1}
 \gamma_{i - \tau_j- C_{j+}}
 \]
 
@@ -209,7 +219,7 @@ given by $\gamma_j \propto j^{-1.6}$.
 
 Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of
 Foster and Stine (2008) that guarantees FDR control for independent p-values.
-This procedure uses SAFFRON's update rule with the constant \eqn{\lambda}
+This procedure uses SAFFRON's update rule with the constant $\lambda$
 replaced by a sequence $\lambda_i = \alpha_i$. This is also equivalent to using
 the ADDIS algorithm (see below) with $\tau = 1$ and $\lambda_i = \alpha_i$.
 
@@ -218,7 +228,7 @@ the ADDIS algorithm (see below) with $\tau = 1$ and $\lambda_i = \alpha_i$.
 
 The ADDIS procedure controls the FDR for independent p-values, and was proposed
 by Tian & Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-with conservative nulls, by including both adapativity in the fraction of null
+with conservative nulls, by including both adaptivity in the fraction of null
 hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
 
 ADDIS depends on constants $w_0, \lambda$ and $\tau$. $w_0$ represents the
@@ -229,21 +239,21 @@ the procedure. Finally, $\lambda \in (0,1)$ sets the threshold for a p-value to
 be a candidate for rejection: ADDIS will never reject a p-value larger than
 $\tau \lambda$.
 
-The significance thresholds for ADDIS are chosen as follows: \[ 
+The significance thresholds for ADDIS are chosen as follows: \[
 \alpha_t = \min\{\tau\lambda, \tilde{\alpha}_t\}
 \] where \[
 \tilde{\alpha}_t = w_0 \gamma_{S^t-C_{0+}} +
-(\tau(1-\lambda)\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} + 
+(\tau(1-\lambda)\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
 \tau(1-\lambda)\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
 \] and \[
-\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i} 
+\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i < t} 1 \{p_i \leq \tau \}, \;
 C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 \]
 
-The default sequence of $\gamma$ for ADDIS is the same as for SAFFRON given 
+The default sequence of $\gamma$ for ADDIS is the same as for SAFFRON given
 [here](#SAFFRON_gamma).
 
 ## FWER Control
@@ -306,8 +316,7 @@ As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume
 independent p-values, while the LOND procedure is also valid under positive
 dependencies (like the Benjamini-Hochberg method, see below). Adjusted
 versions of LOND and LORD available for arbitrarily dependent p-values.
-Alpha-spending and online fallback also control the FWER and FDR for arbitrarily
-dependent p-values.
+Alpha-spending and online fallback also control the FWER and FDR for arbitrarily dependent p-values.
 
 By way of comparison, the usual Benjamini-Hochberg method for controlling
 the FDR assumes that the p-values are positively dependent (PRDS). As an
