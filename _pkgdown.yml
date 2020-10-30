@@ -2,6 +2,28 @@ url: https://dsrobertson.github.io/onlineFDR/
 
 template:
   params:
+    bootswatch: cosmo
     docsearch:
       api_key: 4c638d00ee22961d7aab55c43dd0309d
       index_name: onlinefdr
+
+reference: 
+  - title: Synchronous FDR Control
+    contents:
+    - "ADDIS"
+    - "Alpha_investing"
+    - "LOND"
+    - "LORD"
+    - "LORDdep"
+    - "SAFFRON"
+  - title: Asynchronous FDR Control
+    contents:
+    - "ADDIS"
+    - "LONDstar"
+    - "LORDstar"
+    - "SAFFRONstar"
+  - title: FWER Control
+    contents:
+    - "ADDIS_spending"
+    - "Alpha_spending"
+    - "online_fallback"

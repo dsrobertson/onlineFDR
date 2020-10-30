@@ -97,6 +97,7 @@
 #' decision.times = seq_len(15) + 1)
 #'
 #' LONDstar(sample.df, version='async')
+
 #' 
 #' sample.df2 <- data.frame(
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
@@ -111,6 +112,7 @@
 #' 
 #' sample.df3 <- data.frame(
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
 #'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
 #' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
@@ -148,6 +150,7 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
     if (missing(betai)) {
         betai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
     } else if (any(betai < 0)) {
+
         stop("All elements of betai must be non-negative.")
     } else if (sum(betai) > alpha) {
         stop("The sum of the elements of betai must be <= alpha.")

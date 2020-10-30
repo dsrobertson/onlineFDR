@@ -27,3 +27,5 @@ Suggests: knitr,
     covr
 VignetteBuilder: knitr
 biocViews: MultipleComparison, Software, StatisticalMethod
+LinkingTo: 
+    Rcpp
