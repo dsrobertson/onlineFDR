@@ -1,11 +1,11 @@
-pandoc: 2.7.3
+pandoc: '2.6'
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   advanced-usage: advanced-usage.html
   onlineFDR: onlineFDR.html
   theory: theory.html
-last_built: 2020-10-16T11:45Z
+last_built: 2020-10-30T13:12Z
 urls:
   reference: https://dsrobertson.github.io/onlineFDR//reference
   article: https://dsrobertson.github.io/onlineFDR//articles
