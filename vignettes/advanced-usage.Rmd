@@ -1,0 +1,185 @@
+---
+title: "Advanced usage of onlineFDR"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  rmarkdown::html_vignette:
+    toc: yes
+    toc_depth: 2
+    vignette: >
+      %\VignetteIndexEntry{Advanced usage of onlineFDR}
+      %\VignetteEncoding{UTF-8}
+      %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+
+library(onlineFDR)
+
+sample.df <- data.frame(
+    id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+        'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+        'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+    date = as.Date(c(rep("2014-12-01",3),
+                    rep("2015-09-21",5),
+                    rep("2016-05-19",2),
+                    "2016-11-12",
+                    rep("2017-03-27",4))),
+    pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
+            3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+            0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
+
+set.seed(1)
+```
+
+## Variations to the default options
+
+In the following section,  we consider the arguments that a typical user might
+consider amending for their analysis.
+
+
+### Common arguments
+
+As a default, the `alpha` argument is set to 0.05, where `alpha` sets the
+overall significance level of the FDR of FWER controlling procedure. By
+convention, the standard significance level utilised is the 5%.  However, there
+are applications where an alternate threshold could be considered. For example,
+a more stringent threshold might be appropriate when there are limited resources
+to follow up significant findings. A less stringent threshold might be
+appropriate when the downstream analysis is a global analysis which can tolerate
+a higher proportion of false positives.
+
+To ensure correct interpretation of the dates provided there is a date.format 
+argument. As a default, the date format is set to receive dates as 
+year-month(00-12)-day(number).  The following website provides clear guidance
+on symbols used to interpret the date information: 
+https://www.statmethods.net/input/dates.html
+
+As a default, the `random` argument is set to `TRUE`. In this situation, the
+order of p-values in each batch (i.e. with the same date) are randomised. This
+is to avoid the risk of p-values being ordered post-hoc, which can lead to an
+inflation of the FDR. As the dataset grows the data is reprocessed. To ensure 
+the consistency of the output (with the randomisation within the previous
+batches remaining the same), it is necessary to set the same `seed`
+for all analyses.
+
+The user also has the option to turn off the randomisation step, by setting the 
+`random` argument to `FALSE`. This approach would be appropriate if the user 
+has both a date *and* a time stamp for the p-values, in which case the data
+should be ordered by date and time beforehand and then passed to a wrapper
+function. Another scenario would be when p-values within the batches are
+ordered using *independent* side information, so that hypotheses most likely to
+be rejected come first, which would potentially increase the power of the
+procedure (see Javanmard and Montanari (2018) and Li and Barber (2017)). 
+
+
+### LOND
+
+As a default, the `dep` argument is set to `FALSE`.  Alternatively, this can be
+set to `TRUE` and will implement the LOND procedure to guarantee FDR control for
+arbitrarily dependent p-values. This method will in general be more
+conservative.
+
+```{r}
+set.seed(1); results.indep <- LOND(sample.df)    # for independent p-values
+set.seed(1); results.dep <- LOND(sample.df, dep=TRUE)   # for dependent p-values
+
+# compare adjusted significance thresholds
+cbind(independent = results.indep$alphai, dependent = results.dep$alphai)
+
+```
+
+The vector `betai` is supplied by default, but can optionally be specified by the
+user (as described above, see the formula for $\beta_j$ [here](#LOND_beta)).
+
+
+### LORD
+
+The default version of LORD used is version '++', but the user can optionally
+specify versions 3, 'discard' and 'dep' using the `version` argument (see
+[here](#LORD) for further details about the different versions).
+
+```{r}
+set.seed(1); results.LORD.plus <- LORD(sample.df)
+set.seed(1); results.LORD3 <- LORD(sample.df, version=3)
+set.seed(1); results.LORD.discard <- LORD(sample.df, version='discard')
+set.seed(1); results.LORD.dep <- LORD(sample.df, version='dep') 
+
+# compare adjusted significance thresholds
+cbind(LORD.plus = results.LORD.plus$alphai,
+    LORD3 = results.LORD3$alphai,
+    LORD.discard  = results.LORD.discard$alphai,
+    LORD.dep = results.LORD.dep$alphai)
+
+```
+
+By default $w_0 = \alpha/10$ and (for LORD 3 and LORD dep) $b0 = alpha - w0$,
+but these parameters can optionally be specified by the user subject to the
+requirements that $0 \leq w_0 \leq \alpha$, $b_0 > 0$ and $w_0+b_0 \leq \alpha$.
+
+The value of `gammai` is also supplied by default, but can optionally be
+specified by the user (as described above, see the formula for $\gamma_j$
+[here](#LORDdep_xi) for version='dep' and [here](#LORD_gamma) for all other
+versions of LORD).
+
+
+### SAFFRON
+
+By default $w_0 = \alpha/2$ and $\lambda = 0.5$, but these parameters can
+optionally be specified by the user subject to the requirements that
+$0 \leq w_0 < \alpha$ and $0 < \lambda < 1$. The values of `gammai` are also
+supplied by default, but can optionally be specified by the user (as described
+above, see the formula for $\gamma_j$ [here](#SAFFRON_gamma)).
+
+
+### ADDIS
+
+By default $w_0 = \tau \lambda \alpha/2$ and $\lambda = \tau = 0.5$, but these
+parameters can optionally be specified by the user subject to the requirements
+that $0 \leq w_0 < \tau \lambda \alpha$, $0 < \lambda < 1$ and $0 < \tau < 1$.
+The values of `gammai` are also supplied by default, but can optionally be
+specified by the user.
+
+
+### Alpha-spending and online fallback
+
+The values of `gammai` are supplied by default, but can optionally
+be specified by the user.
+
+
+### ADDIS-spending
+
+By default $\lambda = 0.25$ and $\tau = 0.5$, but these
+parameters can optionally be specified by the user subject to the requirements
+that $\lambda < \tau$, $0 < \lambda < 1$ and $0 < \tau < 1$.
+The values of `gammai` are also supplied by default, but can optionally be
+specified by the user.
+
+### Asynchronous testing
+
+Zrnic *et al.* (2018) proposed procedures to control the modified
+FDR (mFDR) in the context of *asynchronous* testing, i.e. where each hypothesis
+test can itself be a sequential process and the tests can overlap in time. They
+presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a 
+variety of trial settings, including the following:
+
+1: **Asynchronous online mFDR control**: 
+This is for an asynchronous testing process, consisting of tests that start and
+finish at (potentially) random times. The discretised finish times of the test
+correspond to the decision times.
+
+2: **Online mFDR control under local dependence**: 
+For any $t>0$ we allow the p-value $p_t$ to have arbitrary dependence on the
+previous $L_t$ p-values. The fixed sequence $L_t$ is referred to as `lags'.
+
+3: **mFDR control in asynchronous mini-batch testing**: 
+A mini-batch represents a grouping of tests run asynchronously which
+result in dependent p-values. Once a mini-batch of tests is fully completed,
+a new one can start, testing hypotheses independent of the previous batch.
+
+---

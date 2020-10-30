@@ -5,8 +5,15 @@
 \title{LORD (dep): Online FDR control based on recent discovery for dependent
 p-values}
 \usage{
-LORDdep(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0,
-  random = TRUE, date.format = "\%Y-\%m-\%d")
+LORDdep(
+  d,
+  alpha = 0.05,
+  xi,
+  w0 = alpha/10,
+  b0 = alpha - w0,
+  random = TRUE,
+  date.format = "\%Y-\%m-\%d"
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an

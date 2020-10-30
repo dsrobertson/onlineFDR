@@ -4,18 +4,33 @@
 \alias{SAFFRONstar}
 \title{SAFFRONstar: Adaptive online mFDR control for asynchronous testing}
 \usage{
-SAFFRONstar(pval, alpha = 0.05, version, gammai, w0, lambda = 0.5,
-  decision.times, lags, batch.sizes, discard = FALSE,
-  tau.discard = 0.5)
+SAFFRONstar(
+  d,
+  alpha = 0.05,
+  version,
+  gammai,
+  w0,
+  lambda = 0.5,
+  batch.sizes,
+  discard = FALSE,
+  tau.discard = 0.5
+)
 }
 \arguments{
-\item{pval}{A vector of p-values}
+\item{d}{Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), 
+p-value (`pval'), and either 
+`decision.times', or
+`lags', depending on which version you're using. See version for more details.}
 
 \item{alpha}{Overall significance level of the procedure, the default is
 0.05.}
 
 \item{version}{Takes values 'async', 'dep' or 'batch'. This specifies the
-version of LORDstar to use.}
+  version of SAFFRONstar to use. \code{version='async'} requires a 
+column of decision times (`decision.times'). \code{version='dep'} requires a
+column of lags (`lags').
+\code{version='batch'} requires a vector of batch sizes (`batch.sizes').}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
@@ -24,12 +39,6 @@ version of LORDstar to use.}
 
 \item{lambda}{Optional threshold for a `candidate' hypothesis, must be
 between 0 and 1. Defaults to 0.5.}
-
-\item{decision.times}{A vector of decision times for the hypothesis tests,
-this is required for \code{version='async'}.}
-
-\item{lags}{A vector of lags or the hypothesis tests, this is required for
-\code{version='dep'}.}
 
 \item{batch.sizes}{A vector of batch sizes, this is required for
 \code{version='batch'}.}
@@ -53,13 +62,15 @@ Implements the SAFFRON algorithm for asynchronous online testing, as
 presented by Zrnic et al. (2018).
 }
 \details{
-The function takes as its input a vector of p-values, as well as a vector
-describing the conflict sets for the hypotheses. This takes the form of a
-vector of decision times, lags or batch sizes (see below).
+The function takes as its input either a vector of p-values, or a dataframe
+with three columns: an identifier (`id'),
+p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+This takes the form of a vector of decision times or lags. Batch sizes can be 
+specified as a separate argument (see below).
 
 Zrnic et al. (2018) present explicit three versions of SAFFRONstar:
 
-1) \code{version='async'} is for an asynchoronous testing process, consisting
+1) \code{version='async'} is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The discretised
 finish times of the test correspond to the decision times. These decision
 times are given as the input \code{decision.times} for this version of the
@@ -98,24 +109,37 @@ Further details of the SAFFRONstar algorithms can be found in Zrnic et al.
 (2018).
 }
 \examples{
-pval = c(2.90e-08, 0.06743, 3.51e-04, 0.0174, 0.04723,
-        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-06,
-        0.69274, 0.30443, 0.00136, 0.82342, 0.54757)
+sample.df <- data.frame(
+id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+        0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+decision.times = seq_len(15) + 1)
 
-SAFFRONstar(pval, version='async', decision.times=seq_len(15)) # Synchronous
+SAFFRONstar(sample.df, version='async')
 
-SAFFRONstar(pval, version='async', decision.times=seq_len(15)+1)
-# Asynchronous
+sample.df2 <- data.frame(
+id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+        0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+lags = rep(1,15))
 
+SAFFRONstar(sample.df2, version='dep')
 
-SAFFRONstar(pval, version='dep', lags=rep(0,15)) # Synchronous
+sample.df3 <- data.frame(
+id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+        0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
-SAFFRONstar(pval, version='dep', lags=rep(1,15)) # Locally dependent
-
-
-SAFFRONstar(pval, version='batch', batch.size=rep(1,15)) # Synchronous
-
-SAFFRONstar(pval, version='batch', batch.size=c(4,6,5)) # Batched
+SAFFRONstar(sample.df3, version='batch', batch.sizes = c(4,6,5))
 
 }
 \references{

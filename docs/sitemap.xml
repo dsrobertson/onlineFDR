@@ -16,9 +16,6 @@
     <loc>https://dsrobertson.github.io/onlineFDR//reference/Alpha_spending.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/bonfInfinite.html</loc>
-  </url>
-  <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/LOND.html</loc>
   </url>
   <url>
@@ -34,6 +31,15 @@
     <loc>https://dsrobertson.github.io/onlineFDR//reference/LORDstar.html</loc>
   </url>
   <url>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRON.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRONstar.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR//reference/bonfInfinite.html</loc>
+  </url>
+  <url>
     <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFDR-deprecated.html</loc>
   </url>
   <url>
@@ -43,12 +49,12 @@
     <loc>https://dsrobertson.github.io/onlineFDR//reference/online_fallback.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRON.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR//articles/advanced-usage.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRONstar.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR//articles/onlineFDR.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//articles/onlineFDR-vignette.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR//articles/theory.html</loc>
   </url>
 </urlset>

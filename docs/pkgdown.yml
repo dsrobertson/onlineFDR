@@ -1,8 +1,11 @@
-pandoc: '2.6'
-pkgdown: 1.4.1
+pandoc: 2.7.3
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  onlineFDR-vignette: ../../../../../../H:/Documents/onlineFDR/vignettes/onlineFDR-vignette.html
+  advanced-usage: advanced-usage.html
+  onlineFDR: onlineFDR.html
+  theory: theory.html
+last_built: 2020-10-16T11:45Z
 urls:
   reference: https://dsrobertson.github.io/onlineFDR//reference
   article: https://dsrobertson.github.io/onlineFDR//articles
