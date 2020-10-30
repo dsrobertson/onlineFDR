@@ -88,7 +88,7 @@
 #'
 #' @export
 
-myADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE) {
+ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE) {
     
     if (is.data.frame(d)) {
         pval <- d$pval
@@ -137,7 +137,6 @@ myADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async 
         stop("w0 must be less than tau*lambda*alpha")
     }
     
-    sourceCpp("addis.cpp")
     if (!(async)) {
             addis_sync_faster(pval)
     } else {

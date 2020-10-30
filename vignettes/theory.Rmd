@@ -10,7 +10,9 @@ output:
     toc: yes
     toc_depth: 2
     vignette: |
-      %\VignetteIndexEntry{The theory behind onlineFDR} %\VignetteEncoding{UTF-8} %\VignetteEngine{knitr::rmarkdown}
+      %\VignetteIndexEntry{The theory behind onlineFDR}
+      %\VignetteEncoding{UTF-8}
+      %\VignetteEngine{knitr::rmarkdown}
   word_document:
     toc: yes
     toc_depth: '2'
@@ -25,6 +27,7 @@ knitr::opts_chunk$set(
 options(tinytex.verbose = TRUE)
 
 library(onlineFDR)
+library(Rcpp)
 
 sample.df <- data.frame(
     id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',

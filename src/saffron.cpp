@@ -6,16 +6,16 @@ using std::endl;
 
 // Debugging function to print contents of a vector.
 // Need separate functions for each datatype.
-void printVec(NumericVector vec) {
-	for (int i = 0; i < vec.size(); i++)
-		Rcout << vec[i] << " ";
-	Rcout << endl;
-}
-void printVec(IntegerVector vec) {
-	for (int i = 0; i < vec.size(); i++)
-		Rcout << vec[i] << " ";
-	Rcout << endl;
-}
+// void printVec(NumericVector vec) {
+// 	for (int i = 0; i < vec.size(); i++)
+// 		Rcout << vec[i] << " ";
+// 	Rcout << endl;
+// }
+// void printVec(IntegerVector vec) {
+// 	for (int i = 0; i < vec.size(); i++)
+// 		Rcout << vec[i] << " ";
+// 	Rcout << endl;
+// }
 
 // [[Rcpp::export]]
 DataFrame saffron_faster(NumericVector pval,

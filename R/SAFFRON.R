@@ -114,7 +114,7 @@
 #'
 #' @export
 
-mySAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, date.format = "%Y-%m-%d", 
+SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, date.format = "%Y-%m-%d", 
     discard = FALSE, tau.discard = 0.5) {
     
     if (is.data.frame(d)) {
@@ -158,7 +158,6 @@ mySAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, 
     }
     
     ### Start SAFFRON algorithm
-    sourceCpp("saffron.cpp")
     saffron_faster(pval)
 
 }

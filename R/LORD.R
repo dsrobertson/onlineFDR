@@ -133,7 +133,7 @@
 #'
 #' @export
 
-myLORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 0.5, 
+LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 0.5, 
     random = TRUE, date.format = "%Y-%m-%d") {
     
     if (is.data.frame(d)) {
@@ -207,7 +207,6 @@ myLORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard 
         version <- 4
     }
     
-    sourceCpp("lord.cpp")
     lord_faster(pval, gammai, version)
 }
 

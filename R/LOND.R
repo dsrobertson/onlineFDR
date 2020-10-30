@@ -104,7 +104,7 @@
 #'
 #' @export
 
-myLOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format = "%Y-%m-%d", 
+LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format = "%Y-%m-%d", 
     original = TRUE) {
     
     if (is.data.frame(d)) {
@@ -138,7 +138,6 @@ myLOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.form
     
     ### Start LOND procedure
     
-    sourceCpp("lond.cpp")
     lond_faster(pval, betai, original = original)
 }
 TRUE
