@@ -21,7 +21,3 @@ saffron_faster <- function(pval, gammai = numeric(0), lambda = 0.5, alpha = 0.05
     .Call('_onlineFDR_saffron_faster', PACKAGE = 'onlineFDR', pval, gammai, lambda, alpha, w0)
 }
 
-saffron_rcpp_full <- function(N, lambda, w0, alpha, candsum, gammai, Cjplus, cand, pval, alphai, R) {
-    .Call('_onlineFDR_saffron_rcpp_full', PACKAGE = 'onlineFDR', N, lambda, w0, alpha, candsum, gammai, Cjplus, cand, pval, alphai, R)
-}
-
