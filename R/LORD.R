@@ -207,6 +207,8 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
         version <- 4
     }
     
-    lord_faster(pval, gammai, version)
+    out <- lord_faster(pval, gammai, version)
+    out$R <- as.numeric(out$R)
+    out
 }
 

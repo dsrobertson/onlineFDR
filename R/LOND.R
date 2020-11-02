@@ -138,7 +138,9 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format
     
     ### Start LOND procedure
     
-    lond_faster(pval, betai, original = original)
+    out <- lond_faster(pval, betai, original = original)
+    out$R <- as.numeric(out$R)
+    out
 }
 TRUE
 TRUE

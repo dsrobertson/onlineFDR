@@ -70,10 +70,7 @@ DataFrame lord_faster(NumericVector pval,
 
 				}
 				alphai[i] = w0*gammai[i] + (alpha-w0)*gammai[ i-tau[0]-1 ] + alpha*Cjsum;
-
-			Rcout << "i: " << i << " R: " << R[i] << " tau: " << tau << " tau2: " << tau2 << endl;
-
-				// Rcout << "i: " << i << "Cjsum: " << Cjsum << endl;
+				
 			}
 
 			if (pval[i] <= alphai[i]) {

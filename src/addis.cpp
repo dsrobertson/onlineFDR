@@ -92,10 +92,10 @@ DataFrame addis_sync_faster(NumericVector pval,
 			}
 
 			Cjplussum += gammai[ S[i-1]-kappaistar[K-1]-Cjplus[K-1] ] - 
-			gammai[ S[i-1]-kappaistar[0]-Cjplus[0] + 1 ];
+			gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ];
 
-			alphaitilde = w0*gammai[ S[i-1]-candsum + 1 ] + 
-			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] + 1 ] +
+			alphaitilde = w0*gammai[ S[i-1]-candsum ] + 
+			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] +
 			tau*(1-lambda)*alpha*Cjplussum;
 
 		} else if (K == 1) {
@@ -104,7 +104,7 @@ DataFrame addis_sync_faster(NumericVector pval,
 				kappai[0] = i-1;
 
 			int kappaistar = 0;
-			for (int j = 0; j < kappai[0]; j++)
+			for (int j = 0; j <= kappai[0]; j++)
 				kappaistar += selected[j];
 
 			Cjplus[0] = 0;
@@ -115,8 +115,8 @@ DataFrame addis_sync_faster(NumericVector pval,
 					Cjplus[0]++;
 			}
 
-			alphaitilde = w0*gammai[ S[i-1] - candsum ] + 
-			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] - 1];
+			alphaitilde = w0*gammai[ S[i-1] - candsum  ] + 
+			    (tau*(1-lambda)*alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ];
 
 		} else {
 
@@ -169,8 +169,8 @@ DataFrame addis_async_faster(NumericVector pval,
 	for (int i = 1; i < N; i++) {
 
 		IntegerVector kappai(0);
-	// nightmare to code the which statement
-		for (int j = 0; j < i-1; j++) {
+		// nightmare to code the which statement
+		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
 				kappai.push_back(j);
 		}
@@ -178,16 +178,16 @@ DataFrame addis_async_faster(NumericVector pval,
 		K = kappai.size();
 
 		cand[i-1] = (pval[i-1] <= tau*lambda);
-
+		
 		int candsum = 0;
-	//C++ trick to loop "seq_len" and use conditional incrementor for "sum"
-		for (int j = 0; j < i-1; j++) {
+		//C++ trick to loop "seq_len" and use conditional incrementor for "sum"
+		for (int j = 0; j <= i-1; j++) {
 			if (cand[j] && (E[j]-1 <= i-1))
 				candsum++;
 		}
 
 		int Ssum = 0;
-		for (int j = 0; j < i-1; j++) {
+		for (int j = 0; j <= i-1; j++) {
 			if (selected[j] && (E[j]-1 <= i-1))
 				Ssum++;
 			if (E[j]-1 >= i)
@@ -232,34 +232,34 @@ DataFrame addis_async_faster(NumericVector pval,
 			double Cjplussum = 0;
 			//indexing gammai is a nightmare
 			for (int j = 0; j < K; j++) {
-				Cjplussum += gammai[ S[i-1] - kappaistar[j] - Cjplus[j] + 1 ];
+				Cjplussum += gammai[ S[i-1] - kappaistar[j] - Cjplus[j] ];
 			}
-			Cjplussum -= gammai[ S[i-1] - kappaistar[0] - Cjplus[0] + 1];
-
-			alphaitilde = w0*gammai[ S[i-1]-candsum +1 ] + 
-			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] +1 ] +
+			Cjplussum -= gammai[ S[i-1] - kappaistar[0] - Cjplus[0] ];
+			
+			alphaitilde = w0*gammai[ S[i-1]-candsum ] + 
+			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] +
 			tau*(1-lambda)*alpha*Cjplussum;
-
+			
 		}  else if (K == 1) {
 
 			int kappaistar = 0;
-			for (int j = 0; j < kappai[0]; j++)
+			for (int j = 0; j <= kappai[0]; j++)
 				kappaistar += selected[j];
 
-			int from = kappai[0];
-			int to = std::max(i-1, kappai[0]);
+			int from = kappai[0]+1;
+			int to = std::max(i-1, kappai[0]+1);
 			Cjplus[0] = 0;
 			for (int j = from; j <= to; j++) {
-				if (cand[j] && E[j] <= i-1)
+				if (cand[j] && E[j]-1 <= i-1)
 					Cjplus[0]++;
 			}
 
-			alphaitilde = w0 * gammai[ S[i-1] - candsum + 1 ] + 
-			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar-Cjplus[0] ];
-
+			alphaitilde = w0 * gammai[ S[i-1] - candsum  ] + 
+			    (tau*(1-lambda)*alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ];
+			
 		} else {
 
-			alphaitilde = w0*gammai[ S[i-1]-candsum + 1 ];
+			alphaitilde = w0*gammai[ S[i-1]-candsum ];
 
 		}
 

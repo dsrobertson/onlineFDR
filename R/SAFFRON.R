@@ -158,7 +158,9 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, da
     }
     
     ### Start SAFFRON algorithm
-    saffron_faster(pval)
+    out <- saffron_faster(pval)
+    out$R <- as.numeric(out$R)
+    out
 
 }
 TRUE

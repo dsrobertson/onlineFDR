@@ -138,7 +138,11 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = 
     }
     
     if (!(async)) {
-            addis_sync_faster(pval)
+        
+            out <- addis_sync_faster(pval)
+            out$R <- as.numeric(out$R)
+            out
+        
     } else {
         
         if (any(is.na(d$decision.times))) {
@@ -147,7 +151,9 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = 
         
         E <- d$decision.times
         
-        addis_async_faster(pval, E)
+        out <- addis_async_faster(pval, E)
+        out$R <- as.numeric(out$R)
+        out
     }
 }
 TRUE
