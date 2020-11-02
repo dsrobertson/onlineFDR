@@ -1,8 +1,10 @@
 ---
 title: "The theory behind onlineFDR"
-header-includes:
-   - \usepackage{amsmath}
 output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
   pdf_document:
     toc: yes
     toc_depth: '2'
@@ -16,6 +18,7 @@ output:
   word_document:
     toc: yes
     toc_depth: '2'
+header-includes: \usepackage{amsmath}
 ---
 
 ```{r setup, include=FALSE}
