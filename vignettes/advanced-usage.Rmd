@@ -24,6 +24,7 @@ knitr::opts_chunk$set(
 )
 
 library(onlineFDR)
+library(Rcpp)
 
 sample.df <- data.frame(
     id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',

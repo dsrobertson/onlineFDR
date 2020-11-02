@@ -42,7 +42,7 @@ test_that("Correct rejections", {
 })
 
 test_that("Check that ADDIS with async=FALSE is a special case of async=TRUE", {
-              expect_equal(ADDIS(test.pval)$alphai,
+              expect_equal(ADDIS(test.pval, async=FALSE)$alphai,
                            ADDIS(test.df4, async=TRUE)$alphai)
 })
 

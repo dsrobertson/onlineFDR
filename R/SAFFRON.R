@@ -158,65 +158,10 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, da
     }
     
     ### Start SAFFRON algorithm
-    
-    alphai <- R <- cand <- Cj.plus <- rep(0, N)
-    
-    cand.sum <- 0
-    
-    alphai[1] <- min((1 - lambda) * gammai[1] * w0, lambda)
-    R[1] <- (pval[1] <= alphai[1])
-    
-    if (N == 1) {
-        d.out <- data.frame(d, alphai, R)
-        return(d.out)
-    }
-    
-    for (i in (seq_len(N - 1) + 1)) {
-        
-        K <- sum(R)
-        tau <- which(R[seq_len(i - 1)] == 1)
-        
-        cand[i - 1] <- (pval[i - 1] <= lambda)
-        cand.sum <- cand.sum + cand[i - 1]
-        
-        if (K > 1) {
-            
-            Kseq <- seq_len(K - 1)
-            
-            Cj.plus[Kseq] <- Cj.plus[Kseq] + cand[i - 1]
-            Cj.plus.sum <- sum(gammai[i - tau[Kseq] - Cj.plus[Kseq]])
-            
-            Cj.plus[K] <- sum(cand[seq(from = tau[K] + 1, to = max(i - 1, tau + 1))])
-            Cj.plus.sum <- Cj.plus.sum + gammai[i - tau[K] - Cj.plus[K]] - gammai[i - 
-                tau[1] - Cj.plus[1]]
-            
-            alphai.tilde <- (1 - lambda) * (w0 * gammai[i - cand.sum] + (alpha - 
-                w0) * gammai[i - tau[1] - Cj.plus[1]] + alpha * Cj.plus.sum)
-            
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- (pval[i] <= alphai[i])
-            
-        } else if (K == 1) {
-            
-            Cj.plus[1] <- sum(cand[seq(from = tau + 1, to = max(i - 1, tau + 1))])
-            
-            alphai.tilde <- (1 - lambda) * (w0 * gammai[i - cand.sum] + (alpha - 
-                w0) * gammai[i - tau - Cj.plus[1]])
-            
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- (pval[i] <= alphai[i])
-            
-        } else {
-            
-            alphai.tilde <- (1 - lambda) * w0 * gammai[i - cand.sum]
-            alphai[i] <- min(lambda, alphai.tilde)
-            R[i] <- (pval[i] <= alphai[i])
-            
-        }
-    }
-    
-    d.out <- data.frame(d, alphai, R)
-    return(d.out)
+    out <- saffron_faster(pval)
+    out$R <- as.numeric(out$R)
+    out
+
 }
 TRUE
 TRUE
