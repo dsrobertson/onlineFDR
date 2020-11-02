@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
       </span>
     </div>
 
@@ -83,7 +83,8 @@
 
       
 
-      </header><script src="theory_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><link href="theory_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="theory_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>The theory behind onlineFDR</h1>
@@ -100,10 +101,12 @@
 <div id="fdr-control" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fdr-control" class="anchor"></a>FDR Control</h2>
-<p>Consider a sequence of hypotheses <span class="math inline">\(H_1, H_2, H_3, \ldots\)</span> that arrive sequentially in a stream, with corresponding <span class="math inline">\(p\)</span>-values <span class="math inline">\((p_1, p_2, p_3, \ldots)\)</span>. A testing procedure provides a sequence of adjusted significance thresholds <span class="math inline">\(\alpha_i\)</span>, with corresponding decision rule: <span class="math display">\[ R_i = \begin{cases}
+<p>Consider a sequence of hypotheses <span class="math inline">\(H_1, H_2, H_3, \ldots\)</span> that arrive sequentially in a stream, with corresponding <span class="math inline">\(p\)</span>-values <span class="math inline">\((p_1, p_2, p_3, \ldots)\)</span>. A testing procedure provides a sequence of adjusted significance thresholds <span class="math inline">\(\alpha_i\)</span>, with corresponding decision rule: <span class="math display">\[
+R_i = \left\{\begin{array}{ccc}
 1 &amp; \text{if } p_i \leq \alpha_i &amp; (\text{reject } H_i)\\
-0 &amp; \text{otherwise} &amp; (\text{accept } H_i)
-\end{cases} \]</span></p>
+0 &amp; \text{otherwise } &amp; (\text{accept } H_i)
+\end{array}\right\}
+\]</span></p>
 <p>In <em>online</em> testing, the significance thresholds can only be functions of the prior decisions, i.e. <span class="math inline">\(\alpha_i = \alpha_i(R_1, R_2, \ldots, R_{i-1})\)</span>.</p>
 <p>Javanmard and Montanari (2015, 2018) proposed two procedures for online control. The first is LOND, which stands for (significance) Levels based On Number of Discoveries. The second is LORD, which stands for (significance) Levels based On Recent Discovery. LORD was subsequently extended by Ramdas <em>et al.</em> (2017). Ramdas <em>et al.</em> (2018) also proposed the SAFFRON procedure, which provides an adaptive method of online FDR control, which includes a variant of Alpha-investing. Finally, Tian &amp; Ramdas (2019) proposed the ADDIS procedure as an improvement of SAFFRON in the presence of conservative nulls.</p>
 <div id="LOND" class="section level3">
@@ -123,29 +126,34 @@
 <p>Javanmard and Montanari (2018) presented three different versions of LORD, which have different definitions of the adjusted significance thresholds <span class="math inline">\(\alpha_i\)</span>. Versions 1 and 2 have since been superseded by the LORD++ procedure of Ramdas <em>et al.</em> (2017), so we do not describe them here.</p>
 <ul>
 <li><p><strong>LORD++</strong>: The significance thresholds for LORD++ are chosen as follows: <span class="math display">\[
-\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} + 
+\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} +
 \alpha \sum_{j : \tau_j &lt; i, \tau_j \neq \tau_1} \gamma_{i - \tau_j}
 \]</span></p></li>
 <li><p><strong>LORD 3</strong>: The significance thresholds depend on the time of the last discovery time and the wealth accumulated at that time, with <span class="math display">\[
 \alpha_i  = \gamma_{i - \tau_i} W(\tau_i)
-\]</span> where <span class="math inline">\(\tau_1 = 0\)</span>. Here <span class="math inline">\(\{W(j)\}_{j \geq 0}\)</span> represents the ‘wealth’ available at time <span class="math inline">\(j\)</span>, and is defined recursively: <span class="math display">\[
-\begin{align}
-W(0) &amp; = w_0 \nonumber \\
-W(j) &amp; = W(j-1) - \alpha_{j-1} + b_0 R_j
-\end{align}
-\]</span></p></li>
-<li><p><strong>D-LORD</strong>: This is equivalent to the LORD++ procedure with discarding. Given a discarding threshold <span class="math inline">\(\tau \in (0,1)\)</span> and initial wealth <span class="math inline">\(w_0 \leq \tau\alpha\)</span> the significance thresholds are chosen as follows: <span class="math display">\[ 
+\]</span> where <span class="math inline">\(\tau_1 = 0\)</span>. Here <span class="math inline">\(\{W(j)\}_{j \geq 0}\)</span> represents the ‘wealth’ available at time <span class="math inline">\(j\)</span>, and is defined recursively:</p></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+W(0) &amp;= w_0 \\
+W(j) &amp;= W(j-1) - \alpha_{j-1} + b_0 R_j
+\end{aligned}
+\]</span></p>
+<ul>
+<li>
+<strong>D-LORD</strong>: This is equivalent to the LORD++ procedure with discarding. Given a discarding threshold <span class="math inline">\(\tau \in (0,1)\)</span> and initial wealth <span class="math inline">\(w_0 \leq \tau\alpha\)</span> the significance thresholds are chosen as follows: <span class="math display">\[
 \alpha_t = \min\{\tau, \tilde{\alpha}_t\}
 \]</span> where <span class="math display">\[
 \tilde{\alpha}_t = w_0 \gamma_{S^t} +
-(\tau\alpha - w_0)\gamma_{S^t - \kappa_1^*} + 
+(\tau\alpha - w_0)\gamma_{S^t - \kappa_1^*} +
 \tau\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^*}
 \]</span> and <span class="math display">\[
-\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i} 
+\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
-\]</span></p></li>
+\]</span>
+</li>
 </ul>
 <p>LORD++ is an instance of a monotone rule, and provably controls the FDR for independent p-values provided <span class="math inline">\(w_0 \leq \alpha\)</span>. LORD 3 is a non-monotone rule, and FDR control is only demonstrated empirically. In some scenarios with large <span class="math inline">\(N\)</span>, LORD 3 will have a slightly higher power than LORD++ (see Robertson <em>et al.</em>, 2018), but since it is a non-monotone rule we would recommend using LORD++ (which is the default), especially since it also has a provable guarantee of FDR control.</p>
 <p><a name="LORD_gamma"></a> In all versions, the default sequence of <span class="math inline">\(\gamma\)</span> is given by <span class="math display">\[\gamma_j = C \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\]</span> where <span class="math inline">\(C \approx 0.07720838\)</span>, as proposed by Javanmard and Montanari (2018) equation 31.</p>
@@ -163,9 +171,9 @@ S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
 <li><p>Set the initial alpha-wealth <span class="math inline">\(w_0 &lt; (1-\lambda)\alpha\)</span></p></li>
 <li><p>At each time <span class="math inline">\(i\)</span>, define the number of candidates after the <span class="math inline">\(k\)</span>-th rejection as <span class="math display">\[ C_{k+} = C_{k+}(i) = \sum_{j = \tau_k + 1}^{i-1} C_j\]</span> where <span class="math inline">\(C_j = 1\{p_j \leq \lambda \}\)</span> is the indicator for candidacy.</p></li>
 <li><p>SAFFRON starts with <span class="math inline">\(\alpha_1 = \min\{\gamma_1 w_0, \lambda\}\)</span>. Subsequent test levels are chosen as <span class="math inline">\(\alpha_i = \min\{ \lambda, \tilde{\alpha}_i\}\)</span>, where <span class="math display">\[
-\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} + 
+\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} +
 ((1-\lambda)\alpha - w_0)\gamma_{i-\tau_1-C_{1+}} +
-(1-\lambda)\alpha \sum_{j : \tau_j &lt; i, \tau_j \neq \tau_1} 
+(1-\lambda)\alpha \sum_{j : \tau_j &lt; i, \tau_j \neq \tau_1}
 \gamma_{i - \tau_j- C_{j+}}
 \]</span></p></li>
 </ol>
@@ -174,21 +182,21 @@ S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
 <div id="AlphaInvesting" class="section level3">
 <h3 class="hasAnchor">
 <a href="#AlphaInvesting" class="anchor"></a>Alpha-investing</h3>
-<p>Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control for independent p-values. This procedure uses SAFFRON’s update rule with the constant  replaced by a sequence <span class="math inline">\(\lambda_i = \alpha_i\)</span>. This is also equivalent to using the ADDIS algorithm (see below) with <span class="math inline">\(\tau = 1\)</span> and <span class="math inline">\(\lambda_i = \alpha_i\)</span>.</p>
+<p>Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control for independent p-values. This procedure uses SAFFRON’s update rule with the constant <span class="math inline">\(\lambda\)</span> replaced by a sequence <span class="math inline">\(\lambda_i = \alpha_i\)</span>. This is also equivalent to using the ADDIS algorithm (see below) with <span class="math inline">\(\tau = 1\)</span> and <span class="math inline">\(\lambda_i = \alpha_i\)</span>.</p>
 </div>
 <div id="ADDIS" class="section level3">
 <h3 class="hasAnchor">
 <a href="#ADDIS" class="anchor"></a>ADDIS</h3>
-<p>The ADDIS procedure controls the FDR for independent p-values, and was proposed by Tian &amp; Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adapativity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).</p>
+<p>The ADDIS procedure controls the FDR for independent p-values, and was proposed by Tian &amp; Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adaptivity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).</p>
 <p>ADDIS depends on constants <span class="math inline">\(w_0, \lambda\)</span> and <span class="math inline">\(\tau\)</span>. <span class="math inline">\(w_0\)</span> represents the initial `wealth’ of the procedure and satisfies <span class="math inline">\(0 \leq w_0 \leq \tau \lambda \alpha\)</span>. <span class="math inline">\(\tau \in (0,1)\)</span> represents the threshold for a hypothesis to be selected for testing: p-values greater than <span class="math inline">\(\tau\)</span> are implicitly ‘discarded’ by the procedure. Finally, <span class="math inline">\(\lambda \in (0,1)\)</span> sets the threshold for a p-value to be a candidate for rejection: ADDIS will never reject a p-value larger than <span class="math inline">\(\tau \lambda\)</span>.</p>
-<p>The significance thresholds for ADDIS are chosen as follows: <span class="math display">\[ 
+<p>The significance thresholds for ADDIS are chosen as follows: <span class="math display">\[
 \alpha_t = \min\{\tau\lambda, \tilde{\alpha}_t\}
 \]</span> where <span class="math display">\[
 \tilde{\alpha}_t = w_0 \gamma_{S^t-C_{0+}} +
-(\tau(1-\lambda)\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} + 
+(\tau(1-\lambda)\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
 \tau(1-\lambda)\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
 \]</span> and <span class="math display">\[
-\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i} 
+\kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}, \;
@@ -241,7 +249,7 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 
 
       <footer><div class="copyright">
-  <p>Developed by David S. Robertson, Aaditya Ramdas, Adel Javanmard, Andrea Montanari, Jinjin Tian, Tijana Zrnic, Natasha A. Karp, Lathan Liou.</p>
+  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Adel Javanmard, Andrea Montanari, Jinjin Tian, Tijana Zrnic, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">
