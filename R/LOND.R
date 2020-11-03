@@ -138,36 +138,9 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format
     
     ### Start LOND procedure
     
-    R <- alphai <- rep(0, N)
-    
-    alphai[1] <- betai[1]
-    R[1] <- pval[1] <= alphai[1]
-    
-    if (N == 1) {
-        d.out <- data.frame(d, alphai, R)
-        return(d.out)
-    }
-    
-    D <- R[1]
-    
-    if (!(original)) {
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            alphai[i] <- betai[i] * max(D, 1)
-            R[i] <- pval[i] <= alphai[i]
-            D <- D + R[i]
-        }
-    } else {
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            alphai[i] <- betai[i] * (D + 1)
-            R[i] <- pval[i] <= alphai[i]
-            D <- D + R[i]
-        }
-    }
-    
-    d.out <- data.frame(d, alphai, R)
-    return(d.out)
+    out <- lond_faster(pval, betai, original = original)
+    out$R <- as.numeric(out$R)
+    out
 }
 TRUE
 TRUE

@@ -91,6 +91,7 @@ we also set a seed using the `set.seed` function.
 
 ```{r}
 library(onlineFDR)
+library(Rcpp)
 
 sample.df <- data.frame(
     id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
