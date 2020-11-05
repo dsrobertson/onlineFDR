@@ -84,27 +84,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// saffron_rcpp_full
-List saffron_rcpp_full(int N, double lambda, double w0, double alpha, int candsum, NumericVector gammai, IntegerVector Cjplus, IntegerVector cand, NumericVector pval, NumericVector alphai, LogicalVector R);
-RcppExport SEXP _onlineFDR_saffron_rcpp_full(SEXP NSEXP, SEXP lambdaSEXP, SEXP w0SEXP, SEXP alphaSEXP, SEXP candsumSEXP, SEXP gammaiSEXP, SEXP CjplusSEXP, SEXP candSEXP, SEXP pvalSEXP, SEXP alphaiSEXP, SEXP RSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
-    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< int >::type candsum(candsumSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gammai(gammaiSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type Cjplus(CjplusSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type cand(candSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pval(pvalSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type alphai(alphaiSEXP);
-    Rcpp::traits::input_parameter< LogicalVector >::type R(RSEXP);
-    rcpp_result_gen = Rcpp::wrap(saffron_rcpp_full(N, lambda, w0, alpha, candsum, gammai, Cjplus, cand, pval, alphai, R));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_onlineFDR_addis_sync_faster", (DL_FUNC) &_onlineFDR_addis_sync_faster, 6},
@@ -112,7 +91,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_onlineFDR_lond_faster", (DL_FUNC) &_onlineFDR_lond_faster, 4},
     {"_onlineFDR_lord_faster", (DL_FUNC) &_onlineFDR_lord_faster, 7},
     {"_onlineFDR_saffron_faster", (DL_FUNC) &_onlineFDR_saffron_faster, 5},
-    {"_onlineFDR_saffron_rcpp_full", (DL_FUNC) &_onlineFDR_saffron_rcpp_full, 11},
     {NULL, NULL, 0}
 };
 
