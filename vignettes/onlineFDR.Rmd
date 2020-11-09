@@ -225,7 +225,10 @@ handling local dependence.
 
 ### Which function do I use?
 
----
+We strive to make our R package as easy to use as possible. 
+Please see the flowchart below to decide which function is best to solve
+your problem. The interactive version (click-to-functions) is available
+[here]()---
 
 ## How to get help for onlineFDR
 
