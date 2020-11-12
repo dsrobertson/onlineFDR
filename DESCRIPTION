@@ -21,7 +21,8 @@ License: GPL-3
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 Imports: stats,
-	Rcpp
+	Rcpp,
+	dplyr
 Suggests: knitr,
     rmarkdown,
     testthat,
