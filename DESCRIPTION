@@ -23,6 +23,7 @@ Encoding: UTF-8
 Imports: stats,
 	Rcpp,
 	dplyr,
+	tidyr,
 	ggplot2
 Suggests: knitr,
     rmarkdown,
