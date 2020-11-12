@@ -153,6 +153,7 @@ LOND_results %>%
 To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds like this:
 ```{r}
 library(ggplot2)
+library(tidyr)
 
 set.seed(1)
 LORD_results <- LORD(sample.df)
