@@ -22,7 +22,9 @@ RoxygenNote: 7.1.1
 Encoding: UTF-8
 Imports: stats,
 	Rcpp,
-	dplyr
+	dplyr,
+	tidyr,
+	ggplot2
 Suggests: knitr,
     rmarkdown,
     testthat,
