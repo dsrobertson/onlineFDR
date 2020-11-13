@@ -15,7 +15,7 @@ output:
 ```{r setup, include = FALSE}
 library(dplyr)
 library(ggplot2)
-library(tidy)
+library(tidyr)
 
 knitr::opts_chunk$set(
     collapse = TRUE,
