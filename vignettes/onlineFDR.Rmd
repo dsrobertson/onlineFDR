@@ -13,6 +13,9 @@ output:
 ---
 
 ```{r setup, include = FALSE}
+library(dplyr)
+library(ggplot2)
+
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>"
@@ -144,7 +147,6 @@ LOND_results
 
 To check how many hypotheses we've rejected, we can do:
 ```{r}
-library(dplyr)
 LOND_results %>%
   filter(R == 1) %>%
   nrow()
@@ -152,8 +154,6 @@ LOND_results %>%
 
 To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds like this:
 ```{r}
-library(ggplot2)
-
 set.seed(1)
 LORD_results <- LORD(sample.df)
 
@@ -167,7 +167,7 @@ cbind(LOND_results, LORD_results$alphai) %>%
                    names_to = "adjustment",
                    values_to = "alpha") %>%
   ggplot(aes(x = index, y = alpha, col = adjustment)) + 
-    geom_lines()
+    geom_line()
 ```
 
 ### Using `onlineFDR` Sequentially
