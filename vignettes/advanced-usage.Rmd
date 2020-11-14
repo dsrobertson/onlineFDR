@@ -1,11 +1,11 @@
 ---
 title: "Advanced usage of onlineFDR"
 output:
-  html_document:
-    df_print: paged
+  pdf_document:
     toc: yes
     toc_depth: '2'
-  pdf_document:
+  html_document:
+    df_print: paged
     toc: yes
     toc_depth: '2'
   rmarkdown::html_vignette:
