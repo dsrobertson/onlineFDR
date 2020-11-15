@@ -1,5 +1,8 @@
 ---
-output: github_document
+output:
+  md_document:
+    variant: markdown_github
+  github_document: default
 ---
 
 ```{r, include = FALSE}
@@ -34,7 +37,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 # The following initializes usage of Bioc devel
-BiocManager::install(version='devel')
+BiocManager::install(version='3.12')
 
 BiocManager::install("onlineFDR")
 ```
@@ -47,6 +50,7 @@ Alternatively, you can install the package directly from GitHub:
 devtools::install_github("dsrobertson/onlineFDR")
 ```
 
+We recommend the GitHub version for faster implementations of the algorithms.
 
 ## Documentation
 
