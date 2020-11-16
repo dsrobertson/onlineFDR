@@ -27,3 +27,8 @@ reference:
     - "ADDIS_spending"
     - "Alpha_spending"
     - "online_fallback"
+  - title: Other
+    contents:
+    - "bonfInfinite"
+    - "onlineFDR-deprecated"
+    - "onlineFDR-package"
