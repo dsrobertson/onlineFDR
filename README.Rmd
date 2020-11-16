@@ -1,5 +1,8 @@
 ---
-output: github_document
+output:
+  github_document: default
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r, include = FALSE}
@@ -33,8 +36,8 @@ Bioconductor, please run the following code:
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-# The following initializes usage of Bioc devel
-BiocManager::install(version='devel')
+# The following initializes usage of Bioc
+BiocManager::install()
 
 BiocManager::install("onlineFDR")
 ```
