@@ -8,6 +8,13 @@
 
 <title>LORD: Online FDR control based on recent discovery — LORD • onlineFDR</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -49,6 +56,7 @@
 <meta property="og:description" content="Implements the LORD procedure for online FDR control, where LORD stands for
 (significance) Levels based On Recent Discovery, as presented by Javanmard
 and Montanari (2018) and Ramdas et al. (2017)." />
+<meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
 
 
@@ -293,73 +301,73 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval       alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0002675839 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0024664457 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0005732818 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004872805 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0004059066 0
-#&gt; 6  C38292 2015-09-21 3.6000e-05 0.0003447286 1
-#&gt; 7  A30619 2015-09-21 7.9149e-01 0.0029745013 0
-#&gt; 8  D46627 2015-09-21 2.7201e-01 0.0008450114 0
-#&gt; 9  E29198 2016-05-19 2.8295e-01 0.0007305648 0
-#&gt; 10 A41418 2016-05-19 7.5900e-08 0.0006243143 1
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0032185913 0
-#&gt; 12 C88669 2017-03-27 3.0443e-01 0.0010617227 0
-#&gt; 13 E03673 2017-03-27 1.3600e-03 0.0009256825 0
-#&gt; 14 A63155 2017-03-27 7.2342e-01 0.0008019657 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01 0.0007059610 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0002675839 1
+#&gt; 2  6.7430e-02 0.0024664457 0
+#&gt; 3  1.5140e-02 0.0005732818 0
+#&gt; 4  8.1740e-02 0.0004872805 0
+#&gt; 5  1.7100e-03 0.0004059066 0
+#&gt; 6  3.6000e-05 0.0003447286 1
+#&gt; 7  7.9149e-01 0.0029745013 0
+#&gt; 8  2.7201e-01 0.0008450114 0
+#&gt; 9  2.8295e-01 0.0007305648 0
+#&gt; 10 7.5900e-08 0.0006243143 1
+#&gt; 11 6.9274e-01 0.0032185913 0
+#&gt; 12 3.0443e-01 0.0010617227 0
+#&gt; 13 1.3600e-03 0.0009256825 0
+#&gt; 14 7.2342e-01 0.0008019657 0
+#&gt; 15 5.4757e-01 0.0007059610 0</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, version<span class='op'>=</span><span class='st'>'dep'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval       alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 2.323935e-03 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 1.107961e-02 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 1.855138e-03 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02 6.924756e-04 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 3.540284e-04 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01 2.138161e-04 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05 1.430752e-04 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01 1.685669e-04 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08 1.270096e-04 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01 1.560048e-04 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01 1.255746e-04 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01 1.034364e-04 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01 8.681710e-05 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01 7.401343e-05 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03 6.393279e-05 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 2.323935e-03 1
+#&gt; 2  6.7430e-02 1.107961e-02 0
+#&gt; 3  1.5140e-02 1.855138e-03 0
+#&gt; 4  8.1740e-02 6.924756e-04 0
+#&gt; 5  1.7100e-03 3.540284e-04 0
+#&gt; 6  2.7201e-01 2.138161e-04 0
+#&gt; 7  3.6000e-05 1.430752e-04 1
+#&gt; 8  7.9149e-01 1.685669e-04 0
+#&gt; 9  7.5900e-08 1.270096e-04 1
+#&gt; 10 2.8295e-01 1.560048e-04 0
+#&gt; 11 6.9274e-01 1.255746e-04 0
+#&gt; 12 7.2342e-01 1.034364e-04 0
+#&gt; 13 3.0443e-01 8.681710e-05 0
+#&gt; 14 5.4757e-01 7.401343e-05 0
+#&gt; 15 1.3600e-03 6.393279e-05 0</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, version<span class='op'>=</span><span class='st'>'discard'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval       alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0002675839 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0011285264 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0002823266 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0002394680 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0001998165 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0001700069 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0001475152 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0014680343 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0014680343 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0017451837 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0006438778 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0006438778 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0006438778 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0005497556 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0005497556 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0002675839 1
+#&gt; 2  6.7430e-02 0.0011285264 0
+#&gt; 3  1.5140e-02 0.0002823266 0
+#&gt; 4  8.1740e-02 0.0002394680 0
+#&gt; 5  1.7100e-03 0.0001998165 0
+#&gt; 6  2.7201e-01 0.0001700069 0
+#&gt; 7  3.6000e-05 0.0001475152 1
+#&gt; 8  7.9149e-01 0.0014680343 0
+#&gt; 9  7.5900e-08 0.0014680343 1
+#&gt; 10 2.8295e-01 0.0017451837 0
+#&gt; 11 6.9274e-01 0.0006438778 0
+#&gt; 12 7.2342e-01 0.0006438778 0
+#&gt; 13 3.0443e-01 0.0006438778 0
+#&gt; 14 5.4757e-01 0.0005497556 0
+#&gt; 15 1.3600e-03 0.0005497556 0</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span>, w0<span class='op'>=</span><span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval       alphai R
-#&gt; 1  A15432 2014-12-01 2.9000e-08 0.0026758385 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0032577488 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0010775352 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0009078052 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0007616238 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0006517385 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0005682672 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0058549106 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0016151293 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0067518870 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0023619734 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0020342733 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0017477495 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0015277362 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0013569121 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0002675839 1
+#&gt; 2  6.7430e-02 0.0024664457 0
+#&gt; 3  1.5140e-02 0.0005732818 0
+#&gt; 4  8.1740e-02 0.0004872805 0
+#&gt; 5  1.7100e-03 0.0004059066 0
+#&gt; 6  2.7201e-01 0.0003447286 0
+#&gt; 7  3.6000e-05 0.0002986627 1
+#&gt; 8  7.9149e-01 0.0029389397 0
+#&gt; 9  7.5900e-08 0.0008168502 1
+#&gt; 10 2.8295e-01 0.0033835974 0
+#&gt; 11 6.9274e-01 0.0011873999 0
+#&gt; 12 7.2342e-01 0.0010225858 0
+#&gt; 13 3.0443e-01 0.0008785607 0
+#&gt; 14 5.4757e-01 0.0007679398 0
+#&gt; 15 1.3600e-03 0.0006820264 0</div><div class='input'>
 
 </div></pre>
   </div>
