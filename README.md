@@ -24,9 +24,6 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install()
 
 BiocManager::install("onlineFDR")
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T//Rtmp5vD2bY/downloaded_packages
 ```
 
 Alternatively, you can install the package directly from GitHub:
@@ -35,16 +32,6 @@ Alternatively, you can install the package directly from GitHub:
 # install.packages("devtools") # If devtools not installed
 
 devtools::install_github("dsrobertson/onlineFDR")
-#> 
-#>      checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/Rtmp5vD2bY/remotes2b655051e504/dsrobertson-onlineFDR-049a40d/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/Rtmp5vD2bY/remotes2b655051e504/dsrobertson-onlineFDR-049a40d/DESCRIPTION’
-#>   ─  preparing ‘onlineFDR’:
-#>      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
-#>   ─  cleaning src
-#>   ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#>   ─  building ‘onlineFDR_1.7.1.tar.gz’
-#>      
-#> 
 ```
 
 ## Documentation
