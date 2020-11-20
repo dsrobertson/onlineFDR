@@ -98,32 +98,116 @@
   <div class="contents col-md-9">
 
 
-<div id="onlinefdr" class="section level1">
+<div id="onlinefdr-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#onlinefdr" class="anchor"></a>onlineFDR</h1></div>
-<p>This R package allows users to control the false discovery rate (FDR) or familywise error rate (FWER) for online hypothesis testing, where hypotheses arrive sequentially in a stream. In this framework, a null hypothesis is rejected based only on the previous decisions, as the future p-values and the number of hypotheses to be tested are unknown.</p>
+<a href="#onlinefdr-" class="anchor"></a>onlineFDR <img src="reference/figures/logo.png" align="right">
+</h1></div>
+<p><code>onlineFDR</code> allows users to control the false discovery rate (FDR) or familywise error rate (FWER) for online hypothesis testing, where hypotheses arrive sequentially in a stream. In this framework, a null hypothesis is rejected based only on the previous decisions, as the future p-values and the number of hypotheses to be tested are unknown.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To install the latest (development) version of the onlineFDR package from Bioconductor, please run the following code:</p>
-<pre class="{r}"><code>if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
 
-# The following initializes usage of Bioc devel
-BiocManager::install(version='devel')
+<span class="co"># The following initializes usage of Bioc</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Bioconductor version 3.12 (BiocManager 1.30.10), R 4.0.2 (2020-06-22)</span>
+<span class="co">#&gt; Old packages: 'annotate', 'AnnotationDbi', 'AnnotationFilter',</span>
+<span class="co">#&gt;   'AnnotationForge', 'apeglm', 'Biobase', 'BiocCheck', 'BiocFileCache',</span>
+<span class="co">#&gt;   'BiocParallel', 'BiocStyle', 'biocViews', 'biomaRt', 'Biostrings',</span>
+<span class="co">#&gt;   'biovizBase', 'bookdown', 'broom', 'BSgenome', 'bumphunter', 'car',</span>
+<span class="co">#&gt;   'Category', 'clipr', 'clusterProfiler', 'coda', 'codetools', 'DALEX',</span>
+<span class="co">#&gt;   'data.table', 'dbplyr', 'DEFormats', 'DelayedArray', 'deldir', 'derfinder',</span>
+<span class="co">#&gt;   'derfinderHelper', 'derfinderPlot', 'DESeq2', 'DNAcopy', 'doParallel',</span>
+<span class="co">#&gt;   'DOSE', 'downlit', 'DT', 'e1071', 'edgeR', 'enrichplot', 'ensembldb',</span>
+<span class="co">#&gt;   'fgsea', 'foreach', 'Formula', 'furrr', 'future', 'gdsfmt', 'genefilter',</span>
+<span class="co">#&gt;   'geneLenDataBase', 'geneplotter', 'GenomeInfoDb', 'GenomeInfoDbData',</span>
+<span class="co">#&gt;   'GenomicAlignments', 'GenomicFeatures', 'GenomicFiles', 'GenomicRanges',</span>
+<span class="co">#&gt;   'GEOquery', 'ggbio', 'ggfortify', 'ggraph', 'globals', 'GO.db', 'GOSemSim',</span>
+<span class="co">#&gt;   'goseq', 'GOstats', 'graph', 'graphlayouts', 'GSEABase', 'gtsummary',</span>
+<span class="co">#&gt;   'GWASTools', 'haplo.stats', 'hardhat', 'HardyWeinberg', 'here',</span>
+<span class="co">#&gt;   'htmlwidgets', 'ideal', 'igraph', 'IHW', 'insight', 'iterators',</span>
+<span class="co">#&gt;   'kableExtra', 'KernSmooth', 'knitr', 'lava', 'lhs', 'limma', 'lme4',</span>
+<span class="co">#&gt;   'lpsymphony', 'lubridate', 'MASS', 'meta', 'mgcv', 'mice', 'modeldata',</span>
+<span class="co">#&gt;   'multcomp', 'nlme', 'officer', 'onlineFDR', 'openxlsx', 'org.Hs.eg.db',</span>
+<span class="co">#&gt;   'OrganismDbi', 'parsnip', 'patchwork', 'pcaExplorer', 'pkgmaker', 'profvis',</span>
+<span class="co">#&gt;   'ProtGenerics', 'quantreg', 'quantsmooth', 'qvalue', 'raster', 'RBGL',</span>
+<span class="co">#&gt;   'RcppArmadillo', 'reactable', 'readr', 'recipes', 'recount', 'RefManageR',</span>
+<span class="co">#&gt;   'regionReport', 'rentrez', 'renv', 'Rgraphviz', 'Rhtslib', 'rmarkdown',</span>
+<span class="co">#&gt;   'rprojroot', 'rsample', 'Rsamtools', 'RSQLite', 'rstan', 'rtracklayer',</span>
+<span class="co">#&gt;   'sandwich', 'seriation', 'sever', 'shinyFeedback', 'shinyWidgets',</span>
+<span class="co">#&gt;   'sjlabelled', 'SNPassoc', 'sp', 'SQUAREM', 'statmod', 'SummarizedExperiment',</span>
+<span class="co">#&gt;   'survival', 'systemfonts', 'textshaping', 'tidypredict', 'tidytext',</span>
+<span class="co">#&gt;   'tinytex', 'topGO', 'V8', 'VariantAnnotation', 'vroom', 'workflows', 'xfun',</span>
+<span class="co">#&gt;   'XVector', 'zlibbioc'</span>
 
-BiocManager::install("onlineFDR")</code></pre>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span>
+<span class="co">#&gt; Bioconductor version 3.12 (BiocManager 1.30.10), R 4.0.2 (2020-06-22)</span>
+<span class="co">#&gt; Installing package(s) 'onlineFDR'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; The downloaded binary packages are in</span>
+<span class="co">#&gt;  /var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T//RtmpRHIxqk/downloaded_packages</span>
+<span class="co">#&gt; Old packages: 'annotate', 'AnnotationDbi', 'AnnotationFilter',</span>
+<span class="co">#&gt;   'AnnotationForge', 'apeglm', 'Biobase', 'BiocCheck', 'BiocFileCache',</span>
+<span class="co">#&gt;   'BiocParallel', 'BiocStyle', 'biocViews', 'biomaRt', 'Biostrings',</span>
+<span class="co">#&gt;   'biovizBase', 'bookdown', 'broom', 'BSgenome', 'bumphunter', 'car',</span>
+<span class="co">#&gt;   'Category', 'clipr', 'clusterProfiler', 'coda', 'codetools', 'DALEX',</span>
+<span class="co">#&gt;   'data.table', 'dbplyr', 'DEFormats', 'DelayedArray', 'deldir', 'derfinder',</span>
+<span class="co">#&gt;   'derfinderHelper', 'derfinderPlot', 'DESeq2', 'DNAcopy', 'doParallel',</span>
+<span class="co">#&gt;   'DOSE', 'downlit', 'DT', 'e1071', 'edgeR', 'enrichplot', 'ensembldb',</span>
+<span class="co">#&gt;   'fgsea', 'foreach', 'Formula', 'furrr', 'future', 'gdsfmt', 'genefilter',</span>
+<span class="co">#&gt;   'geneLenDataBase', 'geneplotter', 'GenomeInfoDb', 'GenomeInfoDbData',</span>
+<span class="co">#&gt;   'GenomicAlignments', 'GenomicFeatures', 'GenomicFiles', 'GenomicRanges',</span>
+<span class="co">#&gt;   'GEOquery', 'ggbio', 'ggfortify', 'ggraph', 'globals', 'GO.db', 'GOSemSim',</span>
+<span class="co">#&gt;   'goseq', 'GOstats', 'graph', 'graphlayouts', 'GSEABase', 'gtsummary',</span>
+<span class="co">#&gt;   'GWASTools', 'haplo.stats', 'hardhat', 'HardyWeinberg', 'here',</span>
+<span class="co">#&gt;   'htmlwidgets', 'ideal', 'igraph', 'IHW', 'insight', 'iterators',</span>
+<span class="co">#&gt;   'kableExtra', 'KernSmooth', 'knitr', 'lava', 'lhs', 'limma', 'lme4',</span>
+<span class="co">#&gt;   'lpsymphony', 'lubridate', 'MASS', 'meta', 'mgcv', 'mice', 'modeldata',</span>
+<span class="co">#&gt;   'multcomp', 'nlme', 'officer', 'openxlsx', 'org.Hs.eg.db', 'OrganismDbi',</span>
+<span class="co">#&gt;   'parsnip', 'patchwork', 'pcaExplorer', 'pkgmaker', 'profvis', 'ProtGenerics',</span>
+<span class="co">#&gt;   'quantreg', 'quantsmooth', 'qvalue', 'raster', 'RBGL', 'RcppArmadillo',</span>
+<span class="co">#&gt;   'reactable', 'readr', 'recipes', 'recount', 'RefManageR', 'regionReport',</span>
+<span class="co">#&gt;   'rentrez', 'renv', 'Rgraphviz', 'Rhtslib', 'rmarkdown', 'rprojroot',</span>
+<span class="co">#&gt;   'rsample', 'Rsamtools', 'RSQLite', 'rstan', 'rtracklayer', 'sandwich',</span>
+<span class="co">#&gt;   'seriation', 'sever', 'shinyFeedback', 'shinyWidgets', 'sjlabelled',</span>
+<span class="co">#&gt;   'SNPassoc', 'sp', 'SQUAREM', 'statmod', 'SummarizedExperiment', 'survival',</span>
+<span class="co">#&gt;   'systemfonts', 'textshaping', 'tidypredict', 'tidytext', 'tinytex', 'topGO',</span>
+<span class="co">#&gt;   'V8', 'VariantAnnotation', 'vroom', 'workflows', 'xfun', 'XVector',</span>
+<span class="co">#&gt;   'zlibbioc'</span></pre></div>
 <p>Alternatively, you can install the package directly from GitHub:</p>
-<pre class="{r}"><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html"># install.packages("devtools") # If devtools not installed
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># install.packages("devtools") # If devtools not installed</span>
 
-devtools::install_github("dsrobertson/onlineFDR")</a></code></pre>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span>
+<span class="co">#&gt; Downloading GitHub repo dsrobertson/onlineFDR@HEAD</span>
+<span class="co">#&gt; rprojroot (1.3-2 -&gt; 2.0.2) [CRAN]</span>
+<span class="co">#&gt; Installing 1 packages: rprojroot</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;   There is a binary version available but the source version is later:</span>
+<span class="co">#&gt;           binary source needs_compilation</span>
+<span class="co">#&gt; rprojroot  1.3-2  2.0.2             FALSE</span>
+<span class="co">#&gt; installing the source package 'rprojroot'</span>
+<span class="co">#&gt;      checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/RtmpRHIxqk/remotes15329444a34b1/dsrobertson-onlineFDR-680fc9a/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/RtmpRHIxqk/remotes15329444a34b1/dsrobertson-onlineFDR-680fc9a/DESCRIPTION’</span>
+<span class="co">#&gt;   ─  preparing ‘onlineFDR’:</span>
+<span class="co">#&gt;      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information</span>
+<span class="co">#&gt;   ─  cleaning src</span>
+<span class="co">#&gt;   ─  checking for LF line-endings in source and make files and shell scripts</span>
+<span class="co">#&gt;   ─  checking for empty or unneeded directories</span>
+<span class="co">#&gt;   ─  building ‘onlineFDR_1.7.1.tar.gz’</span>
+<span class="co">#&gt;      </span>
+<span class="co">#&gt; </span></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <p>Documentation is hosted at <a href="https://dsrobertson.github.io/onlineFDR/" class="uri">https://dsrobertson.github.io/onlineFDR/</a></p>
 <p>To view the vignette for the version of this package installed in your system, start R and enter:</p>
-<pre class="{r}"><code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes("onlineFDR")</a></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span>
+<span class="co">#&gt; No vignettes found by browseVignettes("onlineFDR")</span></pre></div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
