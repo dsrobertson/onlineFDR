@@ -32,7 +32,7 @@ number of hypotheses to be tested are unknown.
 To install the latest (development) version of the onlineFDR package from
 Bioconductor, please run the following code:
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -44,7 +44,7 @@ BiocManager::install("onlineFDR")
 
 Alternatively, you can install the package directly from GitHub:
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # install.packages("devtools") # If devtools not installed
 
 devtools::install_github("dsrobertson/onlineFDR")

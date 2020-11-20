@@ -22,70 +22,11 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 # The following initializes usage of Bioc
 BiocManager::install()
-#> Bioconductor version 3.12 (BiocManager 1.30.10), R 4.0.2 (2020-06-22)
-#> Old packages: 'annotate', 'AnnotationDbi', 'AnnotationFilter',
-#>   'AnnotationForge', 'apeglm', 'Biobase', 'BiocCheck', 'BiocFileCache',
-#>   'BiocParallel', 'BiocStyle', 'biocViews', 'biomaRt', 'Biostrings',
-#>   'biovizBase', 'bookdown', 'broom', 'BSgenome', 'bumphunter', 'car',
-#>   'Category', 'clipr', 'clusterProfiler', 'coda', 'codetools', 'DALEX',
-#>   'data.table', 'dbplyr', 'DEFormats', 'DelayedArray', 'deldir', 'derfinder',
-#>   'derfinderHelper', 'derfinderPlot', 'DESeq2', 'DNAcopy', 'doParallel',
-#>   'DOSE', 'downlit', 'DT', 'e1071', 'edgeR', 'enrichplot', 'ensembldb',
-#>   'fgsea', 'foreach', 'Formula', 'furrr', 'future', 'gdsfmt', 'genefilter',
-#>   'geneLenDataBase', 'geneplotter', 'GenomeInfoDb', 'GenomeInfoDbData',
-#>   'GenomicAlignments', 'GenomicFeatures', 'GenomicFiles', 'GenomicRanges',
-#>   'GEOquery', 'ggbio', 'ggfortify', 'ggraph', 'globals', 'GO.db', 'GOSemSim',
-#>   'goseq', 'GOstats', 'graph', 'graphlayouts', 'GSEABase', 'gtsummary',
-#>   'GWASTools', 'haplo.stats', 'hardhat', 'HardyWeinberg', 'here',
-#>   'htmlwidgets', 'ideal', 'igraph', 'IHW', 'insight', 'iterators',
-#>   'kableExtra', 'KernSmooth', 'knitr', 'lava', 'lhs', 'limma', 'lme4',
-#>   'lpsymphony', 'lubridate', 'MASS', 'meta', 'mgcv', 'mice', 'modeldata',
-#>   'multcomp', 'nlme', 'officer', 'onlineFDR', 'openxlsx', 'org.Hs.eg.db',
-#>   'OrganismDbi', 'parsnip', 'patchwork', 'pcaExplorer', 'pkgmaker', 'profvis',
-#>   'ProtGenerics', 'quantreg', 'quantsmooth', 'qvalue', 'raster', 'RBGL',
-#>   'RcppArmadillo', 'reactable', 'readr', 'recipes', 'recount', 'RefManageR',
-#>   'regionReport', 'rentrez', 'renv', 'Rgraphviz', 'Rhtslib', 'rmarkdown',
-#>   'rprojroot', 'rsample', 'Rsamtools', 'RSQLite', 'rstan', 'rtracklayer',
-#>   'sandwich', 'seriation', 'sever', 'shinyFeedback', 'shinyWidgets',
-#>   'sjlabelled', 'SNPassoc', 'sp', 'SQUAREM', 'statmod', 'SummarizedExperiment',
-#>   'survival', 'systemfonts', 'textshaping', 'tidypredict', 'tidytext',
-#>   'tinytex', 'topGO', 'V8', 'VariantAnnotation', 'vroom', 'workflows', 'xfun',
-#>   'XVector', 'zlibbioc'
 
 BiocManager::install("onlineFDR")
-#> Bioconductor version 3.12 (BiocManager 1.30.10), R 4.0.2 (2020-06-22)
-#> Installing package(s) 'onlineFDR'
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T//RtmpRHIxqk/downloaded_packages
-#> Old packages: 'annotate', 'AnnotationDbi', 'AnnotationFilter',
-#>   'AnnotationForge', 'apeglm', 'Biobase', 'BiocCheck', 'BiocFileCache',
-#>   'BiocParallel', 'BiocStyle', 'biocViews', 'biomaRt', 'Biostrings',
-#>   'biovizBase', 'bookdown', 'broom', 'BSgenome', 'bumphunter', 'car',
-#>   'Category', 'clipr', 'clusterProfiler', 'coda', 'codetools', 'DALEX',
-#>   'data.table', 'dbplyr', 'DEFormats', 'DelayedArray', 'deldir', 'derfinder',
-#>   'derfinderHelper', 'derfinderPlot', 'DESeq2', 'DNAcopy', 'doParallel',
-#>   'DOSE', 'downlit', 'DT', 'e1071', 'edgeR', 'enrichplot', 'ensembldb',
-#>   'fgsea', 'foreach', 'Formula', 'furrr', 'future', 'gdsfmt', 'genefilter',
-#>   'geneLenDataBase', 'geneplotter', 'GenomeInfoDb', 'GenomeInfoDbData',
-#>   'GenomicAlignments', 'GenomicFeatures', 'GenomicFiles', 'GenomicRanges',
-#>   'GEOquery', 'ggbio', 'ggfortify', 'ggraph', 'globals', 'GO.db', 'GOSemSim',
-#>   'goseq', 'GOstats', 'graph', 'graphlayouts', 'GSEABase', 'gtsummary',
-#>   'GWASTools', 'haplo.stats', 'hardhat', 'HardyWeinberg', 'here',
-#>   'htmlwidgets', 'ideal', 'igraph', 'IHW', 'insight', 'iterators',
-#>   'kableExtra', 'KernSmooth', 'knitr', 'lava', 'lhs', 'limma', 'lme4',
-#>   'lpsymphony', 'lubridate', 'MASS', 'meta', 'mgcv', 'mice', 'modeldata',
-#>   'multcomp', 'nlme', 'officer', 'openxlsx', 'org.Hs.eg.db', 'OrganismDbi',
-#>   'parsnip', 'patchwork', 'pcaExplorer', 'pkgmaker', 'profvis', 'ProtGenerics',
-#>   'quantreg', 'quantsmooth', 'qvalue', 'raster', 'RBGL', 'RcppArmadillo',
-#>   'reactable', 'readr', 'recipes', 'recount', 'RefManageR', 'regionReport',
-#>   'rentrez', 'renv', 'Rgraphviz', 'Rhtslib', 'rmarkdown', 'rprojroot',
-#>   'rsample', 'Rsamtools', 'RSQLite', 'rstan', 'rtracklayer', 'sandwich',
-#>   'seriation', 'sever', 'shinyFeedback', 'shinyWidgets', 'sjlabelled',
-#>   'SNPassoc', 'sp', 'SQUAREM', 'statmod', 'SummarizedExperiment', 'survival',
-#>   'systemfonts', 'textshaping', 'tidypredict', 'tidytext', 'tinytex', 'topGO',
-#>   'V8', 'VariantAnnotation', 'vroom', 'workflows', 'xfun', 'XVector',
-#>   'zlibbioc'
+#>  /var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T//Rtmp5vD2bY/downloaded_packages
 ```
 
 Alternatively, you can install the package directly from GitHub:
@@ -94,15 +35,8 @@ Alternatively, you can install the package directly from GitHub:
 # install.packages("devtools") # If devtools not installed
 
 devtools::install_github("dsrobertson/onlineFDR")
-#> Downloading GitHub repo dsrobertson/onlineFDR@HEAD
-#> rprojroot (1.3-2 -> 2.0.2) [CRAN]
-#> Installing 1 packages: rprojroot
 #> 
-#>   There is a binary version available but the source version is later:
-#>           binary source needs_compilation
-#> rprojroot  1.3-2  2.0.2             FALSE
-#> installing the source package 'rprojroot'
-#>      checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/RtmpRHIxqk/remotes15329444a34b1/dsrobertson-onlineFDR-680fc9a/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/RtmpRHIxqk/remotes15329444a34b1/dsrobertson-onlineFDR-680fc9a/DESCRIPTION’
+#>      checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/Rtmp5vD2bY/remotes2b655051e504/dsrobertson-onlineFDR-049a40d/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/Rtmp5vD2bY/remotes2b655051e504/dsrobertson-onlineFDR-049a40d/DESCRIPTION’
 #>   ─  preparing ‘onlineFDR’:
 #>      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
 #>   ─  cleaning src
