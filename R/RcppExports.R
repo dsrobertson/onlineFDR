@@ -2,22 +2,22 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 addis_sync_faster <- function(pval, gammai = numeric(0), lambda = 0.5, alpha = 0.05, tau = 0.5, w0 = 0.00625) {
-    .Call('_onlineFDR_addis_sync_faster', PACKAGE = 'onlineFDR', pval, gammai, lambda, alpha, tau, w0)
+    .Call(`_onlineFDR_addis_sync_faster`, pval, gammai, lambda, alpha, tau, w0)
 }
 
 addis_async_faster <- function(pval, E, gammai = numeric(0), lambda = 0.5, alpha = 0.05, tau = 0.5, w0 = 0.00625) {
-    .Call('_onlineFDR_addis_async_faster', PACKAGE = 'onlineFDR', pval, E, gammai, lambda, alpha, tau, w0)
+    .Call(`_onlineFDR_addis_async_faster`, pval, E, gammai, lambda, alpha, tau, w0)
 }
 
 lond_faster <- function(pval, betai, alpha = 0.05, original = TRUE) {
-    .Call('_onlineFDR_lond_faster', PACKAGE = 'onlineFDR', pval, betai, alpha, original)
+    .Call(`_onlineFDR_lond_faster`, pval, betai, alpha, original)
 }
 
 lord_faster <- function(pval, gammai, version, alpha = 0.05, w0 = 0.005, b0 = 0.045, taudiscard = 0.5) {
-    .Call('_onlineFDR_lord_faster', PACKAGE = 'onlineFDR', pval, gammai, version, alpha, w0, b0, taudiscard)
+    .Call(`_onlineFDR_lord_faster`, pval, gammai, version, alpha, w0, b0, taudiscard)
 }
 
 saffron_faster <- function(pval, gammai = numeric(0), lambda = 0.5, alpha = 0.05, w0 = 0.025) {
-    .Call('_onlineFDR_saffron_faster', PACKAGE = 'onlineFDR', pval, gammai, lambda, alpha, w0)
+    .Call(`_onlineFDR_saffron_faster`, pval, gammai, lambda, alpha, w0)
 }
 
