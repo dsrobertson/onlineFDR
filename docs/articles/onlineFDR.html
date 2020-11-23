@@ -110,14 +110,19 @@
 <h2 class="hasAnchor">
 <a href="#what-is-onlinefdr" class="anchor"></a>What is <code>onlineFDR</code>?</h2>
 <p>Multiple hypothesis testing is a fundamental problem in statistical inference. The failure to manage the multiple testing problem has been highlighted as one of the elements contributing to the replicability crisis in science (Ioannidis 2015). Methodologies have been developed for a family of hypotheses to adjust the significance levels to manage the multiple testing situation by controlling error metrics such as the familywise error rate (FWER) or the false discovery rate (FDR).</p>
-<p>Frequently, modern data analysis problems have a further complexity that the hypothesis arrive sequentially in a stream.</p>
+<p>Frequently, modern data analysis problems have a further complexity that the hypotheses arrive sequentially in a stream.</p>
 <p><img src="stream-diagram.png"></p>
-<p>This introduces the challenge that at each step the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypothesis to be tested, but does have knowledge of the historic decisions to date. The International Mouse Phenotyping Consortium (Koscielny <em>et al.</em>, 2013), provides a concrete example of such a scenario. Here the dataset is constantly growing as new knockout mice lines are generated and phenotyping data uploaded to a database.</p>
-<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control the FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the adjusted significance thresholds based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas <em>et al.</em> (2018) then proposed the SAFFRON procedure, which provides an adaptive method of online FDR control. They also proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, using SAFFRON’s update rule.</p>
-<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings. For both synchronous and asynchronous testing, Tian &amp; Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
-<p>Finally, Tian &amp; Ramdas (2019b) proposed procedures that provide online control of the FWER. One procedure, online fallback, gives a uniform improvement to the naive Alpha-spending procedure (see below). The ADDIS-spending procedure compensates for the power loss of these procedures by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls.</p>
-<p>The onlineFDR package implements all these procedures and provides wrapper functions to apply them to a historic or growing dataset. As a comparison, we have also provided a function for implementation of the Alpha-spending procedure, which is based on the Bonferroni procedure adapted to the online scenario. This vignette explains the use of the package and demonstrates a typical workflow.</p>
+<p>This introduces the challenge that at each step the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but does have knowledge of the historic decisions to date.</p>
+<p>The onlineFDR package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called “alpha wealth” in which experiments cost some amount of error from your “budget” but a discovery earns some of the budget back.</p>
+<p><img src="alpha-wealth.gif"></p>
+<p>This vignette explains the two main uses of the package and demonstrates their typical workflows.</p>
 <hr>
+</div>
+<div id="which-algorithm-do-i-use" class="section level2">
+<h2 class="hasAnchor">
+<a href="#which-algorithm-do-i-use" class="anchor"></a>Which algorithm do I use?</h2>
+<p>We strive to make our R package as easy to use as possible. Please see the flowchart below to decide which function is best to solve your problem. The interactive version (click-to-functions) is available <a href="https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html">here</a></p>
+<p><img src="onlineFDR-diagram.png"></p>
 </div>
 <div id="quick-start" class="section level2">
 <h2 class="hasAnchor">
@@ -276,14 +281,15 @@
 <li><p><code><a href="../reference/online_fallback.html">online_fallback()</a></code> implements the online fallback algorithm for FWER control, as proposed by Tian &amp; Ramdas (2019b). Online fallback is a uniformly more powerful method than Alpha-spending, as it saves the significance level of a previous rejection. Online fallback strongly controls the FWER for arbitrarily dependent p-values.</p></li>
 <li><p><code><a href="../reference/ADDIS_spending.html">ADDIS_spending()</a></code> implements the ADDIS-spending algorithm for online FWER control, as proposed by Tian &amp; Ramdas (2019b). The algorithm compensates for the power loss of Alpha-spending, by including both adaptivity in the fraction of null hypotheses and the conservativeness of nulls. ADDIS-spending provides strong FWER control for independent p-values. Tian &amp; Ramdas (2019b) also presented a version for handling local dependence.</p></li>
 </ul>
-</div>
-<div id="which-function-do-i-use" class="section level3">
-<h3 class="hasAnchor">
-<a href="#which-function-do-i-use" class="anchor"></a>Which function do I use?</h3>
-<p>We strive to make our R package as easy to use as possible. Please see the flowchart below to decide which function is best to solve your problem. The interactive version (click-to-functions) is available <a href="https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html">here</a></p>
-<p><img src="onlineFDR-diagram.png"></p>
 <hr>
 </div>
+</div>
+<div id="brief-background-of-the-onlinefdr-algorithms" class="section level2">
+<h2 class="hasAnchor">
+<a href="#brief-background-of-the-onlinefdr-algorithms" class="anchor"></a>Brief Background of the <code>onlineFDR</code> algorithms</h2>
+<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control the FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the adjusted significance thresholds based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas <em>et al.</em> (2018) then proposed the SAFFRON procedure, which provides an adaptive method of online FDR control. They also proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, using SAFFRON’s update rule.</p>
+<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings. For both synchronous and asynchronous testing, Tian &amp; Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
+<p>Finally, Tian &amp; Ramdas (2019b) proposed procedures that provide online control of the FWER. One procedure, online fallback, gives a uniform improvement to the naive Alpha-spending procedure (see below). The ADDIS-spending procedure compensates for the power loss of these procedures by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls.</p>
 </div>
 <div id="how-to-get-help-for-onlinefdr" class="section level2">
 <h2 class="hasAnchor">
