@@ -112,7 +112,6 @@
 #' 
 #' sample.df3 <- data.frame(
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
-
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
 #'     'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
 #' pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
@@ -159,86 +158,30 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
     version <- checkStarVersion(d, N, version, batch.sizes)
     
     switch(version, {
+        
         ## async = 1
         E <- d$decision.times
+        out <- londstar_async_faster(pval, E, betai)
+        out$R <- as.numeric(out$R)
+        out
         
-        R <- alphai <- rep(0, N)
-        
-        alphai[1] <- betai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            D <- max(sum(R[seq_len(i - 1)] == 1 & E[seq_len(i - 1)] <= i - 1), 1)
-            
-            alphai[i] <- betai[i] * D
-            R[i] <- (pval[i] <= alphai[i])
-        }
-        
-        d.out <- data.frame(pval, alphai, R)
     }, {
         ## dep = 2
         L <- d$lags
-        
-        R <- alphai <- rep(0, N)
-        
-        alphai[1] <- betai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, lag = L, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            D <- max(sum(R[seq_len(i - 1)] == 1 & seq_len(i - 1) <= i - 1 - L[i]), 
-                1)
-            
-            alphai[i] <- betai[i] * D
-            R[i] <- (pval[i] <= alphai[i])
-        }
-        
-        d.out <- data.frame(pval, lag = L, alphai, R)
+        out <- londstar_dep_faster(pval, L, betai)
+        out$R <- as.numeric(out$R)
+        out
+     
     }, {
-        ## mini-batch = 3
-        n <- batch.sizes
-        ncum <- cumsum(n)
+        ## batch = 3
+        batch <- batch.sizes
+        batchsum <- cumsum(batch)
         
-        alphai <- matrix(NA, nrow = length(n), ncol = max(n))
-        R <- matrix(0, nrow = length(n), ncol = max(n))
+        list_out <- londstar_batch_faster(pval, batch, batchsum, betai)
         
-        for (i in seq_len(n[1])) {
-            alphai[1, i] <- betai[i]
-            R[1, i] <- (pval[i] <= alphai[1, i])
-        }
-        
-        if (length(n) == 1) {
-            d.out <- data.frame(pval, batch = rep(1, n), alphai = as.vector(t(alphai)), 
-                R = as.vector(t(R)))
-            
-            return(d.out)
-            
-        } else {
-            
-            for (b in seq_len(length(n) - 1) + 1) {
-                
-                D <- max(sum(R[seq_len(b - 1), ]), 1)
-                
-                for (i in seq_len(n[b])) {
-                  
-                  alphai[b, i] <- betai[ncum[b - 1] + i] * D
-                  R[b, i] <- (pval[ncum[b - 1] + i] <= alphai[b, i])
-                }
-            }
-        }
-        
-        alphai <- as.vector(t(alphai))
-        R <- as.vector(t(R))
-        x <- !(is.na(alphai))
+        alphai <- as.vector(t(out$alphai))
+        R <- as.vector(t(out$R))
+        x <- alphai != 0
         
         if (length(x) > 0) {
             alphai <- alphai[x]
@@ -246,8 +189,6 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
         }
         
         batch.no <- rep(seq_len(length(n)), n)
-        d.out <- data.frame(pval, batch = batch.no, alphai, R)
+        out <- data.frame(pval, batch = batch.no, alphai, as.numeric(R))
     })
-    
-    return(d.out)
 }

@@ -9,8 +9,24 @@ addis_async_faster <- function(pval, E, gammai = numeric(0), lambda = 0.5, alpha
     .Call(`_onlineFDR_addis_async_faster`, pval, E, gammai, lambda, alpha, tau, w0)
 }
 
+alphainvesting_faster <- function(pval, gammai = numeric(0), alpha = 0.05, w0 = 0.025) {
+    .Call(`_onlineFDR_alphainvesting_faster`, pval, gammai, alpha, w0)
+}
+
 lond_faster <- function(pval, betai, alpha = 0.05, original = TRUE) {
     .Call(`_onlineFDR_lond_faster`, pval, betai, alpha, original)
+}
+
+londstar_async_faster <- function(pval, E, betai, alpha = 0.05) {
+    .Call(`_onlineFDR_londstar_async_faster`, pval, E, betai, alpha)
+}
+
+londstar_dep_faster <- function(pval, L, betai, alpha = 0.05) {
+    .Call(`_onlineFDR_londstar_dep_faster`, pval, L, betai, alpha)
+}
+
+londstar_batch_faster <- function(pval, batch, batchsum, betai, alpha = 0.05) {
+    .Call(`_onlineFDR_londstar_batch_faster`, pval, batch, batchsum, betai, alpha)
 }
 
 lord_faster <- function(pval, gammai, version, alpha = 0.05, w0 = 0.005, b0 = 0.045, taudiscard = 0.5) {
