@@ -50,6 +50,7 @@ Alternatively, you can install the package directly from GitHub:
 devtools::install_github("dsrobertson/onlineFDR")
 ```
 
+We recommend the GitHub version for faster implementations of the algorithms.
 
 ## Documentation
 

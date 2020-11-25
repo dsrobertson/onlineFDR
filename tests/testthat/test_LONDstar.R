@@ -58,13 +58,13 @@ test_that("Correct rejections for version batch", {
 
 test_that("Check that LOND is a special case of the LONDstar
           algorithms", {
-    expect_equal(LOND(test.df, original=FALSE)$alphai,
+    expect_equal(LOND(test.df, original=FALSE, random = FALSE)$alphai,
                  LONDstar(test.df, version='async')$alphai)
               
-    expect_equal(LOND(test.df, original=FALSE)$alphai,
+    expect_equal(LOND(test.df, original=FALSE, random = FALSE)$alphai,
                  LONDstar(test.df3, version='dep')$alphai)
               
-    expect_equal(LOND(test.df, original=FALSE)$alphai,
+    expect_equal(LOND(test.df, original=FALSE, random = FALSE)$alphai,
                  LONDstar(test.pval, version='batch',
                           batch.sizes = rep(1,4))$alphai)              
 })

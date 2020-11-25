@@ -147,6 +147,9 @@
 #' 
 #' @docType package
 #' @name onlineFDR-package
+#' 
+## usethis namespace: start
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib onlineFDR, .registration = TRUE
+## usethis namespace: end
 NULL
-TRUE
-TRUE
