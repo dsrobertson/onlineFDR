@@ -33,6 +33,18 @@ lord_faster <- function(pval, gammai, version, alpha = 0.05, w0 = 0.005, b0 = 0.
     .Call(`_onlineFDR_lord_faster`, pval, gammai, version, alpha, w0, b0, taudiscard)
 }
 
+lordstar_async_faster <- function(pval, E, gammai, w0 = 0.005, alpha = 0.05) {
+    .Call(`_onlineFDR_lordstar_async_faster`, pval, E, gammai, w0, alpha)
+}
+
+lordstar_dep_faster <- function(pval, L, gammai, w0 = 0.005, alpha = 0.05) {
+    .Call(`_onlineFDR_lordstar_dep_faster`, pval, L, gammai, w0, alpha)
+}
+
+lordstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.005, alpha = 0.05) {
+    .Call(`_onlineFDR_lordstar_batch_faster`, pval, batch, batchsum, gammai, w0, alpha)
+}
+
 saffron_faster <- function(pval, gammai = numeric(0), lambda = 0.5, alpha = 0.05, w0 = 0.025) {
     .Call(`_onlineFDR_saffron_faster`, pval, gammai, lambda, alpha, w0)
 }
