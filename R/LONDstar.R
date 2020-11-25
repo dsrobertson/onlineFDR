@@ -185,7 +185,7 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
         
         if (length(x) > 0) {
             alphai <- alphai[x]
-            R <- R[x] %>% as.numeric()
+            R <- as.numeric(R[x])
         }
         
         batch.no <- rep(seq_len(length(batch)), batch)

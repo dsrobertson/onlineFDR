@@ -4,21 +4,25 @@
 \alias{setBound}
 \title{setBound}
 \usage{
-setBound(alg, alpha = 0.05, N)
+setBound(alg, alpha = 0.05, N, b0)
 }
 \arguments{
-\item{alg}{A string that takes the value of one of the following: LOND, LORD, LORDdep, SAFFRON, ADDIS, LONDSTAR, LORDSTAR, SAFFRONSTAR, or alphainvesting}
+\item{alg}{A string that takes the value of one of the following: LOND, LORD,
+LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, or
+Alpha_investing}
 
-\item{alpha}{Overall significance level of the FDR procedure, the default is 0.05.}
+\item{alpha}{Overall significance level of the FDR procedure, the default is
+0.05.}
 
-\item{N}{The number of hypotheses to be tested}
+\item{N}{An upper bound on the number of hypotheses to be tested}
+
+\item{b0}{The 'payout' for rejecting a hypothesis, required for LORDdep.}
 }
 \value{
-\item{bound}{A vector of nonnegative numbers that define the update rule to each subsequent significance threshold}
+\item{bound}{ A vector giving the values of a default sequence
+\eqn{\gamma_i} of nonnegative numbers that sum to 1.}
 }
 \description{
-Sets an upper bound to the number of hypotheses to be tested
-}
-\details{
-Note that when specifying the number of hypotheses to be tested, \code{N} should not be less than the number of hypotheses within your target dataset.
+Calculates a default sequence of non-negative numbers \eqn{\gamma_i} that sum
+to 1, given an upper bound \eqn{N} on the number of hypotheses to be tested.
 }
