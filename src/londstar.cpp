@@ -25,9 +25,11 @@ DataFrame londstar_async_faster(NumericVector pval,
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
 				Dsum++;
+			// Rcout << "Dsum: " << Dsum << " R: " << R[j] << " E: " << E[j] << " j: " << j << " i-1: " << i-1 << endl;
+
 		}
 		int D = std::max(Dsum, 1);
-		alphai[i] = betai[i-1] * D;
+		alphai[i] = betai[i] * D;
 		R[i] = (pval[i] <= alphai[i]);
 	}
 
@@ -52,12 +54,12 @@ DataFrame londstar_dep_faster(NumericVector pval,
 	for (int i = 1; i < N; i++) {
 		int Dsum = 0;
 		for (int j = 0; j <= i-1; j++) {
-			if (R[j] && (j-1 <= i-1-L[j+1]))
+			if (R[j] && (j <= j - L[i]))
 				Dsum++;
 		}
 		int D = std::max(Dsum, 1);
-		alphai[i-1] = betai[i-1] * D;
-		R[i-1] = (pval[i-1] <= alphai[i-1]);
+		alphai[i] = betai[i] * D;
+		R[i] = (pval[i] <= alphai[i]);
 	}
 
 	return DataFrame::create(_["pval"] = pval,
@@ -86,15 +88,15 @@ List londstar_batch_faster(NumericVector pval,
 	for (int b = 1; b < batch.size(); b++) {
 		int Dsum = 0;
 		for (int j = 0; j <= b-1; j++) {
-			for (int k = 0; k <= R.ncol(); k++) {
+			for (int k = 0; k <= R.ncol()-1; k++) {
 				if(R(j,k))
 					Dsum++;
 			}
 		}
 		int D = std::max(Dsum, 1);
-		for (int i = 0; i < batch[b]; i++) {
-			alphai(b,i) = betai[batchsum[b-1] + i] * D;
-			R(b,i) = (pval[batchsum[b-1] + i] <= alphai(b,i));
+		for (int x = 0; x < batch[b]; x++) {
+			alphai(b,x) = betai[batchsum[b-1] + x] * D;
+			R(b,x) = (pval[batchsum[b-1] + x] <= alphai(b,x));
 		}
 	}
 

@@ -179,16 +179,16 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
         
         list_out <- londstar_batch_faster(pval, batch, batchsum, betai)
         
-        alphai <- as.vector(t(out$alphai))
-        R <- as.vector(t(out$R))
+        alphai <- as.vector(t(list_out$alphai))
+        R <- as.vector(t(list_out$R))
         x <- alphai != 0
         
         if (length(x) > 0) {
             alphai <- alphai[x]
-            R <- R[x]
+            R <- R[x] %>% as.numeric()
         }
         
-        batch.no <- rep(seq_len(length(n)), n)
-        out <- data.frame(pval, batch = batch.no, alphai, as.numeric(R))
+        batch.no <- rep(seq_len(length(batch)), batch)
+        out <- data.frame(pval, batch = batch.no, alphai, R)
     })
 }
