@@ -25,7 +25,6 @@ DataFrame londstar_async_faster(NumericVector pval,
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
 				Dsum++;
-			// Rcout << "Dsum: " << Dsum << " R: " << R[j] << " E: " << E[j] << " j: " << j << " i-1: " << i-1 << endl;
 
 		}
 		int D = std::max(Dsum, 1);
@@ -75,7 +74,6 @@ List londstar_batch_faster(NumericVector pval,
 	IntegerVector batchsum,
 	NumericVector betai,
 	double alpha = 0.05) {
-
 
 	NumericMatrix alphai(batch.size(), max(batch));
 	LogicalMatrix R(batch.size(), max(batch));
