@@ -167,130 +167,37 @@ LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
     version <- checkStarVersion(d, N, version, batch.sizes)
     
     switch(version, {
+        
         ## async = 1
         E <- d$decision.times
-        alphai <- R <- rep(0, N)
+        out <- lordstar_async_faster(pval, E, gammai)
+        out$R <- as.numeric(out$R)
+        out
         
-        alphai[1] <- gammai[1] * w0
-        R[1] <- pval[1] <= alphai[1]
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            r <- which(R[seq_len(i - 1)] == 1 & E[seq_len(i - 1)] <= i - 1)
-            
-            if (length(r) <= 1) {
-                alphai[i] <- gammai[i] * w0 + (alpha - w0) * sum(gammai[i - r])
-                R[i] <- pval[i] <= alphai[i]
-                
-            } else {
-                alphai[i] <- gammai[i] * w0 + (alpha - w0) * gammai[i - r[1]] + alpha * 
-                  sum(gammai[i - r[-1]])
-                
-                R[i] = pval[i] <= alphai[i]
-            }
-        }
-        
-        d.out <- data.frame(pval, alphai, R)
     }, {
         ## dep = 2
         L <- d$lags
+        out <- lordstar_dep_faster(pval, L, gammai)
+        out$R <- as.numeric(out$R)
+        out
         
-        alphai <- R <- rep(0, N)
-        
-        alphai[1] <- gammai[1] * w0
-        R[1] <- pval[1] <= alphai[1]
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, lag = L, alphai, R)
-            return(d.out)
-        }
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            r <- which(R[seq_len(i - 1)] == 1 & seq_len(i - 1) <= i - 1 - L[i])
-            
-            if (length(r) <= 1) {
-                alphai[i] <- gammai[i] * w0 + (alpha - w0) * sum(gammai[i - r])
-                R[i] <- pval[i] <= alphai[i]
-                
-            } else {
-                alphai[i] <- gammai[i] * w0 + (alpha - w0) * gammai[i - r[1]] + alpha * 
-                  sum(gammai[i - r[-1]])
-                
-                R[i] = pval[i] <= alphai[i]
-            }
-        }
-        
-        d.out <- data.frame(pval, lag = L, alphai, R)
     }, {
-        ## mini-batch = 3
-        n <- batch.sizes
-        ncum <- cumsum(n)
+        ## batch = 3
+        batch <- batch.sizes
+        batchsum <- cumsum(batch)
         
-        alphai <- matrix(NA, nrow = length(n), ncol = max(n))
-        R <- matrix(0, nrow = length(n), ncol = max(n))
+        list_out <- lordstar_batch_faster(pval, batch, batchsum, gammai)
         
-        for (i in seq_len(n[1])) {
-            alphai[1, i] <- gammai[i] * w0
-            R[1, i] <- pval[i] <= alphai[1, i]
+        alphai <- as.vector(t(list_out$alphai))
+        R <- as.vector(t(list_out$R))
+        x <- alphai != 0
+        
+        if (length(x) > 0) {
+            alphai <- alphai[x]
+            R <- as.numeric(R[x])
         }
         
-        if (length(n) == 1) {
-            d.out <- data.frame(pval, batch = rep(1, n), alphai = as.vector(t(alphai)), 
-                R = as.vector(t(R)))
-            
-            return(d.out)
-            
-        } else {
-            
-            r <- integer(0)
-            
-            for (b in seq_len(length(n) - 1) + 1) {
-                
-                Rcum <- cumsum(rowSums(R))
-                
-                for (i in seq_len(n[b])) {
-                  
-                  if (max(Rcum) > 0) {
-                    r <- sapply(seq_len(max(Rcum)), function(x) {
-                      match(1, Rcum >= x)
-                    })
-                  }
-                  
-                  if (length(r) <= 1) {
-                    alphai[b, i] <- gammai[ncum[b - 1] + i] * w0 + (alpha - w0) * 
-                      sum(gammai[ncum[b - 1] + i - ncum[r]])
-                    
-                    R[b, i] <- pval[ncum[b - 1] + i] <= alphai[b, i]
-                    
-                  } else {
-                    alphai[b, i] <- gammai[ncum[b - 1] + i] * w0 + (alpha - w0) * 
-                      gammai[ncum[b - 1] + i - ncum[r[1]]] + alpha * sum(gammai[ncum[b - 
-                      1] + i - ncum[r[-1]]])
-                    
-                    R[b, i] = pval[ncum[b - 1] + i] <= alphai[b, i]
-                  }
-                }
-            }
-            
-            alphai <- as.vector(t(alphai))
-            R <- as.vector(t(R))
-            x <- !(is.na(alphai))
-            
-            if (length(x) > 0) {
-                alphai <- alphai[x]
-                R <- R[x]
-            }
-            
-            batch.no <- rep(seq_len(length(n)), n)
-            d.out <- data.frame(pval, batch = batch.no, alphai, R)
-        }
+        batch.no <- rep(seq_len(length(batch)), batch)
+        out <- data.frame(pval, batch = batch.no, alphai, R)
     })
-    
-    return(d.out)
 }
