@@ -121,9 +121,7 @@ List lordstar_batch_faster(NumericVector pval,
 	}
 
 	for (int b = 1; b < batch.size(); b++) {
-		Rcout << "R: " << R << endl;
 		NumericVector rcum = cumsum(static_cast<NumericVector>(rowSums(R)));
-		Rcout << "Rcum: " << rcum << endl;
 
 		for (int x = 0; x < batch[b]; x++) {
 			NumericVector r(0);
@@ -136,19 +134,16 @@ List lordstar_batch_faster(NumericVector pval,
 
 			if(r.size() <= 1) {
 				if(r.size() > 0){
-					Rcout << "a" << endl;
 					alphai(b,x) = gammai[batchsum[b-1] + x] * w0 + (alpha - w0) * 
 					gammai[batchsum[b-1] + x - batchsum[r[0]]];
 
 				} else {
-					Rcout << "b" << endl;
 					double simul = 0;
 					alphai(b,x) = gammai[batchsum[b-1] + x] * w0 + (alpha - w0) * 
 					simul;
 				}
 				R(b,x) = (pval[batchsum[b-1] + x] <= alphai(b,x));
 			} else {
-				Rcout << "c" << endl;
 				double gammaisum = 0;
 				int bound = r.size();
 				for (int g = 1; g < bound; g++) {
