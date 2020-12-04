@@ -3,6 +3,7 @@
 language: r
 r: bioc-release
 bioc_check: true
+warnings_are_errors: false
 
 r_packages:
   - covr
