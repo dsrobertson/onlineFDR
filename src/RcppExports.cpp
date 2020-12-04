@@ -187,6 +187,55 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// saffronstar_async_faster
+DataFrame saffronstar_async_faster(NumericVector pval, IntegerVector E, NumericVector gammai, double w0, double lambda, double alpha);
+RcppExport SEXP _onlineFDR_saffronstar_async_faster(SEXP pvalSEXP, SEXP ESEXP, SEXP gammaiSEXP, SEXP w0SEXP, SEXP lambdaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pval(pvalSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type E(ESEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type gammai(gammaiSEXP);
+    Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(saffronstar_async_faster(pval, E, gammai, w0, lambda, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// saffronstar_dep_faster
+DataFrame saffronstar_dep_faster(NumericVector pval, IntegerVector L, NumericVector gammai, double w0, double lambda, double alpha);
+RcppExport SEXP _onlineFDR_saffronstar_dep_faster(SEXP pvalSEXP, SEXP LSEXP, SEXP gammaiSEXP, SEXP w0SEXP, SEXP lambdaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pval(pvalSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type L(LSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type gammai(gammaiSEXP);
+    Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(saffronstar_dep_faster(pval, L, gammai, w0, lambda, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
+// saffronstar_batch_faster
+List saffronstar_batch_faster(NumericVector pval, IntegerVector batch, IntegerVector batchsum, NumericVector gammai, double w0, double lambda, double alpha);
+RcppExport SEXP _onlineFDR_saffronstar_batch_faster(SEXP pvalSEXP, SEXP batchSEXP, SEXP batchsumSEXP, SEXP gammaiSEXP, SEXP w0SEXP, SEXP lambdaSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type pval(pvalSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type batch(batchSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type batchsum(batchsumSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type gammai(gammaiSEXP);
+    Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(saffronstar_batch_faster(pval, batch, batchsum, gammai, w0, lambda, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_onlineFDR_addis_sync_faster", (DL_FUNC) &_onlineFDR_addis_sync_faster, 6},
@@ -201,6 +250,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_onlineFDR_lordstar_dep_faster", (DL_FUNC) &_onlineFDR_lordstar_dep_faster, 5},
     {"_onlineFDR_lordstar_batch_faster", (DL_FUNC) &_onlineFDR_lordstar_batch_faster, 6},
     {"_onlineFDR_saffron_faster", (DL_FUNC) &_onlineFDR_saffron_faster, 5},
+    {"_onlineFDR_saffronstar_async_faster", (DL_FUNC) &_onlineFDR_saffronstar_async_faster, 6},
+    {"_onlineFDR_saffronstar_dep_faster", (DL_FUNC) &_onlineFDR_saffronstar_dep_faster, 6},
+    {"_onlineFDR_saffronstar_batch_faster", (DL_FUNC) &_onlineFDR_saffronstar_batch_faster, 7},
     {NULL, NULL, 0}
 };
 
