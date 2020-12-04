@@ -49,3 +49,15 @@ saffron_faster <- function(pval, gammai = numeric(0), lambda = 0.5, alpha = 0.05
     .Call(`_onlineFDR_saffron_faster`, pval, gammai, lambda, alpha, w0)
 }
 
+saffronstar_async_faster <- function(pval, E, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05) {
+    .Call(`_onlineFDR_saffronstar_async_faster`, pval, E, gammai, w0, lambda, alpha)
+}
+
+saffronstar_dep_faster <- function(pval, L, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05) {
+    .Call(`_onlineFDR_saffronstar_dep_faster`, pval, L, gammai, w0, lambda, alpha)
+}
+
+saffronstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05) {
+    .Call(`_onlineFDR_saffronstar_batch_faster`, pval, batch, batchsum, gammai, w0, lambda, alpha)
+}
+

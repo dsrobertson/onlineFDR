@@ -73,7 +73,7 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 
 		NumericVector r(0);
 		for (int j = 0; j <= i-1; j++) {
-			if (R[j] && (j <= j -L[i]))
+			if (R[j] && (j <= j - L[i]))
 				r.push_back(j);
 		}
 
