@@ -136,6 +136,8 @@
 LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 0.5, 
     random = TRUE, date.format = "%Y-%m-%d") {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
@@ -145,7 +147,6 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (alpha <= 0 || alpha > 1) {

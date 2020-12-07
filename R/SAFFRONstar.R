@@ -147,6 +147,8 @@
 SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batch.sizes, 
     discard = FALSE, tau.discard = 0.5) {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         checkSTARdf(d, version)
         pval <- d$pval
@@ -174,7 +176,6 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         return(ADDIS(d, alpha, gammai, w0, lambda, tau.discard, async = TRUE))
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (missing(gammai)) {

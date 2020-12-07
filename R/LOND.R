@@ -107,6 +107,8 @@
 LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format = "%Y-%m-%d", 
     original = TRUE) {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
@@ -116,7 +118,6 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (alpha < 0 || alpha > 1) {

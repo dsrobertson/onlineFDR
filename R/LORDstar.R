@@ -126,6 +126,8 @@
 
 LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         checkSTARdf(d, version)
         pval <- d$pval
@@ -152,8 +154,7 @@ LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
     } else if (w0 > alpha) {
         stop("w0 must not be greater than alpha.")
     }
-    
-    checkPval(pval)
+
     N <- length(pval)
     
     if (missing(gammai)) {
