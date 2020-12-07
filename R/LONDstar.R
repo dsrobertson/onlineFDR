@@ -124,6 +124,8 @@
 
 LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         checkSTARdf(d, version)
         pval <- d$pval
@@ -142,8 +144,7 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
     if (alpha < 0 || alpha > 1) {
         stop("alpha must be between 0 and 1.")
     }
-    
-    checkPval(pval)
+
     N <- length(pval)
     
     if (missing(betai)) {

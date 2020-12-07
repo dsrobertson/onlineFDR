@@ -111,28 +111,18 @@
 <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
 
+
 <span class="co"># The following initializes usage of Bioc</span>
 <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; The downloaded binary packages are in</span>
-<span class="co">#&gt;  /var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T//Rtmp5vD2bY/downloaded_packages</span></pre></div>
+
+
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></pre></div>
 <p>Alternatively, you can install the package directly from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="co"># install.packages("devtools") # If devtools not installed</span>
 
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;      checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/Rtmp5vD2bY/remotes2b655051e504/dsrobertson-onlineFDR-049a40d/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/8q/bl_mhpkj7m13gjn159ct8rn40000gn/T/Rtmp5vD2bY/remotes2b655051e504/dsrobertson-onlineFDR-049a40d/DESCRIPTION’</span>
-<span class="co">#&gt;   ─  preparing ‘onlineFDR’:</span>
-<span class="co">#&gt;      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information</span>
-<span class="co">#&gt;   ─  cleaning src</span>
-<span class="co">#&gt;   ─  checking for LF line-endings in source and make files and shell scripts</span>
-<span class="co">#&gt;   ─  checking for empty or unneeded directories</span>
-<span class="co">#&gt;   ─  building ‘onlineFDR_1.7.1.tar.gz’</span>
-<span class="co">#&gt;      </span>
-<span class="co">#&gt; </span></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">

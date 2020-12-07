@@ -89,6 +89,7 @@
 #' @export
 
 ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE) {
+    checkPval(d)
     
     if (is.data.frame(d)) {
         pval <- d$pval
@@ -117,8 +118,7 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = 
     if (tau <= 0 || tau > 1) {
         stop("tau must be between 0 and 1.")
     }
-    
-    checkPval(pval)
+
     N <- length(pval)
     
     if (missing(gammai)) {

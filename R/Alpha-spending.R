@@ -80,6 +80,8 @@
 
 Alpha_spending <- function(d, alpha = 0.05, gammai, random = TRUE, date.format = "%Y-%m-%d") {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
@@ -89,7 +91,7 @@ Alpha_spending <- function(d, alpha = 0.05, gammai, random = TRUE, date.format =
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    checkPval(pval)
+
     N <- length(pval)
     
     if (alpha < 0 || alpha > 1) {

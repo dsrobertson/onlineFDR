@@ -87,6 +87,8 @@
 
 ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE) {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         pval <- d$pval
     } else if (is.vector(d)) {
@@ -111,7 +113,6 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
         stop("lambda must be less than tau.")
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (missing(gammai)) {

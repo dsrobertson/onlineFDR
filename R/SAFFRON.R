@@ -117,6 +117,8 @@
 SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, date.format = "%Y-%m-%d", 
     discard = FALSE, tau.discard = 0.5) {
     
+    checkPval(d)
+    
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
@@ -125,8 +127,7 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, da
     } else {
         stop("d must either be a dataframe or a vector of p-values.")
     }
-    
-    checkPval(pval)
+
     N <- length(pval)
     
     if (alpha <= 0 || alpha > 1) {
