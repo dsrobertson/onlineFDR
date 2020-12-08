@@ -124,7 +124,7 @@
 
 LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         checkSTARdf(d, version)

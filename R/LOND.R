@@ -107,7 +107,7 @@
 LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format = "%Y-%m-%d", 
     original = TRUE) {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)

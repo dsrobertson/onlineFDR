@@ -147,7 +147,7 @@
 SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batch.sizes, 
     discard = FALSE, tau.discard = 0.5) {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         checkSTARdf(d, version)

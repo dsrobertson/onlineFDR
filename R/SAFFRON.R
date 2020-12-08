@@ -117,7 +117,7 @@
 SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, date.format = "%Y-%m-%d", 
     discard = FALSE, tau.discard = 0.5) {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)

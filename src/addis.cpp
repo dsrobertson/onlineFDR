@@ -178,13 +178,15 @@ DataFrame addis_async_faster(NumericVector pval,
 		K = kappai.size();
 
 		cand[i-1] = (pval[i-1] <= tau*lambda);
-		
+		Rcout << "point A" << endl;
 		int candsum = 0;
 		//C++ trick to loop "seq_len" and use conditional incrementor for "sum"
 		for (int j = 0; j <= i-1; j++) {
 			if (cand[j] && (E[j]-1 <= i-1))
 				candsum++;
 		}
+
+		Rcout << "point B" << endl;
 
 		int Ssum = 0;
 		for (int j = 0; j <= i-1; j++) {
