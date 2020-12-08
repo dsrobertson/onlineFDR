@@ -80,7 +80,7 @@
 
 Alpha_spending <- function(d, alpha = 0.05, gammai, random = TRUE, date.format = "%Y-%m-%d") {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)

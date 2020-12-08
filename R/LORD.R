@@ -136,7 +136,7 @@
 LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 0.5, 
     random = TRUE, date.format = "%Y-%m-%d") {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)

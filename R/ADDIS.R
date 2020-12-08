@@ -89,7 +89,7 @@
 #' @export
 
 ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5, async = FALSE) {
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         pval <- d$pval

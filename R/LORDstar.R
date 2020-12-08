@@ -126,7 +126,7 @@
 
 LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
     
-    checkPval(d)
+    d <- checkPval(d)
     
     if (is.data.frame(d)) {
         checkSTARdf(d, version)
