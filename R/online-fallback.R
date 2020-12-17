@@ -75,6 +75,8 @@
 
 online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, date.format = "%Y-%m-%d") {
     
+    d <- checkPval(d)
+    
     if (is.data.frame(d)) {
         d <- checkdf(d, random, date.format)
         pval <- d$pval
@@ -84,7 +86,6 @@ online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, date.format 
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (alpha <= 0 || alpha > 1) {
@@ -100,25 +101,9 @@ online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, date.format 
     }
     
     ### Start algorithm
-    
-    alphai <- R <- rep(0, N)
-    
-    alphai[1] <- alpha * gammai[1]
-    R[1] <- (pval[1] <= alphai[1])
-    
-    if (N == 1) {
-        d.out <- data.frame(d, alphai, R)
-        return(d.out)
-    }
-    
-    for (i in (seq_len(N - 1) + 1)) {
-        
-        alphai[i] <- alpha * gammai[i] + R[i - 1] * alphai[i - 1]
-        R[i] <- (pval[i] <= alphai[i])
-    }
-    
-    d.out <- data.frame(d, alphai, R)
-    return(d.out)
+    out <- online_fallback_faster(pval, gammai)
+    out$R <- as.numeric(out$R)
+    out
 }
 TRUE
 TRUE

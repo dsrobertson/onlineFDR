@@ -126,62 +126,20 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
     
     if (!(dep)) {
         
-        alphai <- R <- rep(0, N)
-        
-        alphai[1] <- alpha * (tau - lambda) * gammai[1]
-        R[1] <- (pval[1] <= alphai[1])
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, alphai, R)
-            return(d.out)
-        }
-        
-        select.sum <- (pval[1] <= tau)
-        cand.sum <- (pval[1] <= lambda)
-        
-        for (i in (seq_len(N - 1) + 1)) {
+        out <- addis_spending_faster(pval, gammai)
+        out$R <- as.numeric(out$R)
+        out
             
-            alphai[i] <- alpha * (tau - lambda) * gammai[1 + select.sum - cand.sum]
-            R[i] <- (pval[i] <= alphai[i])
-            
-            select.sum <- select.sum + (pval[i] <= tau)
-            cand.sum <- cand.sum + (pval[i] <= lambda)
-            
-        }
     } else {
         
         checkStarVersion(d, N, "dep")
         
         L <- d$lags
         
-        R <- select <- cand <- alphai <- rep(0, N)
-        
-        alphai[1] <- alpha * (tau - lambda) * gammai[1]
-        R[1] <- pval[1] <= alphai[1]
-        
-        if (N == 1) {
-            d.out <- data.frame(pval, lag = L, alphai, R)
-            return(d.out)
-        }
-        
-        select[1] <- (pval[1] <= tau)
-        cand[1] <- (pval[1] <= lambda)
-        
-        for (i in (seq_len(N - 1) + 1)) {
-            
-            alphai[i] <- alpha * (tau - lambda) * gammai[1 + min(L[i], i - 1) + sum(select[seq_len(max(0, 
-                i - L[i] - 1))]) - sum(cand[seq_len(max(0, i - L[i] - 1))])]
-            
-            R[i] <- (pval[i] <= alphai[i])
-            
-            select[i] <- (pval[i] <= tau)
-            cand[i] <- (pval[i] <= lambda)
-        }
+        out <- addis_spending_dep_faster(pval, L, gammai)
+        out$R <- as.numeric(out$R)
+        out
     }
-    
-    d.out <- data.frame(pval, alphai, R)
-    
-    return(d.out)
 }
 TRUE
 TRUE
