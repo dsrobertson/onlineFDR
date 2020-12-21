@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <vector>
 #include <algorithm>
 
 using namespace Rcpp;
@@ -165,10 +166,10 @@ DataFrame addis_async_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 
 	int K;
-	
+	std::vector<bool> kappai;
 	for (int i = 1; i < N; i++) {
 
-		IntegerVector kappai(0);
+		kappai.clear();
 		// nightmare to code the which statement
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
@@ -178,15 +179,13 @@ DataFrame addis_async_faster(NumericVector pval,
 		K = kappai.size();
 
 		cand[i-1] = (pval[i-1] <= tau*lambda);
-		Rcout << "point A" << endl;
+
 		int candsum = 0;
 		//C++ trick to loop "seq_len" and use conditional incrementor for "sum"
 		for (int j = 0; j <= i-1; j++) {
 			if (cand[j] && (E[j]-1 <= i-1))
 				candsum++;
 		}
-
-		Rcout << "point B" << endl;
 
 		int Ssum = 0;
 		for (int j = 0; j <= i-1; j++) {

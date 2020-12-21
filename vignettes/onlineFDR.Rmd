@@ -64,6 +64,15 @@ your problem. The interactive version (click-to-functions) is available
 [here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html)
 
 ![](onlineFDR-diagram.png)
+### Frequently Asked Questions
+We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
+
+* What is the difference between FDR and FWER?
+FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
+
+* What is the difference between sequential and non-sequential hypothesis testing?
+
+* What does it mean for p-values to be independent or dependent?
 
 ## Quick Start
 
