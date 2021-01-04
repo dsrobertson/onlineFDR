@@ -9,6 +9,14 @@ addis_async_faster <- function(pval, E, gammai = numeric(0), lambda = 0.5, alpha
     .Call(`_onlineFDR_addis_async_faster`, pval, E, gammai, lambda, alpha, tau, w0)
 }
 
+addis_spending_faster <- function(pval, gammai = numeric(0), alpha = 0.05, lambda = 0.25, tau = 0.5) {
+    .Call(`_onlineFDR_addis_spending_faster`, pval, gammai, alpha, lambda, tau)
+}
+
+addis_spending_dep_faster <- function(pval, L, gammai = numeric(0), alpha = 0.05, lambda = 0.25, tau = 0.5) {
+    .Call(`_onlineFDR_addis_spending_dep_faster`, pval, L, gammai, alpha, lambda, tau)
+}
+
 alphainvesting_faster <- function(pval, gammai = numeric(0), alpha = 0.05, w0 = 0.025) {
     .Call(`_onlineFDR_alphainvesting_faster`, pval, gammai, alpha, w0)
 }
@@ -43,6 +51,10 @@ lordstar_dep_faster <- function(pval, L, gammai, w0 = 0.005, alpha = 0.05) {
 
 lordstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.005, alpha = 0.05) {
     .Call(`_onlineFDR_lordstar_batch_faster`, pval, batch, batchsum, gammai, w0, alpha)
+}
+
+online_fallback_faster <- function(pval, gammai, alpha = 0.05) {
+    .Call(`_onlineFDR_online_fallback_faster`, pval, gammai, alpha)
 }
 
 saffron_faster <- function(pval, gammai = numeric(0), lambda = 0.5, alpha = 0.05, w0 = 0.025) {
