@@ -1,5 +1,4 @@
-[![Build
-Status](https://travis-ci.org/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.org/dsrobertson/onlineFDR)
+[![Build Status](https://travis-ci.com/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.com/dsrobertson/onlineFDR)
 [![codecov](https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg)](https://codecov.io/gh/dsrobertson/onlineFDR)
 
 # onlineFDR <img src="man/figures/logo.png" align="right" />
