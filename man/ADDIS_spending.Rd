@@ -28,7 +28,7 @@ be between 0 and 1, defaults to 0.5.}
 p-values}
 }
 \value{
-\item{d.out}{A dataframe with the original p-values \code{pval}, the
+\item{out}{A dataframe with the original p-values \code{pval}, the
   adjusted testing levels \eqn{\alpha_i} and the indicator function of
   discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
   p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =

@@ -40,7 +40,7 @@
 #'@param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#'@return \item{d.out}{ A dataframe with the original data \code{d} (which will
+#'@return \item{out}{ A dataframe with the original data \code{d} (which will
 #'  be reordered if there are batches and \code{random = TRUE}), the adjusted
 #'  signifcance thresholds \code{alphai} and the indicator function of
 #'  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis

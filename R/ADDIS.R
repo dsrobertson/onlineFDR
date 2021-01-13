@@ -52,7 +52,7 @@
 #' @param async Logical. If \code{TRUE} runs the version for an asynchronous
 #'   testing process
 #'
-#' @return \item{d.out}{A dataframe with the original p-values \code{pval}, the
+#' @return \item{out}{A dataframe with the original p-values \code{pval}, the
 #'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
 #'   discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
 #'   p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =

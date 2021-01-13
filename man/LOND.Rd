@@ -41,7 +41,7 @@ of Javanmard and Montanari (2015), otherwise runs the modified algorithm
 of Zrnic et al. (2018). Defaults to \code{TRUE}.}
 }
 \value{
-\item{d.out}{ A dataframe with the original data \code{d} (which
+\item{out}{ A dataframe with the original data \code{d} (which
 will be reordered if there are batches and \code{random = TRUE}), the
 LOND-adjusted significance thresholds \eqn{\alpha_i} and the indicator
 function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
