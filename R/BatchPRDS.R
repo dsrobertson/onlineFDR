@@ -1,44 +1,46 @@
 #' BatchPRDS: Online batch FDR control under Positive Dependence
-#' 
-#' Implements the BatchPRDS algorithm for online FDR control, where PRDS stands for
-#' positive regression dependency on a subset, as presented by
-#' Zrnic et. al. (2020).
 #'
-#' The function takes as its input a dataframe
-#' with three columns: an identifier (`id'), 
-#' and a p-value (`pval').
+#' Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
+#' for positive regression dependency on a subset, as presented by Zrnic et. al.
+#' (2020).
 #'
-#' The BatchPRDS algorithm controls the FDR when the p-values in one batch
-#' are positively dependent, and independent across batches.
-#' Given an overall significance level \eqn{\alpha}, 
-#' we choose a sequence of non-negative numbers \eqn{\gamma_i} such
-#' that they sum to \eqn{\alpha}. The algorithm runs the Benjamini-Hochberg procedure
-#' on each batch, where the values of the adjusted significance
-#' thresholds \eqn{\alpha_{t+1}} are chosen as follows: \deqn{\alpha_{t+1} = \alpha \frac{\gamma_{t+1}}{n_{t+1}}(n_{t+1} + \sum_{s=1}^{t}R_s
-#' where \eqn{R_s} denotes the number of discoveries in batch s.
-#' 
-#' Further details of the BatchPRDS algorithm can be found in Zrnic et. al. (2020).
-#' 
-#' @param d A dataframe with three columns: an identifier (`id') 
-#' and a p-value (`pval').
+#' The function takes as its input a dataframe with three columns: identifiers
+#' (`id'), batch numbers (`batch') and p-values (`pval').
+#'
+#' The BatchPRDS algorithm controls the FDR when the p-values in one batch are
+#' positively dependent, and independent across batches. Given an overall
+#' significance level \eqn{\alpha}, we choose a sequence of non-negative numbers
+#' \eqn{\gamma_i} such that they sum to 1. The algorithm runs the
+#' Benjamini-Hochberg procedure on each batch, where the values of the adjusted
+#' significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
+#' discoveries.
+#'
+#' Further details of the BatchPRDS algorithm can be found in Zrnic et. al.
+#' (2020).
+#'
+#' @param d A dataframe with three columns: identifiers (`id'),
+#'   batch numbers (`batch') and p-values (`pval').
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05.
-#'   
+#'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#' \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
-#' 
-#' @return \item{out}{ A dataframe with the original data \code{d} and the indicator
-#' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#' \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal to 
-#' \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value 
-#' within an ordered set and \eqn{n} is the total number of hypotheses 
-#' within the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
-#' 
-#' @references Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching in Multiple Hypothesis Testing. \emph{International Conference on Artificial Intelligence and Statistics}: 3806-3815 
-#' 
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'
+#' @return \item{out}{ A dataframe with the original data \code{d} and the
+#'   indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
+#'   if the \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal
+#'   to \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value
+#'   within an ordered set and \eqn{n} is the total number of hypotheses within
+#'   the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
+#'   (otherwise \code{R[i] = 0}).}
+#'
+#' @references Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+#'   Batching in Multiple Hypothesis Testing. \emph{International Conference on
+#'   Artificial Intelligence and Statistics}: 3806-3815
+#'
 #' @examples
-#' 
+#'
 #' sample.df <- data.frame(
 #' id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
 #'     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
@@ -47,9 +49,9 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
 #' batch = c(rep(1,5), rep(2,6), rep(3,4)))
-#' 
+#'
 #' BatchPRDS(sample.df)
-#' 
+#'
 #' @export
 
 BatchPRDS <- function(d, alpha = 0.05, gammai){
@@ -73,12 +75,13 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   }
   
   ### Start Batch PRDS procedure
-  alphai <- c()
-  alphai[1] <- gammai[1] * alpha
   n_batch <- length(unique(d$batch))
   all_batches <- list()
   
-  for(i in seq_along(1:n_batch)){
+  alphai <- rep(0, n_batch)
+  alphai[1] <- gammai[1] * alpha
+  
+  for(i in seq_len(n_batch)){
     batch_data <- d[d$batch == i,]
     batch_data$ind <- seq.int(nrow(batch_data))
     n <- length(batch_data$pval)

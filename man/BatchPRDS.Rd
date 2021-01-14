@@ -7,8 +7,8 @@
 BatchPRDS(d, alpha = 0.05, gammai)
 }
 \arguments{
-\item{d}{A dataframe with three columns: an identifier (`id') 
-and a p-value (`pval').}
+\item{d}{A dataframe with three columns: identifiers (`id'),
+batch numbers (`batch') and p-values (`pval').}
 
 \item{alpha}{Overall significance level of the FDR procedure, the default is
 0.05.}
@@ -17,20 +17,33 @@ and a p-value (`pval').}
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 }
 \value{
-\item{out}{ A dataframe with the original data \code{d} and the indicator
-function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-\eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal to 
-\eqn{(r/n)*\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value 
-within an ordered set and \eqn{n} is the total number of hypotheses 
-within the \eqn{t}-th batch. As such, \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+\item{out}{ A dataframe with the original data \code{d} and the
+  indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
+  if the \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal
+  to \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value
+  within an ordered set and \eqn{n} is the total number of hypotheses within
+  the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
+  (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements the BatchPRDS algorithm for online FDR control, where PRDS stands for
-positive regression dependency on a subset, as presented by
-Zrnic et. al. (2020).
+Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
+for positive regression dependency on a subset, as presented by Zrnic et. al.
+(2020).
 }
 \details{
+The function takes as its input a dataframe with three columns: identifiers
+(`id'), batch numbers (`batch') and p-values (`pval').
 
+The BatchPRDS algorithm controls the FDR when the p-values in one batch are
+positively dependent, and independent across batches. Given an overall
+significance level \eqn{\alpha}, we choose a sequence of non-negative numbers
+\eqn{\gamma_i} such that they sum to 1. The algorithm runs the
+Benjamini-Hochberg procedure on each batch, where the values of the adjusted
+significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
+discoveries.
+
+Further details of the BatchPRDS algorithm can be found in Zrnic et. al.
+(2020).
 }
 \examples{
 
@@ -47,5 +60,7 @@ BatchPRDS(sample.df)
 
 }
 \references{
-Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching in Multiple Hypothesis Testing. \emph{International Conference on Artificial Intelligence and Statistics}: 3806-3815
+Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+  Batching in Multiple Hypothesis Testing. \emph{International Conference on
+  Artificial Intelligence and Statistics}: 3806-3815
 }
