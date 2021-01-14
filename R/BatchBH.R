@@ -1,21 +1,19 @@
-#' BatchPRDS: Online batch FDR control under Positive Dependence
+#' BatchBH: Online batch FDR control using the BH procedure
 #'
-#' Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
-#' for positive regression dependency on a subset, as presented by Zrnic et. al.
-#' (2020).
+#' Implements the BatchBH algorithm for online FDR control, as presented by Zrnic et. al.(2020).
 #'
 #' The function takes as its input a dataframe with three columns: identifiers
 #' (`id'), batch numbers (`batch') and p-values (`pval').
 #'
-#' The BatchPRDS algorithm controls the FDR when the p-values in one batch are
-#' positively dependent, and independent across batches. Given an overall
+#' The BatchBH algorithm controls the FDR when the p-values in a batch 
+#' are independent, and independent across batches. Given an overall
 #' significance level \eqn{\alpha}, we choose a sequence of non-negative numbers
 #' \eqn{\gamma_i} such that they sum to 1. The algorithm runs the
 #' Benjamini-Hochberg procedure on each batch, where the values of the adjusted
 #' significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
 #' discoveries.
 #'
-#' Further details of the BatchPRDS algorithm can be found in Zrnic et. al.
+#' Further details of the BatchBH algorithm can be found in Zrnic et. al.
 #' (2020).
 #'
 #' @param d A dataframe with three columns: identifiers (`id'),
@@ -50,11 +48,11 @@
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
 #' batch = c(rep(1,5), rep(2,6), rep(3,4)))
 #'
-#' BatchPRDS(sample.df)
+#' BatchBH(sample.df)
 #'
 #' @export
 
-BatchPRDS <- function(d, alpha = 0.05, gammai){
+BatchBH <- function(d, alpha = 0.05, gammai){
   
   if (!is.data.frame(d)) {
     stop("d must be a dataframe")
@@ -74,11 +72,11 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
     stop("The sum of the elements of gammai must not be greater than 1.")
   }
   
-  ### Start Batch PRDS procedure
+  ### Start Batch BH procedure
   n_batch <- length(unique(d$batch))
   all_batches <- list()
   
-  alphai <- rep(0, n_batch)
+  Rplus <- Rsum <- Rrsum <- alphai <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
   for(i in seq_len(n_batch)){
@@ -96,14 +94,42 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
     all_batches[[i]] <- ordered_batch_data
     out <- do.call(rbind, all_batches)
     
+    Rsum[i] <- sum(ordered_batch_data$R)
+    
+    #calculate Rsplus
+    
+    aug_rej <- rep(0,n)
+    
+    hallucinated_data <- ordered_batch_data
+    
+    for (j in seq_len(n)) {
+      
+      #run BH procedure with hallucinated p-value
+      hallucinated_data$R <- c(0, hallucinated_data$pval[-j]) <= ((1:n)/n)*alphai[i]
+      max_entry <- suppressWarnings(max(which(hallucinated_data$R)))
+      if(is.finite(max_entry)) {
+        hallucinated_data$R[1:max_entry] <- 1
+      }
+      
+      aug_rej[j] <- sum(hallucinated_data$R, na.rm = T)
+    }
+    
+    Rplus[i] = max(aug_rej)
+    
     #update alphai
     if(i < n_batch) {
+      gammasum <- sum(gammai[seq_len(i+1)]) * alpha
+      
+      for (r in seq_len(i)) {
+        Rrsum[r] = sum(Rsum[-r])
+      }
+      
       ntplus <- nrow(d[d$batch == i+1,])
-      alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(out$R, na.rm = T))
+      alphai[i+1] <- (gammasum - sum(alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
+        ((ntplus + sum(Rsum))/ntplus)
+      
     }
   }
-  
-  #create alphai
   out$alphai <- alphai[d$batch]
   return(out)
 }
