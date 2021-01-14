@@ -64,6 +64,15 @@ your problem. The interactive version (click-to-functions) is available
 [here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html)
 
 ![](onlineFDR-diagram.png)
+### Frequently Asked Questions
+We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
+
+* What is the difference between FDR and FWER?
+FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
+
+* What is the difference between sequential and non-sequential hypothesis testing?
+
+* What does it mean for p-values to be independent or dependent?
 
 ## Quick Start
 
@@ -149,10 +158,14 @@ plot <- cbind(LOND_results, LORD_results$alphai) %>%
                    values_to = "alpha") %>%
   ggplot(aes(x = index, y = alpha, col = adjustment)) + 
     geom_line() + 
-  theme_bw()
+    theme_bw() + 
+  labs(x = "Index",
+       y = "logalpha_i")
 
 print(plot)
 ```
+
+Note that both LOND and LORD result in much lower significance thresholds (logalpha_i) than an offline Bonferroni adjustment. When log_alphai jumps, that indicates that the algorithm is recovering some of it's "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, it's alpha wealth decreases (the line will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in "alpha wealth") compared to LOND.
 
 ### Using `onlineFDR` Sequentially
 This package (and the corresponding Shiny app) can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 

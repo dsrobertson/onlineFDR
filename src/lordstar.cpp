@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <vector>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -21,29 +22,36 @@ DataFrame lordstar_async_faster(NumericVector pval,
 	alphai[0] = gammai[0] * w0;
 	R[0] = (pval[0] <= alphai[0]);
 
+	std::vector<bool> r;
 	for (int i = 1; i < N; i++) {
-
-		NumericVector r(0);
+		r.clear();
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
 				r.push_back(j);
 		}
 
 		if(r.size() <= 1) {
+
 			if(r.size() > 0){
+
 				alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1];
 
 			} else {
-				double simul = 0;
-				alphai[i] = gammai[i] * w0 + (alpha - w0) * simul;
+
+				alphai[i] = gammai[i] * w0 + (alpha - w0) * 0;
 			}
+
 			R[i] = (pval[i] <= alphai[i]); 
+
 		} else {
+
 			double gammaisum = 0;
 			int bound = r.size();
+
 			for (int g = 1; g < bound; g++) {
 				gammaisum += gammai[i-r[g]-1];
 			}
+
 			alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1] + alpha * gammaisum;
 			R[i] = (pval[i] <= alphai[i]);
 		}
@@ -69,29 +77,36 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 	alphai[0] = gammai[0] * w0;
 	R[0] = (pval[0] <= alphai[0]);
 
+	std::vector<bool> r;
 	for (int i = 1; i < N; i++) {
-
-		NumericVector r(0);
+		r.clear();
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (j <= j - L[i]))
 				r.push_back(j);
 		}
 
 		if(r.size() <= 1) {
+
 			if(r.size() > 0){
+
 				alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1];
 
 			} else {
-				double simul = 0;
-				alphai[i] = gammai[i] * w0 + (alpha - w0) * simul;
+
+				alphai[i] = gammai[i] * w0 + (alpha - w0) * 0;
+
 			}
 			R[i] = (pval[i] <= alphai[i]); 
+
 		} else {
+
 			double gammaisum = 0;
 			int bound = r.size();
+
 			for (int g = 1; g < bound; g++) {
 				gammaisum += gammai[i-r[g]-1];
 			}
+			
 			alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1] + alpha * gammaisum;
 			R[i] = (pval[i] <= alphai[i]);
 		}

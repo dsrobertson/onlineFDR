@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <vector>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -25,11 +26,12 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 	int candsum = 0;
 
+	std::vector<bool> r;
 	for (int i = 1; i < N; i++) {
 
 		cand[i-1] = (pval[i-1] <= lambda);
 
-		NumericVector r(0);
+		r.clear();
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
 				r.push_back(j);
@@ -107,11 +109,11 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 	alphai[0] = std::min(gammai[0]*w0, lambda);
 	R[0] = (pval[0] <= alphai[0]);
 
+	std::vector<bool> r;
 	for (int i = 1; i < N; i++) {
 
 		cand[i-1] = (pval[i-1] <= lambda);
-
-		NumericVector r(0);
+		r.clear();
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (j <= j - L[i]))
 				r.push_back(j);

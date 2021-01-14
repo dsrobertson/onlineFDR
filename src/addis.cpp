@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include <vector>
 #include <algorithm>
 
 using namespace Rcpp;
@@ -165,10 +166,10 @@ DataFrame addis_async_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 
 	int K;
-	
+	std::vector<bool> kappai;
 	for (int i = 1; i < N; i++) {
 
-		IntegerVector kappai(0);
+		kappai.clear();
 		// nightmare to code the which statement
 		for (int j = 0; j <= i-1; j++) {
 			if (R[j] && (E[j]-1 <= i-1))
