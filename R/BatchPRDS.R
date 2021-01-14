@@ -11,13 +11,13 @@
 #' The BatchPRDS algorithm controls the FDR when the p-values in one batch
 #' are positively dependent, and independent across batches.
 #' Given an overall significance level \eqn{\alpha}, 
-#' we choose a sequence of non-negative numbers \eqn{\gammi_i} such
+#' we choose a sequence of non-negative numbers \eqn{\gamma_i} such
 #' that they sum to \eqn{\alpha}. The algorithm runs the Benjamini-Hochberg procedure
 #' on each batch, where the values of the adjusted significance
-#' thresholds \eqn{\alpha_{t+1}} are chosen as follows: \deqn{\alpha_{t+1} = \alpha \frac{\gammai_{t+1}}{n_{t+1}}(n_{t+1} + \sum_{s=1}^{t}R_s
-#' where \eqn{R_s} denotes the number of discoveries in all the batches up until \eqn{batch_t}.
+#' thresholds \eqn{\alpha_{t+1}} are chosen as follows: \deqn{\alpha_{t+1} = \alpha \frac{\gamma_{t+1}}{n_{t+1}}(n_{t+1} + \sum_{s=1}^{t}R_s
+#' where \eqn{R_s} denotes the number of discoveries in batch s.
 #' 
-#' Further details of the LOND algorithm can be found in Zrnic et. al. (2020).
+#' Further details of the BatchPRDS algorithm can be found in Zrnic et. al. (2020).
 #' 
 #' @param d A dataframe with three columns: an identifier (`id') 
 #' and a p-value (`pval').
@@ -31,9 +31,9 @@
 #' @return \item{out}{ A dataframe with the original data \code{d} and the indicator
 #' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 #' \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal to 
-#' \eqn{(r/n)*\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value 
+#' \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value 
 #' within an ordered set and \eqn{n} is the total number of hypotheses 
-#' within the \eqn{t}-th batch. As such, \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' within the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #' 
 #' @references Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching in Multiple Hypothesis Testing. \emph{International Conference on Artificial Intelligence and Statistics}: 3806-3815 
 #' 
