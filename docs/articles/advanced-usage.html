@@ -103,6 +103,13 @@
 
     
     
+<div id="brief-background-of-the-onlinefdr-algorithms" class="section level2">
+<h2 class="hasAnchor">
+<a href="#brief-background-of-the-onlinefdr-algorithms" class="anchor"></a>Brief Background of the <code>onlineFDR</code> algorithms</h2>
+<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control the FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the adjusted significance thresholds based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas <em>et al.</em> (2018) then proposed the SAFFRON procedure, which provides an adaptive method of online FDR control. They also proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, using SAFFRON’s update rule.</p>
+<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings. For both synchronous and asynchronous testing, Tian &amp; Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
+<p>Finally, Tian &amp; Ramdas (2019b) proposed procedures that provide online control of the FWER. One procedure, online fallback, gives a uniform improvement to the naive Alpha-spending procedure (see below). The ADDIS-spending procedure compensates for the power loss of these procedures by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls.</p>
+</div>
 <div id="variations-to-the-default-options" class="section level2">
 <h2 class="hasAnchor">
 <a href="#variations-to-the-default-options" class="anchor"></a>Variations to the default options</h2>

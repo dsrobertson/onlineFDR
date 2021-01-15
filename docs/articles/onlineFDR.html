@@ -123,6 +123,16 @@
 <a href="#which-algorithm-do-i-use" class="anchor"></a>Which algorithm do I use?</h2>
 <p>We strive to make our R package as easy to use as possible. Please see the flowchart below to decide which function is best to solve your problem. The interactive version (click-to-functions) is available <a href="https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html">here</a></p>
 <p><img src="onlineFDR-diagram.png"></p>
+<div id="frequently-asked-questions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#frequently-asked-questions" class="anchor"></a>Frequently Asked Questions</h3>
+<p>We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.</p>
+<ul>
+<li><p>What is the difference between FDR and FWER? FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.</p></li>
+<li><p>What is the difference between sequential and non-sequential hypothesis testing?</p></li>
+<li><p>What does it mean for p-values to be independent or dependent?</p></li>
+</ul>
+</div>
 </div>
 <div id="quick-start" class="section level2">
 <h2 class="hasAnchor">
@@ -130,29 +140,32 @@
 <div id="general-info" class="section level3">
 <h3 class="hasAnchor">
 <a href="#general-info" class="anchor"></a>General Info</h3>
+<p>This Quick Start guide is meant to provide a framework for you to use any of the algorithms within the <code>onlineFDR</code> package. The algorithms used in the examples below were selected arbitrarily for the sake of example.</p>
 <div id="input-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#input-data" class="anchor"></a>Input data</h4>
-<p>A dataset with three columns (an identifier (‘id’), date (‘date’) and p-value (‘pval’)). All p-values generated should be passed to the function (and not just the significant p-values). An exception to this would be if you have implemented an orthogonal filter to reduce the dataset size, such as discussed in (Burgon <em>et al.</em>, 2010).</p>
-<p>Alternatively, just the vector of p-values can be passed to the function. In this case, the p-values are treated as being ordered sequentially with no batches.</p>
+<p>In general, your dataset should contain, at the minimum, two columns (identifiers (‘id’) and p-values (‘pval’)). You can also pass in a date column (‘date’), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially.</p>
+<p>If you are using the Batch algorithms, ensure that your dataset contains a column (‘batch’) where batches are defined sequentially starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see <code><a href="../reference/LONDstar.html">LONDstar()</a></code>, <code><a href="../reference/LORDstar.html">LORDstar()</a></code>, and <code><a href="../reference/SAFFRONstar.html">SAFFRONstar()</a></code>). If you are not sure which algorithm to use, click <a href="#which-function-do-i-use-">here</a>.</p>
+<p>All p-values generated should be passed to the function (and not just the significant p-values). An exception to this would be if you have implemented an orthogonal filter to reduce the dataset size, such as discussed in (Burgon <em>et al.</em>, 2010).</p>
 </div>
 <div id="what-happens-to-the-input-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#what-happens-to-the-input-data" class="anchor"></a>What happens to the input data</h4>
-<p>The function orders the information by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have an <em>a priori</em> belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected initially in the stream. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the <code>set.seed</code> function) before calling the wrapper function.</p>
+<p>If you’re using <code><a href="../reference/LOND.html">LOND()</a></code>, <code><a href="../reference/LORD.html">LORD()</a></code>, or <code><a href="../reference/SAFFRON.html">SAFFRON()</a></code>, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have an <em>a priori</em> belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected initially in the stream. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the <code>set.seed</code> function) before calling the wrapper function.</p>
+<p>Otherwise, the other algorithms will take in the p-values in the original order of the data.</p>
 </div>
 <div id="understanding-the-output" class="section level4">
 <h4 class="hasAnchor">
 <a href="#understanding-the-output" class="anchor"></a>Understanding the output</h4>
 <p>For each hypothesis test, the functions calculate the adjusted significance thresholds (<code>alphai</code>) at which the corresponding p-value would be declared statistically significant.</p>
 <p>Also calculated is an indicator function of discoveries (<code>R</code>), where <code>R[i] = 1</code> corresponds to hypothesis i being rejected, otherwise <code>R[i] = 0</code>.</p>
-<p>A dataframe is returned, reordered by batch, with the original data and the newly calculated <code>alphai</code> and <code>R</code>.</p>
+<p>A dataframe is returned with the original data and the newly calculated <code>alphai</code> and <code>R</code>.</p>
 </div>
 </div>
 <div id="using-onlinefdr-exploratively" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-onlinefdr-exploratively" class="anchor"></a>Using <code>onlineFDR</code> Exploratively</h3>
-<p>This package (and the corresponding Shiny app) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in <code>onlineFDR</code> to explore how you could control the FDR and how the different algorithms have different levels of power.</p>
+<p>This package (and the corresponding <a href="https://mrc-bsu.shinyapps.io/onlineFDRExplore/">Shiny app</a>) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in <code>onlineFDR</code> to explore how you could control the FDR and how the different algorithms have different levels of power.</p>
 <p>First, we initialize a toy dataset with three columns: an identifier (‘id’), date (‘date’) and p-value (‘pval’). Note that date should be in the format “YYYY-MM-DD”.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
@@ -224,7 +237,7 @@
 <div id="using-onlinefdr-sequentially" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-onlinefdr-sequentially" class="anchor"></a>Using <code>onlineFDR</code> Sequentially</h3>
-<p>This package (and the corresponding Shiny app) can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), <em>the same seed should be used for all analyses</em>. Ideally, you will have selected your algorithm <em>a priori</em> based on your needs (click <a href="#which-function-do-i-use-">here</a>. You can pass your growing dataset to the same algorithm.</p>
+<p>This package can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), <em>the same seed should be used for all analyses</em>. Ideally, you will have selected your algorithm <em>a priori</em> based on your needs (click <a href="#which-function-do-i-use-">here</a>. You can pass your growing dataset to the same algorithm.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
     id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span><span class="op">)</span>,
@@ -286,13 +299,6 @@
 </ul>
 <hr>
 </div>
-</div>
-<div id="brief-background-of-the-onlinefdr-algorithms" class="section level2">
-<h2 class="hasAnchor">
-<a href="#brief-background-of-the-onlinefdr-algorithms" class="anchor"></a>Brief Background of the <code>onlineFDR</code> algorithms</h2>
-<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control the FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the adjusted significance thresholds based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas <em>et al.</em> (2018) then proposed the SAFFRON procedure, which provides an adaptive method of online FDR control. They also proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, using SAFFRON’s update rule.</p>
-<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings. For both synchronous and asynchronous testing, Tian &amp; Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
-<p>Finally, Tian &amp; Ramdas (2019b) proposed procedures that provide online control of the FWER. One procedure, online fallback, gives a uniform improvement to the naive Alpha-spending procedure (see below). The ADDIS-spending procedure compensates for the power loss of these procedures by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls.</p>
 </div>
 <div id="how-to-get-help-for-onlinefdr" class="section level2">
 <h2 class="hasAnchor">

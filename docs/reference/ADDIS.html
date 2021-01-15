@@ -208,7 +208,7 @@ testing process</p></td>
 
     
 
-<dt>d.out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
+<dt>out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
   adjusted testing levels \(\alpha_i\) and the indicator function of
   discoveries <code>R</code>. Hypothesis \(i\) is rejected if the \(i\)-th
   p-value is less than or equal to \(\alpha_i\), in which case <code>R[i] =
@@ -257,34 +257,7 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
 
 <span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df</span>, async <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># Asynchronous</span>
-</div><div class='output co'>#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B
-#&gt; point A
-#&gt; point B</div><div class='output co'>#&gt;          pval       alphai R
+</div><div class='output co'>#&gt;          pval       alphai R
 #&gt; 1  2.9000e-08 0.0027343135 1
 #&gt; 2  6.7430e-02 0.0009019871 0
 #&gt; 3  1.5140e-02 0.0018039742 0
@@ -292,14 +265,14 @@ decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.
 #&gt; 5  1.7100e-03 0.0018039742 1
 #&gt; 6  3.6000e-05 0.0018039742 1
 #&gt; 7  7.9149e-01 0.0036079483 0
-#&gt; 8  2.7201e-01 0.0054119225 0
-#&gt; 9  2.8295e-01 0.0054119225 0
-#&gt; 10 7.5900e-08 0.0028288216 1
-#&gt; 11 6.9274e-01 0.0017852686 0
-#&gt; 12 3.0443e-01 0.0035892428 0
-#&gt; 13 1.3600e-03 0.0035892428 1
-#&gt; 14 7.2342e-01 0.0021921853 0
-#&gt; 15 5.4757e-01 0.0039961595 0</div><div class='input'>
+#&gt; 8  2.7201e-01 0.0042030379 0
+#&gt; 9  2.8295e-01 0.0042030379 0
+#&gt; 10 7.5900e-08 0.0023022960 1
+#&gt; 11 6.9274e-01 0.0015012335 0
+#&gt; 12 3.0443e-01 0.0018122878 0
+#&gt; 13 1.3600e-03 0.0018122878 1
+#&gt; 14 7.2342e-01 0.0013189588 0
+#&gt; 15 5.4757e-01 0.0015620232 0</div><div class='input'>
 <span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df</span>, async <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Synchronous</span>
 </div><div class='output co'>#&gt;          pval      alphai R
 #&gt; 1  2.9000e-08 0.002734314 1

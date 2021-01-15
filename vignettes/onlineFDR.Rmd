@@ -64,6 +64,7 @@ your problem. The interactive version (click-to-functions) is available
 [here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html)
 
 ![](onlineFDR-diagram.png)
+
 ### Frequently Asked Questions
 We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
 

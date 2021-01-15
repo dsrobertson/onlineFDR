@@ -224,7 +224,7 @@ testing. Must be between 0 and 1, defaults to 0.5. This is required if
 
     
 
-<dt>d.out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
+<dt>out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
   adjusted testing levels \(\alpha_i\) and the indicator function of
   discoveries <code>R</code>. Hypothesis \(i\) is rejected if the \(i\)-th
   p-value is less than or equal to \(\alpha_i\), in which case <code>R[i] =
@@ -309,10 +309,10 @@ decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.
 #&gt; 9  2.8295e-01 0.004877291 0
 #&gt; 10 7.5900e-08 0.004852068 1
 #&gt; 11 6.9274e-01 0.004832640 0
-#&gt; 12 3.0443e-01 0.008425261 0
-#&gt; 13 1.3600e-03 0.004951604 1
-#&gt; 14 7.2342e-01 0.004941510 0
-#&gt; 15 5.4757e-01 0.008541078 0</div><div class='input'>
+#&gt; 12 3.0443e-01 0.006703193 0
+#&gt; 13 1.3600e-03 0.004255902 1
+#&gt; 14 7.2342e-01 0.004245808 0
+#&gt; 15 5.4757e-01 0.005427607 0</div><div class='input'>
 <span class='va'>sample.df2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
 id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A15432'</span>, <span class='st'>'B90969'</span>, <span class='st'>'C18705'</span>, <span class='st'>'B49731'</span>, <span class='st'>'E99902'</span>,
     <span class='st'>'C38292'</span>, <span class='st'>'A30619'</span>, <span class='st'>'D46627'</span>, <span class='st'>'E29198'</span>, <span class='st'>'A41418'</span>,
