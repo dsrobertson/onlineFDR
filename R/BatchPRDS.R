@@ -66,6 +66,10 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
     stop("alpha must be between 0 and 1.")
   }
   
+  if(!is.numeric(d$batch)) {
+    stop("Check that your batches are numeric")
+  }
+  
   #check that batches were labeled correctly
   if(max(d$batch, na.rm = TRUE) > length(unique(d$batch))) {
     stop("Check that your batches labelled in ascending order starting from 1")
