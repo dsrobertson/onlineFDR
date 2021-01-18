@@ -67,16 +67,17 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   }
   
   if(!is.numeric(d$batch)) {
-    stop("Check that your batches are numeric")
+    stop("Check that your batch labels are numeric values.")
   }
   
   #check that batches were labeled correctly
-  if(max(d$batch, na.rm = TRUE) > length(unique(d$batch))) {
-    stop("Check that your batches labelled in ascending order starting from 1")
+  n_batch <- length(unique(d$batch))
+  if(max(d$batch, na.rm = TRUE) > n_batch) {
+    stop("Check that your batches are labelled in ascending order starting from 1.")
   }
   
   if (missing(gammai)) {
-    gammai <- 0.4374901658/(seq_len(length(d$pval))^(1.6))
+    gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
     stop("All elements of gammai must be non-negative.")
   } else if (sum(gammai) > 1) {
@@ -84,7 +85,6 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   }
   
   ### Start Batch PRDS procedure
-  n_batch <- length(unique(d$batch))
   all_batches <- list()
   
   alphai <- rep(0, n_batch)
