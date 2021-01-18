@@ -1,6 +1,7 @@
 #' BatchBH: Online batch FDR control using the BH procedure
 #'
-#' Implements the BatchBH algorithm for online FDR control, as presented by Zrnic et. al.(2020).
+#' Implements the BatchBH algorithm for online FDR control, as presented by 
+#' Zrnic et. al.(2020).
 #'
 #' The function takes as its input a dataframe with three columns: identifiers
 #' (`id'), batch numbers (`batch') and p-values (`pval').
@@ -65,16 +66,18 @@ BatchBH <- function(d, alpha = 0.05, gammai){
   }
   
   if(!is.numeric(d$batch)) {
-    stop("Check that your batches are numeric")
+    stop("Check that your batch labels are numeric values.")
   }
   
   #check that batches were labeled correctly
-  if(max(d$batch, na.rm = TRUE) > length(unique(d$batch))) {
-    stop("Check that your batches labelled in ascending order starting from 1")
+  n_batch <- length(unique(d$batch))
+  
+  if(max(d$batch, na.rm = TRUE) > n_batch) {
+    stop("Check that your batches are labelled in ascending order starting from 1.")
   }
   
   if (missing(gammai)) {
-    gammai <- 0.4374901658/(seq_len(length(d$pval))^(1.6))
+    gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
     stop("All elements of gammai must be non-negative.")
   } else if (sum(gammai) > 1) {
@@ -82,7 +85,6 @@ BatchBH <- function(d, alpha = 0.05, gammai){
   }
   
   ### Start Batch BH procedure
-  n_batch <- length(unique(d$batch))
   all_batches <- list()
   
   Rplus <- Rsum <- Rrsum <- alphai <- rep(0, n_batch)
@@ -106,9 +108,7 @@ BatchBH <- function(d, alpha = 0.05, gammai){
     Rsum[i] <- sum(ordered_batch_data$R)
     
     #calculate Rsplus
-    
     aug_rej <- rep(0,n)
-    
     hallucinated_data <- ordered_batch_data
     
     for (j in seq_len(n)) {
