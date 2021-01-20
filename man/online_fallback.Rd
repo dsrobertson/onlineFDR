@@ -39,7 +39,7 @@ randomised.}
   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements the online fallback procedure of Tian and Ramdas (2019b), which
+Implements the online fallback procedure of Tian and Ramdas (2021), which
 guarantees strong FWER control under arbitrary dependence of the p-values.
 }
 \details{
@@ -58,7 +58,7 @@ More specifically, the procedure tests hypothesis \eqn{H_i} at level
 1\{p_i \leq \alpha_i\}} denotes a rejected hypothesis.
 
 Further details of the online fallback procedure can be found in Tian and
-Ramdas (2019b).
+Ramdas (2021).
 }
 \examples{
 sample.df <- data.frame(
@@ -82,6 +82,7 @@ set.seed(1); online_fallback(sample.df, alpha=0.1)
 
 }
 \references{
-Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-\emph{arXiv preprint}, \url{https://arxiv.org/abs/1910.04900}.
+Tian, J. and Ramdas, A. (2021). Online control of the familywise
+error rate. \emph{Statistical Methods for Medical Research} (to appear),
+\url{https://arxiv.org/abs/1910.04900}.
 }

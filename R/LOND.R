@@ -20,7 +20,7 @@
 #'
 #' A slightly modified version of LOND with thresholds \eqn{\alpha_i =
 #' max(D(i-1), 1)\beta_i} provably controls the FDR under positive dependence
-#' (PRDS condition), see Zrnic et al. (2018).
+#' (PRDS condition), see Zrnic et al. (2021).
 #'
 #' For arbitrarily dependent p-values, LOND controls the FDR if it is modified
 #' with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the
@@ -71,8 +71,8 @@
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #'
-#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{arXiv preprint}, 
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
 #' \url{https://arxiv.org/abs/1812.05068}.
 #' 
 #'
@@ -143,5 +143,3 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format
     out$R <- as.numeric(out$R)
     out
 }
-TRUE
-TRUE

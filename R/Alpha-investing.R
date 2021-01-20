@@ -128,5 +128,3 @@ Alpha_investing <- function(d, alpha = 0.05, gammai, w0, random = TRUE, date.for
     out$R <- as.numeric(out$R)
     out
 }
-TRUE
-TRUE

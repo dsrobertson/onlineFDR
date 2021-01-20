@@ -1,7 +1,7 @@
 #' BatchPRDS: Online batch FDR control under Positive Dependence
 #'
 #' Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
-#' for positive regression dependency on a subset, as presented by Zrnic et. al.
+#' for positive regression dependency on a subset, as presented by Zrnic et al.
 #' (2020).
 #'
 #' The function takes as its input a dataframe with three columns: identifiers
@@ -15,7 +15,7 @@
 #' significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
 #' discoveries.
 #'
-#' Further details of the BatchPRDS algorithm can be found in Zrnic et. al.
+#' Further details of the BatchPRDS algorithm can be found in Zrnic et al. 
 #' (2020).
 #'
 #' @param d A dataframe with three columns: identifiers (`id'),

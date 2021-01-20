@@ -27,7 +27,7 @@ batch numbers (`batch') and p-values (`pval').}
 }
 \description{
 Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
-for positive regression dependency on a subset, as presented by Zrnic et. al.
+for positive regression dependency on a subset, as presented by Zrnic et al.
 (2020).
 }
 \details{
@@ -42,7 +42,7 @@ Benjamini-Hochberg procedure on each batch, where the values of the adjusted
 significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
 discoveries.
 
-Further details of the BatchPRDS algorithm can be found in Zrnic et. al.
+Further details of the BatchPRDS algorithm can be found in Zrnic et al. 
 (2020).
 }
 \examples{
