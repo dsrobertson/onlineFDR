@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.com/dsrobertson/onlineFDR)
+[![Build
+Status](https://travis-ci.com/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.com/dsrobertson/onlineFDR)
 [![codecov](https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg)](https://codecov.io/gh/dsrobertson/onlineFDR)
 
 # onlineFDR <img src="man/figures/logo.png" align="right" />
@@ -18,14 +19,10 @@ from Bioconductor, please run the following code:
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-
 # The following initializes usage of Bioc
 BiocManager::install()
 
-
-
 BiocManager::install("onlineFDR")
-
 ```
 
 Alternatively, you can install the package directly from GitHub:
@@ -36,6 +33,9 @@ Alternatively, you can install the package directly from GitHub:
 devtools::install_github("dsrobertson/onlineFDR")
 ```
 
+We recommend the GitHub version for faster implementations of the
+algorithms.
+
 ## Documentation
 
 Documentation is hosted at <https://dsrobertson.github.io/onlineFDR/>
@@ -45,7 +45,6 @@ system, start R and enter:
 
 ``` r
 browseVignettes("onlineFDR")
-#> No vignettes found by browseVignettes("onlineFDR")
 ```
 
 ## References
@@ -59,8 +58,7 @@ sequential control of expected false discoveries. *Journal of the Royal
 Statistical Society (Series B)*, 29(4):429-444.
 
 Javanmard, A., and Montanari, A. (2015). On Online Control of False
-Discovery Rate. *arXiv preprint*,
-<a href="https://arxiv.org/abs/1502.06197" class="uri">https://arxiv.org/abs/1502.06197</a>.
+Discovery Rate. *arXiv preprint*, <https://arxiv.org/abs/1502.06197>.
 
 Javanmard, A., and Montanari, A. (2018). Online Rules for Control of
 False Discovery Rate and False Discovery Exceedance. *Annals of
@@ -77,22 +75,21 @@ an adaptive algorithm for online control of the false discovery rate.
 
 Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
 discovery rate in biomedical research. *arXiv preprint*,
-<a href="https://arxiv.org/abs/1809.07292" class="uri">https://arxiv.org/abs/1809.07292</a>.
+<https://arxiv.org/abs/1809.07292>.
 
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 onlineFDR: an R package to control the false discovery rate for growing
 data repositories. *Bioinformatics*, 35:4196-4199,
-<a href="https://doi.org/10.1093/bioinformatics/btz191" class="uri">https://doi.org/10.1093/bioinformatics/btz191</a>.
+<https://doi.org/10.1093/bioinformatics/btz191>.
 
-Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm
-for online FDR control with conservative nulls. *arXiv preprint*,
-<a href="https://arxiv.org/abs/1905.11465" class="uri">https://arxiv.org/abs/1905.11465</a>.
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm
+for online FDR control with conservative nulls. *Advances in Neural
+Information Processing Systems*, 9388-9396.
 
-Tian, J. and Ramdas, A. (2019b). Online control of the familywise error
-rate. *arXiv preprint*,
-<a href="https://arxiv.org/abs/1910.04900" class="uri">https://arxiv.org/abs/1910.04900</a>.
+Tian, J. and Ramdas, A. (2021). Online control of the familywise error
+rate. *Statistical Methods for Medical Research* (to appear),
+<https://arxiv.org/abs/1910.04900>.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online
-Testing of Multiple Hypotheses. *arXiv preprint*,
-<a href="https://arxiv.org/abs/1812.05068" class="uri">https://arxiv.org/abs/1812.05068</a>.
-
+Testing of Multiple Hypotheses. *Journal of Machine Learning Research*
+(to appear), <https://arxiv.org/abs/1812.05068>.
