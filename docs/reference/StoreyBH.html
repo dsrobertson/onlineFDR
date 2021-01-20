@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Deprecated functions in package &#8216;onlineFDR&#8217; — onlineFDR-deprecated • onlineFDR</title>
+<title>StoreyBH: Offline FDR control using the St-BH procedure — StoreyBH • onlineFDR</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,9 @@
 
 
 
-<meta property="og:title" content="Deprecated functions in package &#8216;onlineFDR&#8217; — onlineFDR-deprecated" />
-<meta property="og:description" content="These functions are provided for compatibility with older versions
-  of &amp;#8216;onlineFDR&amp;#8217; only, and will be defunct at the next release." />
+<meta property="og:title" content="StoreyBH: Offline FDR control using the St-BH procedure — StoreyBH" />
+<meta property="og:description" content="Implements the Storey-BH algorithm for offline FDR control, as presented by
+Storey (2002)." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
 
@@ -142,29 +142,82 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Deprecated functions in package &#8216;onlineFDR&#8217;</h1>
+    <h1>StoreyBH: Offline FDR control using the St-BH procedure</h1>
     
-    <div class="hidden name"><code>onlineFDR-deprecated.Rd</code></div>
+    <div class="hidden name"><code>StoreyBH.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>These functions are provided for compatibility with older versions
-  of &#8216;onlineFDR&#8217; only, and will be defunct at the next release.</p>
+    <p>Implements the Storey-BH algorithm for offline FDR control, as presented by
+Storey (2002).</p>
     </div>
 
+    <pre class="usage"><span class='fu'>StoreyBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, lambda <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>d</th>
+      <td><p>Either a vector of p-values, or a dataframe with the column: p-value
+(`pval').</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>Overall significance level of the FDR procedure, the default is
+0.05.</p></td>
+    </tr>
+    <tr>
+      <th>lambda</th>
+      <td><p>Threshold for Storey-BH, must be between 0 and 1. Defaults to
+0.5.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
 
-<p>The following functions are deprecated and will be made defunct; use
-  the replacement indicated below:</p><ul>
-<li><p>LORDdep: <code><a href='LORD.html'>LORD</a></code> with version='dep'</p></li>
-<li><p>bonfInfinite: <code><a href='Alpha_spending.html'>Alpha_spending</a></code></p></li>
-</ul>
+<dt>ordered_d</dt><dd><p>A dataframe with the original data <code>d</code> and the
+  indicator function of discoveries <code>R</code>. Hypothesis \(i\) is rejected
+  if the \(i\)-th p-value is less than or equal to \((r/n)\alpha\), where
+  \(r\) is the rank of the \(i\)-th p-value within an ordered set and
+  \(n\) is the total number of hypotheses. If hypothesis \(i\) is
+  rejected, <code>R[i] = 1</code> (otherwise <code>R[i] = 0</code>).</p></dd>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>The function takes as its input either a vector of p-values, or a dataframe
+with a column of p-values (`pval').</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Storey, J.D. (2002). A direct approach to false discovery rates.
+  <em>J. R. Statist. Soc. B</em>: 64, Part 3, 479-498.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='va'>pvals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.90e-08</span>, <span class='fl'>0.06743</span>, <span class='fl'>0.01514</span>, <span class='fl'>0.08174</span>, <span class='fl'>0.00171</span>,
+        <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-08</span>,
+        <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span>
+
+<span class='fu'>StoreyBH</span><span class='op'>(</span><span class='va'>pvals</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;          pval R
+#&gt; 1  2.9000e-08 1
+#&gt; 2  6.7430e-02 0
+#&gt; 3  1.5140e-02 1
+#&gt; 4  8.1740e-02 0
+#&gt; 5  1.7100e-03 1
+#&gt; 6  3.6000e-05 1
+#&gt; 7  7.9149e-01 0
+#&gt; 8  2.7201e-01 0
+#&gt; 9  2.8295e-01 0
+#&gt; 10 7.5900e-08 1
+#&gt; 11 6.9274e-01 0
+#&gt; 12 3.0443e-01 0
+#&gt; 13 1.3600e-03 1
+#&gt; 14 7.2342e-01 0
+#&gt; 15 5.4757e-01 0</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

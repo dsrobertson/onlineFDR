@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>setBound — setBound • onlineFDR</title>
+<title>supLORD: Online control of the false discovery exceedance (FDX) and the 
+FDR at stopping times — supLORD • onlineFDR</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +53,10 @@
 
 
 
-<meta property="og:title" content="setBound — setBound" />
-<meta property="og:description" content="Calculates a default sequence of non-negative numbers \(\gamma_i\) that sum
-to 1, given an upper bound \(N\) on the number of hypotheses to be tested." />
+<meta property="og:title" content="supLORD: Online control of the false discovery exceedance (FDX) and the 
+FDR at stopping times — supLORD" />
+<meta property="og:description" content="Implements the supLORD procedure, which controls both FDX and FDR, including
+the FDR at stopping times, as presented by Xu and Ramdas (2021)." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
 
@@ -142,39 +144,77 @@ to 1, given an upper bound \(N\) on the number of hypotheses to be tested." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>setBound</h1>
+    <h1>supLORD: Online control of the false discovery exceedance (FDX) and the 
+FDR at stopping times</h1>
     
-    <div class="hidden name"><code>setBound.Rd</code></div>
+    <div class="hidden name"><code>supLORD.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculates a default sequence of non-negative numbers \(\gamma_i\) that sum
-to 1, given an upper bound \(N\) on the number of hypotheses to be tested.</p>
+    <p>Implements the supLORD procedure, which controls both FDX and FDR, including
+the FDR at stopping times, as presented by Xu and Ramdas (2021).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>setBound</span><span class='op'>(</span><span class='va'>alg</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>N</span>, <span class='va'>b0</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>supLORD</span><span class='op'>(</span>
+  <span class='va'>d</span>,
+  delta <span class='op'>=</span> <span class='fl'>0.05</span>,
+  <span class='va'>eps</span>,
+  <span class='va'>r</span>,
+  <span class='va'>eta</span>,
+  <span class='va'>rho</span>,
+  <span class='va'>gammai</span>,
+  random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>alg</th>
-      <td><p>A string that takes the value of one of the following: LOND, LORD,
-LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, or
-Alpha_investing</p></td>
+      <th>d</th>
+      <td><p>Either a vector of p-values, or a dataframe with three columns: an
+identifier (`id'), date (`date') and p-value (`pval'). If no column of
+dates is provided, then the p-values are treated as being ordered
+sequentially with no batches.</p></td>
     </tr>
     <tr>
-      <th>alpha</th>
-      <td><p>Overall significance level of the FDR procedure, the default is
-0.05.</p></td>
+      <th>delta</th>
+      <td><p>The probability at which the FDP exceeds eps (at any time step
+after making r rejections). Must be between 0 and 1, defaults to 0.05.</p></td>
     </tr>
     <tr>
-      <th>N</th>
-      <td><p>An upper bound on the number of hypotheses to be tested</p></td>
+      <th>eps</th>
+      <td><p>The upper bound on the FDP. Must be between 0 and 1.</p></td>
     </tr>
     <tr>
-      <th>b0</th>
-      <td><p>The 'payout' for rejecting a hypothesis, required for LORDdep.</p></td>
+      <th>r</th>
+      <td><p>The threshold of rejections after which the error control 
+begins to apply. Must be a positive integer.</p></td>
+    </tr>
+    <tr>
+      <th>eta</th>
+      <td><p>Controls the pace at which wealth is spent as a function of the 
+algorithm's current wealth. Must be a positive real number.</p></td>
+    </tr>
+    <tr>
+      <th>rho</th>
+      <td><p>Controls the length of time before the spending sequence exhausts 
+the wealth earned from a rejection. Must be a positive integer.</p></td>
+    </tr>
+    <tr>
+      <th>gammai</th>
+      <td><p>Optional vector of \(\gamma_i\). A default is provided as
+proposed by Javanmard and Montanari (2018).</p></td>
+    </tr>
+    <tr>
+      <th>random</th>
+      <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
+p-values in each batch (i.e. those that have exactly the same date) is
+randomised.</p></td>
+    </tr>
+    <tr>
+      <th>date.format</th>
+      <td><p>Optional string giving the format that is used for dates.</p></td>
     </tr>
     </table>
 
@@ -182,10 +222,59 @@ Alpha_investing</p></td>
 
     
 
-<dt>bound</dt><dd><p>A vector giving the values of a default sequence
-\(\gamma_i\) of nonnegative numbers that sum to 1.</p></dd>
+<dt>d.out</dt><dd><p>A dataframe with the original data <code>d</code> (which
+  will be reordered if there are batches and <code>random = TRUE</code>), the
+  supLORD-adjusted significance thresholds \(\alpha_i\) and the indicator
+  function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
+  \(i\)-th p-value is less than or equal to \(\alpha_i\), in which case
+  <code>R[i] = 1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>The function takes as its input either a vector of p-values or a dataframe
+with three columns: an identifier (`id'), date (`date') and p-value (`pval').
+The case where p-values arrive in batches corresponds to multiple instances
+of the same date. If no column of dates is provided, then the p-values are
+treated as being ordered sequentially with no batches.</p>
+<p>The supLORD procedure provably controls the FDX for p-values that are 
+conditionally superuniform under the null. supLORD also controls the supFDR 
+and hence the FDR (even at stopping times). Given an overall significance
+level \(\alpha\), we choose a sequence of non-negative non-increasing
+numbers \(\gamma_i\) that sum to 1.</p>
+<p>supLORD requires the user to specify r, a threshold of rejections after which
+the error control begins to apply, eps, the upper bound on the false 
+discovery proportion (FDP), and delta, the probability at which the FDP
+exceeds eps at any time step after making r rejections. As well, the user
+should specify the variables eta, which controls the pace at which wealth is 
+spent (as a function of the algorithm's current wealth), and rho, which 
+controls the length of time before the spending sequence exhausts 
+the wealth earned from a rejection.</p>
+<p>Further details of the supLORD procedure can be found in Xu and Ramdas (2021).</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online 
+Multiple Testing. <em>arXiv preprint</em>, 
+<a href='https://arxiv.org/abs/2010.13953'>https://arxiv.org/abs/2010.13953</a>.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>N</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span>
+<span class='va'>B</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>N</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='va'>Z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>N</span>, mean <span class='op'>=</span> <span class='fl'>3</span><span class='op'>*</span><span class='va'>B</span><span class='op'>)</span>
+<span class='va'>pval</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>-</span><span class='va'>Z</span><span class='op'>)</span>
+
+<span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>supLORD</span><span class='op'>(</span><span class='va'>pval</span>, eps<span class='op'>=</span><span class='fl'>0.15</span>, r<span class='op'>=</span><span class='fl'>30</span>, eta<span class='op'>=</span><span class='fl'>0.05</span>, rho<span class='op'>=</span><span class='fl'>30</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;              d       alphai R
+#&gt; 1 4.691912e-01 0.0019301522 0
+#&gt; 2 6.167166e-01 0.0004197471 0
+#&gt; 3 3.462711e-02 0.0003575072 0
+#&gt; 4 1.300690e-03 0.0002973164 0
+#&gt; 5 1.606961e-01 0.0002520627 0
+#&gt; 6 2.174486e-06 0.0002180533 1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>$</span><span class='va'>R</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 390</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

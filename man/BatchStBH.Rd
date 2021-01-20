@@ -31,8 +31,8 @@ BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5)
 \description{
 Implements the BatchSt-BH algorithm for online FDR control, as presented by
 Zrnic et al. (2020). This algorithm makes one modification to the original
-Storey-BH algorithm, by adding 1 to the numerator of the null proportion
-estimate for more stable results.
+Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of
+the null proportion estimate for more stable results.
 }
 \details{
 The function takes as its input a dataframe with three columns: identifiers
@@ -64,7 +64,7 @@ BatchStBH(sample.df)
 
 }
 \references{
-Storey, JD. (2002). A direct approach to false discovery rates.
+Storey, J.D. (2002). A direct approach to false discovery rates.
   \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
 
   Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching

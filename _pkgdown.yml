@@ -20,12 +20,16 @@ reference:
     contents:
     - "BatchBH"
     - "BatchPRDS"
+    - "BatchStBH"
   - title: Asynchronous FDR Control
     contents:
     - "ADDIS"
     - "LONDstar"
     - "LORDstar"
     - "SAFFRONstar"
+  - title: False Discovery Exceedance Control
+    contents:
+    - "supLORD"
   - title: FWER Control
     contents:
     - "ADDIS_spending"

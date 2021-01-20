@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -52,7 +52,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -107,31 +107,28 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To install the latest (development) version of the onlineFDR package from Bioconductor, please run the following code:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
-
 
 <span class="co"># The following initializes usage of Bioc</span>
 <span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="op">)</span>
 
-
-
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></pre></div>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></code></pre></div>
 <p>Alternatively, you can install the package directly from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># install.packages("devtools") # If devtools not installed</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools") # If devtools not installed</span>
 
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span></code></pre></div>
+<p>We recommend the GitHub version for faster implementations of the algorithms.</p>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <p>Documentation is hosted at <a href="https://dsrobertson.github.io/onlineFDR/" class="uri">https://dsrobertson.github.io/onlineFDR/</a></p>
 <p>To view the vignette for the version of this package installed in your system, start R and enter:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span>
-<span class="co">#&gt; No vignettes found by browseVignettes("onlineFDR")</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -144,9 +141,10 @@
 <p>Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an adaptive algorithm for online control of the false discovery rate. <em>Proceedings of the 35th International Conference in Machine Learning</em>, 80:4286-4294.</p>
 <p>Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery rate in biomedical research. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1809.07292" class="uri">https://arxiv.org/abs/1809.07292</a>.</p>
 <p>Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019). onlineFDR: an R package to control the false discovery rate for growing data repositories. <em>Bioinformatics</em>, 35:4196-4199, <a href="https://doi.org/10.1093/bioinformatics/btz191" class="uri">https://doi.org/10.1093/bioinformatics/btz191</a>.</p>
-<p>Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for online FDR control with conservative nulls. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1905.11465" class="uri">https://arxiv.org/abs/1905.11465</a>.</p>
-<p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1910.04900" class="uri">https://arxiv.org/abs/1910.04900</a>.</p>
-<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of Multiple Hypotheses. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1812.05068" class="uri">https://arxiv.org/abs/1812.05068</a>.</p>
+<p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for online FDR control with conservative nulls. <em>Advances in Neural Information Processing Systems</em>, 9388-9396.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate. <em>Statistical Methods for Medical Research</em> (to appear), <a href="https://arxiv.org/abs/1910.04900" class="uri">https://arxiv.org/abs/1910.04900</a>.</p>
+<p>Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching in Multiple Hypothesis Testing. <em>International Conference on Artificial Intelligence and Statistics</em>, 3806-3815.</p>
+<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear), <a href="https://arxiv.org/abs/1812.05068" class="uri">https://arxiv.org/abs/1812.05068</a>.</p>
 </div>
 </div>
 

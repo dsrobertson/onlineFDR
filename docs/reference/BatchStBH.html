@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS_spending • onlineFDR</title>
+<title>BatchStBH: Online batch FDR control using the St-BH procedure — BatchStBH • onlineFDR</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,11 @@
 
 
 
-<meta property="og:title" content="ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS_spending" />
-<meta property="og:description" content="Implements the ADDIS algorithm for online FWER control, where ADDIS stands
-for an ADaptive algorithm that DIScards conservative nulls, as presented by
-Tian and Ramdas (2021). The procedure compensates for the power loss of
-Alpha-spending, by including both adaptivity in the fraction of null
-hypotheses and the conservativeness of nulls." />
+<meta property="og:title" content="BatchStBH: Online batch FDR control using the St-BH procedure — BatchStBH" />
+<meta property="og:description" content="Implements the BatchSt-BH algorithm for online FDR control, as presented by
+Zrnic et al. (2020). This algorithm makes one modification to the original
+Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of
+the null proportion estimate for more stable results." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
 
@@ -145,32 +144,31 @@ hypotheses and the conservativeness of nulls." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ADDIS-spending: Adaptive discarding algorithm for online FWER control</h1>
+    <h1>BatchStBH: Online batch FDR control using the St-BH procedure</h1>
     
-    <div class="hidden name"><code>ADDIS_spending.Rd</code></div>
+    <div class="hidden name"><code>BatchStBH.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Implements the ADDIS algorithm for online FWER control, where ADDIS stands
-for an ADaptive algorithm that DIScards conservative nulls, as presented by
-Tian and Ramdas (2021). The procedure compensates for the power loss of
-Alpha-spending, by including both adaptivity in the fraction of null
-hypotheses and the conservativeness of nulls.</p>
+    <p>Implements the BatchSt-BH algorithm for online FDR control, as presented by
+Zrnic et al. (2020). This algorithm makes one modification to the original
+Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of
+the null proportion estimate for more stable results.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ADDIS_spending</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, lambda <span class='op'>=</span> <span class='fl'>0.25</span>, tau <span class='op'>=</span> <span class='fl'>0.5</span>, dep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>BatchStBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, lambda <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>d</th>
-      <td><p>Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), p-value (`pval'), and lags (`lags').</p></td>
+      <td><p>A dataframe with three columns: identifiers (`id'), batch numbers
+(`batch') and p-values (`pval').</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>Overall significance level of the procedure, the default is
+      <td><p>Overall significance level of the FDR procedure, the default is
 0.05.</p></td>
     </tr>
     <tr>
@@ -180,18 +178,8 @@ identifier (`id'), p-value (`pval'), and lags (`lags').</p></td>
     </tr>
     <tr>
       <th>lambda</th>
-      <td><p>Optional parameter that sets the threshold for `candidate'
-hypotheses. Must be between 0 and 1, defaults to 0.25.</p></td>
-    </tr>
-    <tr>
-      <th>tau</th>
-      <td><p>Optional threshold for hypotheses to be selected for testing. Must
-be between 0 and 1, defaults to 0.5.</p></td>
-    </tr>
-    <tr>
-      <th>dep</th>
-      <td><p>Logical. If <code>TRUE</code> runs the version for locally dependent
-p-values</p></td>
+      <td><p>Threshold for Storey-BH, must be between 0 and 1. Defaults to
+0.5.</p></td>
     </tr>
     </table>
 
@@ -199,89 +187,63 @@ p-values</p></td>
 
     
 
-<dt>out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
-  adjusted testing levels \(\alpha_i\) and the indicator function of
-  discoveries <code>R</code>. Hypothesis \(i\) is rejected if the \(i\)-th
-  p-value is less than or equal to \(\alpha_i\), in which case <code>R[i] =
-  1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
+<dt>out</dt><dd><p>A dataframe with the original data <code>d</code> and the
+  indicator function of discoveries <code>R</code>. Hypothesis \(i\) is rejected
+  if the \(i\)-th p-value within the \(t\)-th batch is less than or equal
+  to \((r/n)\alpha_t\), where \(r\) is the rank of the \(i\)-th p-value
+  within an ordered set and \(n\) is the total number of hypotheses within
+  the \(t\)-th batch. If hypothesis \(i\) is rejected, <code>R[i] = 1</code>
+  (otherwise <code>R[i] = 0</code>).</p></dd>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function takes as its input either a vector of p-values, or a dataframe
-with three columns: an identifier (`id'), p-value (`pval'), and lags, if the
-dependent version is specified (see below). Given an overall significance
-level \(\alpha\), ADDIS depends on constants \(\lambda\) and \(\tau\),
-where \(\lambda &lt; \tau\). Here \(\tau \in (0,1)\) represents the
-threshold for a hypothesis to be selected for testing: p-values greater than
-\(\tau\) are implicitly `discarded' by the procedure, while \(\lambda
-\in (0,1)\) sets the threshold for a p-value to be a candidate for rejection:
-ADDIS-spending will never reject a p-value larger than \(\lambda\). The
-algorithms also require a sequence of non-negative non-increasing numbers
-\(\gamma_i\) that sum to 1.</p>
-<p>The ADDIS-spending procedure provably controls the FWER in the strong sense
-for independent p-values. Note that the procedure also controls the
-generalised familywise error rate (k-FWER) for \(k &gt; 1\) if \(\alpha\) is
-replaced by min(\(1, k\alpha\)).</p>
-<p>Tian and Ramdas (2021) also presented a version for handling local
-dependence. More precisely, for any \(t&gt;0\) we allow the p-value \(p_t\)
-to have arbitrary dependence on the previous \(L_t\) p-values. The fixed
-sequence \(L_t\) is referred to as `lags', and is given as the input
-<code>lags</code> for this version of the ADDIS-spending algorithm.</p>
-<p>Further details of the ADDIS-spending algorithms can be found in Tian and
-Ramdas (2021).</p>
+    <p>The function takes as its input a dataframe with three columns: identifiers
+(`id'), batch numbers (`batch') and p-values (`pval').</p>
+<p>The BatchSt-BH algorithm controls the FDR when the p-values in a batch are
+independent, and independent across batches. Given an overall significance
+level \(\alpha\), we choose a sequence of non-negative numbers
+\(\gamma_i\) such that they sum to 1. The algorithm runs the
+Benjamini-Hochberg procedure on each batch, where the values of the adjusted
+significance thresholds \(\alpha_{t+1}\) depend on the number of previous
+discoveries.</p>
+<p>Further details of the BatchSt-BH algorithm can be found in Zrnic et al.
+(2020).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
-  error rate. <em>Statistical Methods for Medical Research</em> (to appear),
-  <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='ADDIS.html'>ADDIS</a></code> provides online control of the FDR.</p></div>
+    <p>Storey, J.D. (2002). A direct approach to false discovery rates.
+  <em>J. R. Statist. Soc. B</em>: 64, Part 3, 479-498.</p>
+<p>Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching
+  in Multiple Hypothesis Testing. <em>International Conference on
+  Artificial Intelligence and Statistics</em>: 3806-3815</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>sample.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    <pre class="examples"><div class='input'>
+<span class='va'>sample.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
 id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A15432'</span>, <span class='st'>'B90969'</span>, <span class='st'>'C18705'</span>, <span class='st'>'B49731'</span>, <span class='st'>'E99902'</span>,
     <span class='st'>'C38292'</span>, <span class='st'>'A30619'</span>, <span class='st'>'D46627'</span>, <span class='st'>'E29198'</span>, <span class='st'>'A41418'</span>,
     <span class='st'>'D51456'</span>, <span class='st'>'C88669'</span>, <span class='st'>'E03673'</span>, <span class='st'>'A63155'</span>, <span class='st'>'B66033'</span><span class='op'>)</span>,
 pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.90e-08</span>, <span class='fl'>0.06743</span>, <span class='fl'>0.01514</span>, <span class='fl'>0.08174</span>, <span class='fl'>0.00171</span>,
         <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-08</span>,
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span>,
-lags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>15</span><span class='op'>)</span><span class='op'>)</span>
+batch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>5</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>ADDIS_spending</span><span class='op'>(</span><span class='va'>sample.df</span><span class='op'>)</span> <span class='co'>#independent</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0054686271 1
-#&gt; 2  6.7430e-02 0.0054686271 0
-#&gt; 3  1.5140e-02 0.0054686271 0
-#&gt; 4  8.1740e-02 0.0054686271 0
-#&gt; 5  1.7100e-03 0.0054686271 1
-#&gt; 6  3.6000e-05 0.0054686271 1
-#&gt; 7  7.9149e-01 0.0054686271 0
-#&gt; 8  2.7201e-01 0.0054686271 0
-#&gt; 9  2.8295e-01 0.0018039742 0
-#&gt; 10 7.5900e-08 0.0009429405 1
-#&gt; 11 6.9274e-01 0.0009429405 0
-#&gt; 12 3.0443e-01 0.0009429405 0
-#&gt; 13 1.3600e-03 0.0005950895 0
-#&gt; 14 7.2342e-01 0.0005950895 0
-#&gt; 15 5.4757e-01 0.0005950895 0</div><div class='input'>
-<span class='fu'>ADDIS_spending</span><span class='op'>(</span><span class='va'>sample.df</span>, dep <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'>#Locally dependent</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0054686271 1
-#&gt; 2  6.7430e-02 0.0018039742 0
-#&gt; 3  1.5140e-02 0.0018039742 0
-#&gt; 4  8.1740e-02 0.0018039742 0
-#&gt; 5  1.7100e-03 0.0018039742 1
-#&gt; 6  3.6000e-05 0.0018039742 1
-#&gt; 7  7.9149e-01 0.0018039742 0
-#&gt; 8  2.7201e-01 0.0018039742 0
-#&gt; 9  2.8295e-01 0.0009429405 0
-#&gt; 10 7.5900e-08 0.0005950895 1
-#&gt; 11 6.9274e-01 0.0005950895 0
-#&gt; 12 3.0443e-01 0.0005950895 0
-#&gt; 13 1.3600e-03 0.0004164149 0
-#&gt; 14 7.2342e-01 0.0004164149 0
-#&gt; 15 5.4757e-01 0.0004164149 0</div><div class='input'>
+<span class='fu'>BatchStBH</span><span class='op'>(</span><span class='va'>sample.df</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;        id       pval batch R      alphai
+#&gt; 1  A15432 2.9000e-08     1 1 0.021874508
+#&gt; 2  B90969 6.7430e-02     1 0 0.021874508
+#&gt; 3  C18705 1.5140e-02     1 1 0.021874508
+#&gt; 4  B49731 8.1740e-02     1 0 0.021874508
+#&gt; 5  E99902 1.7100e-03     1 1 0.021874508
+#&gt; 6  C38292 3.6000e-05     2 1 0.043635607
+#&gt; 7  A30619 7.9149e-01     2 0 0.043635607
+#&gt; 8  D46627 2.7201e-01     2 0 0.043635607
+#&gt; 9  E29198 2.8295e-01     2 0 0.043635607
+#&gt; 10 A41418 7.5900e-08     2 1 0.043635607
+#&gt; 11 D51456 6.9274e-01     2 0 0.043635607
+#&gt; 12 C88669 3.0443e-01     3 0 0.008486465
+#&gt; 13 E03673 1.3600e-03     3 1 0.008486465
+#&gt; 14 A63155 7.2342e-01     3 0 0.008486465
+#&gt; 15 B66033 5.4757e-01     3 0 0.008486465</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -103,7 +103,12 @@ Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
 *Statistical Methods for Medical Research* (to appear),
 https://arxiv.org/abs/1910.04900.
 
-Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
+Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+Batching in Multiple Hypothesis Testing.
+*International Conference on Artificial Intelligence and Statistics*,
+3806-3815.
+
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 Multiple Hypotheses. *Journal of Machine Learning Research* (to appear),
 https://arxiv.org/abs/1812.05068.
 
