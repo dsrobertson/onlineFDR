@@ -126,7 +126,7 @@ supLORD <- function(d, delta = 0.05, eps, r, eta, rho, gammai, random = TRUE,
          log(1/delta)/(eps*r))^2
     }
     
-    a <- optimize(obj, c(0,r/10), tol = 1e-10)$minimum
+    a <- stats::optimize(obj, c(0,r/10), tol = 1e-10)$minimum
     beta0 <- ((eps*r/(log(1/delta)/(a*log(1+log(1/delta)/a))))-a)/r
     betai[1] <- beta0
 
