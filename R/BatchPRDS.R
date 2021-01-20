@@ -73,7 +73,13 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   #check that batches were labeled correctly
   n_batch <- length(unique(d$batch))
   if(max(d$batch, na.rm = TRUE) > n_batch) {
-    stop("Check that your batches are labelled in ascending order starting from 1.")
+    d <- d[order(d$batch),]
+    d$batch2 <- rep(1:length(table(d$batch)), table(d$batch))
+    d$batch2 <- as.numeric(d$batch2)
+    warning("Your batches were not labelled in a fully sequential manner. A new batch id was created labelled sequentially starting from 1.")
+  } else {
+    d$batch2 <- rep(1:length(table(d$batch)), table(d$batch))
+    d$batch2 <- as.numeric(d$batch2)
   }
   
   if (missing(gammai)) {
@@ -85,34 +91,40 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   }
   
   ### Start Batch PRDS procedure
-  all_batches <- list()
   
+  R <- rep(0, nrow(d))
   alphai <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
   for(i in seq_len(n_batch)){
-    batch_data <- d[d$batch == i,]
-    batch_data$ind <- seq.int(nrow(batch_data))
-    n <- length(batch_data$pval)
-    ordered_batch_data <- batch_data[order(batch_data$pval),]
-    ordered_batch_data$R <- ordered_batch_data$pval <= ((1:n)/n)*alphai[i]
-    max_entry <- suppressWarnings(max(which(ordered_batch_data$R)))
+    batch_pval <- d[which(d$batch2 == i),]$pval
+    # batch_pval <- subset_rcpp(d$batch2, d$pval, i)
+    n <- length(batch_pval)
+    
+    ordered_pval <- sort(batch_pval)
+    batchR <- ordered_pval <= ((1:n)/n)*alphai[i]
+
+    max_entry <- suppressWarnings(which.max(batchR))
     if(is.finite(max_entry)) {
-      ordered_batch_data$R[1:max_entry] <- 1
+      batchR[1:max_entry] <- 1
     }
-    ordered_batch_data <- ordered_batch_data[order(ordered_batch_data$ind),]
-    ordered_batch_data$ind <- NULL
-    all_batches[[i]] <- ordered_batch_data
-    out <- do.call(rbind, all_batches)
+    out_R <- batchR[order(batch_pval)]
+    idx <- which(d$batch2 == i)
+    R[idx] <- out_R
     
     #update alphai
     if(i < n_batch) {
-      ntplus <- nrow(d[d$batch == i+1,])
-      alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(out$R, na.rm = T))
+      ntplus <- length(which(d$batch2 == i+1))
+      alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(R, na.rm = T))
     }
   }
-  
-  #create alphai
-  out$alphai <- rep(alphai, table(d$batch))
+  out <- d
+  out$R = R
+  out$alphai = rep(alphai, table(d$batch2))
+  #deduplicate columns, so if batch2 is the same, remove it
+  if(identical(out$batch, out$batch2)) {
+    out$batch2 <- NULL
+  }
   return(out)
 }
+
