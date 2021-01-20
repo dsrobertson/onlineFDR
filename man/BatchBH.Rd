@@ -26,7 +26,8 @@ batch numbers (`batch') and p-values (`pval').}
   (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements the BatchBH algorithm for online FDR control, as presented by Zrnic et. al.(2020).
+Implements the BatchBH algorithm for online FDR control, as presented by 
+Zrnic et al. (2020).
 }
 \details{
 The function takes as its input a dataframe with three columns: identifiers
@@ -40,8 +41,7 @@ Benjamini-Hochberg procedure on each batch, where the values of the adjusted
 significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
 discoveries.
 
-Further details of the BatchBH algorithm can be found in Zrnic et. al.
-(2020).
+Further details of the BatchBH algorithm can be found in Zrnic et al. (2020).
 }
 \examples{
 
@@ -60,5 +60,5 @@ BatchBH(sample.df)
 \references{
 Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
   Batching in Multiple Hypothesis Testing. \emph{International Conference on
-  Artificial Intelligence and Statistics}: 3806-3815
+  Artificial Intelligence and Statistics}, 3806-3815
 }

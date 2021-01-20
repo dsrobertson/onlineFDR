@@ -8,9 +8,7 @@ ADDIS_spending(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), 
-p-value (`pval'), and lags 
-(`lags').}
+identifier (`id'), p-value (`pval'), and lags (`lags').}
 
 \item{alpha}{Overall significance level of the procedure, the default is
 0.05.}
@@ -24,7 +22,7 @@ hypotheses. Must be between 0 and 1, defaults to 0.25.}
 \item{tau}{Optional threshold for hypotheses to be selected for testing. Must
 be between 0 and 1, defaults to 0.5.}
 
-\item{dep}{Logical. If \code{TRUE} runs the version for locally dependent 
+\item{dep}{Logical. If \code{TRUE} runs the version for locally dependent
 p-values}
 }
 \value{
@@ -37,36 +35,36 @@ p-values}
 \description{
 Implements the ADDIS algorithm for online FWER control, where ADDIS stands
 for an ADaptive algorithm that DIScards conservative nulls, as presented by
-Tian and Ramdas (2019b). The procedure compensates for the power loss of
+Tian and Ramdas (2021). The procedure compensates for the power loss of
 Alpha-spending, by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls.
 }
 \details{
 The function takes as its input either a vector of p-values, or a dataframe
-with three columns: an identifier (`id'),
-p-value (`pval'), and lags, if the dependent version is specified (see below). 
-Given an overall significance level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and
-\eqn{\tau}, where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1)} represents
-the threshold for a hypothesis to be selected for testing: p-values greater
-than \eqn{\tau} are implicitly `discarded' by the procedure, while
-\eqn{\lambda \in (0,1)} sets the threshold for a p-value to be a candidate
-for rejection: ADDIS-spending will never reject a p-value larger than
-\eqn{\lambda}. The algorithms also require a sequence of non-negative
-non-increasing numbers \eqn{\gamma_i} that sum to 1.
+with three columns: an identifier (`id'), p-value (`pval'), and lags, if the
+dependent version is specified (see below). Given an overall significance
+level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and \eqn{\tau},
+where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1)} represents the
+threshold for a hypothesis to be selected for testing: p-values greater than
+\eqn{\tau} are implicitly `discarded' by the procedure, while \eqn{\lambda
+\in (0,1)} sets the threshold for a p-value to be a candidate for rejection:
+ADDIS-spending will never reject a p-value larger than \eqn{\lambda}. The
+algorithms also require a sequence of non-negative non-increasing numbers
+\eqn{\gamma_i} that sum to 1.
 
 The ADDIS-spending procedure provably controls the FWER in the strong sense
 for independent p-values. Note that the procedure also controls the
 generalised familywise error rate (k-FWER) for \eqn{k > 1} if \eqn{\alpha} is
 replaced by min(\eqn{1, k\alpha}).
 
-Tian and Ramdas (2019b) also presented a version for handling local
+Tian and Ramdas (2021) also presented a version for handling local
 dependence. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t}
 to have arbitrary dependence on the previous \eqn{L_t} p-values. The fixed
 sequence \eqn{L_t} is referred to as `lags', and is given as the input
 \code{lags} for this version of the ADDIS-spending algorithm.
 
 Further details of the ADDIS-spending algorithms can be found in Tian and
-Ramdas (2019b).
+Ramdas (2021).
 }
 \examples{
 sample.df <- data.frame(
@@ -84,8 +82,9 @@ ADDIS_spending(sample.df, dep = TRUE) #Locally dependent
 
 }
 \references{
-Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-\emph{arXiv preprint}, \url{https://arxiv.org/abs/1910.04900}.
+Tian, J. and Ramdas, A. (2021). Online control of the familywise
+  error rate. \emph{Statistical Methods for Medical Research} (to appear),
+  \url{https://arxiv.org/abs/1910.04900}.
 }
 \seealso{
 \code{\link{ADDIS}} provides online control of the FDR.

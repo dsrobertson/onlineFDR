@@ -51,8 +51,9 @@
 #'  False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 #'  Statistics}, 46(2):526-554.
 #'
-#' Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1910.04900}.
+#' Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+#' \emph{Statistical Methods for Medical Research} (to appear),
+#' \url{https://arxiv.org/abs/1910.04900}.
 #'
 #'
 #' @examples

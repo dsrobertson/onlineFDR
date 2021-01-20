@@ -7,8 +7,8 @@
 BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5)
 }
 \arguments{
-\item{d}{A dataframe with three columns: identifiers (`id'),
-batch numbers (`batch') and p-values (`pval').}
+\item{d}{A dataframe with three columns: identifiers (`id'), batch numbers
+(`batch') and p-values (`pval').}
 
 \item{alpha}{Overall significance level of the FDR procedure, the default is
 0.05.}
@@ -16,7 +16,8 @@ batch numbers (`batch') and p-values (`pval').}
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
-\item{lambda}{Threshold for Storey-BH, must be between 0 and 1. Defaults to 0.5.}
+\item{lambda}{Threshold for Storey-BH, must be between 0 and 1. Defaults to
+0.5.}
 }
 \value{
 \item{out}{ A dataframe with the original data \code{d} and the
@@ -28,21 +29,24 @@ batch numbers (`batch') and p-values (`pval').}
   (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements the BatchSt-BH algorithm for online FDR control, as presented by Zrnic et. al.(2020). This algorithm makes one modification to the original Storey-BH algorithm, by adding 1 to the numerator of the null proportion estimate for more stable results.
+Implements the BatchSt-BH algorithm for online FDR control, as presented by
+Zrnic et al. (2020). This algorithm makes one modification to the original
+Storey-BH algorithm, by adding 1 to the numerator of the null proportion
+estimate for more stable results.
 }
 \details{
 The function takes as its input a dataframe with three columns: identifiers
 (`id'), batch numbers (`batch') and p-values (`pval').
 
-The BatchSt-BH algorithm controls the FDR when the p-values in a batch 
-are independent, and independent across batches. Given an overall
-significance level \eqn{\alpha}, we choose a sequence of non-negative numbers
+The BatchSt-BH algorithm controls the FDR when the p-values in a batch are
+independent, and independent across batches. Given an overall significance
+level \eqn{\alpha}, we choose a sequence of non-negative numbers
 \eqn{\gamma_i} such that they sum to 1. The algorithm runs the
 Benjamini-Hochberg procedure on each batch, where the values of the adjusted
-significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous 
+significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous
 discoveries.
 
-Further details of the BatchSt-BH algorithm can be found in Zrnic et. al.
+Further details of the BatchSt-BH algorithm can be found in Zrnic et al.
 (2020).
 }
 \examples{
@@ -60,9 +64,10 @@ BatchStBH(sample.df)
 
 }
 \references{
-Storey, JD. (2002). A direct approach to false discovery rates. \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
+Storey, JD. (2002). A direct approach to false discovery rates.
+  \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
 
-Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
-  Batching in Multiple Hypothesis Testing. \emph{International Conference on
+  Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching
+  in Multiple Hypothesis Testing. \emph{International Conference on
   Artificial Intelligence and Statistics}: 3806-3815
 }

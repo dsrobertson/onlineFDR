@@ -135,5 +135,3 @@ LORDdep <- function(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0, random 
     
     return(d.out)
 }  # nocov end
-TRUE
-TRUE
