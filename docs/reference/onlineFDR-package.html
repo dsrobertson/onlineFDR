@@ -90,7 +90,7 @@ of hypotheses to be tested are unknown." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@ of hypotheses to be tested are unknown." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -168,8 +168,8 @@ of hypotheses to be tested are unknown.</p>
 <table class='table'>
 <tr><td>Package:</td><td>onlineFDR</td></tr>
 <tr><td>Type:</td><td>Package</td></tr>
-<tr><td>Version:</td><td>1.8.0</td></tr>
-<tr><td>Date:</td><td>2020-10-22</td></tr>
+<tr><td>Version:</td><td>1.9.1</td></tr>
+<tr><td>Date:</td><td>2021-01-20</td></tr>
 <tr><td>License:</td><td>GPL-3</td></tr>
 </table>
 
@@ -199,14 +199,27 @@ provides an adaptive algorithm for online FDR control. SAFFRON is related to
 the Alpha-investing procedure of Foster and Stine (2008), a monotone version
 of which is implemented by the function <code><a href='Alpha_investing.html'>Alpha_investing</a></code>. Both 
 these procedure provably control the FDR under independence of the p-values.</p>
-<p>Zrnic et al. (2018) generalised these algorithms (i.e. LOND, LORD and
-SAFFRON) for the context of asynchronous online testing, where each
-hypothesis test can itself be a sequential process and the tests can overlap
-in time. These algorithms are designed for the control of the modified FDR
-(mFDR). They are implemented by the functions <code><a href='LONDstar.html'>LONDstar</a></code>,
-<code><a href='LORDstar.html'>LORDstar</a></code> and <code><a href='SAFFRONstar.html'>SAFFRONstar</a></code>. Zrnic et al. (2018)
-presented three explicit versions of these algorithms:</p>
-<p>1) <code>version='async'</code> is for an asynchoronous testing
+<p>Tian and Ramdas (2019) proposed the <code><a href='ADDIS.html'>ADDIS</a></code>
+algorithm, which stands for an ADaptive algorithm that DIScards conservative
+nulls. The algorithm compensates for the power loss of SAFFRON with
+conservative nulls, by including both adaptivity in the fraction of null
+hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
+The ADDIS procedure provably controls the FDR for independent p-values. Tian
+and Ramdas (2019) also presented a version for an asynchronous testing
+process, consisting of tests that start and finish at (potentially) random
+times.</p>
+<p>For testing batches of hypotheses, Zrnic et al. (2020) proposed batched 
+online testing algorithms that control the FDR, where the p-values across
+different batches are independent, and within a batch the p-values are either
+positively dependent or independent.</p>
+<p>Zrnic et al. (2021) generalised LOND, LORD and SAFFRON for asynchronous
+online testing, where each hypothesis test can itself be a sequential process
+and the tests can overlap in time. Note though that these algorithms are
+designed for the control of a modified FDR (mFDR). They are implemented by
+the functions <code><a href='LONDstar.html'>LONDstar</a></code>, <code><a href='LORDstar.html'>LORDstar</a></code> and
+<code><a href='SAFFRONstar.html'>SAFFRONstar</a></code>. Zrnic et al. (2021) presented three explicit
+versions of these algorithms:</p>
+<p>1) <code>version='async'</code> is for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random 
 times. The discretised finish times of the test correspond to the decision 
 times.</p>
@@ -219,16 +232,11 @@ mini-batch testing, where a mini-batch represents a grouping of tests run
 asynchronously which result in dependent p-values. Once a mini-batch of tests
 is fully completed, a new one can start, testing hypotheses independent of
 the previous batch.</p>
-<p>Meanwhile, Tian and Ramdas (2019a) proposed the <code><a href='ADDIS.html'>ADDIS</a></code>
-algorithm, which stands for an ADaptive algorithm that DIScards conservative
-nulls. The algorithm compensates for the power loss of SAFFRON with
-conservative nulls, by including both adapativity in the fraction of null
-hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
-The ADDIS procedure provably controls the FDR for independent p-values. Tian
-and Ramdas (2019) also presented a version for an asynchoronous testing
-process, consisting of tests that start and finish at (potentially) random
-times.</p>
-<p>Finally, Tian and Ramdas (2019b) proposed a number of algorithms for online
+<p>Recently, Xu and Ramdas (2021) proposed the <code><a href='supLORD.html'>supLORD</a></code> algorithm, 
+which provably controls the false discovery exceedance (FDX) for p-values 
+that are conditionally superuniform under the null. supLORD also controls the
+supFDR and hence the FDR (even at stopping times).</p>
+<p>Finally, Tian and Ramdas (2021) proposed a number of algorithms for online
 FWER control. The only previously existing procedure for online FWER control
 is Alpha-spending, which is an online analog of the Bonferroni procedure.
 This is implemented by the function <code><a href='Alpha_spending.html'>Alpha_spending</a></code>, and
@@ -239,11 +247,12 @@ controls the FWER even under arbitrary dependence amongst the p-values. The
 Alpha-spending and online fallback, by including both adapativity in the
 fraction of null hypotheses and the conservativeness of nulls. This procedure
 controls the FWER in the strong sense for independent p-values. Tian and
-Ramdas (2019b) also presented a version for handling local dependence, which
+Ramdas (2021) also presented a version for handling local dependence, which
 can be specified by setting <code>dep=TRUE</code>.</p>
 <p>Further details on all these procedures can be found in Javanmard and
 Montanari (2015, 2018), Ramdas et al. (2017, 2018), Robertson and Wason
-(2018), Tian and Ramdas (2019a, 2019b) and Zrnic et al. (2018).</p>
+(2018), Tian and Ramdas (2019, 2021), Xu and Ramdas (2021), and Zrnic et al.
+(2020, 2021).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Aharoni, E. and Rosset, S. (2014). Generalized \(\alpha\)-investing:
@@ -271,13 +280,22 @@ discovery rate in biomedical research. <em>arXiv preprint</em>,
 onlineFDR: an R package to control the false discovery rate for growing data
 repositories. <em>Bioinformatics</em>, 35:4196-4199, 
 <a href='https://doi.org/10.1093/bioinformatics/btz191'>https://doi.org/10.1093/bioinformatics/btz191</a>.</p>
-<p>Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for
-online FDR control with conservative nulls. <em>arXiv preprint</em>,
-<a href='https://arxiv.org/abs/1905.11465'>https://arxiv.org/abs/1905.11465</a>.</p>
-<p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
-<p>Zrnic, T. et al. (2018). Asynchronous Online Testing of Multiple Hypotheses.
-<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1812.05068'>https://arxiv.org/abs/1812.05068</a>.</p>
+<p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+online FDR control with conservative nulls.
+<em>Advances in Neural Information Processing Systems</em>, 9388-9396.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+<em>Statistical Methods for Medical Research</em> (to appear),
+<a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
+<p>Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online 
+Multiple Testing. <em>arXiv preprint</em>, 
+<a href='https://arxiv.org/abs/2010.13953'>https://arxiv.org/abs/2010.13953</a>.</p>
+<p>Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+Batching in Multiple Hypothesis Testing.
+<em>International Conference on Artificial Intelligence and Statistics</em>,
+3806-3815.</p>
+<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear),
+<a href='https://arxiv.org/abs/1812.05068'>https://arxiv.org/abs/1812.05068</a>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>David S. Robertson (<a href='mailto:david.robertson@mrc-bsu.cam.ac.uk'>david.robertson@mrc-bsu.cam.ac.uk</a>),

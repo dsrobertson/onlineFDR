@@ -53,7 +53,8 @@
 
 
 <meta property="og:title" content="BatchBH: Online batch FDR control using the BH procedure — BatchBH" />
-<meta property="og:description" content="Implements the BatchBH algorithm for online FDR control, as presented by Zrnic et. al.(2020)." />
+<meta property="og:description" content="Implements the BatchBH algorithm for online FDR control, as presented by 
+Zrnic et al. (2020)." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
 
@@ -86,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -94,7 +95,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -147,7 +148,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Implements the BatchBH algorithm for online FDR control, as presented by Zrnic et. al.(2020).</p>
+    <p>Implements the BatchBH algorithm for online FDR control, as presented by 
+Zrnic et al. (2020).</p>
     </div>
 
     <pre class="usage"><span class='fu'>BatchBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span><span class='op'>)</span></pre>
@@ -195,13 +197,12 @@ significance level \(\alpha\), we choose a sequence of non-negative numbers
 Benjamini-Hochberg procedure on each batch, where the values of the adjusted
 significance thresholds \(\alpha_{t+1}\) depend on the number of previous 
 discoveries.</p>
-<p>Further details of the BatchBH algorithm can be found in Zrnic et. al.
-(2020).</p>
+<p>Further details of the BatchBH algorithm can be found in Zrnic et al. (2020).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
   Batching in Multiple Hypothesis Testing. <em>International Conference on
-  Artificial Intelligence and Statistics</em>: 3806-3815</p>
+  Artificial Intelligence and Statistics</em>, 3806-3815.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

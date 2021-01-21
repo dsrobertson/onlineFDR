@@ -53,7 +53,7 @@
 
 
 <meta property="og:title" content="Online fallback procedure for FWER control — online_fallback" />
-<meta property="og:description" content="Implements the online fallback procedure of Tian and Ramdas (2019b), which
+<meta property="og:description" content="Implements the online fallback procedure of Tian and Ramdas (2021), which
 guarantees strong FWER control under arbitrary dependence of the p-values." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
@@ -87,7 +87,7 @@ guarantees strong FWER control under arbitrary dependence of the p-values." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@ guarantees strong FWER control under arbitrary dependence of the p-values." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -148,7 +148,7 @@ guarantees strong FWER control under arbitrary dependence of the p-values." />
     </div>
 
     <div class="ref-description">
-    <p>Implements the online fallback procedure of Tian and Ramdas (2019b), which
+    <p>Implements the online fallback procedure of Tian and Ramdas (2021), which
 guarantees strong FWER control under arbitrary dependence of the p-values.</p>
     </div>
 
@@ -218,11 +218,12 @@ More specifically, the procedure tests hypothesis \(H_i\) at level
 $$\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}$$ where \(R_i =
 1\{p_i \leq \alpha_i\}\) denotes a rejected hypothesis.</p>
 <p>Further details of the online fallback procedure can be found in Tian and
-Ramdas (2019b).</p>
+Ramdas (2021).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
+    <p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
+error rate. <em>Statistical Methods for Medical Research</em> (to appear),
+<a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>sample.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>

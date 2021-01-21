@@ -91,7 +91,7 @@ SAFFRON)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@ SAFFRON)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -160,7 +160,17 @@ null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
 SAFFRON).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, <span class='va'>w0</span>, lambda <span class='op'>=</span> <span class='fl'>0.5</span>, tau <span class='op'>=</span> <span class='fl'>0.5</span>, async <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>ADDIS</span><span class='op'>(</span>
+  <span class='va'>d</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
+  <span class='va'>gammai</span>,
+  <span class='va'>w0</span>,
+  lambda <span class='op'>=</span> <span class='fl'>0.5</span>,
+  tau <span class='op'>=</span> <span class='fl'>0.5</span>,
+  async <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -200,7 +210,17 @@ be between 0 and 1, defaults to 0.5.</p></td>
     <tr>
       <th>async</th>
       <td><p>Logical. If <code>TRUE</code> runs the version for an asynchronous
-testing process</p></td>
+testing process. Defaults to FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>random</th>
+      <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
+p-values in each batch (i.e. those that have exactly the same date) is
+randomised. Only needed if async=FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>date.format</th>
+      <td><p>Optional string giving the format that is used for dates.</p></td>
     </tr>
     </table>
 
@@ -217,29 +237,33 @@ testing process</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function takes as its input either a vector of p-values, or a dataframe
-with three columns: an identifier (`id'),
-p-value (`pval'), and decision times, if the asynchronous version is specified (see below). 
-Given an overall significance level \(\alpha\), ADDIS depends on constants \(w_0\)
-\(\lambda\) and \(\tau\). \(w_0\) represents the intial `wealth' of the
-procedure and satisfies \(0 \le w_0 \le \tau \lambda \alpha\). \(\tau
-\in (0,1)\) represents the threshold for a hypothesis to be selected for
-testing: p-values greater than \(\tau\) are implicitly `discarded' by the
-procedure. Finally, \(\lambda \in (0,1)\) sets the threshold for a p-value
-to be a candidate for rejection: ADDIS will never reject a p-value larger
-than \(\tau \lambda\). The algorithm also require a sequence of
-non-negative non-increasing numbers \(\gamma_i\) that sum to 1.</p>
+with three columns. For the fully sequential version, the dataframe requires
+an identifier (`id'), date (`date') and p-value (`pval'). If the asynchronous
+version is specified (see below), then the column date should be replaced 
+by the decision times.</p>
+<p>Given an overall significance level \(\alpha\), ADDIS depends on constants
+\(w_0\), \(\lambda\) and \(\tau\). Here \(w_0\) represents the
+initial `wealth' of the procedure and satisfies \(0 \le w_0 \le \tau
+\lambda \alpha\). \(\tau \in (0,1)\) represents the threshold for a
+hypothesis to be selected for testing: p-values greater than \(\tau\) are
+implicitly `discarded' by the procedure. Finally, \(\lambda \in (0,1)\)
+sets the threshold for a p-value to be a candidate for rejection: ADDIS will
+never reject a p-value larger than \(\tau \lambda\). The algorithm also
+require a sequence of non-negative non-increasing numbers \(\gamma_i\) that
+sum to 1.</p>
 <p>The ADDIS procedure provably controls the FDR for independent p-values. Tian
 and Ramdas (2019) also presented a version for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random
 times. The discretised finish times of the test correspond to the decision
-times. These decision times are given as the input <code>decision.times</code>.</p>
+times. These decision times are given as the input <code>decision.times</code>.
+Note that this asynchronous version controls a modified version of the FDR.</p>
 <p>Further details of the ADDIS algorithms can be found in Tian and Ramdas
 (2019).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
-  algorithm for online FDR control with conservative nulls. <em>arXiv
-  preprint</em>, <a href='https://arxiv.org/abs/1905.11465'>https://arxiv.org/abs/1905.11465</a>.</p>
+  algorithm for online FDR control with conservative nulls.
+  <em>Advances in Neural Information Processing Systems</em>, 9388-9396.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>ADDIS is identical to <code><a href='SAFFRON.html'>SAFFRON</a></code> with option <code>discard=TRUE</code>.</p>
@@ -247,33 +271,20 @@ times. These decision times are given as the input <code>decision.times</code>.<
 with option <code>discard=TRUE</code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>sample.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    <pre class="examples"><div class='input'><span class='va'>sample.df1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
 id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A15432'</span>, <span class='st'>'B90969'</span>, <span class='st'>'C18705'</span>, <span class='st'>'B49731'</span>, <span class='st'>'E99902'</span>,
     <span class='st'>'C38292'</span>, <span class='st'>'A30619'</span>, <span class='st'>'D46627'</span>, <span class='st'>'E29198'</span>, <span class='st'>'A41418'</span>,
     <span class='st'>'D51456'</span>, <span class='st'>'C88669'</span>, <span class='st'>'E03673'</span>, <span class='st'>'A63155'</span>, <span class='st'>'B66033'</span><span class='op'>)</span>,
+date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'2014-12-01'</span>,<span class='fl'>3</span><span class='op'>)</span>,
+                <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'2015-09-21'</span>,<span class='fl'>5</span><span class='op'>)</span>,
+                <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'2016-05-19'</span>,<span class='fl'>2</span><span class='op'>)</span>,
+                <span class='st'>'2016-11-12'</span>,
+                <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>'2017-03-27'</span>,<span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
 pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.90e-08</span>, <span class='fl'>0.06743</span>, <span class='fl'>0.01514</span>, <span class='fl'>0.08174</span>, <span class='fl'>0.00171</span>,
         <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-08</span>,
-        <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span>,
-decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
+        <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df</span>, async <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># Asynchronous</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0027343135 1
-#&gt; 2  6.7430e-02 0.0009019871 0
-#&gt; 3  1.5140e-02 0.0018039742 0
-#&gt; 4  8.1740e-02 0.0018039742 0
-#&gt; 5  1.7100e-03 0.0018039742 1
-#&gt; 6  3.6000e-05 0.0018039742 1
-#&gt; 7  7.9149e-01 0.0036079483 0
-#&gt; 8  2.7201e-01 0.0042030379 0
-#&gt; 9  2.8295e-01 0.0042030379 0
-#&gt; 10 7.5900e-08 0.0023022960 1
-#&gt; 11 6.9274e-01 0.0015012335 0
-#&gt; 12 3.0443e-01 0.0018122878 0
-#&gt; 13 1.3600e-03 0.0018122878 1
-#&gt; 14 7.2342e-01 0.0013189588 0
-#&gt; 15 5.4757e-01 0.0015620232 0</div><div class='input'>
-<span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df</span>, async <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Synchronous</span>
+<span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df1</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Fully sequential</span>
 </div><div class='output co'>#&gt;          pval      alphai R
 #&gt; 1  2.9000e-08 0.002734314 1
 #&gt; 2  6.7430e-02 0.005468627 0
@@ -290,6 +301,34 @@ decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.
 #&gt; 13 1.3600e-03 0.003589243 1
 #&gt; 14 7.2342e-01 0.009057870 0
 #&gt; 15 5.4757e-01 0.009057870 0</div><div class='input'>
+
+<span class='va'>sample.df2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A15432'</span>, <span class='st'>'B90969'</span>, <span class='st'>'C18705'</span>, <span class='st'>'B49731'</span>, <span class='st'>'E99902'</span>,
+    <span class='st'>'C38292'</span>, <span class='st'>'A30619'</span>, <span class='st'>'D46627'</span>, <span class='st'>'E29198'</span>, <span class='st'>'A41418'</span>,
+    <span class='st'>'D51456'</span>, <span class='st'>'C88669'</span>, <span class='st'>'E03673'</span>, <span class='st'>'A63155'</span>, <span class='st'>'B66033'</span><span class='op'>)</span>,
+pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.90e-08</span>, <span class='fl'>0.06743</span>, <span class='fl'>0.01514</span>, <span class='fl'>0.08174</span>, <span class='fl'>0.00171</span>,
+        <span class='fl'>3.60e-05</span>, <span class='fl'>0.79149</span>, <span class='fl'>0.27201</span>, <span class='fl'>0.28295</span>, <span class='fl'>7.59e-08</span>,
+        <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span>,
+decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df2</span>, async <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># Asynchronous</span>
+</div><div class='output co'>#&gt;          pval       alphai R
+#&gt; 1  2.9000e-08 0.0027343135 1
+#&gt; 2  6.7430e-02 0.0009019871 0
+#&gt; 3  1.5140e-02 0.0018039742 0
+#&gt; 4  8.1740e-02 0.0018039742 0
+#&gt; 5  1.7100e-03 0.0018039742 1
+#&gt; 6  3.6000e-05 0.0018039742 1
+#&gt; 7  7.9149e-01 0.0036079483 0
+#&gt; 8  2.7201e-01 0.0042030379 0
+#&gt; 9  2.8295e-01 0.0042030379 0
+#&gt; 10 7.5900e-08 0.0023022960 1
+#&gt; 11 6.9274e-01 0.0015012335 0
+#&gt; 12 3.0443e-01 0.0018122878 0
+#&gt; 13 1.3600e-03 0.0018122878 1
+#&gt; 14 7.2342e-01 0.0013189588 0
+#&gt; 15 5.4757e-01 0.0015620232 0</div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

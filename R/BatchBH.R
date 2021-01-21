@@ -35,7 +35,7 @@
 #'
 #' @references Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
 #'   Batching in Multiple Hypothesis Testing. \emph{International Conference on
-#'   Artificial Intelligence and Statistics}, 3806-3815
+#'   Artificial Intelligence and Statistics}, 3806-3815.
 #'
 #' @examples
 #'

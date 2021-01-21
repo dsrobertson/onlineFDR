@@ -2,8 +2,8 @@
 #'
 #' Implements the BatchSt-BH algorithm for online FDR control, as presented by
 #' Zrnic et al. (2020). This algorithm makes one modification to the original
-#' Storey-BH algorithm, by adding 1 to the numerator of the null proportion
-#' estimate for more stable results.
+#' Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of
+#' the null proportion estimate for more stable results.
 #'
 #' The function takes as its input a dataframe with three columns: identifiers
 #' (`id'), batch numbers (`batch') and p-values (`pval').
@@ -39,7 +39,7 @@
 #'   the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
 #'   (otherwise \code{R[i] = 0}).}
 #'
-#' @references Storey, JD. (2002). A direct approach to false discovery rates.
+#' @references Storey, J.D. (2002). A direct approach to false discovery rates.
 #'   \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
 #'
 #'   Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching

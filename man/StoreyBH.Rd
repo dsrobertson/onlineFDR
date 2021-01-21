@@ -2,7 +2,7 @@
 % Please edit documentation in R/StoreyBH.R
 \name{StoreyBH}
 \alias{StoreyBH}
-\title{StoreyBH: FDR control using the St-BH procedure}
+\title{StoreyBH: Offline FDR control using the St-BH procedure}
 \usage{
 StoreyBH(d, alpha = 0.05, lambda = 0.5)
 }
@@ -25,8 +25,8 @@ StoreyBH(d, alpha = 0.05, lambda = 0.5)
   rejected, \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
-Implements the Storey-BH algorithm for FDR control, as presented by Storey et
-al. (2002).
+Implements the Storey-BH algorithm for offline FDR control, as presented by
+Storey (2002).
 }
 \details{
 The function takes as its input either a vector of p-values, or a dataframe
@@ -42,6 +42,6 @@ StoreyBH(pvals)
 
 }
 \references{
-Storey, JD. (2002). A direct approach to false discovery rates.
+Storey, J.D. (2002). A direct approach to false discovery rates.
   \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
 }

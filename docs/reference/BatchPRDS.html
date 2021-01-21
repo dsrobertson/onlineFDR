@@ -54,7 +54,7 @@
 
 <meta property="og:title" content="BatchPRDS: Online batch FDR control under Positive Dependence — BatchPRDS" />
 <meta property="og:description" content="Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
-for positive regression dependency on a subset, as presented by Zrnic et. al.
+for positive regression dependency on a subset, as presented by Zrnic et al.
 (2020)." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
@@ -88,7 +88,7 @@ for positive regression dependency on a subset, as presented by Zrnic et. al.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@ for positive regression dependency on a subset, as presented by Zrnic et. al.
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -150,7 +150,7 @@ for positive regression dependency on a subset, as presented by Zrnic et. al.
 
     <div class="ref-description">
     <p>Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
-for positive regression dependency on a subset, as presented by Zrnic et. al.
+for positive regression dependency on a subset, as presented by Zrnic et al.
 (2020).</p>
     </div>
 
@@ -199,7 +199,7 @@ significance level \(\alpha\), we choose a sequence of non-negative numbers
 Benjamini-Hochberg procedure on each batch, where the values of the adjusted
 significance thresholds \(\alpha_{t+1}\) depend on the number of previous 
 discoveries.</p>
-<p>Further details of the BatchPRDS algorithm can be found in Zrnic et. al.
+<p>Further details of the BatchPRDS algorithm can be found in Zrnic et al. 
 (2020).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -223,14 +223,14 @@ batch <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base
 #&gt; 1  A15432 2.9000e-08     1 1 0.021874508
 #&gt; 2  B90969 6.7430e-02     1 0 0.021874508
 #&gt; 3  C18705 1.5140e-02     1 0 0.021874508
-#&gt; 4  B49731 8.1740e-02     1 0 0.021874508
-#&gt; 5  E99902 1.7100e-03     1 1 0.021874508
-#&gt; 6  C38292 3.6000e-05     2 1 0.009621196
-#&gt; 7  A30619 7.9149e-01     2 0 0.009621196
+#&gt; 4  B49731 8.1740e-02     1 1 0.021874508
+#&gt; 5  E99902 1.7100e-03     1 0 0.021874508
+#&gt; 6  C38292 3.6000e-05     2 0 0.009621196
+#&gt; 7  A30619 7.9149e-01     2 1 0.009621196
 #&gt; 8  D46627 2.7201e-01     2 0 0.009621196
 #&gt; 9  E29198 2.8295e-01     2 0 0.009621196
-#&gt; 10 A41418 7.5900e-08     2 1 0.009621196
-#&gt; 11 D51456 6.9274e-01     2 0 0.009621196
+#&gt; 10 A41418 7.5900e-08     2 0 0.009621196
+#&gt; 11 D51456 6.9274e-01     2 1 0.009621196
 #&gt; 12 C88669 3.0443e-01     3 0 0.007543524
 #&gt; 13 E03673 1.3600e-03     3 1 0.007543524
 #&gt; 14 A63155 7.2342e-01     3 0 0.007543524

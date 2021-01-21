@@ -3,7 +3,7 @@ checkPval <- function(d) {
     if (is.data.frame(d)) {
         if (any(is.na(d$pval))) {
             warning("Your data contains missing p-values. Missing p-values were omitted.")
-            d <- na.omit(d)
+            d <- stats::na.omit(d)
         }
         
         if (!(is.numeric(d$pval))) {
