@@ -97,24 +97,23 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   alphai[1] <- gammai[1] * alpha
   
   for(i in seq_len(n_batch)){
-    batch_pval <- d[which(d$batch2 == i),]$pval
+    batch_pval <- .subset2(d, "pval")[which(.subset2(d, "batch2") == i)]
     # batch_pval <- subset_rcpp(d$batch2, d$pval, i)
     n <- length(batch_pval)
     
-    ordered_pval <- sort(batch_pval)
-    batchR <- ordered_pval <= ((1:n)/n)*alphai[i]
+    batchR <- sort(batch_pval) <= ((1:n)/n)*alphai[i]
 
     max_entry <- suppressWarnings(which.max(batchR))
     if(is.finite(max_entry)) {
       batchR[1:max_entry] <- 1
     }
     out_R <- batchR[order(batch_pval)]
-    idx <- which(d$batch2 == i)
+    idx <- which(.subset2(d, "batch2") == i)
     R[idx] <- out_R
     
     #update alphai
     if(i < n_batch) {
-      ntplus <- length(which(d$batch2 == i+1))
+      ntplus <- length(which(.subset2(d, "batch2") == i+1))
       alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(R, na.rm = T))
     }
   }
