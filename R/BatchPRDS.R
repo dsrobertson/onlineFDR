@@ -56,6 +56,8 @@
 
 BatchPRDS <- function(d, alpha = 0.05, gammai){
   
+  d <- checkPval(d)
+  
   if (!is.data.frame(d)) {
     stop("d must be a dataframe")
   } else if (!("batch" %in% colnames(d))) {
@@ -96,10 +98,27 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   alphai <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
+  d2 <- transform(
+    d,
+    idx_b = ave(1:nrow(d), batch2, FUN = min),
+    idx_e = ave(1:nrow(d), batch2, FUN = max)
+  )
+  
+  batch_indices <- d2[!duplicated(d2[,c("batch2")]),][c("batch2", "idx_b", "idx_e")]
+  
+  #add indices to reorder p-values back to original order
+  
   for(i in seq_len(n_batch)){
-    batch_pval <- .subset2(d, "pval")[which(.subset2(d, "batch2") == i)]
-    # batch_pval <- subset_rcpp(d$batch2, d$pval, i)
+    idx_b <- batch_indices[i,2]
+    idx_e <- batch_indices[i,3]
+    batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     n <- length(batch_pval)
+    
+    #need indices
+    batch_data <- as.data.frame(batch_pval)
+    colnames(batch_data) <- "pval"
+    batch_data$ind <- seq.int(length(batch_pval))
+    new_order_ind <- batch_data[order(batch_data$pval),]$ind
     
     batchR <- sort(batch_pval) <= ((1:n)/n)*alphai[i]
 
@@ -107,13 +126,15 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
     if(is.finite(max_entry)) {
       batchR[1:max_entry] <- 1
     }
-    out_R <- batchR[order(batch_pval)]
-    idx <- which(.subset2(d, "batch2") == i)
-    R[idx] <- out_R
+
+    out_R <- batchR[order(new_order_ind)]
+    R[idx_b:idx_e] <- out_R
     
     #update alphai
     if(i < n_batch) {
-      ntplus <- length(which(.subset2(d, "batch2") == i+1))
+      idx_b <- batch_indices[i+1,2]
+      idx_e <- batch_indices[i+1,3]
+      ntplus <- idx_e - idx_b + 1
       alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(R, na.rm = T))
     }
   }
@@ -124,6 +145,5 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   if(identical(out$batch, out$batch2)) {
     out$batch2 <- NULL
   }
-  return(out)
+  out
 }
-

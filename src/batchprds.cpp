@@ -1,10 +1,6 @@
-#include <RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
+#include <Rcpp.h>
 using namespace Rcpp;
 using std::endl;
-
-// Enable C++11 via this plugin (Rcpp 0.10.3 or later)
-// [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
 Rcpp::NumericVector subset_rcpp(Rcpp::NumericVector v, Rcpp::NumericVector pval, double batch) { 
@@ -21,7 +17,6 @@ IntegerVector which_rcpp(NumericVector v, double batch) {
 
 	int n = v.size();
 	std::vector< int > res;
-	res.push_back(0);
 
 	for(int i = 0; i < n; i++) {
 		double x = v[i];
@@ -29,7 +24,6 @@ IntegerVector which_rcpp(NumericVector v, double batch) {
 			res.push_back(i);
 		}
 	}
-	res.erase(res.begin());
 
 	Rcpp::IntegerVector iv( res.begin(), res.end() );
 	return iv;
@@ -47,13 +41,6 @@ Rcpp::NumericVector Rcpp_sort(Rcpp::NumericVector x, Rcpp::NumericVector y) {
 }
 
 // [[Rcpp::export]]
-arma::rowvec arma_sub(arma::rowvec x, arma::uvec pos, arma::vec vals) {
-    
-    x.elem(pos) = vals;  // Subset by element position and set equal to
-    return x;
-}
-
-// [[Rcpp::export]]
 NumericVector stl_sort(NumericVector x) {
    NumericVector y = clone(x);
    std::sort(y.begin(), y.end());
@@ -67,6 +54,7 @@ Rcpp::List prds_faster(DataFrame d,
 	double alpha = 0.05) {
 
 	Rcpp::LogicalVector R(d.nrows());
+	Rcpp::List R_list = List::create(R);
 	Rcpp::NumericVector alphai(n_batch);
 	alphai[0] = gammai[0] * alpha;
 
@@ -81,11 +69,15 @@ Rcpp::List prds_faster(DataFrame d,
 		}
 
 		int max_entry = which_max(batchR);
-		// arma_sub(batchR, Rcpp::Range(0, max_entry), Rcpp::rep(1, max_entry));
+		//turn batchR into list for subsetting to work
+		Rcpp::List batchR_list = List::create(batchR);
+		batchR_list_new = batchR[seq_len(max_entry)-1];
+		//convert back to vector
+		NumericVector batchR_vec = Rcpp::as<std::vector<double>>(batchR_list_new);
 
-		Rcpp::NumericVector outR = Rcpp_sort(static_cast<NumericVector>(batchR), batch_pval);
+		Rcpp::NumericVector outR = Rcpp_sort(batchR_vec, batch_pval);
 		IntegerVector idx = which_rcpp(d["batch2"], i);
-		// arma_sub(R, idx, outR);
+		R_list[idx]
 
 		if(i < n_batch) {
 			int ntplus = which_rcpp(d["batch2"], i+1).size();
