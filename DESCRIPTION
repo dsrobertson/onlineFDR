@@ -22,6 +22,7 @@ RoxygenNote: 7.1.1
 Encoding: UTF-8
 Imports: stats,
 	Rcpp,
+	RcppProgress,
 	dplyr,
 	tidyr,
 	ggplot2
@@ -29,6 +30,6 @@ Suggests: knitr,
     rmarkdown,
     testthat,
     covr
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppProgress
 VignetteBuilder: knitr
 biocViews: MultipleComparison, Software, StatisticalMethod
