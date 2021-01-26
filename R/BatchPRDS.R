@@ -73,17 +73,13 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   }
   
   #check that batches were labeled correctly
-  n_batch <- length(unique(d$batch))
-  if(max(d$batch, na.rm = TRUE) > n_batch) {
+  
+  if(is.unsorted(d$batch)) {
     d <- d[order(d$batch),]
-    d$batch2 <- rep(1:length(table(d$batch)), table(d$batch))
-    d$batch2 <- as.numeric(d$batch2)
-    warning("Your batches were not labelled in a fully sequential manner. A new batch id was created labelled sequentially starting from 1.")
-  } else {
-    d$batch2 <- rep(1:length(table(d$batch)), table(d$batch))
-    d$batch2 <- as.numeric(d$batch2)
+    warning("Batches were re-ordered in increasing numeric value.")
   }
   
+  n_batch <- length(unique(d$batch))
   if (missing(gammai)) {
     gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
@@ -94,56 +90,36 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   
   ### Start Batch PRDS procedure
   
-  R <- rep(0, nrow(d))
+  R <- NULL
   alphai <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
-  d2 <- transform(
-    d,
-    idx_b = ave(1:nrow(d), batch2, FUN = min),
-    idx_e = ave(1:nrow(d), batch2, FUN = max)
-  )
-  
-  batch_indices <- d2[!duplicated(d2[,c("batch2")]),][c("batch2", "idx_b", "idx_e")]
-  
-  #add indices to reorder p-values back to original order
+  nt <- as.vector(table(d$batch))
+  batch_indices <- c(0, cumsum(nt))
   
   for(i in seq_len(n_batch)){
-    idx_b <- batch_indices[i,2]
-    idx_e <- batch_indices[i,3]
+    idx_b <- batch_indices[i]+1
+    idx_e <- batch_indices[i+1]
     batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
-    n <- length(batch_pval)
     
-    #need indices
-    batch_data <- as.data.frame(batch_pval)
-    colnames(batch_data) <- "pval"
-    batch_data$ind <- seq.int(length(batch_pval))
-    new_order_ind <- batch_data[order(batch_data$pval),]$ind
+    j <- nt[i]:1L
+    #sort pvals and then return the original indices of the sorted pvals
+    o <- order(batch_pval, decreasing = TRUE)
+    #sort the indices and then return the indices of the sorted indices
+    #effectively reverses the order
+    ro <- order(o)
+    out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
     
-    batchR <- sort(batch_pval) <= ((1:n)/n)*alphai[i]
-
-    max_entry <- suppressWarnings(which.max(batchR))
-    if(is.finite(max_entry)) {
-      batchR[1:max_entry] <- 1
-    }
-
-    out_R <- batchR[order(new_order_ind)]
-    R[idx_b:idx_e] <- out_R
+    R <- c(R, out_R)
     
     #update alphai
     if(i < n_batch) {
-      idx_b <- batch_indices[i+1,2]
-      idx_e <- batch_indices[i+1,3]
-      ntplus <- idx_e - idx_b + 1
-      alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(R, na.rm = T))
+      alphai[i+1] <- alpha * (gammai[i+1]/nt[i+1]) * (nt[i+1] + sum(R))
     }
+    
   }
   out <- d
-  out$R = R
-  out$alphai = rep(alphai, table(d$batch2))
-  #deduplicate columns, so if batch2 is the same, remove it
-  if(identical(out$batch, out$batch2)) {
-    out$batch2 <- NULL
-  }
+  out$R <- as.numeric(R)
+  out$alphai <- rep(alphai, nt)
   out
 }

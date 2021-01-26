@@ -63,6 +63,8 @@
 
 BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
   
+  d <- checkPval(d)
+  
   if (!is.data.frame(d)) {
     stop("d must be a dataframe")
   } else if (!("batch" %in% colnames(d))) {
@@ -78,16 +80,17 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
   }
   
   if(!is.numeric(d$batch)) {
-    stop("Check that your batches are numeric")
+    stop("Check that your batch labels are numeric values.")
   }
   
   #check that batches were labeled correctly
-  n_batch <- length(unique(d$batch))
   
-  if(max(d$batch, na.rm = TRUE) > n_batch) {
-    stop("Check that your batches labelled in ascending order starting from 1")
+  if(is.unsorted(d$batch)) {
+    d <- d[order(d$batch),]
+    warning("Batches were re-ordered in increasing numeric value.")
   }
   
+  n_batch <- length(unique(d$batch))
   if (missing(gammai)) {
     gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
@@ -98,35 +101,38 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
   
   ### Start Batch St-BH procedure
   
-  all_batches <- list()
-  
+  R <- NULL
   Rplus <- Rsum <- Rrsum <- alphai <- k <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
-  for(i in seq_len(n_batch)){
-    batch_data <- d[d$batch == i,]
-    batch_data$ind <- seq.int(nrow(batch_data))
-    n <- length(batch_data$pval)
-    ordered_batch_data <- batch_data[order(batch_data$pval),]
-    candsum <- sum(ordered_batch_data$pval > lambda, na.rm = T)
+  nt <- as.vector(table(d$batch))
+  batch_indices <- c(0, cumsum(nt))
+  
+  for(i in seq_len(n_batch)) {
+    idx_b <- batch_indices[i]+1
+    idx_e <- batch_indices[i+1]
+    batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
+    
+    j <- nt[i]:1L
+    #sort pvals and then return the original indices of the sorted pvals
+    o <- order(batch_pval, decreasing = TRUE)
+    #sort the indices and then return the indices of the sorted indices
+    #effectively reverses the order
+    ro <- order(o)
     
     #calculate pi0
-    pi0 <- (candsum + 1)/((1 - lambda)*n)
+    n <- length(batch_pval)
+    candsum <- sum(batch_pval > lambda)
+    pi0 <- (candsum + 1)/((1 - lambda) * n)
     
-    ordered_batch_data$R <- pi0*ordered_batch_data$pval <= ((1:n)/n)*alphai[i]
-    max_entry <- suppressWarnings(max(which(ordered_batch_data$R)))
-    if(is.finite(max_entry)) {
-      ordered_batch_data$R[1:max_entry] <- 1
-    }
-    ordered_batch_data <- ordered_batch_data[order(ordered_batch_data$ind),]
-    ordered_batch_data$ind <- NULL
-    all_batches[[i]] <- ordered_batch_data
-    out <- do.call(rbind, all_batches)
+    out_R <- pmin(1, cummin(nt[i]/j * pi0 * batch_pval[o]))[ro] <= alphai[i]
     
-    Rsum[i] <- sum(ordered_batch_data$R)
+    R <- c(R, out_R)
+    
+    Rsum[i] <- sum(R)
     
     ## k
-    if(max(ordered_batch_data$pval) > lambda) {
+    if(max(batch_pval) > lambda) {
       k[i] <- 1
     }
     
@@ -134,24 +140,18 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     #aug_rej is the number of rejections if we hallucinate jth pval to be 0
     aug_rej <- rep(0,n)
     
-    hallucinated_data <- ordered_batch_data
-    
     for (j in seq_len(n)) {
-      ## Rsplus
-      hallucinated_pvals <- c(0, hallucinated_data$pval[-j])
-      #calulcate pi0
-      hallucinated_pi0 <- (sum(hallucinated_pvals > lambda) + 1)/((1 - lambda)*n)
+      
       #run St-BH procedure with hallucinated p-value
-      hallucinated_data$R <- hallucinated_pi0*hallucinated_pvals <= ((1:n)/n)*alphai[i]
-      max_entry <- suppressWarnings(max(which(hallucinated_data$R)))
-      if(is.finite(max_entry)) {
-        hallucinated_data$R[1:max_entry] <- 1
-      }
+      hallucinated_pval <- batch_pval[-j]
       
-      aug_rej[j] <- sum(hallucinated_data$R, na.rm = T)
-      
+      #calculate pi0
+      hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
+      hallucinated_R <- pmin(1, cummin(nt[i]/j * hallucinated_pi0*hallucinated_pval[o]))[ro] <= alphai[i]
+
+      aug_rej[j] <- sum(hallucinated_R, na.rm = T)
     }
-    
+  
     Rplus[i] = max(aug_rej)
     
     #update alphai
@@ -162,12 +162,13 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
         Rrsum[r] = sum(Rsum[-r])
       }
       
-      ntplus <- nrow(d[d$batch == i+1,])
       alphai[i+1] <- (gammasum - sum(k[1:i]*alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
-        ((ntplus + sum(Rsum))/ntplus)
-      
+        ((nt[i+1] + sum(Rsum))/nt[i+1])
     }
   }
-  out$alphai <- rep(alphai, table(d$batch))
-  return(out)
+  out <- d
+  out$R <- as.numeric(R)
+  out$alphai <- rep(alphai, nt)
+  out
 }
+  
