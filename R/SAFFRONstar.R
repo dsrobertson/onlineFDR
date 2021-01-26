@@ -1,7 +1,7 @@
 #' SAFFRONstar: Adaptive online mFDR control for asynchronous testing
 #'
 #' Implements the SAFFRON algorithm for asynchronous online testing, as
-#' presented by Zrnic et al. (2018).
+#' presented by Zrnic et al. (2021).
 #'
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with three columns: an identifier (`id'),
@@ -9,7 +9,7 @@
 #' This takes the form of a vector of decision times or lags. Batch sizes can be 
 #' specified as a separate argument (see below).
 #'
-#' Zrnic et al. (2018) present explicit three versions of SAFFRONstar:
+#' Zrnic et al. (2021) present explicit three versions of SAFFRONstar:
 #'
 #' 1) \code{version='async'} is for an asynchronous testing process, consisting
 #' of tests that start and finish at (potentially) random times. The discretised
@@ -47,14 +47,12 @@
 #' assumed to be independent.
 #'
 #' Further details of the SAFFRONstar algorithms can be found in Zrnic et al.
-#' (2018).
+#' (2021).
 #'
 #'
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
-#'   identifier (`id'), 
-#'   p-value (`pval'), and either 
-#'   `decision.times', or
-#'   `lags', depending on which version you're using. See version for more details.
+#'   identifier (`id'), p-value (`pval'), and either decision.times', or `lags',
+#'   depending on which version you're using. See version for more details.
 #'
 #' @param alpha Overall significance level of the procedure, the default is
 #'   0.05.
@@ -83,7 +81,7 @@
 #'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
 #'   \code{discard=TRUE}.
 #'
-#' @return \item{d.out}{A dataframe with the original p-values \code{pval}, the
+#' @return \item{out}{A dataframe with the original p-values \code{pval}, the
 #'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
 #'   discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
 #'   p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
@@ -94,9 +92,9 @@
 #'   Online Testing of Multiple Hypotheses. \emph{arXiv preprint},
 #'   \url{https://arxiv.org/abs/1812.05068}.
 #'
-#'   Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
-#'   online FDR control with conservative nulls. \emph{arXiv preprint},
-#'   \url{https://arxiv.org/abs/1905.11465}.
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
+#' \url{https://arxiv.org/abs/1812.05068}.
 #'
 #'
 #' @seealso

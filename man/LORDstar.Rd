@@ -31,7 +31,7 @@ proposed by Javanmard and Montanari (2018), equation 31.}
 \code{version='batch'}.}
 }
 \value{
-\item{d.out}{A dataframe with the original p-values \code{pval}, the
+\item{out}{A dataframe with the original p-values \code{pval}, the
 adjusted testing levels \eqn{\alpha_i} and the indicator function of
 discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
 p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
@@ -39,7 +39,7 @@ p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
 }
 \description{
 Implements LORD algorithms for asynchronous online testing, as presented by
-Zrnic et al. (2018).
+Zrnic et al. (2021).
 }
 \details{
 The function takes as its input either a vector of p-values, or a dataframe
@@ -48,7 +48,7 @@ p-value (`pval'), or a column describing the conflict sets for the hypotheses.
 This takes the form of a vector of decision times or lags. Batch sizes can be 
 specified as a separate argument (see below).
 
-Zrnic et al. (2018) present explicit three versions of LORDstar:
+Zrnic et al. (2021) present explicit three versions of LORDstar:
 
 1) \code{version='async'} is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The discretised
@@ -79,7 +79,7 @@ The `async' version also controls the usual FDR if the p-values are assumed
 to be independent.
 
 Further details of the LORDstar algorithms can be found in Zrnic et al.
-(2018).
+(2021).
 }
 \examples{
 sample.df <- data.frame(
@@ -120,8 +120,8 @@ Javanmard, A. and Montanari, A. (2018) Online Rules for Control
 of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 Statistics}, 46(2):526-554.
 
-Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
-Multiple Hypotheses. \emph{arXiv preprint},
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
 \url{https://arxiv.org/abs/1812.05068}.
 }
 \seealso{

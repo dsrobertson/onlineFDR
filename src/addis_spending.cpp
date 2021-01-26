@@ -64,8 +64,6 @@ DataFrame addis_spending_dep_faster(NumericVector pval,
 			}
 		}
 
-		Rcout << "selectsum: " << selectsum << "candsum: " << candsum << endl;
-
 		alphai[i] = alpha * (tau - lambda) * gammai[1 + std::min(L[i]-1, i-1) + selectsum - candsum];
 		R[i] = (pval[i] <= alphai[i]);
 		select[i] = (pval[i] <= tau);

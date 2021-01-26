@@ -8,7 +8,7 @@ template:
       index_name: onlinefdr
 
 reference: 
-  - title: Synchronous FDR Control
+  - title: Fully Sequential FDR Control
     contents:
     - "ADDIS"
     - "Alpha_investing"
@@ -16,12 +16,20 @@ reference:
     - "LORD"
     - "LORDdep"
     - "SAFFRON"
+  - title: Batch FDR Control
+    contents:
+    - "BatchBH"
+    - "BatchPRDS"
+    - "BatchStBH"
   - title: Asynchronous FDR Control
     contents:
     - "ADDIS"
     - "LONDstar"
     - "LORDstar"
     - "SAFFRONstar"
+  - title: False Discovery Exceedance Control
+    contents:
+    - "supLORD"
   - title: FWER Control
     contents:
     - "ADDIS_spending"
@@ -32,3 +40,4 @@ reference:
     - "bonfInfinite"
     - "onlineFDR-deprecated"
     - "onlineFDR-package"
+    - "Storey-BH"

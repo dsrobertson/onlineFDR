@@ -97,8 +97,8 @@
 #' Information Processing Systems 30}, 5650-5659.
 #'
 #' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
-#' online FDR control with conservative nulls. \emph{arXiv preprint},
-#' \url{https://arxiv.org/abs/1905.11465}.
+#' online FDR control with conservative nulls.
+#' \emph{Advances in Neural Information Processing Systems}, 9388-9396.
 #'
 #'
 #' @seealso
@@ -212,4 +212,3 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
     out$R <- as.numeric(out$R)
     out
 }
-

@@ -64,6 +64,7 @@ your problem. The interactive version (click-to-functions) is available
 [here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html)
 
 ![](onlineFDR-diagram.png)
+
 ### Frequently Asked Questions
 We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
 
@@ -77,21 +78,23 @@ FDR is the expected proportion of false rejections out of all rejections. FWER i
 ## Quick Start
 
 ### General Info
+
+This Quick Start guide is meant to provide a framework for you to use any of the algorithms within the `onlineFDR` package. The algorithms used in the examples below were selected arbitrarily for the sake of example.
+
 #### Input data
 
-A dataset with three columns (an identifier ('id'), date ('date') and p-value
-('pval')). All p-values generated should be passed to the function (and not
+In general, your dataset should contain, at the minimum, two columns (identifiers ('id') and p-values ('pval')). You can also pass in a date column ('date'), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially. 
+
+If you are using the Batch algorithms, ensure that your dataset contains a column ('batch') where batches are defined sequentially starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see `LONDstar()`, `LORDstar()`, and `SAFFRONstar()`). If you are not sure which algorithm to use, click [here](#which-function-do-i-use-).
+
+All p-values generated should be passed to the function (and not
 just the significant p-values).  An exception to this would be if you have
 implemented an orthogonal filter to reduce the dataset size, such as discussed in (Burgon *et al.*, 2010).
 
-Alternatively, just the vector of p-values can be passed to the function. In
-this case, the p-values are treated as being ordered sequentially with no
-batches.
-
 #### What happens to the input data
-The function orders the information by date. If there are multiple p-values
-with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have an *a priori* belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected initially in the stream. In order for the randomisation of the p-values to be reproducible, 
-it is necessary to set a seed (via the `set.seed` function) before calling the wrapper function.
+If you're using `LOND()`, `LORD()`, or `SAFFRON()`, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have an *a priori* belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected initially in the stream. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the `set.seed` function) before calling the wrapper function.
+
+Otherwise, the other algorithms will take in the p-values in the original order of the data. 
 
 #### Understanding the output
 
@@ -101,11 +104,10 @@ statistically significant.
 
 Also calculated is an indicator function of discoveries (`R`), where `R[i] = 1` corresponds to hypothesis i being rejected, otherwise `R[i] = 0`.  
 
-A dataframe is returned, reordered by batch, with the original data and the
-newly calculated `alphai` and `R`.
+A dataframe is returned with the original data and the newly calculated `alphai` and `R`.
 
 ### Using `onlineFDR` Exploratively
-This package (and the corresponding Shiny app) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in `onlineFDR` to explore how you could control the FDR and how the different algorithms have different levels of power. 
+This package (and the corresponding [Shiny app](https://mrc-bsu.shinyapps.io/onlineFDRExplore/)) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in `onlineFDR` to explore how you could control the FDR and how the different algorithms have different levels of power. 
 
 First, we initialize a toy dataset with three columns: an identifier ('id'), date ('date') and p-value ('pval'). Note that date should be in the format "YYYY-MM-DD".
 
@@ -168,7 +170,7 @@ print(plot)
 Note that both LOND and LORD result in much lower significance thresholds (logalpha_i) than an offline Bonferroni adjustment. When log_alphai jumps, that indicates that the algorithm is recovering some of it's "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, it's alpha wealth decreases (the line will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in "alpha wealth") compared to LOND.
 
 ### Using `onlineFDR` Sequentially
-This package (and the corresponding Shiny app) can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
+This package can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
 
 ```{r}
 sample.df <- data.frame(
@@ -199,7 +201,6 @@ set.seed(1)
 LOND_results <- LOND(sample.df)
 ```
 ---
-
 
 ## API
 
@@ -272,33 +273,6 @@ for independent p-values. Tian & Ramdas (2019b) also presented a version for
 handling local dependence.
 
 ---
-
-## Brief Background of the `onlineFDR` algorithms
-
-Javanmard and Montanari proposed two procedures, LOND and LORD, to control the
-FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter
-extended by Ramdas *et al.* (2017). The LOND procedure sets the adjusted
-significance thresholds  based on the number of discoveries made so far, while
-LORD sets them according to the time of the most recent discovery. Ramdas
-*et al.* (2018) then proposed the SAFFRON procedure, which provides an adaptive
-method of online FDR control. They also proposed a variant of the
-Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR
-control, using SAFFRON's update rule.
-
-Subsequently, Zrnic *et al.* (2018) proposed procedures to control the modified
-FDR (mFDR) in the context of *asynchronous* testing, i.e. where each hypothesis
-test can itself be a sequential process and the tests can overlap in time. They
-presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a
-variety of trial settings. For both synchronous and asynchronous testing, Tian
-& Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss
-in power in the presence of conservative nulls by adaptively 'discarding' these
-p-values.
-
-Finally, Tian & Ramdas (2019b) proposed procedures that provide online control
-of the FWER. One procedure, online fallback, gives a uniform improvement to the
-naive Alpha-spending procedure (see below). The ADDIS-spending procedure
-compensates for the power loss of these procedures by including both adapativity
-in the fraction of null hypotheses and the conservativeness of nulls.
 
 ## How to get help for onlineFDR
 

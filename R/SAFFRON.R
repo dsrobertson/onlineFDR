@@ -68,7 +68,7 @@
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return \item{d.out}{ A dataframe with the original data \code{d} (which
+#' @return \item{out}{ A dataframe with the original data \code{d} (which
 #'   will be reordered if there are batches and \code{random = TRUE}), the
 #'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
 #'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
@@ -164,5 +164,3 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, da
     out
 
 }
-TRUE
-TRUE

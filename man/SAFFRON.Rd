@@ -48,7 +48,7 @@ testing. Must be between 0 and 1, defaults to 0.5. This is required if
 \code{discard=TRUE}.}
 }
 \value{
-\item{d.out}{ A dataframe with the original data \code{d} (which
+\item{out}{ A dataframe with the original data \code{d} (which
   will be reordered if there are batches and \code{random = TRUE}), the
   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the

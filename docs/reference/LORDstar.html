@@ -54,7 +54,7 @@
 
 <meta property="og:title" content="LORDstar: Asynchronous online mFDR control based on recent discovery — LORDstar" />
 <meta property="og:description" content="Implements LORD algorithms for asynchronous online testing, as presented by
-Zrnic et al. (2018)." />
+Zrnic et al. (2021)." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
 
 
@@ -87,7 +87,7 @@ Zrnic et al. (2018)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@ Zrnic et al. (2018)." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -149,7 +149,7 @@ Zrnic et al. (2018)." />
 
     <div class="ref-description">
     <p>Implements LORD algorithms for asynchronous online testing, as presented by
-Zrnic et al. (2018).</p>
+Zrnic et al. (2021).</p>
     </div>
 
     <pre class="usage"><span class='fu'>LORDstar</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>version</span>, <span class='va'>gammai</span>, <span class='va'>w0</span>, <span class='va'>batch.sizes</span><span class='op'>)</span></pre>
@@ -198,7 +198,7 @@ proposed by Javanmard and Montanari (2018), equation 31.</p></td>
 
     
 
-<dt>d.out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
+<dt>out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
 adjusted testing levels \(\alpha_i\) and the indicator function of
 discoveries <code>R</code>. Hypothesis \(i\) is rejected if the \(i\)-th
 p-value is less than or equal to \(\alpha_i\), in which case <code>R[i] =
@@ -211,7 +211,7 @@ with three columns: an identifier (`id'),
 p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
 This takes the form of a vector of decision times or lags. Batch sizes can be 
 specified as a separate argument (see below).</p>
-<p>Zrnic et al. (2018) present explicit three versions of LORDstar:</p>
+<p>Zrnic et al. (2021) present explicit three versions of LORDstar:</p>
 <p>1) <code>version='async'</code> is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The discretised
 finish times of the test correspond to the decision times. These decision
@@ -236,14 +236,14 @@ non-negative non-increasing numbers \(\gamma_i\) that sum to 1.</p>
 The `async' version also controls the usual FDR if the p-values are assumed
 to be independent.</p>
 <p>Further details of the LORDstar algorithms can be found in Zrnic et al.
-(2018).</p>
+(2021).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Javanmard, A. and Montanari, A. (2018) Online Rules for Control
 of False Discovery Rate and False Discovery Exceedance. <em>Annals of
 Statistics</em>, 46(2):526-554.</p>
-<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
-Multiple Hypotheses. <em>arXiv preprint</em>,
+<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear),
 <a href='https://arxiv.org/abs/1812.05068'>https://arxiv.org/abs/1812.05068</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -269,14 +269,14 @@ decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.
 #&gt; 5  1.7100e-03 4.059066e-04 0
 #&gt; 6  3.6000e-05 3.447286e-04 1
 #&gt; 7  7.9149e-01 2.986627e-04 0
-#&gt; 8  2.7201e-01 8.450114e-04 0
-#&gt; 9  2.8295e-01 7.305648e-04 0
-#&gt; 10 7.5900e-08 6.243143e-04 1
-#&gt; 11 6.9274e-01 5.427528e-04 0
-#&gt; 12 3.0443e-01 1.061723e-03 0
-#&gt; 13 1.3600e-03 9.256825e-04 0
-#&gt; 14 7.2342e-01 8.019657e-04 0
-#&gt; 15 5.4757e-01 7.059610e-04 0</div><div class='input'>
+#&gt; 8  2.7201e-01 5.653961e-04 0
+#&gt; 9  2.8295e-01 5.009121e-04 0
+#&gt; 10 7.5900e-08 4.493952e-04 1
+#&gt; 11 6.9274e-01 4.073567e-04 0
+#&gt; 12 3.0443e-01 5.673426e-04 0
+#&gt; 13 1.3600e-03 5.218446e-04 0
+#&gt; 14 7.2342e-01 4.830378e-04 0
+#&gt; 15 5.4757e-01 4.495542e-04 0</div><div class='input'>
 <span class='va'>sample.df2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
 id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A15432'</span>, <span class='st'>'B90969'</span>, <span class='st'>'C18705'</span>, <span class='st'>'B49731'</span>, <span class='st'>'E99902'</span>,
     <span class='st'>'C38292'</span>, <span class='st'>'A30619'</span>, <span class='st'>'D46627'</span>, <span class='st'>'E29198'</span>, <span class='st'>'A41418'</span>,
@@ -312,7 +312,22 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>LORDstar</span><span class='op'>(</span><span class='va'>sample.df3</span>, version<span class='op'>=</span><span class='st'>'batch'</span>, batch.sizes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>,<span class='fl'>6</span>,<span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt;          pval batch       alphai R
+#&gt; 1  2.9000e-08     1 2.675839e-04 1
+#&gt; 2  6.7430e-02     1 5.819103e-05 0
+#&gt; 3  1.5140e-02     1 4.956249e-05 0
+#&gt; 4  8.1740e-02     1 4.121803e-05 0
+#&gt; 5  1.7100e-03     2 2.443199e-03 1
+#&gt; 6  3.6000e-05     2 5.539488e-04 1
+#&gt; 7  7.9149e-01     2 4.726597e-04 0
+#&gt; 8  2.7201e-01     2 3.946884e-04 0
+#&gt; 9  2.8295e-01     2 3.359039e-04 0
+#&gt; 10 7.5900e-08     2 2.915568e-04 1
+#&gt; 11 6.9274e-01     3 2.933102e-03 0
+#&gt; 12 3.0443e-01     3 8.119711e-04 0
+#&gt; 13 1.3600e-03     3 7.036218e-04 0
+#&gt; 14 7.2342e-01     3 6.019379e-04 0
+#&gt; 15 5.4757e-01     3 5.238788e-04 0</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -1,6 +1,6 @@
 #' Online fallback procedure for FWER control
 #'
-#' Implements the online fallback procedure of Tian and Ramdas (2019b), which
+#' Implements the online fallback procedure of Tian and Ramdas (2021), which
 #' guarantees strong FWER control under arbitrary dependence of the p-values.
 #'
 #' The function takes as its input either a vector of p-values or a dataframe
@@ -18,7 +18,7 @@
 #' 1\{p_i \leq \alpha_i\}} denotes a rejected hypothesis.
 #'
 #' Further details of the online fallback procedure can be found in Tian and
-#' Ramdas (2019b).
+#' Ramdas (2021).
 #'
 #'
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
@@ -39,7 +39,7 @@
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return \item{d.out}{ A dataframe with the original data \code{d} (which will
+#' @return \item{out}{ A dataframe with the original data \code{d} (which will
 #'   be reordered if there are batches and \code{random = TRUE}), the
 #'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
 #'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
@@ -47,8 +47,9 @@
 #'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-#' \emph{arXiv preprint}, \url{https://arxiv.org/abs/1910.04900}.
+#' @references Tian, J. and Ramdas, A. (2021). Online control of the familywise
+#' error rate. \emph{Statistical Methods for Medical Research} (to appear),
+#' \url{https://arxiv.org/abs/1910.04900}.
 #'
 #'
 #' @examples
@@ -105,5 +106,3 @@ online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, date.format 
     out$R <- as.numeric(out$R)
     out
 }
-TRUE
-TRUE

@@ -35,7 +35,7 @@ randomised.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{d.out}{ A dataframe with the original data \code{d} (which will
+\item{out}{ A dataframe with the original data \code{d} (which will
   be reordered if there are batches and \code{random = TRUE}), the
   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the

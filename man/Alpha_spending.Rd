@@ -33,7 +33,7 @@ randomised.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{d.out}{ A dataframe with the original data \code{d} (which will
+\item{out}{ A dataframe with the original data \code{d} (which will
  be reordered if there are batches and \code{random = TRUE}), the adjusted
  signifcance thresholds \code{alphai} and the indicator function of
  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
@@ -87,6 +87,7 @@ Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
  False Discovery Rate and False Discovery Exceedance. \emph{Annals of
  Statistics}, 46(2):526-554.
 
-Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-\emph{arXiv preprint}, \url{https://arxiv.org/abs/1910.04900}.
+Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+\emph{Statistical Methods for Medical Research} (to appear),
+\url{https://arxiv.org/abs/1910.04900}.
 }

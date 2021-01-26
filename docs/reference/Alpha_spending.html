@@ -86,7 +86,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -196,7 +196,7 @@ randomised.</p></td>
 
     
 
-<dt>d.out</dt><dd><p>A dataframe with the original data <code>d</code> (which will
+<dt>out</dt><dd><p>A dataframe with the original data <code>d</code> (which will
  be reordered if there are batches and <code>random = TRUE</code>), the adjusted
  signifcance thresholds <code>alphai</code> and the indicator function of
  discoveries <code>R</code>, where <code>R[i] = 1</code> corresponds to hypothesis
@@ -223,8 +223,9 @@ k\alpha\)).</p>
     <p>Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
  False Discovery Rate and False Discovery Exceedance. <em>Annals of
  Statistics</em>, 46(2):526-554.</p>
-<p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+<em>Statistical Methods for Medical Research</em> (to appear),
+<a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>sample.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
@@ -241,56 +242,56 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>Alpha_spending</span><span class='op'>(</span><span class='va'>sample.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval alpha...gammai R
-#&gt; 1  A15432 2014-12-01 2.9000e-17   0.0026758385 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02   0.0005819103 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02   0.0004956249 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02   0.0004121803 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03   0.0003494435 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01   0.0003022950 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05   0.0002659722 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01   0.0002372613 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08   0.0002140474 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01   0.0001949126 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01   0.0001788796 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01   0.0001652568 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01   0.0001535420 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01   0.0001433627 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03   0.0001344368 0</div><div class='input'>
+</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-17 0.0026758385 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0005819103 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0004956249 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004121803 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0003494435 0
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0003022950 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0002659722 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0002372613 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0002140474 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0001949126 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0001788796 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0001652568 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0001535420 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0001433627 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0001344368 0</div><div class='input'>
 <span class='fu'>Alpha_spending</span><span class='op'>(</span><span class='va'>sample.df</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval alpha...gammai R
-#&gt; 1  A15432 2014-12-01 2.9000e-17   0.0026758385 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02   0.0005819103 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02   0.0004956249 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02   0.0004121803 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03   0.0003494435 0
-#&gt; 6  C38292 2015-09-21 3.6000e-05   0.0003022950 1
-#&gt; 7  A30619 2015-09-21 7.9149e-01   0.0002659722 0
-#&gt; 8  D46627 2015-09-21 2.7201e-01   0.0002372613 0
-#&gt; 9  E29198 2016-05-19 2.8295e-01   0.0002140474 0
-#&gt; 10 A41418 2016-05-19 7.5900e-08   0.0001949126 1
-#&gt; 11 D51456 2016-11-12 6.9274e-01   0.0001788796 0
-#&gt; 12 C88669 2017-03-27 3.0443e-01   0.0001652568 0
-#&gt; 13 E03673 2017-03-27 1.3600e-03   0.0001535420 0
-#&gt; 14 A63155 2017-03-27 7.2342e-01   0.0001433627 0
-#&gt; 15 B66033 2017-03-27 5.4757e-01   0.0001344368 0</div><div class='input'>
+</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-17 0.0026758385 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0005819103 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0004956249 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0004121803 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0003494435 0
+#&gt; 6  C38292 2015-09-21 3.6000e-05 0.0003022950 1
+#&gt; 7  A30619 2015-09-21 7.9149e-01 0.0002659722 0
+#&gt; 8  D46627 2015-09-21 2.7201e-01 0.0002372613 0
+#&gt; 9  E29198 2016-05-19 2.8295e-01 0.0002140474 0
+#&gt; 10 A41418 2016-05-19 7.5900e-08 0.0001949126 1
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0001788796 0
+#&gt; 12 C88669 2017-03-27 3.0443e-01 0.0001652568 0
+#&gt; 13 E03673 2017-03-27 1.3600e-03 0.0001535420 0
+#&gt; 14 A63155 2017-03-27 7.2342e-01 0.0001433627 0
+#&gt; 15 B66033 2017-03-27 5.4757e-01 0.0001344368 0</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>Alpha_spending</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;        id       date       pval alpha...gammai R
-#&gt; 1  A15432 2014-12-01 2.9000e-17   0.0053516771 1
-#&gt; 2  B90969 2014-12-01 6.7430e-02   0.0011638206 0
-#&gt; 3  C18705 2014-12-01 1.5140e-02   0.0009912499 0
-#&gt; 4  B49731 2015-09-21 8.1740e-02   0.0008243606 0
-#&gt; 5  E99902 2015-09-21 1.7100e-03   0.0006988870 0
-#&gt; 6  D46627 2015-09-21 2.7201e-01   0.0006045900 0
-#&gt; 7  C38292 2015-09-21 3.6000e-05   0.0005319444 1
-#&gt; 8  A30619 2015-09-21 7.9149e-01   0.0004745225 0
-#&gt; 9  A41418 2016-05-19 7.5900e-08   0.0004280949 1
-#&gt; 10 E29198 2016-05-19 2.8295e-01   0.0003898252 0
-#&gt; 11 D51456 2016-11-12 6.9274e-01   0.0003577593 0
-#&gt; 12 A63155 2017-03-27 7.2342e-01   0.0003305137 0
-#&gt; 13 C88669 2017-03-27 3.0443e-01   0.0003070841 0
-#&gt; 14 B66033 2017-03-27 5.4757e-01   0.0002867254 0
-#&gt; 15 E03673 2017-03-27 1.3600e-03   0.0002688736 0</div><div class='input'>
+</div><div class='output co'>#&gt;        id       date       pval       alphai R
+#&gt; 1  A15432 2014-12-01 2.9000e-17 0.0053516771 1
+#&gt; 2  B90969 2014-12-01 6.7430e-02 0.0011638206 0
+#&gt; 3  C18705 2014-12-01 1.5140e-02 0.0009912499 0
+#&gt; 4  B49731 2015-09-21 8.1740e-02 0.0008243606 0
+#&gt; 5  E99902 2015-09-21 1.7100e-03 0.0006988870 0
+#&gt; 6  D46627 2015-09-21 2.7201e-01 0.0006045900 0
+#&gt; 7  C38292 2015-09-21 3.6000e-05 0.0005319444 1
+#&gt; 8  A30619 2015-09-21 7.9149e-01 0.0004745225 0
+#&gt; 9  A41418 2016-05-19 7.5900e-08 0.0004280949 1
+#&gt; 10 E29198 2016-05-19 2.8295e-01 0.0003898252 0
+#&gt; 11 D51456 2016-11-12 6.9274e-01 0.0003577593 0
+#&gt; 12 A63155 2017-03-27 7.2342e-01 0.0003305137 0
+#&gt; 13 C88669 2017-03-27 3.0443e-01 0.0003070841 0
+#&gt; 14 B66033 2017-03-27 5.4757e-01 0.0002867254 0
+#&gt; 15 E03673 2017-03-27 1.3600e-03 0.0002688736 0</div><div class='input'>
 
 </div></pre>
   </div>

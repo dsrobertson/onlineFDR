@@ -55,7 +55,7 @@
 <meta property="og:title" content="ADDIS-spending: Adaptive discarding algorithm for online FWER control — ADDIS_spending" />
 <meta property="og:description" content="Implements the ADDIS algorithm for online FWER control, where ADDIS stands
 for an ADaptive algorithm that DIScards conservative nulls, as presented by
-Tian and Ramdas (2019b). The procedure compensates for the power loss of
+Tian and Ramdas (2021). The procedure compensates for the power loss of
 Alpha-spending, by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls." />
 <meta property="og:image" content="https://dsrobertson.github.io/onlineFDR/logo.png" />
@@ -90,7 +90,7 @@ hypotheses and the conservativeness of nulls." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@ hypotheses and the conservativeness of nulls." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -153,7 +153,7 @@ hypotheses and the conservativeness of nulls." />
     <div class="ref-description">
     <p>Implements the ADDIS algorithm for online FWER control, where ADDIS stands
 for an ADaptive algorithm that DIScards conservative nulls, as presented by
-Tian and Ramdas (2019b). The procedure compensates for the power loss of
+Tian and Ramdas (2021). The procedure compensates for the power loss of
 Alpha-spending, by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls.</p>
     </div>
@@ -166,9 +166,7 @@ hypotheses and the conservativeness of nulls.</p>
     <tr>
       <th>d</th>
       <td><p>Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), 
-p-value (`pval'), and lags 
-(`lags').</p></td>
+identifier (`id'), p-value (`pval'), and lags (`lags').</p></td>
     </tr>
     <tr>
       <th>alpha</th>
@@ -192,7 +190,7 @@ be between 0 and 1, defaults to 0.5.</p></td>
     </tr>
     <tr>
       <th>dep</th>
-      <td><p>Logical. If <code>TRUE</code> runs the version for locally dependent 
+      <td><p>Logical. If <code>TRUE</code> runs the version for locally dependent
 p-values</p></td>
     </tr>
     </table>
@@ -201,7 +199,7 @@ p-values</p></td>
 
     
 
-<dt>d.out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
+<dt>out</dt><dd><p>A dataframe with the original p-values <code>pval</code>, the
   adjusted testing levels \(\alpha_i\) and the indicator function of
   discoveries <code>R</code>. Hypothesis \(i\) is rejected if the \(i\)-th
   p-value is less than or equal to \(\alpha_i\), in which case <code>R[i] =
@@ -210,31 +208,32 @@ p-values</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function takes as its input either a vector of p-values, or a dataframe
-with three columns: an identifier (`id'),
-p-value (`pval'), and lags, if the dependent version is specified (see below). 
-Given an overall significance level \(\alpha\), ADDIS depends on constants \(\lambda\) and
-\(\tau\), where \(\lambda &lt; \tau\). Here \(\tau \in (0,1)\) represents
-the threshold for a hypothesis to be selected for testing: p-values greater
-than \(\tau\) are implicitly `discarded' by the procedure, while
-\(\lambda \in (0,1)\) sets the threshold for a p-value to be a candidate
-for rejection: ADDIS-spending will never reject a p-value larger than
-\(\lambda\). The algorithms also require a sequence of non-negative
-non-increasing numbers \(\gamma_i\) that sum to 1.</p>
+with three columns: an identifier (`id'), p-value (`pval'), and lags, if the
+dependent version is specified (see below). Given an overall significance
+level \(\alpha\), ADDIS depends on constants \(\lambda\) and \(\tau\),
+where \(\lambda &lt; \tau\). Here \(\tau \in (0,1)\) represents the
+threshold for a hypothesis to be selected for testing: p-values greater than
+\(\tau\) are implicitly `discarded' by the procedure, while \(\lambda
+\in (0,1)\) sets the threshold for a p-value to be a candidate for rejection:
+ADDIS-spending will never reject a p-value larger than \(\lambda\). The
+algorithms also require a sequence of non-negative non-increasing numbers
+\(\gamma_i\) that sum to 1.</p>
 <p>The ADDIS-spending procedure provably controls the FWER in the strong sense
 for independent p-values. Note that the procedure also controls the
 generalised familywise error rate (k-FWER) for \(k &gt; 1\) if \(\alpha\) is
 replaced by min(\(1, k\alpha\)).</p>
-<p>Tian and Ramdas (2019b) also presented a version for handling local
+<p>Tian and Ramdas (2021) also presented a version for handling local
 dependence. More precisely, for any \(t&gt;0\) we allow the p-value \(p_t\)
 to have arbitrary dependence on the previous \(L_t\) p-values. The fixed
 sequence \(L_t\) is referred to as `lags', and is given as the input
 <code>lags</code> for this version of the ADDIS-spending algorithm.</p>
 <p>Further details of the ADDIS-spending algorithms can be found in Tian and
-Ramdas (2019b).</p>
+Ramdas (2021).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-<em>arXiv preprint</em>, <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
+    <p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
+  error rate. <em>Statistical Methods for Medical Research</em> (to appear),
+  <a href='https://arxiv.org/abs/1910.04900'>https://arxiv.org/abs/1910.04900</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='ADDIS.html'>ADDIS</a></code> provides online control of the FDR.</p></div>
@@ -276,11 +275,11 @@ lags <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 #&gt; 6  3.6000e-05 0.0018039742 1
 #&gt; 7  7.9149e-01 0.0018039742 0
 #&gt; 8  2.7201e-01 0.0018039742 0
-#&gt; 9  2.8295e-01 0.0018039742 0
-#&gt; 10 7.5900e-08 0.0009429405 1
+#&gt; 9  2.8295e-01 0.0009429405 0
+#&gt; 10 7.5900e-08 0.0005950895 1
 #&gt; 11 6.9274e-01 0.0005950895 0
 #&gt; 12 3.0443e-01 0.0005950895 0
-#&gt; 13 1.3600e-03 0.0005950895 0
+#&gt; 13 1.3600e-03 0.0004164149 0
 #&gt; 14 7.2342e-01 0.0004164149 0
 #&gt; 15 5.4757e-01 0.0004164149 0</div><div class='input'>
 </div></pre>
