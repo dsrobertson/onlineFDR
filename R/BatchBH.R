@@ -99,28 +99,30 @@ BatchBH <- function(d, alpha = 0.05, gammai){
     idx_e <- batch_indices[i+1]
     batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     
-    j <- nt[i]:1L
+    k <- nt[i]:1L
     #sort pvals and then return the original indices of the sorted pvals
     o <- order(batch_pval, decreasing = TRUE)
     #sort the indices and then return the indices of the sorted indices
     #effectively reverses the order
     ro <- order(o)
-    out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
+    out_R <- pmin(1, cummin(nt[i]/k * batch_pval[o]))[ro] <= alphai[i]
     
     R <- c(R, out_R)
     
-    Rsum[i] <- sum(R)
+    Rsum[i] <- sum(out_R)
     
     #calculate Rsplus
-    n <- length(batch_pval)
-    aug_rej <- rep(0,n)
+    aug_rej <- rep(0,nt[i])
     
-    for (j in seq_len(n)) {
+    for (j in seq_len(nt[i])) {
       
       #run BH procedure with hallucinated p-value
-      hallucinated_pval <- batch_pval[-j]
-      hallucinated_R <- pmin(1, cummin(nt[i]/j * hallucinated_pval[o]))[ro] <= alphai[i]
-      aug_rej[j] <- sum(hallucinated_R, na.rm = T)
+      hallucinated_pval <- batch_pval
+      hallucinated_pval[j] <- 0
+      oh <- order(hallucinated_pval, decreasing = TRUE)
+      roh <- order(oh)
+      hallucinated_R <- pmin(1, cummin(nt[i]/k * hallucinated_pval[oh]))[roh] <= alphai[i]
+      aug_rej[j] <- sum(hallucinated_R)
     }
     Rplus[i] = max(aug_rej)
     
@@ -128,9 +130,7 @@ BatchBH <- function(d, alpha = 0.05, gammai){
     if(i < n_batch) {
       gammasum <- sum(gammai[seq_len(i+1)]) * alpha
       
-      for (r in seq_len(i)) {
-        Rrsum[r] = sum(Rsum[-r])
-      }
+      Rrsum[1:i] = sum(Rsum)-Rsum[1:i]
       
       alphai[i+1] <- (gammasum - sum(alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
         ((nt[i+1] + sum(Rsum))/nt[i+1])

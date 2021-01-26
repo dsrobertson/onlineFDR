@@ -113,7 +113,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     idx_e <- batch_indices[i+1]
     batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     
-    j <- nt[i]:1L
+    k <- nt[i]:1L
     #sort pvals and then return the original indices of the sorted pvals
     o <- order(batch_pval, decreasing = TRUE)
     #sort the indices and then return the indices of the sorted indices
@@ -125,11 +125,11 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     candsum <- sum(batch_pval > lambda)
     pi0 <- (candsum + 1)/((1 - lambda) * n)
     
-    out_R <- pmin(1, cummin(nt[i]/j * pi0 * batch_pval[o]))[ro] <= alphai[i]
+    out_R <- pmin(1, cummin(nt[i]/k * pi0 * batch_pval[o]))[ro] <= alphai[i]
     
     R <- c(R, out_R)
     
-    Rsum[i] <- sum(R)
+    Rsum[i] <- sum(out_R)
     
     ## k
     if(max(batch_pval) > lambda) {
@@ -138,16 +138,19 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     
     #calculate Rsplus
     #aug_rej is the number of rejections if we hallucinate jth pval to be 0
-    aug_rej <- rep(0,n)
+    aug_rej <- rep(0,nt[i])
     
-    for (j in seq_len(n)) {
+    for (j in seq_len(nt[i])) {
       
       #run St-BH procedure with hallucinated p-value
-      hallucinated_pval <- batch_pval[-j]
+      hallucinated_pval <- batch_pval
+      hallucinated_pval[j] <- 0
+      oh <- order(hallucinated_pval, decreasing = TRUE)
+      roh <- order(oh)
       
       #calculate pi0
       hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
-      hallucinated_R <- pmin(1, cummin(nt[i]/j * hallucinated_pi0*hallucinated_pval[o]))[ro] <= alphai[i]
+      hallucinated_R <- pmin(1, cummin(nt[i]/k * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
 
       aug_rej[j] <- sum(hallucinated_R, na.rm = T)
     }
@@ -158,9 +161,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     if(i < n_batch) {
       gammasum <- sum(gammai[seq_len(i+1)]) * alpha
       
-      for (r in seq_len(i)) {
-        Rrsum[r] = sum(Rsum[-r])
-      }
+      Rrsum[1:i] = sum(Rsum)-Rsum[1:i]
       
       alphai[i+1] <- (gammasum - sum(k[1:i]*alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
         ((nt[i+1] + sum(Rsum))/nt[i+1])
