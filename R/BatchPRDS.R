@@ -56,6 +56,8 @@
 
 BatchPRDS <- function(d, alpha = 0.05, gammai){
   
+  d <- checkPval(d)
+  
   if (!is.data.frame(d)) {
     stop("d must be a dataframe")
   } else if (!("batch" %in% colnames(d))) {
@@ -71,17 +73,13 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   }
   
   #check that batches were labeled correctly
-  n_batch <- length(unique(d$batch))
-  if(max(d$batch, na.rm = TRUE) > n_batch) {
+  
+  if(is.unsorted(d$batch)) {
     d <- d[order(d$batch),]
-    d$batch2 <- rep(1:length(table(d$batch)), table(d$batch))
-    d$batch2 <- as.numeric(d$batch2)
-    warning("Your batches were not labelled in a fully sequential manner. A new batch id was created labelled sequentially starting from 1.")
-  } else {
-    d$batch2 <- rep(1:length(table(d$batch)), table(d$batch))
-    d$batch2 <- as.numeric(d$batch2)
+    warning("Batches were re-ordered in increasing numeric value.")
   }
   
+  n_batch <- length(unique(d$batch))
   if (missing(gammai)) {
     gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
@@ -92,38 +90,34 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   
   ### Start Batch PRDS procedure
   
-  R <- rep(0, nrow(d))
+  R <- NULL
   alphai <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
+  nt <- as.vector(table(d$batch))
+  batch_indices <- c(0, cumsum(nt))
+  
   for(i in seq_len(n_batch)){
-    batch_pval <- .subset2(d, "pval")[which(.subset2(d, "batch2") == i)]
-    # batch_pval <- subset_rcpp(d$batch2, d$pval, i)
-    n <- length(batch_pval)
+    idx_b <- batch_indices[i]+1
+    idx_e <- batch_indices[i+1]
+    batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     
-    batchR <- sort(batch_pval) <= ((1:n)/n)*alphai[i]
-
-    max_entry <- suppressWarnings(which.max(batchR))
-    if(is.finite(max_entry)) {
-      batchR[1:max_entry] <- 1
-    }
-    out_R <- batchR[order(batch_pval)]
-    idx <- which(.subset2(d, "batch2") == i)
-    R[idx] <- out_R
+    j <- nt[i]:1L
+    o <- order(batch_pval, decreasing = TRUE)
+    ro <- order(o)
+    out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
+    
+    R <- c(R, out_R)
     
     #update alphai
     if(i < n_batch) {
-      ntplus <- length(which(.subset2(d, "batch2") == i+1))
-      alphai[i+1] <- alpha * (gammai[i+1]/ntplus) * (ntplus + sum(R, na.rm = T))
+      alphai[i+1] <- alpha * (gammai[i+1]/nt[i+1]) * (nt[i+1] + sum(R))
     }
+    
   }
   out <- d
-  out$R = R
-  out$alphai = rep(alphai, table(d$batch2))
-  #deduplicate columns, so if batch2 is the same, remove it
-  if(identical(out$batch, out$batch2)) {
-    out$batch2 <- NULL
-  }
-  return(out)
+  out$R <- as.numeric(R)
+  out$alphai <- rep(alphai, nt)
+  out
 }
 
