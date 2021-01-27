@@ -13,9 +13,10 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-
-[![Build Status](https://travis-ci.com/dsrobertson/onlineFDR.svg?branch=master)](https://travis-ci.com/dsrobertson/onlineFDR)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/dsrobertson/onlineFDR/workflows/R-CMD-check/badge.svg)](https://github.com/dsrobertson/onlineFDR/actions)
 [![codecov](https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg)](https://codecov.io/gh/dsrobertson/onlineFDR)
+<!-- badges: end -->
 
 
 # onlineFDR <img src="man/figures/logo.png" align="right" />
