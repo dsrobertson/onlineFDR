@@ -1,4 +1,6 @@
-#include <Rcpp.h>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -50,6 +52,8 @@ DataFrame addis_sync_faster(NumericVector pval,
 	int candsum = 0; 
 	IntegerVector kappai(1);
 
+	Progress p(N * N,true);
+
 	for (int i = 1; i < N; i++) {
 
 		cand[i-1] = (pval[i-1] <= tau*lambda);
@@ -80,6 +84,7 @@ DataFrame addis_sync_faster(NumericVector pval,
 			//update Cjplus
 			double Cjplussum = 0;
 			for (int j = 0; j < K-1; j++) {
+				p.increment();
 				Cjplus[j] += cand[i-1];
 				Cjplussum += gammai[ S[i-1] - kappaistar[j] - Cjplus[j] ];
 			}

@@ -1,4 +1,6 @@
-#include <Rcpp.h>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <algorithm>
 
 using namespace Rcpp;
@@ -32,8 +34,11 @@ DataFrame lond_faster(NumericVector pval,
 
 	int D = R[0];
 
+	Progress p(N,true);
+
 	if (original == 0){
 		for(int i = 1; i < N; i++) {
+			p.increment();
 			alphai[i] = betai[i]*std::max(D,1);
 			if (pval[i] <= alphai[i]) {
 				R[i] = 1;
@@ -43,6 +48,7 @@ DataFrame lond_faster(NumericVector pval,
 	} else {
 		//original LOND
 		for(int i = 1; i < N; i++) {
+			p.increment();
 			alphai[i] = betai[i]*(D+1);
 			if (pval[i] <= alphai[i]) {
 				R[i] = 1;

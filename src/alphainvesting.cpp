@@ -1,4 +1,6 @@
-# include <Rcpp.h>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 # include <algorithm>
 
 using namespace Rcpp;
@@ -31,6 +33,8 @@ DataFrame alphainvesting_faster(NumericVector pval,
 	IntegerVector tau(1);
 	
 	int K = sum(R);
+
+	Progress p(N * N,true);
 	
 	for(int i = 1; i < N; i++) {
 		
@@ -46,6 +50,7 @@ DataFrame alphainvesting_faster(NumericVector pval,
 	    //update Cjplus
 			double Cjplussum = 0;
 			for (int j = 0; j < K-1; j++) {
+				p.increment();
 				Cjplus[j] += cand[i-1];
 				Cjplussum += gammai[i - tau[j] - Cjplus[j] - 1];
 			}

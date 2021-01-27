@@ -1,5 +1,6 @@
-#include <Rcpp.h>
-#include <algorithm>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 
 using namespace Rcpp;
 using std::endl;
@@ -46,6 +47,8 @@ DataFrame saffron_faster(NumericVector pval,
 	
 	int K = sum(R);
 	
+	Progress p(N*N,true);
+
 	for(int i = 1; i < N; i++) {
 		
 		cand[i-1] = (pval[i-1] <= lambda);
@@ -60,6 +63,7 @@ DataFrame saffron_faster(NumericVector pval,
 	    //update Cjplus
 			double Cjplussum = 0;
 			for (int j = 0; j < K-1; j++) {
+				p.increment();
 				Cjplus[j] += cand[i-1];
 				Cjplussum += gammai[i - tau[j] - Cjplus[j] - 1];
 			}
