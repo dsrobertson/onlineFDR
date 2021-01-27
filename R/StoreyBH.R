@@ -54,21 +54,19 @@ StoreyBH <- function(d, alpha = 0.05, lambda = 0.5){
     stop("lambda must be between 0 and 1.")
   }
   
-  d$ind <- seq.int(nrow(d))
-  n <- length(d$pval)
-  ordered_d <- d[order(d$pval),]
-  candsum <- sum(ordered_d$pval > lambda, na.rm = T)
+  pvals <- .subset2(d, "pval")
+  o <- order(pvals, decreasing = TRUE)
+  ro <- order(o)
   
   #calculate pi0
-  pi0 <- (candsum + 1)/((1 - lambda)*n)
+  n <- length(pvals)
+  candsum <- sum(pvals > lambda)
+  pi0 <- (candsum + 1)/((1 - lambda) * n)
   
-  ordered_d$R <- pi0*ordered_d$pval <= ((1:n)/n)*alpha
-  max_entry <- suppressWarnings(max(which(ordered_d$R)))
-  if(is.finite(max_entry)) {
-    ordered_d$R[1:max_entry] <- 1
-  }
-  ordered_d <- ordered_d[order(ordered_d$ind),]
-  ordered_d$ind <- NULL
+  jvec <- n:1L
+  out_R <- pmin(1, cummin(n/jvec * pi0 * pvals[o]))[ro] <= alpha
   
-  return(ordered_d)
+  out <- d
+  out$R <- as.numeric(out_R)
+  out
 }
