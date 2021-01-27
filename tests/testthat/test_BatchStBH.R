@@ -31,6 +31,6 @@ test_that("Errors for edge cases", {
 })
 
 test_that("Correct rejections for sample dataframes", {
-  expect_identical(BatchBH(test.df1)$R, 1)
-  expect_identical(BatchBH(test.df2)$R, c(1,0,1))
+  expect_identical(BatchStBH(test.df1)$R, 1)
+  expect_identical(BatchStBH(test.df2)$R, c(1,0,1))
 })
