@@ -104,6 +104,7 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
     
     j <- nt[i]:1L
 
+    o <- order(batch_pval, decreasing = TRUE)
     ro <- order(o)
     out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
     
