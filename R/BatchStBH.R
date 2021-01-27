@@ -113,7 +113,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     idx_e <- batch_indices[i+1]
     batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     
-    k <- nt[i]:1L
+    jvec <- nt[i]:1L
     #sort pvals and then return the original indices of the sorted pvals
     o <- order(batch_pval, decreasing = TRUE)
     #sort the indices and then return the indices of the sorted indices
@@ -125,7 +125,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
     candsum <- sum(batch_pval > lambda)
     pi0 <- (candsum + 1)/((1 - lambda) * n)
     
-    out_R <- pmin(1, cummin(nt[i]/k * pi0 * batch_pval[o]))[ro] <= alphai[i]
+    out_R <- pmin(1, cummin(nt[i]/jvec * pi0 * batch_pval[o]))[ro] <= alphai[i]
     
     R <- c(R, out_R)
     
@@ -150,7 +150,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
       
       #calculate pi0
       hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
-      hallucinated_R <- pmin(1, cummin(nt[i]/k * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
+      hallucinated_R <- pmin(1, cummin(nt[i]/jvec * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
 
       aug_rej[j] <- sum(hallucinated_R, na.rm = T)
     }
