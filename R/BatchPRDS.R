@@ -103,10 +103,7 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
     batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     
     j <- nt[i]:1L
-    #sort pvals and then return the original indices of the sorted pvals
-    o <- order(batch_pval, decreasing = TRUE)
-    #sort the indices and then return the indices of the sorted indices
-    #effectively reverses the order
+
     ro <- order(o)
     out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
     
