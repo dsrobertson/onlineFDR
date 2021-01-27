@@ -1,15 +1,8 @@
 ---
 title: "Advanced usage of onlineFDR"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: '2'
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '2'
   rmarkdown::html_vignette:
-    toc: yes
+    toc: true
     toc_depth: 2
     vignette: >
       %\VignetteIndexEntry{Advanced usage of onlineFDR}

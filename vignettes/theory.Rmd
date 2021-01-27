@@ -1,24 +1,13 @@
 ---
 title: "The theory behind onlineFDR"
 output:
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '2'
-  pdf_document:
-    toc: yes
-    toc_depth: '2'
   rmarkdown::html_vignette:
     toc: yes
     toc_depth: 2
-    vignette: |
+    vignette: >
       %\VignetteIndexEntry{The theory behind onlineFDR}
       %\VignetteEncoding{UTF-8}
       %\VignetteEngine{knitr::rmarkdown}
-  word_document:
-    toc: yes
-    toc_depth: '2'
-header-includes: \usepackage{amsmath}
 ---
 
 ```{r setup, include=FALSE}
