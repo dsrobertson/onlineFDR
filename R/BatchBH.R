@@ -54,6 +54,8 @@
 
 BatchBH <- function(d, alpha = 0.05, gammai){
   
+  d <- checkPval(d)
+  
   if (!is.data.frame(d)) {
     stop("d must be a dataframe")
   } else if (!("batch" %in% colnames(d))) {
@@ -69,12 +71,13 @@ BatchBH <- function(d, alpha = 0.05, gammai){
   }
   
   #check that batches were labeled correctly
-  n_batch <- length(unique(d$batch))
   
-  if(max(d$batch, na.rm = TRUE) > n_batch) {
-    stop("Check that your batches are labelled in ascending order starting from 1.")
+  if(is.unsorted(d$batch)) {
+    d <- d[order(d$batch),]
+    warning("Batches were re-ordered in increasing numeric value.")
   }
   
+  n_batch <- length(unique(d$batch))
   if (missing(gammai)) {
     gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
@@ -84,60 +87,57 @@ BatchBH <- function(d, alpha = 0.05, gammai){
   }
   
   ### Start Batch BH procedure
-  all_batches <- list()
-  
+  R <- NULL
   Rplus <- Rsum <- Rrsum <- alphai <- rep(0, n_batch)
   alphai[1] <- gammai[1] * alpha
   
+  nt <- as.vector(table(d$batch))
+  batch_indices <- c(0, cumsum(nt))
+  
   for(i in seq_len(n_batch)){
-    batch_data <- d[d$batch == i,]
-    batch_data$ind <- seq.int(nrow(batch_data))
-    n <- length(batch_data$pval)
-    ordered_batch_data <- batch_data[order(batch_data$pval),]
-    ordered_batch_data$R <- ordered_batch_data$pval <= ((1:n)/n)*alphai[i]
-    max_entry <- suppressWarnings(max(which(ordered_batch_data$R)))
-    if(is.finite(max_entry)) {
-      ordered_batch_data$R[1:max_entry] <- 1
-    }
-    ordered_batch_data <- ordered_batch_data[order(ordered_batch_data$ind),]
-    ordered_batch_data$ind <- NULL
-    all_batches[[i]] <- ordered_batch_data
-    out <- do.call(rbind, all_batches)
+    idx_b <- batch_indices[i]+1
+    idx_e <- batch_indices[i+1]
+    batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
     
-    Rsum[i] <- sum(ordered_batch_data$R)
+    k <- nt[i]:1L
+    #sort pvals and then return the original indices of the sorted pvals
+    o <- order(batch_pval, decreasing = TRUE)
+    #sort the indices and then return the indices of the sorted indices
+    #effectively reverses the order
+    ro <- order(o)
+    out_R <- pmin(1, cummin(nt[i]/k * batch_pval[o]))[ro] <= alphai[i]
+    
+    R <- c(R, out_R)
+    
+    Rsum[i] <- sum(out_R)
     
     #calculate Rsplus
-    aug_rej <- rep(0,n)
-    hallucinated_data <- ordered_batch_data
+    aug_rej <- rep(0,nt[i])
     
-    for (j in seq_len(n)) {
+    for (j in seq_len(nt[i])) {
       
       #run BH procedure with hallucinated p-value
-      hallucinated_data$R <- c(0, hallucinated_data$pval[-j]) <= ((1:n)/n)*alphai[i]
-      max_entry <- suppressWarnings(max(which(hallucinated_data$R)))
-      if(is.finite(max_entry)) {
-        hallucinated_data$R[1:max_entry] <- 1
-      }
-      
-      aug_rej[j] <- sum(hallucinated_data$R, na.rm = T)
+      hallucinated_pval <- batch_pval
+      hallucinated_pval[j] <- 0
+      oh <- order(hallucinated_pval, decreasing = TRUE)
+      roh <- order(oh)
+      hallucinated_R <- pmin(1, cummin(nt[i]/k * hallucinated_pval[oh]))[roh] <= alphai[i]
+      aug_rej[j] <- sum(hallucinated_R)
     }
-    
     Rplus[i] = max(aug_rej)
     
     #update alphai
     if(i < n_batch) {
       gammasum <- sum(gammai[seq_len(i+1)]) * alpha
       
-      for (r in seq_len(i)) {
-        Rrsum[r] = sum(Rsum[-r])
-      }
+      Rrsum[1:i] = sum(Rsum)-Rsum[1:i]
       
-      ntplus <- nrow(d[d$batch == i+1,])
       alphai[i+1] <- (gammasum - sum(alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
-        ((ntplus + sum(Rsum))/ntplus)
-      
+        ((nt[i+1] + sum(Rsum))/nt[i+1])
     }
   }
-  out$alphai <- rep(alphai, table(d$batch))
-  return(out)
+  out <- d
+  out$R <- as.numeric(R)
+  out$alphai <- rep(alphai, nt)
+  out
 }

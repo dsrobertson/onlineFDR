@@ -1,4 +1,6 @@
-#include <Rcpp.h>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <algorithm>
 
 using namespace Rcpp;
@@ -42,6 +44,8 @@ DataFrame lord_faster(NumericVector pval,
 		IntegerVector tau(1);
 		int K = sum(R);
 
+		Progress p(N*N,true);
+
 		for (int i = 1; i < N; i++) {
 
 			if (K <= 1) {
@@ -51,6 +55,7 @@ DataFrame lord_faster(NumericVector pval,
 
 				double Cjsum = 0;
 				for(int j = 0; j < K; j++){
+					p.increment();
 					Cjsum += gammai[ i-tau[j]-1 ];
 
 				}
@@ -93,6 +98,8 @@ DataFrame lord_faster(NumericVector pval,
 		IntegerVector kappai(1);
 		int K = sum(R);
 
+		Progress p(N*N,true);
+
 		for (int i = 1; i < N; i++) {
 
 			double alphaitilde;
@@ -120,6 +127,7 @@ DataFrame lord_faster(NumericVector pval,
 				IntegerVector kappaistar2 = clone(kappaistar);
 				kappaistar2.erase(kappaistar2.begin());
 				for(int j = 0; j < K-1; j++){
+					p.increment();
 					Cjsum += gammai[ S[i-1]-kappaistar2[j] ];
 				}
 				
@@ -167,7 +175,10 @@ DataFrame lord_faster(NumericVector pval,
 
 		IntegerVector tau(1);
 
+		Progress p(N,true);
+
 		for (int i = 1; i < N; i++) {
+			p.increment();
 			if(R[i])
 				tau.push_back(i);
 			double taumax = max(tau);
@@ -195,7 +206,10 @@ DataFrame lord_faster(NumericVector pval,
 
 		IntegerVector tau(1);
 
+		Progress p(N,true);
+
 		for (int i = 1; i < N; i++) {
+			p.increment();
 			if(R[i])
 				tau.push_back(i);
 			double taumax = max(tau);
