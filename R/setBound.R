@@ -8,7 +8,7 @@
 #'   Alpha_investing
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
-#'   0.05.
+#'   0.05. The bounds for LOND and LORDdep depend on alpha.
 #'
 #' @param N An upper bound on the number of hypotheses to be tested
 #' 
