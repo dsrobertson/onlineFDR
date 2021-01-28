@@ -8,7 +8,7 @@
 #'   Alpha_investing
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
-#'   0.05.
+#'   0.05. The bounds for LOND and LORDdep depend on alpha.
 #'
 #' @param N An upper bound on the number of hypotheses to be tested
 #' 
@@ -39,7 +39,7 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
   }
   
   bound <- switch(alg,
-                  LOND = alpha/N,
+                  LOND = rep(alpha/N, N),
                   
                   LORD = (1/sum(log(pmax(seq_len(N),2))/((seq_len(N)) * 
                       exp(sqrt(log(seq_len(N)))))))*log(pmax(seq_len(N),2))/

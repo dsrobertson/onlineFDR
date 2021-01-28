@@ -129,8 +129,8 @@
 <p>We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.</p>
 <ul>
 <li><p>What is the difference between FDR and FWER? FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.</p></li>
-<li><p>What is the difference between sequential and non-sequential hypothesis testing?</p></li>
-<li><p>What does it mean for p-values to be independent or dependent?</p></li>
+<li><p>What do the different temporal structures mean? Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other.</p></li>
+<li><p>What do the different data dependencies mean? Independent means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about positively dependent means that the p-values come from correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a low p-value, but also A vs. C and A vs. D. A simple way to think about arbitrary dependence is to imagine a situation where some of your p-values just happen to be correlated with p-values from a long time ago.</p></li>
 </ul>
 </div>
 </div>
@@ -263,21 +263,75 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">LOND_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="more-advanced-use-cases" class="section level3">
+<h3 class="hasAnchor">
+<a href="#more-advanced-use-cases" class="anchor"></a>More Advanced Use Cases</h3>
+<p>This section covers some more use cases for more “advanced” <code>onlineFDR</code> users.</p>
+<div id="batch-setting" class="section level4">
+<h4 class="hasAnchor">
+<a href="#batch-setting" class="anchor"></a>Batch Setting</h4>
+<p>If your p-values came from hypothesis tests that were performed in batches, you might consider using the batch algorithms: <code><a href="../reference/BatchPRDS.html">BatchPRDS()</a></code>, <code><a href="../reference/BatchBH.html">BatchBH()</a></code>, and <code><a href="../reference/BatchStBH.html">BatchStBH()</a></code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
+    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
+    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
+pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
+        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
+        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,
+batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">batchprds_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BatchPRDS.html">BatchPRDS</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="setting-a-bound" class="section level4">
+<h4 class="hasAnchor">
+<a href="#setting-a-bound" class="anchor"></a>Setting a Bound</h4>
+<p>In the cases where you <strong>a priori</strong> expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for only LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the <code>betai</code> or <code>gammai</code> argument in your chosen algorithm.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
+        <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
+        <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
+    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
+                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
+                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
+                    <span class="st">"2016-11-12"</span>,
+                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+    pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
+            <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
+            <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co">#</span>
+<span class="va">bound</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/setBound.html">setBound</a></span><span class="op">(</span><span class="st">"LOND"</span>, alpha <span class="op">=</span> <span class="fl">0.04</span>, <span class="fl">20</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">LOND_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, alpha <span class="op">=</span> <span class="fl">0.04</span>, betai <span class="op">=</span> <span class="va">bound</span><span class="op">)</span></code></pre></div>
 <hr>
+</div>
 </div>
 </div>
 <div id="api" class="section level2">
 <h2 class="hasAnchor">
 <a href="#api" class="anchor"></a>API</h2>
-<div id="synchronous-fdr-control" class="section level3">
+<div id="fully-sequential-fdr-control" class="section level3">
 <h3 class="hasAnchor">
-<a href="#synchronous-fdr-control" class="anchor"></a>Synchronous FDR Control</h3>
+<a href="#fully-sequential-fdr-control" class="anchor"></a>Fully Sequential FDR Control</h3>
 <ul>
 <li><p><code><a href="../reference/LOND.html">LOND()</a></code> implements the LOND procedure for online FDR control, where LOND stands for (significance) Levels based On Number of Discoveries, as presented by Javanmard and Montanari (2015). The procedure controls the FDR for independent or positively dependent (PRDS) p-values, with an option <code>(dep = TRUE)</code> which guarantees control for arbitrarily dependent p-values.</p></li>
 <li><p><code><a href="../reference/LORD.html">LORD()</a></code> implements the LORD procedure for online FDR control, where LORD stands for (significance) Levels based On Recent Discovery, as presented by Javanmard and Montanari (2018), Ramdas <em>et al.</em> (2017) and Tian &amp; Ramdas (2019). The function provides different versions of the procedure valid for independent p-values, see <code><a href="../articles/theory.html">vignette("theory")</a></code>. There is also a version (‘dep’) that guarantees control for dependent p-values.</p></li>
 <li><p><code><a href="../reference/SAFFRON.html">SAFFRON()</a></code> implements the SAFFRON procedure for online FDR control, where SAFFRON stands for Serial estimate of the Alpha Fraction that is Futilely Rationed On true Null hypotheses, as presented by Ramdas <em>et al.</em> (2018). The procedure provides an adaptive method of online FDR control.</p></li>
 <li><p><code><a href="../reference/Alpha_investing.html">Alpha_investing()</a></code> Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, as proposed by Ramdas et al. (2018). This procedure uses a variant of SAFFRON’s update rule. This procedure controls the FDR for independent p-values.</p></li>
-<li><p><code><a href="../reference/ADDIS.html">ADDIS()</a></code> implements the ADDIS algorithm for online FDR control, where ADDIS stands for an ADaptive algorithm that DIScards conservative nulls, as presented by Tian &amp; Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adapativity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON). This procedure controls the FDR for independent p-values.</p></li>
+<li><p><code><a href="../reference/ADDIS.html">ADDIS()</a></code> implements the ADDIS algorithm for online FDR control, where ADDIS stands for an ADaptive algorithm that DIScards conservative nulls, as presented by Tian &amp; Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adaptivity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON). This procedure controls the FDR for independent p-values.</p></li>
+</ul>
+</div>
+<div id="batch-fdr-control" class="section level3">
+<h3 class="hasAnchor">
+<a href="#batch-fdr-control" class="anchor"></a>Batch FDR Control</h3>
+<ul>
+<li><p><code><a href="../reference/BatchPRDS.html">BatchPRDS()</a></code> implements the BatchPRDS algorithm for online FDR control, where PRDS stands for positive regression dependency on a subset, as presented by Zrnic et al. (2020). The BatchPRDS algorithm controls the FDR when the p-values in one batch are positively dependent, and independent across batches, by running the Benjamini-Hochberg procedure on each batch.</p></li>
+<li><p><code><a href="../reference/BatchBH.html">BatchBH()</a></code> implements the BatchBH algorithm for online FDR control, as presented by Zrnic et al. (2020). The BatchBH algorithm controls the FDR when the p-values in a batch are independent, and independent across batches, by running the Benjamini-Hochberg procedure on each batch.</p></li>
+<li><p><code><a href="../reference/BatchStBH.html">BatchStBH()</a></code> implements the BatchSt-BH algorithm for online FDR control, as presented by Zrnic et al. (2020). This algorithm makes one modification to the original Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of the null proportion estimate for more stable results. The BatchSt-BH algorithm controls the FDR when the p-values in a batch are independent, and independent across batches, by running the Storey Benjamini-Hochberg procedure on each batch.</p></li>
 </ul>
 </div>
 <div id="asynchronous-fdr-control" class="section level3">

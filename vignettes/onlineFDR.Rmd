@@ -71,9 +71,11 @@ We also have a provided a non-exhaustive list of answers to some questions you m
 * What is the difference between FDR and FWER?
 FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
 
-* What is the difference between sequential and non-sequential hypothesis testing?
+* What do the different temporal structures mean?
+Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other. 
 
-* What does it mean for p-values to be independent or dependent?
+* What do the different data dependencies mean?
+Independent means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about positively dependent means that the p-values come from correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a low p-value, but also A vs. C and A vs. D. A simple way to think about arbitrary dependence is to imagine a situation where some of your p-values just happen to be correlated with p-values from a long time ago.
 
 ## Quick Start
 
@@ -200,11 +202,55 @@ sample.df <- data.frame(
 set.seed(1)
 LOND_results <- LOND(sample.df)
 ```
+
+
+### More Advanced Use Cases
+This section covers some more use cases for more "advanced" `onlineFDR` users.
+
+#### Batch Setting
+If your p-values came from hypothesis tests that were performed in batches, you might consider using the batch algorithms: `BatchPRDS()`, `BatchBH()`, and `BatchStBH()`.
+
+```{r}
+sample.df <- data.frame(
+id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+        0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+batch = c(rep(1,5), rep(2,6), rep(3,4)))
+
+batchprds_results <- BatchPRDS(sample.df)
+```
+
+#### Setting a Bound
+In the cases where you **a priori** expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for only LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the `betai` or `gammai` argument in your chosen algorithm.
+
+```{r}
+sample.df <- data.frame(
+    id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+        'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+        'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+    date = as.Date(c(rep("2014-12-01",3),
+                    rep("2015-09-21",5),
+                    rep("2016-05-19",2),
+                    "2016-11-12",
+                    rep("2017-03-27",4))),
+    pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
+            3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+            0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
+
+#
+bound <- setBound("LOND", alpha = 0.04, 20)
+
+set.seed(1)
+LOND_results <- LOND(sample.df, alpha = 0.04, betai = bound)
+```
 ---
 
 ## API
 
-### Synchronous FDR Control
+### Fully Sequential FDR Control
 * `LOND()`
 implements the LOND procedure for online FDR control, where LOND stands for
 (significance) Levels based On Number of Discoveries, as presented by Javanmard
@@ -236,9 +282,19 @@ independent p-values.
 implements the ADDIS algorithm for online FDR control, where ADDIS stands for
 an ADaptive algorithm that DIScards conservative nulls, as presented by Tian
 & Ramdas (2019). The algorithm compensates for the power loss of SAFFRON
-with conservative nulls, by including both adapativity in the fraction of
+with conservative nulls, by including both adaptivity in the fraction of
 null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike
 SAFFRON). This procedure controls the FDR for independent p-values.
+
+### Batch FDR Control 
+* `BatchPRDS()`
+implements the BatchPRDS algorithm for online FDR control, where PRDS stands for positive regression dependency on a subset, as presented by Zrnic et al. (2020). The BatchPRDS algorithm controls the FDR when the p-values in one batch are positively dependent, and independent across batches, by running the Benjamini-Hochberg procedure on each batch.
+
+* `BatchBH()`
+implements the BatchBH algorithm for online FDR control, as presented by Zrnic et al. (2020). The BatchBH algorithm controls the FDR when the p-values in a batch are independent, and independent across batches, by running the Benjamini-Hochberg procedure on each batch.
+
+* `BatchStBH()`
+implements the BatchSt-BH algorithm for online FDR control, as presented by Zrnic et al. (2020). This algorithm makes one modification to the original Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of the null proportion estimate for more stable results. The BatchSt-BH algorithm controls the FDR when the p-values in a batch are independent, and independent across batches, by running the Storey Benjamini-Hochberg procedure on each batch.
 
 ### Asynchronous FDR Control
 * `LONDstar()`
