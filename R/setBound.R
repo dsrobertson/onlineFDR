@@ -39,7 +39,7 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
   }
   
   bound <- switch(alg,
-                  LOND = rep(alpha/N, N)
+                  LOND = rep(alpha/N, N),
                   
                   LORD = (1/sum(log(pmax(seq_len(N),2))/((seq_len(N)) * 
                       exp(sqrt(log(seq_len(N)))))))*log(pmax(seq_len(N),2))/
