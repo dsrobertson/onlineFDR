@@ -12,7 +12,7 @@
 #' independent, and independent across batches. Given an overall significance
 #' level \eqn{\alpha}, we choose a sequence of non-negative numbers
 #' \eqn{\gamma_i} such that they sum to 1. The algorithm runs the
-#' Benjamini-Hochberg procedure on each batch, where the values of the adjusted
+#' Storey Benjamini-Hochberg procedure on each batch, where the values of the adjusted
 #' significance thresholds \eqn{\alpha_{t+1}} depend on the number of previous
 #' discoveries.
 #'
