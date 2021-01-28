@@ -55,7 +55,6 @@ DataFrame lord_faster(NumericVector pval,
 
 				double Cjsum = 0;
 				for(int j = 0; j < K; j++){
-					p.increment();
 					Cjsum += gammai[ i-tau[j]-1 ];
 
 				}
@@ -71,6 +70,7 @@ DataFrame lord_faster(NumericVector pval,
 				tau2.erase(tau2.begin());
 
 				for (int j = 0; j < K-1; j++){
+					p.increment();
 					Cjsum += gammai[ i-tau2[j]-1 ];
 
 				}
