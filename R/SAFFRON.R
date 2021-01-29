@@ -114,7 +114,7 @@
 #'
 #' @export
 
-SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, date.format = "%Y-%m-%d", 
+SAFFRON <- function(d, alpha = 0.05, gammai, w0 = 0.025, lambda = 0.5, random = TRUE, date.format = "%Y-%m-%d", 
     discard = FALSE, tau.discard = 0.5) {
     
     d <- checkPval(d)

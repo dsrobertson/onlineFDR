@@ -114,7 +114,7 @@
 #'
 #' @export
 
-ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
+ADDIS <- function(d, alpha = 0.05, gammai, w0 = 0.00625, lambda = 0.5, tau = 0.5,
                   async = FALSE, random=TRUE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
