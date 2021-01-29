@@ -20,19 +20,13 @@ using std::endl;
 
 // [[Rcpp::export]]
 DataFrame saffron_faster(NumericVector pval,
-	NumericVector gammai = NumericVector(0),
+	NumericVector gammai,
 	double lambda = 0.5,
 	double alpha = 0.05,
-	double w0 = 0.025) {
+	double w0 = 0.025,
+	bool display_progress = true) {
 	
 	int N = pval.size();
-	
-	if (gammai.size() == 0) {
-		gammai = static_cast<NumericVector>(no_init(N));
-	// gammai <- 0.4374901658/(seq_len(N)^(1.6))
-		for (int i = 0; i < N; i++)
-			gammai[i] = 0.4374901658/pow(i+1, 1.6);
-	}
 
 	NumericVector alphai(N);
 	LogicalVector R(N);
@@ -47,7 +41,7 @@ DataFrame saffron_faster(NumericVector pval,
 	
 	int K = sum(R);
 	
-	Progress p(N*N,true);
+	Progress p(N * N, display_progress);
 
 	for(int i = 1; i < N; i++) {
 		

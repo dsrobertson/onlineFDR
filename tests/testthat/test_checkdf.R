@@ -1,4 +1,3 @@
-test.df0 <- data.frame()
 test.df1 <- data.frame(id = 'A')
 
 test.df2 <- data.frame(
@@ -13,9 +12,6 @@ test.df3 <- data.frame(
 )
 
 test_that("Check error messages", {
-    
-    expect_error(checkdf(test.df0),
-                 "The dataframe d is missing a column 'id' of identifiers.")
     
     expect_error(checkdf(test.df1),
                  "The dataframe d is missing a column 'pval' of p-values.")

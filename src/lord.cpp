@@ -26,7 +26,8 @@ DataFrame lord_faster(NumericVector pval,
 	double alpha = 0.05,
 	double w0 = 0.005,
 	double b0 = 0.045,
-	double taudiscard = 0.5) {
+	double taudiscard = 0.5,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
@@ -44,7 +45,7 @@ DataFrame lord_faster(NumericVector pval,
 		IntegerVector tau(1);
 		int K = sum(R);
 
-		Progress p(N*N,true);
+		Progress p(N * N, display_progress);
 
 		for (int i = 1; i < N; i++) {
 
@@ -98,7 +99,7 @@ DataFrame lord_faster(NumericVector pval,
 		IntegerVector kappai(1);
 		int K = sum(R);
 
-		Progress p(N*N,true);
+		Progress p(N * N,display_progress);
 
 		for (int i = 1; i < N; i++) {
 
@@ -175,7 +176,7 @@ DataFrame lord_faster(NumericVector pval,
 
 		IntegerVector tau(1);
 
-		Progress p(N,true);
+		Progress p(N, display_progress);
 
 		for (int i = 1; i < N; i++) {
 			p.increment();
@@ -206,7 +207,7 @@ DataFrame lord_faster(NumericVector pval,
 
 		IntegerVector tau(1);
 
-		Progress p(N,true);
+		Progress p(N, display_progress);
 
 		for (int i = 1; i < N; i++) {
 			p.increment();

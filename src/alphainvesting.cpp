@@ -10,7 +10,8 @@ using std::endl;
 DataFrame alphainvesting_faster(NumericVector pval,
 	NumericVector gammai = NumericVector(0),
 	double alpha = 0.05,
-	double w0 = 0.025) {
+	double w0 = 0.025,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
@@ -34,7 +35,7 @@ DataFrame alphainvesting_faster(NumericVector pval,
 	
 	int K = sum(R);
 
-	Progress p(N * N,true);
+	Progress p(N * N, display_progress);
 	
 	for(int i = 1; i < N; i++) {
 		

@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // addis_sync_faster
-DataFrame addis_sync_faster(NumericVector pval, NumericVector gammai, double lambda, double alpha, double tau, double w0);
-RcppExport SEXP _onlineFDR_addis_sync_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP tauSEXP, SEXP w0SEXP) {
+DataFrame addis_sync_faster(NumericVector pval, NumericVector gammai, double lambda, double alpha, double tau, double w0, bool display_progress);
+RcppExport SEXP _onlineFDR_addis_sync_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP tauSEXP, SEXP w0SEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,13 +17,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
     Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
-    rcpp_result_gen = Rcpp::wrap(addis_sync_faster(pval, gammai, lambda, alpha, tau, w0));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(addis_sync_faster(pval, gammai, lambda, alpha, tau, w0, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
 // addis_async_faster
-DataFrame addis_async_faster(NumericVector pval, IntegerVector E, NumericVector gammai, double lambda, double alpha, double tau, double w0);
-RcppExport SEXP _onlineFDR_addis_async_faster(SEXP pvalSEXP, SEXP ESEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP tauSEXP, SEXP w0SEXP) {
+DataFrame addis_async_faster(NumericVector pval, IntegerVector E, NumericVector gammai, double lambda, double alpha, double tau, double w0, bool display_progress);
+RcppExport SEXP _onlineFDR_addis_async_faster(SEXP pvalSEXP, SEXP ESEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP tauSEXP, SEXP w0SEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -34,7 +35,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
     Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
-    rcpp_result_gen = Rcpp::wrap(addis_async_faster(pval, E, gammai, lambda, alpha, tau, w0));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(addis_async_faster(pval, E, gammai, lambda, alpha, tau, w0, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -70,8 +72,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // alphainvesting_faster
-DataFrame alphainvesting_faster(NumericVector pval, NumericVector gammai, double alpha, double w0);
-RcppExport SEXP _onlineFDR_alphainvesting_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP w0SEXP) {
+DataFrame alphainvesting_faster(NumericVector pval, NumericVector gammai, double alpha, double w0, bool display_progress);
+RcppExport SEXP _onlineFDR_alphainvesting_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP w0SEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -79,13 +81,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type gammai(gammaiSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
-    rcpp_result_gen = Rcpp::wrap(alphainvesting_faster(pval, gammai, alpha, w0));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(alphainvesting_faster(pval, gammai, alpha, w0, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
 // lond_faster
-DataFrame lond_faster(NumericVector pval, NumericVector betai, double alpha, bool original);
-RcppExport SEXP _onlineFDR_lond_faster(SEXP pvalSEXP, SEXP betaiSEXP, SEXP alphaSEXP, SEXP originalSEXP) {
+DataFrame lond_faster(NumericVector pval, NumericVector betai, double alpha, bool original, bool display_progress);
+RcppExport SEXP _onlineFDR_lond_faster(SEXP pvalSEXP, SEXP betaiSEXP, SEXP alphaSEXP, SEXP originalSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -93,7 +96,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type betai(betaiSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< bool >::type original(originalSEXP);
-    rcpp_result_gen = Rcpp::wrap(lond_faster(pval, betai, alpha, original));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(lond_faster(pval, betai, alpha, original, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -141,8 +145,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // lord_faster
-DataFrame lord_faster(NumericVector pval, NumericVector gammai, int version, double alpha, double w0, double b0, double taudiscard);
-RcppExport SEXP _onlineFDR_lord_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP versionSEXP, SEXP alphaSEXP, SEXP w0SEXP, SEXP b0SEXP, SEXP taudiscardSEXP) {
+DataFrame lord_faster(NumericVector pval, NumericVector gammai, int version, double alpha, double w0, double b0, double taudiscard, bool display_progress);
+RcppExport SEXP _onlineFDR_lord_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP versionSEXP, SEXP alphaSEXP, SEXP w0SEXP, SEXP b0SEXP, SEXP taudiscardSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -153,7 +157,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
     Rcpp::traits::input_parameter< double >::type b0(b0SEXP);
     Rcpp::traits::input_parameter< double >::type taudiscard(taudiscardSEXP);
-    rcpp_result_gen = Rcpp::wrap(lord_faster(pval, gammai, version, alpha, w0, b0, taudiscard));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(lord_faster(pval, gammai, version, alpha, w0, b0, taudiscard, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -217,8 +222,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // saffron_faster
-DataFrame saffron_faster(NumericVector pval, NumericVector gammai, double lambda, double alpha, double w0);
-RcppExport SEXP _onlineFDR_saffron_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP w0SEXP) {
+DataFrame saffron_faster(NumericVector pval, NumericVector gammai, double lambda, double alpha, double w0, bool display_progress);
+RcppExport SEXP _onlineFDR_saffron_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP w0SEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -227,7 +232,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< double >::type w0(w0SEXP);
-    rcpp_result_gen = Rcpp::wrap(saffron_faster(pval, gammai, lambda, alpha, w0));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(saffron_faster(pval, gammai, lambda, alpha, w0, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -282,21 +288,21 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_onlineFDR_addis_sync_faster", (DL_FUNC) &_onlineFDR_addis_sync_faster, 6},
-    {"_onlineFDR_addis_async_faster", (DL_FUNC) &_onlineFDR_addis_async_faster, 7},
+    {"_onlineFDR_addis_sync_faster", (DL_FUNC) &_onlineFDR_addis_sync_faster, 7},
+    {"_onlineFDR_addis_async_faster", (DL_FUNC) &_onlineFDR_addis_async_faster, 8},
     {"_onlineFDR_addis_spending_faster", (DL_FUNC) &_onlineFDR_addis_spending_faster, 5},
     {"_onlineFDR_addis_spending_dep_faster", (DL_FUNC) &_onlineFDR_addis_spending_dep_faster, 6},
-    {"_onlineFDR_alphainvesting_faster", (DL_FUNC) &_onlineFDR_alphainvesting_faster, 4},
-    {"_onlineFDR_lond_faster", (DL_FUNC) &_onlineFDR_lond_faster, 4},
+    {"_onlineFDR_alphainvesting_faster", (DL_FUNC) &_onlineFDR_alphainvesting_faster, 5},
+    {"_onlineFDR_lond_faster", (DL_FUNC) &_onlineFDR_lond_faster, 5},
     {"_onlineFDR_londstar_async_faster", (DL_FUNC) &_onlineFDR_londstar_async_faster, 4},
     {"_onlineFDR_londstar_dep_faster", (DL_FUNC) &_onlineFDR_londstar_dep_faster, 4},
     {"_onlineFDR_londstar_batch_faster", (DL_FUNC) &_onlineFDR_londstar_batch_faster, 5},
-    {"_onlineFDR_lord_faster", (DL_FUNC) &_onlineFDR_lord_faster, 7},
+    {"_onlineFDR_lord_faster", (DL_FUNC) &_onlineFDR_lord_faster, 8},
     {"_onlineFDR_lordstar_async_faster", (DL_FUNC) &_onlineFDR_lordstar_async_faster, 5},
     {"_onlineFDR_lordstar_dep_faster", (DL_FUNC) &_onlineFDR_lordstar_dep_faster, 5},
     {"_onlineFDR_lordstar_batch_faster", (DL_FUNC) &_onlineFDR_lordstar_batch_faster, 6},
     {"_onlineFDR_online_fallback_faster", (DL_FUNC) &_onlineFDR_online_fallback_faster, 3},
-    {"_onlineFDR_saffron_faster", (DL_FUNC) &_onlineFDR_saffron_faster, 5},
+    {"_onlineFDR_saffron_faster", (DL_FUNC) &_onlineFDR_saffron_faster, 6},
     {"_onlineFDR_saffronstar_async_faster", (DL_FUNC) &_onlineFDR_saffronstar_async_faster, 6},
     {"_onlineFDR_saffronstar_dep_faster", (DL_FUNC) &_onlineFDR_saffronstar_dep_faster, 6},
     {"_onlineFDR_saffronstar_batch_faster", (DL_FUNC) &_onlineFDR_saffronstar_batch_faster, 7},

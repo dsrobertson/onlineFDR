@@ -39,6 +39,8 @@
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
@@ -88,7 +90,7 @@
 #' 
 #' @export
 
-Alpha_investing <- function(d, alpha = 0.05, gammai, w0, random = TRUE, date.format = "%Y-%m-%d") {
+Alpha_investing <- function(d, alpha = 0.05, gammai, w0, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
     
@@ -124,7 +126,11 @@ Alpha_investing <- function(d, alpha = 0.05, gammai, w0, random = TRUE, date.for
     }
     
     ### Start algorithm
-    out <- alphainvesting_faster(pval, gammai)
+    out <- alphainvesting_faster(pval,
+                                 gammai,
+                                 alpha = alpha,
+                                 w0 = w0,
+                                 display_progress = display_progress)
     out$R <- as.numeric(out$R)
     out
 }
