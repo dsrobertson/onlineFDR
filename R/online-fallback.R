@@ -36,6 +36,8 @@
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised.
 #'
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
+#'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
@@ -74,7 +76,7 @@
 #' 
 #' @export
 
-online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, date.format = "%Y-%m-%d") {
+online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
     
@@ -102,7 +104,10 @@ online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, date.format 
     }
     
     ### Start algorithm
-    out <- online_fallback_faster(pval, gammai)
+    out <- online_fallback_faster(pval, 
+                                  gammai,
+                                  alpha = alpha,
+                                  display_progress = display_progress)
     out$R <- as.numeric(out$R)
     out
 }

@@ -50,6 +50,7 @@
 #' @param dep Logical. If \code{TRUE} runs the version for locally dependent
 #'   p-values
 #'
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return \item{out}{A dataframe with the original p-values \code{pval}, the
 #'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
@@ -84,7 +85,7 @@
 #'
 #' @export
 
-ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE) {
+ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE, display_progress = FALSE) {
     
     d <- checkPval(d)
     
@@ -124,7 +125,12 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
     
     if (!(dep)) {
         
-        out <- addis_spending_faster(pval, gammai)
+        out <- addis_spending_faster(pval, 
+                                     gammai,
+                                     alpha = alpha,
+                                     lambda = lambda,
+                                     tau = tau,
+                                     display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
             
@@ -134,7 +140,13 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
         
         L <- d$lags
         
-        out <- addis_spending_dep_faster(pval, L, gammai)
+        out <- addis_spending_dep_faster(pval, 
+                                         L,
+                                         gammai,
+                                         alpha = alpha,
+                                         lambda = lambda,
+                                         tau = tau,
+                                         display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
     }

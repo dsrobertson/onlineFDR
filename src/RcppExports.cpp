@@ -41,8 +41,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // addis_spending_faster
-DataFrame addis_spending_faster(NumericVector pval, NumericVector gammai, double alpha, double lambda, double tau);
-RcppExport SEXP _onlineFDR_addis_spending_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP tauSEXP) {
+DataFrame addis_spending_faster(NumericVector pval, NumericVector gammai, double alpha, double lambda, double tau, bool display_progress);
+RcppExport SEXP _onlineFDR_addis_spending_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,13 +51,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
-    rcpp_result_gen = Rcpp::wrap(addis_spending_faster(pval, gammai, alpha, lambda, tau));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(addis_spending_faster(pval, gammai, alpha, lambda, tau, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
 // addis_spending_dep_faster
-DataFrame addis_spending_dep_faster(NumericVector pval, IntegerVector L, NumericVector gammai, double alpha, double lambda, double tau);
-RcppExport SEXP _onlineFDR_addis_spending_dep_faster(SEXP pvalSEXP, SEXP LSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP tauSEXP) {
+DataFrame addis_spending_dep_faster(NumericVector pval, IntegerVector L, NumericVector gammai, double alpha, double lambda, double tau, bool display_progress);
+RcppExport SEXP _onlineFDR_addis_spending_dep_faster(SEXP pvalSEXP, SEXP LSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +68,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
     Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
-    rcpp_result_gen = Rcpp::wrap(addis_spending_dep_faster(pval, L, gammai, alpha, lambda, tau));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(addis_spending_dep_faster(pval, L, gammai, alpha, lambda, tau, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -209,15 +211,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // online_fallback_faster
-DataFrame online_fallback_faster(NumericVector pval, NumericVector gammai, double alpha);
-RcppExport SEXP _onlineFDR_online_fallback_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP alphaSEXP) {
+DataFrame online_fallback_faster(NumericVector pval, NumericVector gammai, double alpha, bool display_progress);
+RcppExport SEXP _onlineFDR_online_fallback_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP alphaSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type pval(pvalSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type gammai(gammaiSEXP);
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    rcpp_result_gen = Rcpp::wrap(online_fallback_faster(pval, gammai, alpha));
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(online_fallback_faster(pval, gammai, alpha, display_progress));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -290,8 +293,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_onlineFDR_addis_sync_faster", (DL_FUNC) &_onlineFDR_addis_sync_faster, 7},
     {"_onlineFDR_addis_async_faster", (DL_FUNC) &_onlineFDR_addis_async_faster, 8},
-    {"_onlineFDR_addis_spending_faster", (DL_FUNC) &_onlineFDR_addis_spending_faster, 5},
-    {"_onlineFDR_addis_spending_dep_faster", (DL_FUNC) &_onlineFDR_addis_spending_dep_faster, 6},
+    {"_onlineFDR_addis_spending_faster", (DL_FUNC) &_onlineFDR_addis_spending_faster, 6},
+    {"_onlineFDR_addis_spending_dep_faster", (DL_FUNC) &_onlineFDR_addis_spending_dep_faster, 7},
     {"_onlineFDR_alphainvesting_faster", (DL_FUNC) &_onlineFDR_alphainvesting_faster, 5},
     {"_onlineFDR_lond_faster", (DL_FUNC) &_onlineFDR_lond_faster, 5},
     {"_onlineFDR_londstar_async_faster", (DL_FUNC) &_onlineFDR_londstar_async_faster, 4},
@@ -301,7 +304,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_onlineFDR_lordstar_async_faster", (DL_FUNC) &_onlineFDR_lordstar_async_faster, 5},
     {"_onlineFDR_lordstar_dep_faster", (DL_FUNC) &_onlineFDR_lordstar_dep_faster, 5},
     {"_onlineFDR_lordstar_batch_faster", (DL_FUNC) &_onlineFDR_lordstar_batch_faster, 6},
-    {"_onlineFDR_online_fallback_faster", (DL_FUNC) &_onlineFDR_online_fallback_faster, 3},
+    {"_onlineFDR_online_fallback_faster", (DL_FUNC) &_onlineFDR_online_fallback_faster, 4},
     {"_onlineFDR_saffron_faster", (DL_FUNC) &_onlineFDR_saffron_faster, 6},
     {"_onlineFDR_saffronstar_async_faster", (DL_FUNC) &_onlineFDR_saffronstar_async_faster, 6},
     {"_onlineFDR_saffronstar_dep_faster", (DL_FUNC) &_onlineFDR_saffronstar_dep_faster, 6},

@@ -110,7 +110,7 @@ Alpha_spending <- function(d, alpha = 0.05, gammai, random = TRUE, date.format =
     R <- as.numeric(pval <= alpha * gammai)
     d.out <- data.frame(d, alphai = alpha * gammai, R)
     
-    return(d.out)
+    d.out
 }
 TRUE
 TRUE

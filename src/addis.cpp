@@ -30,7 +30,7 @@ DataFrame addis_sync_faster(NumericVector pval,
 	double alpha = 0.05,
 	double tau = 0.5,
 	double w0 = 0.00625,
-	bool display_progress = false) {
+	bool display_progress = true) {
 	int N = pval.size();
 
 	NumericVector alphai(N);
