@@ -1,6 +1,7 @@
 // [[Rcpp::depends(RcppProgress)]]
 #include <progress.hpp>
-#include <progress_bar.hpp>#include <algorithm>
+#include <progress_bar.hpp>
+#include <algorithm>
 
 using namespace Rcpp;
 using std::endl;

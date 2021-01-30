@@ -1,6 +1,8 @@
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <algorithm>
 #include <vector>
-#include <Rcpp.h>
 
 using namespace Rcpp;
 using std::endl;
@@ -14,7 +16,8 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 	NumericVector gammai,
 	double w0 = 0.0125,
 	double lambda = 0.5,
-	double alpha = 0.05) {
+	double alpha = 0.05,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
@@ -27,12 +30,15 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 	int candsum = 0;
 
 	std::vector<bool> r;
+
+	Progress p(N * N, display_progress);
 	for (int i = 1; i < N; i++) {
 
 		cand[i-1] = (pval[i-1] <= lambda);
 
 		r.clear();
 		for (int j = 0; j <= i-1; j++) {
+			p.increment();
 			if (R[j] && (E[j]-1 <= i-1))
 				r.push_back(j);
 		}
@@ -98,7 +104,8 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 	NumericVector gammai,
 	double w0 = 0.0125,
 	double lambda = 0.5,
-	double alpha = 0.05) {
+	double alpha = 0.05,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
@@ -110,11 +117,15 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 
 	std::vector<bool> r;
+
+	Progress p(N * N, display_progress);
+
 	for (int i = 1; i < N; i++) {
 
 		cand[i-1] = (pval[i-1] <= lambda);
 		r.clear();
 		for (int j = 0; j <= i-1; j++) {
+			p.increment();
 			if (R[j] && (j <= j - L[i]))
 				r.push_back(j);
 		}
@@ -186,14 +197,23 @@ List saffronstar_batch_faster(NumericVector pval,
 	NumericVector gammai,
 	double w0 = 0.0125,
 	double lambda = 0.5,
-	double alpha = 0.05) {
+	double alpha = 0.05,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
-	NumericMatrix alphai(batch.size(), max(batch));
-	LogicalMatrix R(batch.size(), max(batch));
+	int B = batch.size();
+	NumericMatrix alphai(B, max(batch));
+	LogicalMatrix R(B, max(batch));
 	IntegerVector cand(N);
-	IntegerVector Cj(batch.size());
+	IntegerVector Cj(B);
+
+	int mysum = 0;
+	for (int a = 1; a < batch.size(); a++) {
+		mysum += batch[a];
+	}
+
+	Progress p(mysum, display_progress);
 
 	for (int i = 0; i < batch[0]; i++) {
 		cand[i] = (pval[i] <= lambda);
@@ -201,15 +221,17 @@ List saffronstar_batch_faster(NumericVector pval,
 		R(0,i) = (pval[i] <= alphai(0,i));
 	}
 
-	IntegerVector Cjplus(batch.size());
+	IntegerVector Cjplus(B);
 	Cj[0] = sum(cand);
 
-	for (int b = 1; b < batch.size(); b++) {
+	for (int b = 1; b < B; b++) {
 		NumericVector rcum = cumsum(static_cast<NumericVector>(rowSums(R)));
 		int candsum = sum(Cj);
 
 		for (int x = 0; x < batch[b]; x++) {
 			cand[batchsum[b-1] + x] = (pval[batchsum[b-1] + x] <= lambda);
+
+			p.increment();
 
 			NumericVector r(0);
 			if (max(rcum) > 0) {

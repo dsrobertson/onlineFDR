@@ -25,32 +25,32 @@ lond_faster <- function(pval, betai, alpha = 0.05, original = TRUE, display_prog
     .Call(`_onlineFDR_lond_faster`, pval, betai, alpha, original, display_progress)
 }
 
-londstar_async_faster <- function(pval, E, betai, alpha = 0.05) {
-    .Call(`_onlineFDR_londstar_async_faster`, pval, E, betai, alpha)
+londstar_async_faster <- function(pval, E, betai, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_londstar_async_faster`, pval, E, betai, alpha, display_progress)
 }
 
-londstar_dep_faster <- function(pval, L, betai, alpha = 0.05) {
-    .Call(`_onlineFDR_londstar_dep_faster`, pval, L, betai, alpha)
+londstar_dep_faster <- function(pval, L, betai, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_londstar_dep_faster`, pval, L, betai, alpha, display_progress)
 }
 
-londstar_batch_faster <- function(pval, batch, batchsum, betai, alpha = 0.05) {
-    .Call(`_onlineFDR_londstar_batch_faster`, pval, batch, batchsum, betai, alpha)
+londstar_batch_faster <- function(pval, batch, batchsum, betai, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_londstar_batch_faster`, pval, batch, batchsum, betai, alpha, display_progress)
 }
 
 lord_faster <- function(pval, gammai, version, alpha = 0.05, w0 = 0.005, b0 = 0.045, taudiscard = 0.5, display_progress = TRUE) {
     .Call(`_onlineFDR_lord_faster`, pval, gammai, version, alpha, w0, b0, taudiscard, display_progress)
 }
 
-lordstar_async_faster <- function(pval, E, gammai, w0 = 0.005, alpha = 0.05) {
-    .Call(`_onlineFDR_lordstar_async_faster`, pval, E, gammai, w0, alpha)
+lordstar_async_faster <- function(pval, E, gammai, w0 = 0.005, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_lordstar_async_faster`, pval, E, gammai, w0, alpha, display_progress)
 }
 
-lordstar_dep_faster <- function(pval, L, gammai, w0 = 0.005, alpha = 0.05) {
-    .Call(`_onlineFDR_lordstar_dep_faster`, pval, L, gammai, w0, alpha)
+lordstar_dep_faster <- function(pval, L, gammai, w0 = 0.005, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_lordstar_dep_faster`, pval, L, gammai, w0, alpha, display_progress)
 }
 
-lordstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.005, alpha = 0.05) {
-    .Call(`_onlineFDR_lordstar_batch_faster`, pval, batch, batchsum, gammai, w0, alpha)
+lordstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.005, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_lordstar_batch_faster`, pval, batch, batchsum, gammai, w0, alpha, display_progress)
 }
 
 online_fallback_faster <- function(pval, gammai, alpha = 0.05, display_progress = TRUE) {
@@ -61,15 +61,15 @@ saffron_faster <- function(pval, gammai, lambda = 0.5, alpha = 0.05, w0 = 0.025,
     .Call(`_onlineFDR_saffron_faster`, pval, gammai, lambda, alpha, w0, display_progress)
 }
 
-saffronstar_async_faster <- function(pval, E, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05) {
-    .Call(`_onlineFDR_saffronstar_async_faster`, pval, E, gammai, w0, lambda, alpha)
+saffronstar_async_faster <- function(pval, E, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_saffronstar_async_faster`, pval, E, gammai, w0, lambda, alpha, display_progress)
 }
 
-saffronstar_dep_faster <- function(pval, L, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05) {
-    .Call(`_onlineFDR_saffronstar_dep_faster`, pval, L, gammai, w0, lambda, alpha)
+saffronstar_dep_faster <- function(pval, L, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_saffronstar_dep_faster`, pval, L, gammai, w0, lambda, alpha, display_progress)
 }
 
-saffronstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05) {
-    .Call(`_onlineFDR_saffronstar_batch_faster`, pval, batch, batchsum, gammai, w0, lambda, alpha)
+saffronstar_batch_faster <- function(pval, batch, batchsum, gammai, w0 = 0.0125, lambda = 0.5, alpha = 0.05, display_progress = TRUE) {
+    .Call(`_onlineFDR_saffronstar_batch_faster`, pval, batch, batchsum, gammai, w0, lambda, alpha, display_progress)
 }
 

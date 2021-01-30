@@ -80,6 +80,8 @@
 #' @param tau.discard Optional threshold for hypotheses to be selected for
 #'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
 #'   \code{discard=TRUE}.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return \item{out}{A dataframe with the original p-values \code{pval}, the
 #'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
@@ -133,7 +135,7 @@
 #' @export
 
 SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batch.sizes, 
-    discard = FALSE, tau.discard = 0.5) {
+    discard = FALSE, tau.discard = 0.5, display_progress = FALSE) {
     
     d <- checkPval(d)
     
@@ -188,14 +190,26 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         
         ## async = 1
         E <- d$decision.times
-        out <- saffronstar_async_faster(pval, E, gammai)
+        out <- saffronstar_async_faster(pval, 
+                                        E, 
+                                        gammai,
+                                        w0 = w0,
+                                        lambda = lambda,
+                                        alpha = alpha,
+                                        display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
         
     }, {
         ## dep = 2
         L <- d$lags
-        out <- saffronstar_dep_faster(pval, L, gammai)
+        out <- saffronstar_dep_faster(pval, 
+                                      L,
+                                      gammai,
+                                      w0 = w0,
+                                      lambda = lambda, 
+                                      alpha = alpha,
+                                      display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
     }, {
@@ -203,7 +217,14 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         batch <- batch.sizes
         batchsum <- cumsum(batch)
         
-        list_out <- saffronstar_batch_faster(pval, batch, batchsum, gammai)
+        list_out <- saffronstar_batch_faster(pval, 
+                                             batch,
+                                             batchsum, 
+                                             gammai,
+                                             w0 = w0,
+                                             lambda = lambda,
+                                             alpha = alpha, 
+                                             display_progress = display_progress)
         
         alphai <- as.vector(t(list_out$alphai))
         R <- as.vector(t(list_out$R))

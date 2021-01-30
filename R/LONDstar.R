@@ -61,6 +61,8 @@
 #' 
 #' @param batch.sizes A vector of batch sizes, this is required for
 #'   \code{version='batch'}.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return
 #' \item{out}{A dataframe with the original p-values \code{pval}, the
@@ -122,7 +124,7 @@
 #'
 #' @export
 
-LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
+LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes, display_progress = FALSE) {
     
     d <- checkPval(d)
     
@@ -162,14 +164,22 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
         
         ## async = 1
         E <- d$decision.times
-        out <- londstar_async_faster(pval, E, betai)
+        out <- londstar_async_faster(pval, 
+                                     E, 
+                                     betai,
+                                     alpha = alpha,
+                                     display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
         
     }, {
         ## dep = 2
         L <- d$lags
-        out <- londstar_dep_faster(pval, L, betai)
+        out <- londstar_dep_faster(pval, 
+                                   L,
+                                   betai,
+                                   alpha = alpha,
+                                   display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
      
@@ -178,7 +188,12 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes) {
         batch <- batch.sizes
         batchsum <- cumsum(batch)
         
-        list_out <- londstar_batch_faster(pval, batch, batchsum, betai)
+        list_out <- londstar_batch_faster(pval, 
+                                          batch, 
+                                          batchsum, 
+                                          betai,
+                                          alpha = alpha,
+                                          display_progress = display_progress)
         
         alphai <- as.vector(t(list_out$alphai))
         R <- as.vector(t(list_out$R))
