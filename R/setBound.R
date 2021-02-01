@@ -72,4 +72,6 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
                   ADDIS_spending = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6)
   )
   
+  bound
+  
 }
