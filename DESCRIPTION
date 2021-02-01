@@ -25,7 +25,8 @@ Imports: stats,
 	RcppProgress,
 	dplyr,
 	tidyr,
-	ggplot2
+	ggplot2,
+	progress
 Suggests: knitr,
     rmarkdown,
     testthat,
