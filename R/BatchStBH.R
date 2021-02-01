@@ -30,6 +30,8 @@
 #'
 #' @param lambda Threshold for Storey-BH, must be between 0 and 1. Defaults to
 #'   0.5.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return \item{out}{ A dataframe with the original data \code{d} and the
 #'   indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
@@ -61,7 +63,7 @@
 #'
 #' @export
 
-BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
+BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = FALSE){
   
   d <- checkPval(d)
   
@@ -108,68 +110,138 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5){
   nt <- as.vector(table(d$batch))
   batch_indices <- c(0, cumsum(nt))
   
-  for(i in seq_len(n_batch)) {
-    idx_b <- batch_indices[i]+1
-    idx_e <- batch_indices[i+1]
-    batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
+  if(display_progress) {
+    pb <- progress::progress_bar$new(format = "  Computing [:bar] :percent eta: :eta",
+                                     total = n_batch, clear = FALSE, width = 60)
     
-    jvec <- nt[i]:1L
-    #sort pvals and then return the original indices of the sorted pvals
-    o <- order(batch_pval, decreasing = TRUE)
-    #sort the indices and then return the indices of the sorted indices
-    #effectively reverses the order
-    ro <- order(o)
-    
-    #calculate pi0
-    n <- length(batch_pval)
-    candsum <- sum(batch_pval > lambda)
-    pi0 <- (candsum + 1)/((1 - lambda) * n)
-    
-    out_R <- pmin(1, cummin(nt[i]/jvec * pi0 * batch_pval[o]))[ro] <= alphai[i]
-    
-    R <- c(R, out_R)
-    
-    Rsum[i] <- sum(out_R)
-    
-    ## k
-    if(max(batch_pval) > lambda) {
-      k[i] <- 1
-    }
-    
-    #calculate Rsplus
-    #aug_rej is the number of rejections if we hallucinate jth pval to be 0
-    aug_rej <- rep(0,nt[i])
-    
-    for (j in seq_len(nt[i])) {
+    for(i in seq_len(n_batch)) {
+      pb$tick()
+      idx_b <- batch_indices[i]+1
+      idx_e <- batch_indices[i+1]
+      batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
       
-      #run St-BH procedure with hallucinated p-value
-      hallucinated_pval <- batch_pval
-      hallucinated_pval[j] <- 0
-      oh <- order(hallucinated_pval, decreasing = TRUE)
-      roh <- order(oh)
+      jvec <- nt[i]:1L
+      #sort pvals and then return the original indices of the sorted pvals
+      o <- order(batch_pval, decreasing = TRUE)
+      #sort the indices and then return the indices of the sorted indices
+      #effectively reverses the order
+      ro <- order(o)
       
       #calculate pi0
-      hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
-      hallucinated_R <- pmin(1, cummin(nt[i]/jvec * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
-
-      aug_rej[j] <- sum(hallucinated_R, na.rm = T)
-    }
-  
-    Rplus[i] = max(aug_rej)
-    
-    #update alphai
-    if(i < n_batch) {
-      gammasum <- sum(gammai[seq_len(i+1)]) * alpha
+      n <- length(batch_pval)
+      candsum <- sum(batch_pval > lambda)
+      pi0 <- (candsum + 1)/((1 - lambda) * n)
       
-      Rrsum[1:i] = sum(Rsum)-Rsum[1:i]
+      out_R <- pmin(1, cummin(nt[i]/jvec * pi0 * batch_pval[o]))[ro] <= alphai[i]
       
-      alphai[i+1] <- (gammasum - sum(k[1:i]*alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
-        ((nt[i+1] + sum(Rsum))/nt[i+1])
+      R <- c(R, out_R)
+      
+      Rsum[i] <- sum(out_R)
+      
+      ## k
+      if(max(batch_pval) > lambda) {
+        k[i] <- 1
+      }
+      
+      #calculate Rsplus
+      #aug_rej is the number of rejections if we hallucinate jth pval to be 0
+      aug_rej <- rep(0,nt[i])
+      
+      for (j in seq_len(nt[i])) {
+        
+        #run St-BH procedure with hallucinated p-value
+        hallucinated_pval <- batch_pval
+        hallucinated_pval[j] <- 0
+        oh <- order(hallucinated_pval, decreasing = TRUE)
+        roh <- order(oh)
+        
+        #calculate pi0
+        hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
+        hallucinated_R <- pmin(1, cummin(nt[i]/jvec * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
+        
+        aug_rej[j] <- sum(hallucinated_R, na.rm = T)
+      }
+      
+      Rplus[i] = max(aug_rej)
+      
+      #update alphai
+      if(i < n_batch) {
+        gammasum <- sum(gammai[seq_len(i+1)]) * alpha
+        
+        Rrsum[1:i] = sum(Rsum)-Rsum[1:i]
+        
+        alphai[i+1] <- (gammasum - sum(k[1:i]*alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
+          ((nt[i+1] + sum(Rsum))/nt[i+1])
+      }
     }
+    out <- d
+    out$R <- as.numeric(R)
+    out$alphai <- rep(alphai, nt)
+    out
+  } else {
+    for(i in seq_len(n_batch)) {
+      idx_b <- batch_indices[i]+1
+      idx_e <- batch_indices[i+1]
+      batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
+      
+      jvec <- nt[i]:1L
+      #sort pvals and then return the original indices of the sorted pvals
+      o <- order(batch_pval, decreasing = TRUE)
+      #sort the indices and then return the indices of the sorted indices
+      #effectively reverses the order
+      ro <- order(o)
+      
+      #calculate pi0
+      n <- length(batch_pval)
+      candsum <- sum(batch_pval > lambda)
+      pi0 <- (candsum + 1)/((1 - lambda) * n)
+      
+      out_R <- pmin(1, cummin(nt[i]/jvec * pi0 * batch_pval[o]))[ro] <= alphai[i]
+      
+      R <- c(R, out_R)
+      
+      Rsum[i] <- sum(out_R)
+      
+      ## k
+      if(max(batch_pval) > lambda) {
+        k[i] <- 1
+      }
+      
+      #calculate Rsplus
+      #aug_rej is the number of rejections if we hallucinate jth pval to be 0
+      aug_rej <- rep(0,nt[i])
+      
+      for (j in seq_len(nt[i])) {
+        
+        #run St-BH procedure with hallucinated p-value
+        hallucinated_pval <- batch_pval
+        hallucinated_pval[j] <- 0
+        oh <- order(hallucinated_pval, decreasing = TRUE)
+        roh <- order(oh)
+        
+        #calculate pi0
+        hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
+        hallucinated_R <- pmin(1, cummin(nt[i]/jvec * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
+        
+        aug_rej[j] <- sum(hallucinated_R, na.rm = T)
+      }
+      
+      Rplus[i] = max(aug_rej)
+      
+      #update alphai
+      if(i < n_batch) {
+        gammasum <- sum(gammai[seq_len(i+1)]) * alpha
+        
+        Rrsum[1:i] = sum(Rsum)-Rsum[1:i]
+        
+        alphai[i+1] <- (gammasum - sum(k[1:i]*alphai[1:i]*(Rplus[1:i]/(Rplus[1:i] + Rrsum[1:i])))) * 
+          ((nt[i+1] + sum(Rsum))/nt[i+1])
+      }
+    }
+    out <- d
+    out$R <- as.numeric(R)
+    out$alphai <- rep(alphai, nt)
+    out
   }
-  out <- d
-  out$R <- as.numeric(R)
-  out$alphai <- rep(alphai, nt)
-  out
 }
   

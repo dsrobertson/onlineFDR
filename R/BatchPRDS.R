@@ -26,6 +26,8 @@
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
 #'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return \item{out}{ A dataframe with the original data \code{d} and the
 #'   indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
@@ -54,7 +56,7 @@
 #'
 #' @export
 
-BatchPRDS <- function(d, alpha = 0.05, gammai){
+BatchPRDS <- function(d, alpha = 0.05, gammai, display_progress = FALSE){
   
   d <- checkPval(d)
   
@@ -97,27 +99,57 @@ BatchPRDS <- function(d, alpha = 0.05, gammai){
   nt <- as.vector(table(d$batch))
   batch_indices <- c(0, cumsum(nt))
   
-  for(i in seq_len(n_batch)){
-    idx_b <- batch_indices[i]+1
-    idx_e <- batch_indices[i+1]
-    batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
+  if(display_progress) {
+    pb <- progress::progress_bar$new(format = "  Computing [:bar] :percent eta: :eta",
+                                     total = n_batch, clear = FALSE, width = 60)
     
-    j <- nt[i]:1L
-
-    o <- order(batch_pval, decreasing = TRUE)
-    ro <- order(o)
-    out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
-    
-    R <- c(R, out_R)
-    
-    #update alphai
-    if(i < n_batch) {
-      alphai[i+1] <- alpha * (gammai[i+1]/nt[i+1]) * (nt[i+1] + sum(R))
+    for(i in seq_len(n_batch)){
+      pb$tick()
+      idx_b <- batch_indices[i]+1
+      idx_e <- batch_indices[i+1]
+      batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
+      
+      j <- nt[i]:1L
+      
+      o <- order(batch_pval, decreasing = TRUE)
+      ro <- order(o)
+      out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
+      
+      R <- c(R, out_R)
+      
+      #update alphai
+      if(i < n_batch) {
+        alphai[i+1] <- alpha * (gammai[i+1]/nt[i+1]) * (nt[i+1] + sum(R))
+      }
+      
     }
-    
+    out <- d
+    out$R <- as.numeric(R)
+    out$alphai <- rep(alphai, nt)
+    out
+  } else {
+    for(i in seq_len(n_batch)){
+      idx_b <- batch_indices[i]+1
+      idx_e <- batch_indices[i+1]
+      batch_pval <- .subset2(d, "pval")[idx_b:idx_e]
+      
+      j <- nt[i]:1L
+      
+      o <- order(batch_pval, decreasing = TRUE)
+      ro <- order(o)
+      out_R <- pmin(1, cummin(nt[i]/j * batch_pval[o]))[ro] <= alphai[i]
+      
+      R <- c(R, out_R)
+      
+      #update alphai
+      if(i < n_batch) {
+        alphai[i+1] <- alpha * (gammai[i+1]/nt[i+1]) * (nt[i+1] + sum(R))
+      }
+      
+    }
+    out <- d
+    out$R <- as.numeric(R)
+    out$alphai <- rep(alphai, nt)
+    out
   }
-  out <- d
-  out$R <- as.numeric(R)
-  out$alphai <- rep(alphai, nt)
-  out
 }

@@ -52,6 +52,8 @@
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
@@ -82,8 +84,7 @@
 #'
 #' @export
 
-supLORD <- function(d, delta = 0.05, eps, r, eta, rho, gammai, random = TRUE,
-                    date.format = "%Y-%m-%d") {
+supLORD <- function(d, delta = 0.05, eps, r, eta, rho, gammai, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
     
@@ -147,54 +148,113 @@ supLORD <- function(d, delta = 0.05, eps, r, eta, rho, gammai, random = TRUE,
     W[1] <- beta0 + betai[1]*R[1] - alphai[1]
     beta1 <- eps/(log(1/delta)/(a*log(1+log(1/delta)/a)))
     
-    for (i in (seq_len(N-1)+1)){
+    if(display_progress){
+      pb <- progress::progress_bar$new(format = "  Computing [:bar] :percent eta: :eta",
+                                       total = N-1, clear = FALSE, width= 60)
+      for (i in (seq_len(N-1)+1)){
+        
+        pb$tick()
         
         tau <- which(R[seq_len(i-1)] == 1)
         
         if (sum(R) <= r-1){
-            betai[i] = beta0
+          betai[i] = beta0
         } else {
-            betai[i] = beta1
+          betai[i] = beta1
         }
         
         if (eta > 1 & i <= rho){
-            gamma_bar0 <- (gammai[i]^eta)/sum(gammai[seq_len(rho)]^eta)
+          gamma_bar0 <- (gammai[i]^eta)/sum(gammai[seq_len(rho)]^eta)
         } else if(eta > 1 & i > rho){
-            gamma_bar0 <- 0
+          gamma_bar0 <- 0
         } else {
-            gamma_bar0 <- gammai[i]
+          gamma_bar0 <- gammai[i]
         }
-    
+        
         if (sum(R) <= 1){
-            
-            alphai[i] <- gamma_bar0*beta0
-            R[i] <- (pval[i] <= alphai[i])
-
+          
+          alphai[i] <- gamma_bar0*beta0
+          R[i] <- (pval[i] <= alphai[i])
+          
         } else {
+          
+          m <- length(tau)
+          gamma_bar <- rep(0, m)
+          
+          for(j in seq_len(m)){
             
-            m <- length(tau)
-            gamma_bar <- rep(0, m)
+            cond = eta*W[tau[j]]/beta0
             
-            for(j in seq_len(m)){
-                
-                cond = eta*W[tau[j]]/beta0
-                
-                if (cond > 1 & (i - tau[j]) <= rho){
-                    gamma_bar[j] <- (gammai[i-tau[j]]^max(cond, 1)) / 
-                        sum(gammai[seq_len(rho)]^max(cond, 1))
-                } else if (cond > 1 & (i - tau[j]) > rho){
-                    gamma_bar[j] <- 0
-                } else {
-                    gamma_bar[j] <- gammai[i-tau[j]]
-                }
+            if (cond > 1 & (i - tau[j]) <= rho){
+              gamma_bar[j] <- (gammai[i-tau[j]]^max(cond, 1)) / 
+                sum(gammai[seq_len(rho)]^max(cond, 1))
+            } else if (cond > 1 & (i - tau[j]) > rho){
+              gamma_bar[j] <- 0
+            } else {
+              gamma_bar[j] <- gammai[i-tau[j]]
             }
-
-            alphai[i] <- beta0*gamma_bar0 + sum(betai[tau]*gamma_bar)
-            R[i] = (pval[i] <= alphai[i])
+          }
+          
+          alphai[i] <- beta0*gamma_bar0 + sum(betai[tau]*gamma_bar)
+          R[i] = (pval[i] <= alphai[i])
         }
         W[i] <- W[i-1] + betai[i]*R[i] - alphai[i]
+      }
+      
+      out <- data.frame(d, alphai, R)
+      out
+    } else {
+      for (i in (seq_len(N-1)+1)){
+        
+        tau <- which(R[seq_len(i-1)] == 1)
+        
+        if (sum(R) <= r-1){
+          betai[i] = beta0
+        } else {
+          betai[i] = beta1
+        }
+        
+        if (eta > 1 & i <= rho){
+          gamma_bar0 <- (gammai[i]^eta)/sum(gammai[seq_len(rho)]^eta)
+        } else if(eta > 1 & i > rho){
+          gamma_bar0 <- 0
+        } else {
+          gamma_bar0 <- gammai[i]
+        }
+        
+        if (sum(R) <= 1){
+          
+          alphai[i] <- gamma_bar0*beta0
+          R[i] <- (pval[i] <= alphai[i])
+          
+        } else {
+          
+          m <- length(tau)
+          gamma_bar <- rep(0, m)
+          
+          for(j in seq_len(m)){
+            
+            cond = eta*W[tau[j]]/beta0
+            
+            if (cond > 1 & (i - tau[j]) <= rho){
+              gamma_bar[j] <- (gammai[i-tau[j]]^max(cond, 1)) / 
+                sum(gammai[seq_len(rho)]^max(cond, 1))
+            } else if (cond > 1 & (i - tau[j]) > rho){
+              gamma_bar[j] <- 0
+            } else {
+              gamma_bar[j] <- gammai[i-tau[j]]
+            }
+          }
+          
+          alphai[i] <- beta0*gamma_bar0 + sum(betai[tau]*gamma_bar)
+          R[i] = (pval[i] <= alphai[i])
+        }
+        W[i] <- W[i-1] + betai[i]*R[i] - alphai[i]
+      }
+      
+      out <- data.frame(d, alphai, R)
+      out
     }
     
-    out <- data.frame(d, alphai, R)
-    return(out)
+
 }
