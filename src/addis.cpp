@@ -25,18 +25,13 @@ using std::endl;
 
 // [[Rcpp::export]]
 DataFrame addis_sync_faster(NumericVector pval,
-	NumericVector gammai = NumericVector(0),
+	NumericVector gammai,
 	double lambda = 0.5,
 	double alpha = 0.05,
 	double tau = 0.5,
-	double w0 = 0.00625) {
+	double w0 = 0.00625,
+	bool display_progress = true) {
 	int N = pval.size();
-
-	if (gammai.size() == 0) {
-		gammai = static_cast<NumericVector>(no_init(N));
-		for (int i = 0; i < N; i++)
-			gammai[i] = 0.4374901658/pow(i+1, 1.6);
-	}
 
 	NumericVector alphai(N);
 	LogicalVector R(N);
@@ -52,7 +47,7 @@ DataFrame addis_sync_faster(NumericVector pval,
 	int candsum = 0; 
 	IntegerVector kappai(1);
 
-	Progress p(N * N,true);
+	Progress p(N * N, display_progress);
 
 	for (int i = 1; i < N; i++) {
 
@@ -145,20 +140,14 @@ DataFrame addis_sync_faster(NumericVector pval,
 // [[Rcpp::export]]
 DataFrame addis_async_faster(NumericVector pval,
 	IntegerVector E,
-	NumericVector gammai = NumericVector(0),
+	NumericVector gammai,
 	double lambda = 0.5,
 	double alpha = 0.05,
 	double tau = 0.5,
-	double w0 = 0.00625) {
+	double w0 = 0.00625,
+	bool display_progress = false) {
 
 	int N = pval.size();
-
-	if (gammai.size() == 0) {
-		gammai = static_cast<NumericVector>(no_init(N));
-	// gammai <- 0.4374901658/(seq_len(N)^(1.6))
-		for (int i = 0; i < N; i++)
-			gammai[i] = 0.4374901658/pow(i+1, 1.6);
-	}
 
 	NumericVector alphai(N);
 	LogicalVector R(N);
@@ -172,6 +161,9 @@ DataFrame addis_async_faster(NumericVector pval,
 
 	int K;
 	std::vector<bool> kappai;
+
+	Progress p(N * N, display_progress);
+
 	for (int i = 1; i < N; i++) {
 
 		kappai.clear();
@@ -222,6 +214,7 @@ DataFrame addis_async_faster(NumericVector pval,
 
 	    //update Cjplus
 			for (int j = 0; j < K; j++) {
+				p.increment();
 
 				int from = kappai[j]+1;
 				int to = std::max(i-1, kappai[j]+1);

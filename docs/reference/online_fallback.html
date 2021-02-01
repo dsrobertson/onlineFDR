@@ -157,6 +157,7 @@ guarantees strong FWER control under arbitrary dependence of the p-values.</p>
   alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
   <span class='va'>gammai</span>,
   random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>,
   date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>
 <span class='op'>)</span></pre>
 
@@ -185,6 +186,10 @@ sequentially with no batches.</p></td>
       <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     <tr>
       <th>date.format</th>
@@ -275,21 +280,21 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 #&gt; 15 1.3600e-03 0.0001344368 0</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>online_fallback</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0026758385 1
-#&gt; 2  6.7430e-02 0.0032577488 0
-#&gt; 3  1.5140e-02 0.0004956249 0
-#&gt; 4  8.1740e-02 0.0004121803 0
-#&gt; 5  1.7100e-03 0.0003494435 0
-#&gt; 6  2.7201e-01 0.0003022950 0
-#&gt; 7  3.6000e-05 0.0002659722 1
-#&gt; 8  7.9149e-01 0.0005032335 0
-#&gt; 9  7.5900e-08 0.0002140474 1
-#&gt; 10 2.8295e-01 0.0004089600 0
-#&gt; 11 6.9274e-01 0.0001788796 0
-#&gt; 12 7.2342e-01 0.0001652568 0
-#&gt; 13 3.0443e-01 0.0001535420 0
-#&gt; 14 5.4757e-01 0.0001433627 0
-#&gt; 15 1.3600e-03 0.0001344368 0</div><div class='input'>
+#&gt; 1  2.9000e-08 0.0053516771 1
+#&gt; 2  6.7430e-02 0.0065154977 0
+#&gt; 3  1.5140e-02 0.0009912499 0
+#&gt; 4  8.1740e-02 0.0008243606 0
+#&gt; 5  1.7100e-03 0.0006988870 0
+#&gt; 6  2.7201e-01 0.0006045900 0
+#&gt; 7  3.6000e-05 0.0005319444 1
+#&gt; 8  7.9149e-01 0.0010064670 0
+#&gt; 9  7.5900e-08 0.0004280949 1
+#&gt; 10 2.8295e-01 0.0008179201 0
+#&gt; 11 6.9274e-01 0.0003577593 0
+#&gt; 12 7.2342e-01 0.0003305137 0
+#&gt; 13 3.0443e-01 0.0003070841 0
+#&gt; 14 5.4757e-01 0.0002867254 0
+#&gt; 15 1.3600e-03 0.0002688736 0</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -4,7 +4,15 @@
 \alias{ADDIS_spending}
 \title{ADDIS-spending: Adaptive discarding algorithm for online FWER control}
 \usage{
-ADDIS_spending(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, dep = FALSE)
+ADDIS_spending(
+  d,
+  alpha = 0.05,
+  gammai,
+  lambda = 0.25,
+  tau = 0.5,
+  dep = FALSE,
+  display_progress = FALSE
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
@@ -24,6 +32,8 @@ be between 0 and 1, defaults to 0.5.}
 
 \item{dep}{Logical. If \code{TRUE} runs the version for locally dependent
 p-values}
+
+\item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
 \item{out}{A dataframe with the original p-values \code{pval}, the

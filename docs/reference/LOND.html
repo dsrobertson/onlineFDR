@@ -160,6 +160,7 @@ Javanmard and Montanari (2015).</p>
   <span class='va'>betai</span>,
   dep <span class='op'>=</span> <span class='cn'>FALSE</span>,
   random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>,
   date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>,
   original <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
@@ -195,6 +196,10 @@ guarantees FDR control for <em>dependent</em> p-values. Defaults to
       <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     <tr>
       <th>date.format</th>

@@ -61,6 +61,8 @@
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised. Only needed if async=FALSE.
 #'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
+#'   
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #' @return \item{out}{A dataframe with the original p-values \code{pval}, the
@@ -115,7 +117,7 @@
 #' @export
 
 ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
-                  async = FALSE, random=TRUE, date.format = "%Y-%m-%d") {
+                  async = FALSE, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
     
@@ -170,7 +172,13 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
     
     if (!(async)) {
         
-            out <- addis_sync_faster(pval)
+            out <- addis_sync_faster(pval,
+                                     gammai,
+                                     lambda = lambda,
+                                     alpha = alpha,
+                                     tau = tau,
+                                     w0 = w0,
+                                     display_progress = display_progress)
             out$R <- as.numeric(out$R)
             out
         
@@ -182,7 +190,14 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
         
         E <- d$decision.times
         
-        out <- addis_async_faster(pval, E)
+        out <- addis_async_faster(pval, 
+                                  E,
+                                  gammai,
+                                  lambda = lambda,
+                                  alpha = alpha,
+                                  tau = tau,
+                                  w0 = w0,
+                                  display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
     }

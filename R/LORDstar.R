@@ -66,6 +66,7 @@
 #' @param batch.sizes A vector of batch sizes, this is required for
 #'   \code{version='batch'}.
 #'
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return \item{out}{A dataframe with the original p-values \code{pval}, the
 #' adjusted testing levels \eqn{\alpha_i} and the indicator function of
@@ -114,7 +115,7 @@
 #'
 #' @export
 
-LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
+LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes, display_progress = FALSE) {
     
     d <- checkPval(d)
     
@@ -161,14 +162,24 @@ LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
         
         ## async = 1
         E <- d$decision.times
-        out <- lordstar_async_faster(pval, E, gammai)
+        out <- lordstar_async_faster(pval, 
+                                     E,
+                                     gammai,
+                                     w0 = w0,
+                                     alpha = alpha,
+                                     display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
         
     }, {
         ## dep = 2
         L <- d$lags
-        out <- lordstar_dep_faster(pval, L, gammai)
+        out <- lordstar_dep_faster(pval, 
+                                   L, 
+                                   gammai,
+                                   w0 = w0,
+                                   alpha = alpha,
+                                   display_progress = display_progress)
         out$R <- as.numeric(out$R)
         out
         
@@ -177,7 +188,13 @@ LORDstar <- function(d, alpha = 0.05, version, gammai, w0, batch.sizes) {
         batch <- batch.sizes
         batchsum <- cumsum(batch)
         
-        list_out <- lordstar_batch_faster(pval, batch, batchsum, gammai)
+        list_out <- lordstar_batch_faster(pval, 
+                                          batch,
+                                          batchsum,
+                                          gammai,
+                                          w0 = w0,
+                                          alpha = alpha,
+                                          display_progress = display_progress)
         
         alphai <- as.vector(t(list_out$alphai))
         R <- as.vector(t(list_out$R))

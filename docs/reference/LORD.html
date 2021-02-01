@@ -163,6 +163,7 @@ and Montanari (2018) and Ramdas et al. (2017).</p>
   <span class='va'>b0</span>,
   tau.discard <span class='op'>=</span> <span class='fl'>0.5</span>,
   random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>,
   date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>
 <span class='op'>)</span></pre>
 
@@ -213,6 +214,10 @@ testing. Must be between 0 and 1, defaults to 0.5. This is required if
       <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     <tr>
       <th>date.format</th>
@@ -353,21 +358,21 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 #&gt; 15 1.3600e-03 0.0005497556 0</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span>, w0<span class='op'>=</span><span class='fl'>0.05</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0002675839 1
-#&gt; 2  6.7430e-02 0.0024664457 0
-#&gt; 3  1.5140e-02 0.0005732818 0
-#&gt; 4  8.1740e-02 0.0004872805 0
-#&gt; 5  1.7100e-03 0.0004059066 0
-#&gt; 6  2.7201e-01 0.0003447286 0
-#&gt; 7  3.6000e-05 0.0002986627 1
-#&gt; 8  7.9149e-01 0.0029389397 0
-#&gt; 9  7.5900e-08 0.0008168502 1
-#&gt; 10 2.8295e-01 0.0033835974 0
-#&gt; 11 6.9274e-01 0.0011873999 0
-#&gt; 12 7.2342e-01 0.0010225858 0
-#&gt; 13 3.0443e-01 0.0008785607 0
-#&gt; 14 5.4757e-01 0.0007679398 0
-#&gt; 15 1.3600e-03 0.0006820264 0</div><div class='input'>
+#&gt; 1  2.9000e-08 0.0026758385 1
+#&gt; 2  6.7430e-02 0.0032577488 0
+#&gt; 3  1.5140e-02 0.0010775352 0
+#&gt; 4  8.1740e-02 0.0009078052 0
+#&gt; 5  1.7100e-03 0.0007616238 0
+#&gt; 6  2.7201e-01 0.0006517385 0
+#&gt; 7  3.6000e-05 0.0005682672 1
+#&gt; 8  7.9149e-01 0.0058549106 0
+#&gt; 9  7.5900e-08 0.0016151293 1
+#&gt; 10 2.8295e-01 0.0067518870 0
+#&gt; 11 6.9274e-01 0.0023619734 0
+#&gt; 12 7.2342e-01 0.0020342733 0
+#&gt; 13 3.0443e-01 0.0017477495 0
+#&gt; 14 5.4757e-01 0.0015277362 0
+#&gt; 15 1.3600e-03 0.0013569121 0</div><div class='input'>
 
 </div></pre>
   </div>

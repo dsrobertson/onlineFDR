@@ -161,7 +161,8 @@ presented by Zrnic et al. (2021).</p>
   lambda <span class='op'>=</span> <span class='fl'>0.5</span>,
   <span class='va'>batch.sizes</span>,
   discard <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  tau.discard <span class='op'>=</span> <span class='fl'>0.5</span>
+  tau.discard <span class='op'>=</span> <span class='fl'>0.5</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -215,6 +216,10 @@ adaptive discarding of conservative nulls. The default is <code>FALSE</code>.</p
       <td><p>Optional threshold for hypotheses to be selected for
 testing. Must be between 0 and 1, defaults to 0.5. This is required if
 <code>discard=TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     </table>
 

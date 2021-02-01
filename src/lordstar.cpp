@@ -1,6 +1,7 @@
-#include <algorithm>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <vector>
-#include <Rcpp.h>
 
 using namespace Rcpp;
 using std::endl;
@@ -13,7 +14,8 @@ DataFrame lordstar_async_faster(NumericVector pval,
 	IntegerVector E,
 	NumericVector gammai,
 	double w0 = 0.005,
-	double alpha = 0.05) {
+	double alpha = 0.05,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
@@ -23,9 +25,13 @@ DataFrame lordstar_async_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 
 	std::vector<bool> r;
+
+	Progress p(N * N, display_progress);
+
 	for (int i = 1; i < N; i++) {
 		r.clear();
 		for (int j = 0; j <= i-1; j++) {
+			p.increment();
 			if (R[j] && (E[j]-1 <= i-1))
 				r.push_back(j);
 		}
@@ -68,7 +74,8 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 	IntegerVector L,
 	NumericVector gammai,
 	double w0 = 0.005,
-	double alpha = 0.05) {
+	double alpha = 0.05,
+	bool display_progress = true) {
 
 	int N = pval.size();
 
@@ -78,9 +85,13 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 
 	std::vector<bool> r;
+
+	Progress p(N * N, display_progress);
+
 	for (int i = 1; i < N; i++) {
 		r.clear();
 		for (int j = 0; j <= i-1; j++) {
+			p.increment();
 			if (R[j] && (j <= j - L[i]))
 				r.push_back(j);
 		}
@@ -125,23 +136,37 @@ List lordstar_batch_faster(NumericVector pval,
 	IntegerVector batchsum,
 	NumericVector gammai,
 	double w0 = 0.005,
-	double alpha = 0.05) {
+	double alpha = 0.05,
+	bool display_progress = true) {
 
-	NumericMatrix alphai(batch.size(), max(batch));
-	LogicalMatrix R(batch.size(), max(batch));
+	int B = batch.size();
+
+	NumericMatrix alphai(B, max(batch));
+	LogicalMatrix R(B, max(batch));
+
+	IntegerVector batchclone = clone(batch);
+
+	int mysum = 0;
+	for (int a = 1; a < batch.size(); a++) {
+		mysum += batch[a];
+	}
+
+	Progress p(mysum, display_progress);
 
 	for (int i = 0; i < batch[0]; i++) {
 		alphai(0,i) = gammai[i] * w0;
 		R(0,i) = (pval[i] <= alphai(0,i));
 	}
 
-	for (int b = 1; b < batch.size(); b++) {
+	for (int b = 1; b < B; b++) {
 		NumericVector rcum = cumsum(static_cast<NumericVector>(rowSums(R)));
 
 		for (int x = 0; x < batch[b]; x++) {
+			p.increment();
 			NumericVector r(0);
 			if (max(rcum) > 0) {
 				for (int y = 0; y < max(rcum); y++) {
+	
 					if (rcum[y] >= y)
 						r.push_back(y);
 				}

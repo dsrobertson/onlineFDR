@@ -23,7 +23,8 @@ using std::endl;
 DataFrame lond_faster(NumericVector pval,
 	NumericVector betai,
 	double alpha = 0.05,
-	bool original = true) {
+	bool original = true,
+	bool display_progress = true) {
 	int N = pval.size();
 
 	NumericVector alphai(N);
@@ -34,7 +35,7 @@ DataFrame lond_faster(NumericVector pval,
 
 	int D = R[0];
 
-	Progress p(N,true);
+	Progress p(N, display_progress);
 
 	if (original == 0){
 		for(int i = 1; i < N; i++) {

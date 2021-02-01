@@ -76,6 +76,8 @@
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
@@ -134,7 +136,7 @@
 #' @export
 
 LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 0.5, 
-    random = TRUE, date.format = "%Y-%m-%d") {
+    random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
     
@@ -174,6 +176,9 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
             stop("The sum of w0 and b0 must not be greater than alpha.")
         }
     } else {
+        if (missing(b0)) {
+            b0 = alpha - w0
+        }
         if (w0 > alpha) {
             stop("w0 must not be greater than alpha.")
         }
@@ -208,7 +213,14 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
         version <- 4
     }
     
-    out <- lord_faster(pval, gammai, version)
+    out <- lord_faster(pval, 
+                       gammai,
+                       version, 
+                       alpha = alpha,
+                       w0 = w0,
+                       b0 = b0,
+                       taudiscard = tau.discard,
+                       display_progress = display_progress)
     out$R <- as.numeric(out$R)
     out
 }

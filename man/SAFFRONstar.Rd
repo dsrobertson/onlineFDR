@@ -13,7 +13,8 @@ SAFFRONstar(
   lambda = 0.5,
   batch.sizes,
   discard = FALSE,
-  tau.discard = 0.5
+  tau.discard = 0.5,
+  display_progress = FALSE
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ adaptive discarding of conservative nulls. The default is \code{FALSE}.}
 \item{tau.discard}{Optional threshold for hypotheses to be selected for
 testing. Must be between 0 and 1, defaults to 0.5. This is required if
 \code{discard=TRUE}.}
+
+\item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
 \item{out}{A dataframe with the original p-values \code{pval}, the

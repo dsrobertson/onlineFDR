@@ -48,6 +48,8 @@
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised.
+#'   
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
@@ -104,7 +106,7 @@
 #'
 #' @export
 
-LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format = "%Y-%m-%d", 
+LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d", 
     original = TRUE) {
     
     d <- checkPval(d)
@@ -139,7 +141,11 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, date.format
     
     ### Start LOND procedure
     
-    out <- lond_faster(pval, betai, original = original)
+    out <- lond_faster(pval, 
+                       betai,
+                       alpha = alpha, 
+                       original = original, 
+                       display_progress = display_progress)
     out$R <- as.numeric(out$R)
     out
 }

@@ -1,4 +1,6 @@
-#include <Rcpp.h>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include <algorithm>
 
 using namespace Rcpp;
@@ -9,7 +11,8 @@ DataFrame addis_spending_faster(NumericVector pval,
 	NumericVector gammai = NumericVector(0),
 	double alpha = 0.05,
 	double lambda = 0.25,
-	double tau = 0.5) {
+	double tau = 0.5,
+	bool display_progress = true) {
 	
 	int N = pval.size();
 	NumericVector alphai(N);
@@ -21,7 +24,10 @@ DataFrame addis_spending_faster(NumericVector pval,
 	int selectsum = (pval[0] <= tau);
 	int candsum = (pval[0] <= lambda);
 
+	Progress p(N, display_progress);
+
 	for (int i = 1; i < N; i++) {
+		p.increment();
 		alphai[i] = alpha * (tau - lambda) * gammai[selectsum - candsum];
 		R[i] = (pval[i] <= alphai[i]);
 		selectsum = selectsum + (pval[i] <= tau);
@@ -38,7 +44,8 @@ DataFrame addis_spending_dep_faster(NumericVector pval,
 	NumericVector gammai = NumericVector(0),
 	double alpha = 0.05,
 	double lambda = 0.25,
-	double tau = 0.5) {
+	double tau = 0.5,
+	bool display_progress = true) {
 
 	int N = pval.size();
 	NumericVector alphai(N);
@@ -51,12 +58,15 @@ DataFrame addis_spending_dep_faster(NumericVector pval,
 	select[0] = (pval[0] <= tau);
 	cand[0] = (pval[0] <= lambda);
 
+	Progress p(N, display_progress);
+
 	for (int i = 1; i < N; i++) {
+		p.increment();
 		int selectsum = 0;
 		int candsum = 0;
 		int maxL = std::max(0, i - L[i]);
 		if (maxL > 0) {
-			for(int j = 0; j <= maxL; j++) {
+			for (int j = 0; j <= maxL; j++) {
 				if (select[j])
 					selectsum++;
 				if (cand[j])
