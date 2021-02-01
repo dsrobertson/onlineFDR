@@ -22,8 +22,8 @@
 setBound <- function(alg, alpha = 0.05, N, b0) {
   
   if(!(alg %in% c('LOND','LORD','LORDdep','SAFFRON','ADDIS','LONDstar',
-                  'LORDstar','SAFFRONstar','Alpha_investing'))){
-    stop('alg must be one of LOND, LORD, LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, or Alpha_investing')
+                  'LORDstar','SAFFRONstar','Alpha_investing', 'Alpha_spending', 'ADDIS_spending', 'online_fallback'))){
+    stop('alg must be one of LOND, LORD, LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, Alpha_investing, Alpha_investing, ADDIS_spending or online_fallback')
   }
   
   if (alpha <= 0 || alpha > 1) {
@@ -61,7 +61,11 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
                   
                   SAFFRONstar = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6),
                   
-                  Alpha_investing = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6)
+                  Alpha_investing = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6),
+                  
+                  Alpha_spending = rep(alpha/N, N),
+                  
+                  online_fallback = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6)
   )
   
 }
