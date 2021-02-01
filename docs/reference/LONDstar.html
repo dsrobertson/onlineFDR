@@ -152,7 +152,14 @@ by Zrnic et al. (2021)." />
 by Zrnic et al. (2021).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>LONDstar</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>version</span>, <span class='va'>betai</span>, <span class='va'>batch.sizes</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>LONDstar</span><span class='op'>(</span>
+  <span class='va'>d</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
+  <span class='va'>version</span>,
+  <span class='va'>betai</span>,
+  <span class='va'>batch.sizes</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,6 +194,10 @@ proposed by Javanmard and Montanari (2018), equation 31.</p></td>
       <th>batch.sizes</th>
       <td><p>A vector of batch sizes, this is required for
 <code>version='batch'</code>.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     </table>
 

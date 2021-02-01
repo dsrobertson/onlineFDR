@@ -4,7 +4,14 @@
 \alias{LONDstar}
 \title{LONDstar: Asynchronous online mFDR control based on number of discoveries}
 \usage{
-LONDstar(d, alpha = 0.05, version, betai, batch.sizes)
+LONDstar(
+  d,
+  alpha = 0.05,
+  version,
+  betai,
+  batch.sizes,
+  display_progress = FALSE
+)
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
@@ -27,6 +34,8 @@ proposed by Javanmard and Montanari (2018), equation 31.}
 
 \item{batch.sizes}{A vector of batch sizes, this is required for
 \code{version='batch'}.}
+
+\item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
 \item{out}{A dataframe with the original p-values \code{pval}, the

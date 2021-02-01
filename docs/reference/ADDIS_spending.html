@@ -158,7 +158,15 @@ Alpha-spending, by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ADDIS_spending</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, lambda <span class='op'>=</span> <span class='fl'>0.25</span>, tau <span class='op'>=</span> <span class='fl'>0.5</span>, dep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>ADDIS_spending</span><span class='op'>(</span>
+  <span class='va'>d</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
+  <span class='va'>gammai</span>,
+  lambda <span class='op'>=</span> <span class='fl'>0.25</span>,
+  tau <span class='op'>=</span> <span class='fl'>0.5</span>,
+  dep <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -192,6 +200,10 @@ be between 0 and 1, defaults to 0.5.</p></td>
       <th>dep</th>
       <td><p>Logical. If <code>TRUE</code> runs the version for locally dependent
 p-values</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     </table>
 

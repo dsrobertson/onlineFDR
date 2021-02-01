@@ -167,6 +167,7 @@ alpha-wealth that is allocated to testing the true null hypotheses.</p>
   <span class='va'>w0</span>,
   lambda <span class='op'>=</span> <span class='fl'>0.5</span>,
   random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>,
   date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>,
   discard <span class='op'>=</span> <span class='cn'>FALSE</span>,
   tau.discard <span class='op'>=</span> <span class='fl'>0.5</span>
@@ -207,6 +208,10 @@ between 0 and 1. Defaults to 0.5.</p></td>
       <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     <tr>
       <th>date.format</th>
@@ -325,20 +330,20 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>SAFFRON</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span>, w0<span class='op'>=</span><span class='fl'>0.025</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          pval      alphai R
 #&gt; 1  2.9000e-08 0.005468627 1
-#&gt; 2  6.7430e-02 0.010937254 0
-#&gt; 3  1.5140e-02 0.010937254 0
-#&gt; 4  8.1740e-02 0.010937254 0
-#&gt; 5  1.7100e-03 0.010937254 1
-#&gt; 6  2.7201e-01 0.021874508 0
-#&gt; 7  3.6000e-05 0.021874508 1
-#&gt; 8  7.9149e-01 0.032811762 0
-#&gt; 9  7.5900e-08 0.010823845 1
-#&gt; 10 2.8295e-01 0.021761099 0
-#&gt; 11 6.9274e-01 0.021761099 0
-#&gt; 12 7.2342e-01 0.009265591 0
-#&gt; 13 3.0443e-01 0.005456418 0
-#&gt; 14 5.4757e-01 0.005456418 0
-#&gt; 15 1.3600e-03 0.003688669 1</div><div class='input'>
+#&gt; 2  6.7430e-02 0.021874508 0
+#&gt; 3  1.5140e-02 0.021874508 1
+#&gt; 4  8.1740e-02 0.043749017 0
+#&gt; 5  1.7100e-03 0.043749017 1
+#&gt; 6  2.7201e-01 0.065623525 0
+#&gt; 7  3.6000e-05 0.065623525 1
+#&gt; 8  7.9149e-01 0.087498033 0
+#&gt; 9  7.5900e-08 0.028863587 1
+#&gt; 10 2.8295e-01 0.050738095 0
+#&gt; 11 6.9274e-01 0.050738095 0
+#&gt; 12 7.2342e-01 0.022302945 0
+#&gt; 13 3.0443e-01 0.013293195 0
+#&gt; 14 5.4757e-01 0.013293195 0
+#&gt; 15 1.3600e-03 0.009042997 1</div><div class='input'>
 <span class='fu'>SAFFRON</span><span class='op'>(</span><span class='va'>sample.df</span>, discard<span class='op'>=</span><span class='cn'>TRUE</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          pval      alphai R
 #&gt; 1  2.9000e-08 0.002734314 1

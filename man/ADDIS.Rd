@@ -13,6 +13,7 @@ ADDIS(
   tau = 0.5,
   async = FALSE,
   random = TRUE,
+  display_progress = FALSE,
   date.format = "\%Y-\%m-\%d"
 )
 }
@@ -43,6 +44,8 @@ testing process. Defaults to FALSE.}
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised. Only needed if async=FALSE.}
+
+\item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
