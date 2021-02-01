@@ -152,7 +152,7 @@ Zrnic et al. (2020)." />
 Zrnic et al. (2020).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>BatchBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>BatchBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, display_progress <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,6 +171,10 @@ batch numbers (`batch') and p-values (`pval').</p></td>
       <th>gammai</th>
       <td><p>Optional vector of \(\gamma_i\). A default is provided with
 \(\gamma_j\) proportional to \(1/j^(1.6)\).</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     </table>
 

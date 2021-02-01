@@ -4,7 +4,7 @@
 \alias{BatchStBH}
 \title{BatchStBH: Online batch FDR control using the St-BH procedure}
 \usage{
-BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5)
+BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = FALSE)
 }
 \arguments{
 \item{d}{A dataframe with three columns: identifiers (`id'), batch numbers
@@ -18,6 +18,8 @@ BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5)
 
 \item{lambda}{Threshold for Storey-BH, must be between 0 and 1. Defaults to
 0.5.}
+
+\item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
 \item{out}{ A dataframe with the original data \code{d} and the

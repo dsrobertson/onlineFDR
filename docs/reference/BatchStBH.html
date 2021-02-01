@@ -156,7 +156,7 @@ Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of
 the null proportion estimate for more stable results.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>BatchStBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, lambda <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>BatchStBH</span><span class='op'>(</span><span class='va'>d</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>gammai</span>, lambda <span class='op'>=</span> <span class='fl'>0.5</span>, display_progress <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,6 +180,10 @@ the null proportion estimate for more stable results.</p>
       <th>lambda</th>
       <td><p>Threshold for Storey-BH, must be between 0 and 1. Defaults to
 0.5.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     </table>
 
