@@ -164,6 +164,7 @@ the FDR at stopping times, as presented by Xu and Ramdas (2021).</p>
   <span class='va'>rho</span>,
   <span class='va'>gammai</span>,
   random <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  display_progress <span class='op'>=</span> <span class='cn'>FALSE</span>,
   date.format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span>
 <span class='op'>)</span></pre>
 
@@ -211,6 +212,10 @@ proposed by Javanmard and Montanari (2018).</p></td>
       <td><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.</p></td>
+    </tr>
+    <tr>
+      <th>display_progress</th>
+      <td><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></td>
     </tr>
     <tr>
       <th>date.format</th>

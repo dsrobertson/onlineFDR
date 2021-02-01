@@ -4,7 +4,7 @@
 \alias{BatchPRDS}
 \title{BatchPRDS: Online batch FDR control under Positive Dependence}
 \usage{
-BatchPRDS(d, alpha = 0.05, gammai)
+BatchPRDS(d, alpha = 0.05, gammai, display_progress = FALSE)
 }
 \arguments{
 \item{d}{A dataframe with three columns: identifiers (`id'),
@@ -15,6 +15,8 @@ batch numbers (`batch') and p-values (`pval').}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+
+\item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
 \item{out}{ A dataframe with the original data \code{d} and the
