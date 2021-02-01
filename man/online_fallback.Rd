@@ -22,8 +22,8 @@ sequentially with no batches.}
 \item{alpha}{Overall significance level of the FDR procedure, the default is
 0.05.}
 
-\item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided as
+proposed by Javanmard and Montanari (2018), equation 31.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
