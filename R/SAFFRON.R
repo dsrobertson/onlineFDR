@@ -140,7 +140,12 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, di
         stop("lambda must be between 0 and 1.")
     }
     
-    if (discard == TRUE) {
+    if (discard) {
+        if (missing(tau.discard)) {
+            tau.discard = 0.5
+        } else if (tau.discard <= 0 || tau.discard > 1) {
+            stop("tau.discard must be between 0 and 1.")
+        }
         return(ADDIS(pval, alpha, gammai, w0, lambda, tau.discard))
     }
     

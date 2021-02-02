@@ -184,6 +184,14 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
         }
     }
     
+    if (version == "discard") {
+        if (missing(tau.discard)) {
+            tau.discard = 0.5
+        } else if (tau.discard <= 0 || tau.discard > 1) {
+            stop("tau.discard must be between 0 and 1.")
+        }
+    }
+    
     if (version != "dep") {
         if (missing(gammai)) {
             gammai <- 0.07720838 * log(pmax(seq_len(N + 1), 2))/(seq_len(N + 1) * 
