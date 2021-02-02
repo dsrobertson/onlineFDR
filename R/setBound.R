@@ -63,7 +63,7 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
                   
                   Alpha_investing = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6),
                   
-                  Alpha_spending = rep(alpha/N, N),
+                  Alpha_spending = rep(1/N, N),
                   
                   online_fallback = (1/sum(log(pmax(seq_len(N),2))/((seq_len(N)) * 
                           exp(sqrt(log(seq_len(N)))))))*log(pmax(seq_len(N),2))/
