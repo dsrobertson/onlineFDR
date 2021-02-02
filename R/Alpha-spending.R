@@ -107,10 +107,8 @@ Alpha_spending <- function(d, alpha = 0.05, gammai, random = TRUE, date.format =
         stop("The sum of the elements of gammai must not be greater than 1.")
     }
     
-    R <- as.numeric(pval <= alpha * gammai)
-    d.out <- data.frame(d, alphai = alpha * gammai, R)
+    R <- as.numeric(pval <= alpha * gammai[seq_len(N)])
+    d.out <- data.frame(d, alphai = alpha * gammai[seq_len(N)], R)
     
     d.out
 }
-TRUE
-TRUE
