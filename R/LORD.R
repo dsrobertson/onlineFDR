@@ -201,13 +201,24 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
         } else if (sum(gammai) > 1) {
             stop("The sum of the elements of gammai must be <= 1.")
         }
-    } else {
+    } else if (w0 <= b0) {
         if (missing(gammai)) {
-            gammai <- 0.139307 * alpha/(b0 * seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
+            gammai <- 0.139307 /(seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
         } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
         } else if (sum(gammai) > alpha/b0) {
             stop("The sum of the elements of gammai must be <= alpha/b0.")
+        }
+    } else {
+        if (missing(gammai)) {
+            M <- seq_len(max(N, 10^6))
+            normC <- alpha / sum((w0 + b0*log(M))/(M*(log(pmax(M,2))^3)))
+            gammai <- normC / (seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
+            gammai <- gammai / sum(gammai)
+        } else if (any(gammai < 0)) {
+            stop("All elements of gammai must be non-negative.")
+        } else if (sum((w0 + b0*log(seq_len(N)))*gammai) > alpha) {
+            stop("The sum of the elements of (w0 + b0*log(seq_len(N)))*gammai must be <= alpha.")
         }
     }
     

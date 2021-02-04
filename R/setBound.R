@@ -11,15 +11,13 @@
 #'   0.05. The bounds for LOND and LORDdep depend on alpha.
 #'
 #' @param N An upper bound on the number of hypotheses to be tested
-#' 
-#' @param b0 The 'payout' for rejecting a hypothesis, required for LORDdep.
 #'
 #' @return \item{bound}{ A vector giving the values of a default sequence
-#' \eqn{\gamma_i} of nonnegative numbers that sum to 1.}
+#' \eqn{\gamma_i} of nonnegative numbers.}
 #'   
 #' @export
 
-setBound <- function(alg, alpha = 0.05, N, b0) {
+setBound <- function(alg, alpha = 0.05, N) {
   
   if(!(alg %in% c('LOND','LORD','LORDdep','SAFFRON','ADDIS','LONDstar',
                   'LORDstar','SAFFRONstar','Alpha_investing', 'Alpha_spending', 'ADDIS_spending', 'online_fallback'))){
@@ -30,14 +28,6 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
     stop("alpha must be between 0 and 1.")
   }
   
-  if(alg == 'LORDdep'){
-    if (missing(b0)) {
-      stop("Value of b0 is required for LORDdep.")
-    } else if (b0 <= 0) {
-      stop("b0 must be positive.")
-    }
-  }
-  
   bound <- switch(alg,
                   LOND = rep(alpha/N, N),
                   
@@ -45,7 +35,7 @@ setBound <- function(alg, alpha = 0.05, N, b0) {
                       exp(sqrt(log(seq_len(N)))))))*log(pmax(seq_len(N),2))/
                       ((seq_len(N))*exp(sqrt(log(seq_len(N))))),
                   
-                  LORDdep = alpha/(b0*sum(1+log(seq_len(N)))),
+                  LORDdep = rep(1/N, N),
                   
                   SAFFRON = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6),
                   

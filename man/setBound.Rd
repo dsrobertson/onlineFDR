@@ -4,7 +4,7 @@
 \alias{setBound}
 \title{setBound}
 \usage{
-setBound(alg, alpha = 0.05, N, b0)
+setBound(alg, alpha = 0.05, N)
 }
 \arguments{
 \item{alg}{A string that takes the value of one of the following: LOND, LORD,
@@ -15,12 +15,10 @@ Alpha_investing}
 0.05. The bounds for LOND and LORDdep depend on alpha.}
 
 \item{N}{An upper bound on the number of hypotheses to be tested}
-
-\item{b0}{The 'payout' for rejecting a hypothesis, required for LORDdep.}
 }
 \value{
 \item{bound}{ A vector giving the values of a default sequence
-\eqn{\gamma_i} of nonnegative numbers that sum to 1.}
+\eqn{\gamma_i} of nonnegative numbers.}
 }
 \description{
 Calculates a default sequence of non-negative numbers \eqn{\gamma_i} that sum
