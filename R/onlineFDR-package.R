@@ -11,8 +11,8 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 1.9.1\cr
-#' Date: \tab 2021-01-20\cr
+#' Version: \tab 1.9.2\cr
+#' Date: \tab 2021-02-05\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'

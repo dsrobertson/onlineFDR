@@ -1,7 +1,7 @@
 ---
 title: "Managing multiple testing challenges with sequential inference using the onlineFDR package"
 author: "David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp"
-date: "2021-01-27"
+date: "2021-02-05"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -64,6 +64,7 @@ your problem. The interactive version (click-to-functions) is available
 [here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html).
 
 ![](onlineFDR-diagram.png)
+
 ### Frequently Asked Questions
 We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
 
@@ -77,17 +78,17 @@ Offline refers to the case when all the hypotheses are considered simultaneously
 
 * **What do the different data dependencies mean?**
 
-Independent means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about positively dependent means that the p-values come from correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a low p-value, but also A vs. C and A vs. D. A simple way to think about arbitrary dependence is to imagine a situation where some of your p-values just happen to be correlated with p-values from a long time ago.
+'Independent' means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values just happen to be correlated with p-values from a long time ago.
 
 * **What are the differences between some of the algorithms such as `LOND`, `LORD`, `SAFFRON`, and `ADDIS`?**
 
 `SAFFRON` and `ADDIS` were developed after `LOND` and `LORD` so they have some improvements over the latter two algorithms. 
 
-That being said, `LOND` is a fairly simple algorithm where the significance levels are simply multiplied by the number of discoveries/rejections that have been made thus far. It also provable controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, `LOND` is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.
+That being said, `LOND` is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, `LOND` is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.
 
 `LORD` improves upon `LOND` by taking advantage of "alpha investing" where it can regain some of its alpha-wealth when it makes a discovery/rejection. The adjusted significance levels depend not only on how many discoveries have been made, but also the timing of these discoveries. However, one drawback is that LORD does not take advantage of the strength of the signals present in the data (i.e. the size of the p-values).
 
-`SAFFRON` improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are *a priori* more likely to be truly null hypotheses), `SAFFRON` never loses alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, `SAFFRON` will often be more powerful than `LORD`. 
+`SAFFRON` improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are *a priori* more likely to be truly null hypotheses), `SAFFRON` preserves alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, `SAFFRON` will often be more powerful than `LORD`. 
 
 `ADDIS` is an even further improvement upon `SAFFRON` because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power. 
 

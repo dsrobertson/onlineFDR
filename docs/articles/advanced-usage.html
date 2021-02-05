@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.2</span>
       </span>
     </div>
 
@@ -166,21 +166,21 @@
     LORD.discard  <span class="op">=</span> <span class="va">results.LORD.discard</span><span class="op">$</span><span class="va">alphai</span>,
     LORD.dep <span class="op">=</span> <span class="va">results.LORD.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>
 <span class="co">#&gt;          LORD.plus        LORD3 LORD.discard     LORD.dep</span>
-<span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.323935e-03</span>
-<span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.107961e-02</span>
-<span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.855138e-03</span>
-<span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.924756e-04</span>
-<span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.540284e-04</span>
-<span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 2.138161e-04</span>
-<span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.430752e-04</span>
-<span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.685669e-04</span>
-<span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.270096e-04</span>
-<span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.560048e-04</span>
-<span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.255746e-04</span>
-<span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 1.034364e-04</span>
-<span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 8.681710e-05</span>
-<span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 7.401343e-05</span>
-<span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 6.393279e-05</span></code></pre></div>
+<span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.091542e-03</span>
+<span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.002025e-02</span>
+<span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.677763e-03</span>
+<span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.262659e-04</span>
+<span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.201787e-04</span>
+<span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 1.933725e-04</span>
+<span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.293954e-04</span>
+<span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.548152e-04</span>
+<span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.166482e-04</span>
+<span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.422614e-04</span>
+<span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.145119e-04</span>
+<span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 9.432408e-05</span>
+<span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 7.916885e-05</span>
+<span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 6.749313e-05</span>
+<span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05</span></code></pre></div>
 <p>By default <span class="math inline">\(w_0 = \alpha/10\)</span> and (for LORD 3 and LORD dep) <span class="math inline">\(b0 = alpha - w0\)</span>, but these parameters can optionally be specified by the user subject to the requirements that <span class="math inline">\(0 \leq w_0 \leq \alpha\)</span>, <span class="math inline">\(b_0 &gt; 0\)</span> and <span class="math inline">\(w_0+b_0 \leq \alpha\)</span>.</p>
 <p>The value of <code>gammai</code> is also supplied by default, but can optionally be specified by the user (as described above, see the formula for <span class="math inline">\(\gamma_j\)</span> <a href="#LORDdep_xi">here</a> for version=‘dep’ and <a href="#LORD_gamma">here</a> for all other versions of LORD).</p>
 </div>
