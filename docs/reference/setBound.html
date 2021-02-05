@@ -87,7 +87,7 @@ to 1, given an upper bound \(N\) on the number of hypotheses to be tested." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.2</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@ to 1, given an upper bound \(N\) on the number of hypotheses to be tested." />
 to 1, given an upper bound \(N\) on the number of hypotheses to be tested.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>setBound</span><span class='op'>(</span><span class='va'>alg</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>N</span>, <span class='va'>b0</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>setBound</span><span class='op'>(</span><span class='va'>alg</span>, alpha <span class='op'>=</span> <span class='fl'>0.05</span>, <span class='va'>N</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,10 +172,6 @@ Alpha_investing</p></td>
       <th>N</th>
       <td><p>An upper bound on the number of hypotheses to be tested</p></td>
     </tr>
-    <tr>
-      <th>b0</th>
-      <td><p>The 'payout' for rejecting a hypothesis, required for LORDdep.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -183,7 +179,7 @@ Alpha_investing</p></td>
     
 
 <dt>bound</dt><dd><p>A vector giving the values of a default sequence
-\(\gamma_i\) of nonnegative numbers that sum to 1.</p></dd>
+\(\gamma_i\) of nonnegative numbers.</p></dd>
 
 
   </div>

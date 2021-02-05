@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.2</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Managing multiple testing challenges with sequential inference using the onlineFDR package</h1>
                         <h4 class="author">David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp</h4>
             
-            <h4 class="date">2021-01-27</h4>
+            <h4 class="date">2021-02-05</h4>
       
       
       <div class="hidden name"><code>onlineFDR.Rmd</code></div>
@@ -113,7 +113,7 @@
 <p>Frequently, modern data analysis problems have a further complexity that the hypotheses arrive sequentially in a stream.</p>
 <p><img src="stream-diagram.png"></p>
 <p>This introduces the challenge that at each step the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but does have knowledge of the historic decisions to date.</p>
-<p>The onlineFDR package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called “alpha wealth” in which experiments cost some amount of error from your “budget” but a discovery earns some of the budget back.</p>
+<p>The <code>onlineFDR</code> package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called “alpha wealth” in which experiments cost some amount of error from your “budget” but a discovery earns some of the budget back.</p>
 <p><img src="alpha-wealth.gif"></p>
 <p>This vignette explains the two main uses of the package and demonstrates their typical workflows.</p>
 <hr>
@@ -121,17 +121,32 @@
 <div id="which-algorithm-do-i-use" class="section level2">
 <h2 class="hasAnchor">
 <a href="#which-algorithm-do-i-use" class="anchor"></a>Which algorithm do I use?</h2>
-<p>We strive to make our R package as easy to use as possible. Please see the flowchart below to decide which function is best to solve your problem. The interactive version (click-to-functions) is available <a href="https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html">here</a></p>
+<p>We strive to make our R package as easy to use as possible. Please see the flowchart below to decide which function is best to solve your problem. The interactive version (click-to-functions) is available <a href="https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html">here</a>.</p>
 <p><img src="onlineFDR-diagram.png"></p>
 <div id="frequently-asked-questions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#frequently-asked-questions" class="anchor"></a>Frequently Asked Questions</h3>
 <p>We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.</p>
 <ul>
-<li><p>What is the difference between FDR and FWER? FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.</p></li>
-<li><p>What do the different temporal structures mean? Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other.</p></li>
-<li><p>What do the different data dependencies mean? Independent means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about positively dependent means that the p-values come from correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a low p-value, but also A vs. C and A vs. D. A simple way to think about arbitrary dependence is to imagine a situation where some of your p-values just happen to be correlated with p-values from a long time ago.</p></li>
+<li><strong>What is the difference between FDR and FWER?</strong></li>
 </ul>
+<p>FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.</p>
+<ul>
+<li><strong>What do the different temporal structures mean?</strong></li>
+</ul>
+<p>Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other.</p>
+<ul>
+<li><strong>What do the different data dependencies mean?</strong></li>
+</ul>
+<p>‘Independent’ means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being ‘positively dependent’ is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, ‘arbitrary dependence’ includes the situation where some of your p-values just happen to be correlated with p-values from a long time ago.</p>
+<ul>
+<li><strong>What are the differences between some of the algorithms such as <code>LOND</code>, <code>LORD</code>, <code>SAFFRON</code>, and <code>ADDIS</code>?</strong></li>
+</ul>
+<p><code>SAFFRON</code> and <code>ADDIS</code> were developed after <code>LOND</code> and <code>LORD</code> so they have some improvements over the latter two algorithms.</p>
+<p>That being said, <code>LOND</code> is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, <code>LOND</code> is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.</p>
+<p><code>LORD</code> improves upon <code>LOND</code> by taking advantage of “alpha investing” where it can regain some of its alpha-wealth when it makes a discovery/rejection. The adjusted significance levels depend not only on how many discoveries have been made, but also the timing of these discoveries. However, one drawback is that LORD does not take advantage of the strength of the signals present in the data (i.e. the size of the p-values).</p>
+<p><code>SAFFRON</code> improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are <em>a priori</em> more likely to be truly null hypotheses), <code>SAFFRON</code> preserves alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, <code>SAFFRON</code> will often be more powerful than <code>LORD</code>.</p>
+<p><code>ADDIS</code> is an even further improvement upon <code>SAFFRON</code> because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power.</p>
 </div>
 </div>
 <div id="quick-start" class="section level2">
@@ -144,7 +159,7 @@
 <div id="input-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#input-data" class="anchor"></a>Input data</h4>
-<p>In general, your dataset should contain, at the minimum, two columns (identifiers (‘id’) and p-values (‘pval’)). You can also pass in a date column (‘date’), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially.</p>
+<p>In general, your dataset should contain, at the minimum, a column of p-values (‘pval’)). You can also pass in an id column (‘id’) or a date column (‘date’), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially.</p>
 <p>If you are using the Batch algorithms, ensure that your dataset contains a column (‘batch’) where batches are defined sequentially starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see <code><a href="../reference/LONDstar.html">LONDstar()</a></code>, <code><a href="../reference/LORDstar.html">LORDstar()</a></code>, and <code><a href="../reference/SAFFRONstar.html">SAFFRONstar()</a></code>). If you are not sure which algorithm to use, click <a href="#which-function-do-i-use-">here</a>.</p>
 <p>All p-values generated should be passed to the function (and not just the significant p-values). An exception to this would be if you have implemented an orthogonal filter to reduce the dataset size, such as discussed in (Burgon <em>et al.</em>, 2010).</p>
 </div>

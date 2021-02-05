@@ -1,7 +1,7 @@
 ---
 title: "Managing multiple testing challenges with sequential inference using the onlineFDR package"
 author: "David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp"
-date: "2021-01-27"
+date: "2021-02-05"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -48,7 +48,7 @@ hypothesis without having access to the future p-values or the total number of
 hypotheses to be tested, but does have knowledge of the historic decisions to
 date. 
 
-The onlineFDR package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
+The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
 
 ![](alpha-wealth.gif)
 
@@ -61,21 +61,36 @@ This vignette explains the two main uses of the package and demonstrates their t
 We strive to make our R package as easy to use as possible. 
 Please see the flowchart below to decide which function is best to solve
 your problem. The interactive version (click-to-functions) is available
-[here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html)
+[here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html).
 
 ![](onlineFDR-diagram.png)
 
 ### Frequently Asked Questions
 We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
 
-* What is the difference between FDR and FWER?
+* **What is the difference between FDR and FWER?**
+
 FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
 
-* What do the different temporal structures mean?
+* **What do the different temporal structures mean?**
+
 Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other. 
 
-* What do the different data dependencies mean?
-Independent means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about positively dependent means that the p-values come from correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a low p-value, but also A vs. C and A vs. D. A simple way to think about arbitrary dependence is to imagine a situation where some of your p-values just happen to be correlated with p-values from a long time ago.
+* **What do the different data dependencies mean?**
+
+'Independent' means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values just happen to be correlated with p-values from a long time ago.
+
+* **What are the differences between some of the algorithms such as `LOND`, `LORD`, `SAFFRON`, and `ADDIS`?**
+
+`SAFFRON` and `ADDIS` were developed after `LOND` and `LORD` so they have some improvements over the latter two algorithms. 
+
+That being said, `LOND` is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, `LOND` is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.
+
+`LORD` improves upon `LOND` by taking advantage of "alpha investing" where it can regain some of its alpha-wealth when it makes a discovery/rejection. The adjusted significance levels depend not only on how many discoveries have been made, but also the timing of these discoveries. However, one drawback is that LORD does not take advantage of the strength of the signals present in the data (i.e. the size of the p-values).
+
+`SAFFRON` improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are *a priori* more likely to be truly null hypotheses), `SAFFRON` preserves alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, `SAFFRON` will often be more powerful than `LORD`. 
+
+`ADDIS` is an even further improvement upon `SAFFRON` because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power. 
 
 ## Quick Start
 
@@ -85,7 +100,7 @@ This Quick Start guide is meant to provide a framework for you to use any of the
 
 #### Input data
 
-In general, your dataset should contain, at the minimum, two columns (identifiers ('id') and p-values ('pval')). You can also pass in a date column ('date'), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially. 
+In general, your dataset should contain, at the minimum, a column of p-values ('pval')). You can also pass in an id column ('id') or a date column ('date'), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially. 
 
 If you are using the Batch algorithms, ensure that your dataset contains a column ('batch') where batches are defined sequentially starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see `LONDstar()`, `LORDstar()`, and `SAFFRONstar()`). If you are not sure which algorithm to use, click [here](#which-function-do-i-use-).
 
