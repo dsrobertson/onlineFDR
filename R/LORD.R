@@ -241,7 +241,7 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
                        taudiscard = tau.discard,
                        display_progress = display_progress)
     out$R <- as.numeric(out$R)
-    if(!is.null(d$id)) {
+    if(is.data.frame(d) && !is.null(d$id)) {
         out$id <- d$id
     }
     out

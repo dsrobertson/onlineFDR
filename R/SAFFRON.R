@@ -173,7 +173,7 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, di
                           w0 = w0,
                           display_progress = display_progress)
     out$R <- as.numeric(out$R)
-    if(!is.null(d$id)) {
+    if(is.data.frame(d) && !is.null(d$id)) {
         out$id <- d$id
     }
     out
