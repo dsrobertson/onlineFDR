@@ -180,6 +180,9 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
                                      w0 = w0,
                                      display_progress = display_progress)
             out$R <- as.numeric(out$R)
+            if(!is.null(d$id)) {
+                out$id <- d$id
+            }
             out
         
     } else {
@@ -199,6 +202,9 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
                                   w0 = w0,
                                   display_progress = display_progress)
         out$R <- as.numeric(out$R)
+        if(!is.null(d$id)) {
+            out$id <- d$id
+        }
         out
     }
 }
