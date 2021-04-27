@@ -91,7 +91,7 @@ alpha-wealth that is allocated to testing the true null hypotheses." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.99.0</span>
       </span>
     </div>
 
@@ -294,56 +294,56 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>SAFFRON</span><span class='op'>(</span><span class='va'>sample.df</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.005468627 1
-#&gt; 2  6.7430e-02 0.010937254 0
-#&gt; 3  1.5140e-02 0.010937254 0
-#&gt; 4  8.1740e-02 0.010937254 0
-#&gt; 5  1.7100e-03 0.010937254 1
-#&gt; 6  3.6000e-05 0.021874508 1
-#&gt; 7  7.9149e-01 0.032811762 0
-#&gt; 8  2.7201e-01 0.010823845 0
-#&gt; 9  2.8295e-01 0.010823845 0
-#&gt; 10 7.5900e-08 0.010823845 1
-#&gt; 11 6.9274e-01 0.021761099 0
-#&gt; 12 3.0443e-01 0.009265591 0
-#&gt; 13 1.3600e-03 0.009265591 1
-#&gt; 14 7.2342e-01 0.020202846 0
-#&gt; 15 5.4757e-01 0.009064367 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval      alphai R     id
+#&gt; 1  2.9000e-08 0.005468627 1 A15432
+#&gt; 2  6.7430e-02 0.010937254 0 B90969
+#&gt; 3  1.5140e-02 0.010937254 0 C18705
+#&gt; 4  8.1740e-02 0.010937254 0 B49731
+#&gt; 5  1.7100e-03 0.010937254 1 E99902
+#&gt; 6  3.6000e-05 0.021874508 1 C38292
+#&gt; 7  7.9149e-01 0.032811762 0 A30619
+#&gt; 8  2.7201e-01 0.010823845 0 D46627
+#&gt; 9  2.8295e-01 0.010823845 0 E29198
+#&gt; 10 7.5900e-08 0.010823845 1 A41418
+#&gt; 11 6.9274e-01 0.021761099 0 D51456
+#&gt; 12 3.0443e-01 0.009265591 0 C88669
+#&gt; 13 1.3600e-03 0.009265591 1 E03673
+#&gt; 14 7.2342e-01 0.020202846 0 A63155
+#&gt; 15 5.4757e-01 0.009064367 0 B66033</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>SAFFRON</span><span class='op'>(</span><span class='va'>sample.df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.005468627 1
-#&gt; 2  6.7430e-02 0.010937254 0
-#&gt; 3  1.5140e-02 0.010937254 0
-#&gt; 4  8.1740e-02 0.010937254 0
-#&gt; 5  1.7100e-03 0.010937254 1
-#&gt; 6  2.7201e-01 0.021874508 0
-#&gt; 7  3.6000e-05 0.021874508 1
-#&gt; 8  7.9149e-01 0.032811762 0
-#&gt; 9  7.5900e-08 0.010823845 1
-#&gt; 10 2.8295e-01 0.021761099 0
-#&gt; 11 6.9274e-01 0.021761099 0
-#&gt; 12 7.2342e-01 0.009265591 0
-#&gt; 13 3.0443e-01 0.005456418 0
-#&gt; 14 5.4757e-01 0.005456418 0
-#&gt; 15 1.3600e-03 0.003688669 1</div><div class='input'>
+</div><div class='output co'>#&gt;          pval      alphai R     id
+#&gt; 1  2.9000e-08 0.005468627 1 A15432
+#&gt; 2  6.7430e-02 0.010937254 0 B90969
+#&gt; 3  1.5140e-02 0.010937254 0 C18705
+#&gt; 4  8.1740e-02 0.010937254 0 B49731
+#&gt; 5  1.7100e-03 0.010937254 1 E99902
+#&gt; 6  2.7201e-01 0.021874508 0 D46627
+#&gt; 7  3.6000e-05 0.021874508 1 C38292
+#&gt; 8  7.9149e-01 0.032811762 0 A30619
+#&gt; 9  7.5900e-08 0.010823845 1 A41418
+#&gt; 10 2.8295e-01 0.021761099 0 E29198
+#&gt; 11 6.9274e-01 0.021761099 0 D51456
+#&gt; 12 7.2342e-01 0.009265591 0 A63155
+#&gt; 13 3.0443e-01 0.005456418 0 C88669
+#&gt; 14 5.4757e-01 0.005456418 0 B66033
+#&gt; 15 1.3600e-03 0.003688669 1 E03673</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>SAFFRON</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span>, w0<span class='op'>=</span><span class='fl'>0.025</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.005468627 1
-#&gt; 2  6.7430e-02 0.021874508 0
-#&gt; 3  1.5140e-02 0.021874508 1
-#&gt; 4  8.1740e-02 0.043749017 0
-#&gt; 5  1.7100e-03 0.043749017 1
-#&gt; 6  2.7201e-01 0.065623525 0
-#&gt; 7  3.6000e-05 0.065623525 1
-#&gt; 8  7.9149e-01 0.087498033 0
-#&gt; 9  7.5900e-08 0.028863587 1
-#&gt; 10 2.8295e-01 0.050738095 0
-#&gt; 11 6.9274e-01 0.050738095 0
-#&gt; 12 7.2342e-01 0.022302945 0
-#&gt; 13 3.0443e-01 0.013293195 0
-#&gt; 14 5.4757e-01 0.013293195 0
-#&gt; 15 1.3600e-03 0.009042997 1</div><div class='input'>
+</div><div class='output co'>#&gt;          pval      alphai R     id
+#&gt; 1  2.9000e-08 0.005468627 1 A15432
+#&gt; 2  6.7430e-02 0.021874508 0 B90969
+#&gt; 3  1.5140e-02 0.021874508 1 C18705
+#&gt; 4  8.1740e-02 0.043749017 0 B49731
+#&gt; 5  1.7100e-03 0.043749017 1 E99902
+#&gt; 6  2.7201e-01 0.065623525 0 D46627
+#&gt; 7  3.6000e-05 0.065623525 1 C38292
+#&gt; 8  7.9149e-01 0.087498033 0 A30619
+#&gt; 9  7.5900e-08 0.028863587 1 A41418
+#&gt; 10 2.8295e-01 0.050738095 0 E29198
+#&gt; 11 6.9274e-01 0.050738095 0 D51456
+#&gt; 12 7.2342e-01 0.022302945 0 A63155
+#&gt; 13 3.0443e-01 0.013293195 0 C88669
+#&gt; 14 5.4757e-01 0.013293195 0 B66033
+#&gt; 15 1.3600e-03 0.009042997 1 E03673</div><div class='input'>
 <span class='fu'>SAFFRON</span><span class='op'>(</span><span class='va'>sample.df</span>, discard<span class='op'>=</span><span class='cn'>TRUE</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;          pval      alphai R
 #&gt; 1  2.9000e-08 0.002734314 1
@@ -373,7 +373,7 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 
       <footer>
       <div class="copyright">
-  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Adel Javanmard, Andrea Montanari, Jinjin Tian, Tijana Zrnic, Natasha A. Karp.</p>
+  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">

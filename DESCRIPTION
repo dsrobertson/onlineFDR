@@ -1,15 +1,15 @@
 Package: onlineFDR
-Version: 1.9.2
-Date: 2021-02-05
+Version: 1.99.0
+Date: 2021-04-27
 Title: Online error control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),
              person("Lathan", "Liou", role = "aut"),
              person("Aaditya", "Ramdas", role = "aut"),
-             person("Adel", "Javanmard", role = "aut"),
-             person("Andrea", "Montanari", role = "aut"),
-             person("Jinjin", "Tian", role = "aut"),
-             person("Tijana", "Zrnic", role = "aut"),
+             person("Adel", "Javanmard", role = "ctb"),
+             person("Andrea", "Montanari", role = "ctb"),
+             person("Jinjin", "Tian", role = "ctb"),
+             person("Tijana", "Zrnic", role = "ctb"),
              person(c("Natasha", "A."), "Karp", role = "aut"))
 Description: This package allows users to control the false discovery rate (FDR)
   or familywise error rate (FWER) for online hypothesis testing, where

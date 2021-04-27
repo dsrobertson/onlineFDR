@@ -1,6 +1,19 @@
 # A NEWS File to document package updates
 
 
+CHANGES IN VERSION 2.0.0
+-----------------------
+MODIFICATIONS:
+
+    * added Rcpp code for online testing algorithms
+    * added online batch algorithms of Zrnic et al. [2020]
+    * added Storey-BH algorithm
+    * added setBound function
+    * updated vignette and pkgdown site
+    * updated unit tests
+    * updated references
+
+
 CHANGES IN VERSION 1.8.0
 -----------------------
 MODIFICATIONS:

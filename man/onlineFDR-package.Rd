@@ -17,8 +17,8 @@ of hypotheses to be tested are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 1.9.2\cr
-Date: \tab 2021-02-05\cr
+Version: \tab 1.99.0\cr
+Date: \tab 2021-04-27\cr
 License: \tab GPL-3 \cr
 }
 

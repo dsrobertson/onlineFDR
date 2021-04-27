@@ -91,7 +91,7 @@ SAFFRON)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.99.0</span>
       </span>
     </div>
 
@@ -290,22 +290,22 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df1</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Fully sequential</span>
-</div><div class='output co'>#&gt;          pval      alphai R
-#&gt; 1  2.9000e-08 0.002734314 1
-#&gt; 2  6.7430e-02 0.005468627 0
-#&gt; 3  1.5140e-02 0.005468627 0
-#&gt; 4  8.1740e-02 0.005468627 0
-#&gt; 5  1.7100e-03 0.005468627 1
-#&gt; 6  3.6000e-05 0.010937254 1
-#&gt; 7  7.9149e-01 0.016405881 0
-#&gt; 8  2.7201e-01 0.016405881 0
-#&gt; 9  2.8295e-01 0.005411923 0
-#&gt; 10 7.5900e-08 0.002828822 1
-#&gt; 11 6.9274e-01 0.008297449 0
-#&gt; 12 3.0443e-01 0.008297449 0
-#&gt; 13 1.3600e-03 0.003589243 1
-#&gt; 14 7.2342e-01 0.009057870 0
-#&gt; 15 5.4757e-01 0.009057870 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval      alphai R     id
+#&gt; 1  2.9000e-08 0.002734314 1 A15432
+#&gt; 2  6.7430e-02 0.005468627 0 B90969
+#&gt; 3  1.5140e-02 0.005468627 0 C18705
+#&gt; 4  8.1740e-02 0.005468627 0 B49731
+#&gt; 5  1.7100e-03 0.005468627 1 E99902
+#&gt; 6  3.6000e-05 0.010937254 1 C38292
+#&gt; 7  7.9149e-01 0.016405881 0 A30619
+#&gt; 8  2.7201e-01 0.016405881 0 D46627
+#&gt; 9  2.8295e-01 0.005411923 0 E29198
+#&gt; 10 7.5900e-08 0.002828822 1 A41418
+#&gt; 11 6.9274e-01 0.008297449 0 D51456
+#&gt; 12 3.0443e-01 0.008297449 0 C88669
+#&gt; 13 1.3600e-03 0.003589243 1 E03673
+#&gt; 14 7.2342e-01 0.009057870 0 A63155
+#&gt; 15 5.4757e-01 0.009057870 0 B66033</div><div class='input'>
 
 <span class='va'>sample.df2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
 id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>'A15432'</span>, <span class='st'>'B90969'</span>, <span class='st'>'C18705'</span>, <span class='st'>'B49731'</span>, <span class='st'>'E99902'</span>,
@@ -317,22 +317,22 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span>
 
 <span class='fu'>ADDIS</span><span class='op'>(</span><span class='va'>sample.df2</span>, async <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># Asynchronous</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0027343135 1
-#&gt; 2  6.7430e-02 0.0009019871 0
-#&gt; 3  1.5140e-02 0.0018039742 0
-#&gt; 4  8.1740e-02 0.0018039742 0
-#&gt; 5  1.7100e-03 0.0018039742 1
-#&gt; 6  3.6000e-05 0.0018039742 1
-#&gt; 7  7.9149e-01 0.0036079483 0
-#&gt; 8  2.7201e-01 0.0042030379 0
-#&gt; 9  2.8295e-01 0.0042030379 0
-#&gt; 10 7.5900e-08 0.0023022960 1
-#&gt; 11 6.9274e-01 0.0015012335 0
-#&gt; 12 3.0443e-01 0.0018122878 0
-#&gt; 13 1.3600e-03 0.0018122878 1
-#&gt; 14 7.2342e-01 0.0013189588 0
-#&gt; 15 5.4757e-01 0.0015620232 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R     id
+#&gt; 1  2.9000e-08 0.0027343135 1 A15432
+#&gt; 2  6.7430e-02 0.0009019871 0 B90969
+#&gt; 3  1.5140e-02 0.0018039742 0 C18705
+#&gt; 4  8.1740e-02 0.0018039742 0 B49731
+#&gt; 5  1.7100e-03 0.0018039742 1 E99902
+#&gt; 6  3.6000e-05 0.0018039742 1 C38292
+#&gt; 7  7.9149e-01 0.0036079483 0 A30619
+#&gt; 8  2.7201e-01 0.0042030379 0 D46627
+#&gt; 9  2.8295e-01 0.0042030379 0 E29198
+#&gt; 10 7.5900e-08 0.0023022960 1 A41418
+#&gt; 11 6.9274e-01 0.0015012335 0 D51456
+#&gt; 12 3.0443e-01 0.0018122878 0 C88669
+#&gt; 13 1.3600e-03 0.0018122878 1 E03673
+#&gt; 14 7.2342e-01 0.0013189588 0 A63155
+#&gt; 15 5.4757e-01 0.0015620232 0 B66033</div><div class='input'>
 
 </div></pre>
   </div>
@@ -346,7 +346,7 @@ decision.times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.
 
       <footer>
       <div class="copyright">
-  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Adel Javanmard, Andrea Montanari, Jinjin Tian, Tijana Zrnic, Natasha A. Karp.</p>
+  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">

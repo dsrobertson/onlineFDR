@@ -88,7 +88,7 @@ and Montanari (2018) and Ramdas et al. (2017)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.9.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.99.0</span>
       </span>
     </div>
 
@@ -306,73 +306,73 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
         <span class='fl'>0.69274</span>, <span class='fl'>0.30443</span>, <span class='fl'>0.00136</span>, <span class='fl'>0.72342</span>, <span class='fl'>0.54757</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, random<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0002675839 1
-#&gt; 2  6.7430e-02 0.0024664457 0
-#&gt; 3  1.5140e-02 0.0005732818 0
-#&gt; 4  8.1740e-02 0.0004872805 0
-#&gt; 5  1.7100e-03 0.0004059066 0
-#&gt; 6  3.6000e-05 0.0003447286 1
-#&gt; 7  7.9149e-01 0.0029745013 0
-#&gt; 8  2.7201e-01 0.0008450114 0
-#&gt; 9  2.8295e-01 0.0007305648 0
-#&gt; 10 7.5900e-08 0.0006243143 1
-#&gt; 11 6.9274e-01 0.0032185913 0
-#&gt; 12 3.0443e-01 0.0010617227 0
-#&gt; 13 1.3600e-03 0.0009256825 0
-#&gt; 14 7.2342e-01 0.0008019657 0
-#&gt; 15 5.4757e-01 0.0007059610 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R     id
+#&gt; 1  2.9000e-08 0.0002675839 1 A15432
+#&gt; 2  6.7430e-02 0.0024664457 0 B90969
+#&gt; 3  1.5140e-02 0.0005732818 0 C18705
+#&gt; 4  8.1740e-02 0.0004872805 0 B49731
+#&gt; 5  1.7100e-03 0.0004059066 0 E99902
+#&gt; 6  3.6000e-05 0.0003447286 1 C38292
+#&gt; 7  7.9149e-01 0.0029745013 0 A30619
+#&gt; 8  2.7201e-01 0.0008450114 0 D46627
+#&gt; 9  2.8295e-01 0.0007305648 0 E29198
+#&gt; 10 7.5900e-08 0.0006243143 1 A41418
+#&gt; 11 6.9274e-01 0.0032185913 0 D51456
+#&gt; 12 3.0443e-01 0.0010617227 0 C88669
+#&gt; 13 1.3600e-03 0.0009256825 0 E03673
+#&gt; 14 7.2342e-01 0.0008019657 0 A63155
+#&gt; 15 5.4757e-01 0.0007059610 0 B66033</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, version<span class='op'>=</span><span class='st'>'dep'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 2.091542e-03 1
-#&gt; 2  6.7430e-02 1.002025e-02 0
-#&gt; 3  1.5140e-02 1.677763e-03 0
-#&gt; 4  8.1740e-02 6.262659e-04 0
-#&gt; 5  1.7100e-03 3.201787e-04 0
-#&gt; 6  2.7201e-01 1.933725e-04 0
-#&gt; 7  3.6000e-05 1.293954e-04 1
-#&gt; 8  7.9149e-01 1.548152e-04 0
-#&gt; 9  7.5900e-08 1.166482e-04 1
-#&gt; 10 2.8295e-01 1.422614e-04 0
-#&gt; 11 6.9274e-01 1.145119e-04 0
-#&gt; 12 7.2342e-01 9.432408e-05 0
-#&gt; 13 3.0443e-01 7.916885e-05 0
-#&gt; 14 5.4757e-01 6.749313e-05 0
-#&gt; 15 1.3600e-03 5.830055e-05 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R     id
+#&gt; 1  2.9000e-08 2.091542e-03 1 A15432
+#&gt; 2  6.7430e-02 1.002025e-02 0 B90969
+#&gt; 3  1.5140e-02 1.677763e-03 0 C18705
+#&gt; 4  8.1740e-02 6.262659e-04 0 B49731
+#&gt; 5  1.7100e-03 3.201787e-04 0 E99902
+#&gt; 6  2.7201e-01 1.933725e-04 0 D46627
+#&gt; 7  3.6000e-05 1.293954e-04 1 C38292
+#&gt; 8  7.9149e-01 1.548152e-04 0 A30619
+#&gt; 9  7.5900e-08 1.166482e-04 1 A41418
+#&gt; 10 2.8295e-01 1.422614e-04 0 E29198
+#&gt; 11 6.9274e-01 1.145119e-04 0 D51456
+#&gt; 12 7.2342e-01 9.432408e-05 0 A63155
+#&gt; 13 3.0443e-01 7.916885e-05 0 C88669
+#&gt; 14 5.4757e-01 6.749313e-05 0 B66033
+#&gt; 15 1.3600e-03 5.830055e-05 0 E03673</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, version<span class='op'>=</span><span class='st'>'discard'</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0002675839 1
-#&gt; 2  6.7430e-02 0.0011285264 0
-#&gt; 3  1.5140e-02 0.0002823266 0
-#&gt; 4  8.1740e-02 0.0002394680 0
-#&gt; 5  1.7100e-03 0.0001998165 0
-#&gt; 6  2.7201e-01 0.0001700069 0
-#&gt; 7  3.6000e-05 0.0001475152 1
-#&gt; 8  7.9149e-01 0.0014680343 0
-#&gt; 9  7.5900e-08 0.0014680343 1
-#&gt; 10 2.8295e-01 0.0017451837 0
-#&gt; 11 6.9274e-01 0.0006438778 0
-#&gt; 12 7.2342e-01 0.0006438778 0
-#&gt; 13 3.0443e-01 0.0006438778 0
-#&gt; 14 5.4757e-01 0.0005497556 0
-#&gt; 15 1.3600e-03 0.0005497556 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R     id
+#&gt; 1  2.9000e-08 0.0002675839 1 A15432
+#&gt; 2  6.7430e-02 0.0011285264 0 B90969
+#&gt; 3  1.5140e-02 0.0002823266 0 C18705
+#&gt; 4  8.1740e-02 0.0002394680 0 B49731
+#&gt; 5  1.7100e-03 0.0001998165 0 E99902
+#&gt; 6  2.7201e-01 0.0001700069 0 D46627
+#&gt; 7  3.6000e-05 0.0001475152 1 C38292
+#&gt; 8  7.9149e-01 0.0014680343 0 A30619
+#&gt; 9  7.5900e-08 0.0014680343 1 A41418
+#&gt; 10 2.8295e-01 0.0017451837 0 E29198
+#&gt; 11 6.9274e-01 0.0006438778 0 D51456
+#&gt; 12 7.2342e-01 0.0006438778 0 A63155
+#&gt; 13 3.0443e-01 0.0006438778 0 C88669
+#&gt; 14 5.4757e-01 0.0005497556 0 B66033
+#&gt; 15 1.3600e-03 0.0005497556 0 E03673</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>; <span class='fu'>LORD</span><span class='op'>(</span><span class='va'>sample.df</span>, alpha<span class='op'>=</span><span class='fl'>0.1</span>, w0<span class='op'>=</span><span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          pval       alphai R
-#&gt; 1  2.9000e-08 0.0026758385 1
-#&gt; 2  6.7430e-02 0.0032577488 0
-#&gt; 3  1.5140e-02 0.0010775352 0
-#&gt; 4  8.1740e-02 0.0009078052 0
-#&gt; 5  1.7100e-03 0.0007616238 0
-#&gt; 6  2.7201e-01 0.0006517385 0
-#&gt; 7  3.6000e-05 0.0005682672 1
-#&gt; 8  7.9149e-01 0.0058549106 0
-#&gt; 9  7.5900e-08 0.0016151293 1
-#&gt; 10 2.8295e-01 0.0067518870 0
-#&gt; 11 6.9274e-01 0.0023619734 0
-#&gt; 12 7.2342e-01 0.0020342733 0
-#&gt; 13 3.0443e-01 0.0017477495 0
-#&gt; 14 5.4757e-01 0.0015277362 0
-#&gt; 15 1.3600e-03 0.0013569121 0</div><div class='input'>
+</div><div class='output co'>#&gt;          pval       alphai R     id
+#&gt; 1  2.9000e-08 0.0026758385 1 A15432
+#&gt; 2  6.7430e-02 0.0032577488 0 B90969
+#&gt; 3  1.5140e-02 0.0010775352 0 C18705
+#&gt; 4  8.1740e-02 0.0009078052 0 B49731
+#&gt; 5  1.7100e-03 0.0007616238 0 E99902
+#&gt; 6  2.7201e-01 0.0006517385 0 D46627
+#&gt; 7  3.6000e-05 0.0005682672 1 C38292
+#&gt; 8  7.9149e-01 0.0058549106 0 A30619
+#&gt; 9  7.5900e-08 0.0016151293 1 A41418
+#&gt; 10 2.8295e-01 0.0067518870 0 E29198
+#&gt; 11 6.9274e-01 0.0023619734 0 D51456
+#&gt; 12 7.2342e-01 0.0020342733 0 A63155
+#&gt; 13 3.0443e-01 0.0017477495 0 C88669
+#&gt; 14 5.4757e-01 0.0015277362 0 B66033
+#&gt; 15 1.3600e-03 0.0013569121 0 E03673</div><div class='input'>
 
 </div></pre>
   </div>
@@ -386,7 +386,7 @@ pval <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/
 
       <footer>
       <div class="copyright">
-  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Adel Javanmard, Andrea Montanari, Jinjin Tian, Tijana Zrnic, Natasha A. Karp.</p>
+  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">

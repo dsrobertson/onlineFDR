@@ -159,7 +159,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = 
         hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
         hallucinated_R <- pmin(1, cummin(nt[i]/jvec * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
         
-        aug_rej[j] <- sum(hallucinated_R, na.rm = T)
+        aug_rej[j] <- sum(hallucinated_R, na.rm = TRUE)
       }
       
       Rplus[i] = max(aug_rej)
@@ -223,7 +223,7 @@ BatchStBH <- function(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = 
         hallucinated_pi0 <- (sum(hallucinated_pval > lambda) + 1)/((1 - lambda)*n)
         hallucinated_R <- pmin(1, cummin(nt[i]/jvec * hallucinated_pi0*hallucinated_pval[oh]))[roh] <= alphai[i]
         
-        aug_rej[j] <- sum(hallucinated_R, na.rm = T)
+        aug_rej[j] <- sum(hallucinated_R, na.rm = TRUE)
       }
       
       Rplus[i] = max(aug_rej)
