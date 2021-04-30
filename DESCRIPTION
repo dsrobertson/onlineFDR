@@ -1,6 +1,6 @@
 Package: onlineFDR
-Version: 1.99.0
-Date: 2021-04-27
+Version: 1.99.1
+Date: 2021-04-30
 Title: Online error control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.99.1</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Managing multiple testing challenges with sequential inference using the onlineFDR package</h1>
                         <h4 class="author">David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp</h4>
             
-            <h4 class="date">2021-02-05</h4>
+            <h4 class="date">2021-04-30</h4>
       
       
       <div class="hidden name"><code>onlineFDR.Rmd</code></div>
@@ -109,11 +109,11 @@
 <div id="what-is-onlinefdr" class="section level2">
 <h2 class="hasAnchor">
 <a href="#what-is-onlinefdr" class="anchor"></a>What is <code>onlineFDR</code>?</h2>
-<p>Multiple hypothesis testing is a fundamental problem in statistical inference. The failure to manage the multiple testing problem has been highlighted as one of the elements contributing to the replicability crisis in science (Ioannidis 2015). Methodologies have been developed for a family of hypotheses to adjust the significance levels to manage the multiple testing situation by controlling error metrics such as the familywise error rate (FWER) or the false discovery rate (FDR).</p>
-<p>Frequently, modern data analysis problems have a further complexity that the hypotheses arrive sequentially in a stream.</p>
+<p>Multiple hypothesis testing is a fundamental problem in statistical inference, and the failure to manage multiple testing problems has been highlighted as one of the elements contributing to the replicability crisis in science (Ioannidis 2015). Methodologies have been developed to manage the multiple testing situation by adjusting the significance levels for a family of hypotheses, in order to control error metrics such as the familywise error rate (FWER) or the false discovery rate (FDR).</p>
+<p>Frequently, modern data analysis problems have a further complexity in that the hypotheses arrive sequentially in a stream.</p>
 <p><img src="stream-diagram.png"></p>
-<p>This introduces the challenge that at each step the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but does have knowledge of the historic decisions to date.</p>
-<p>The <code>onlineFDR</code> package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called “alpha wealth” in which experiments cost some amount of error from your “budget” but a discovery earns some of the budget back.</p>
+<p>This introduces the challenge that at each step, the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but with the knowledge of the historic decisions to date.</p>
+<p>The <code>onlineFDR</code> package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high-level, these algorithms rely on a concept called “alpha wealth” in which experiments cost some amount of error from your “budget” but a discovery earns some of the budget back.</p>
 <p><img src="alpha-wealth.gif"></p>
 <p>This vignette explains the two main uses of the package and demonstrates their typical workflows.</p>
 <hr>
@@ -130,23 +130,23 @@
 <ul>
 <li><strong>What is the difference between FDR and FWER?</strong></li>
 </ul>
-<p>FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.</p>
+<p>The FDR is the expected proportion of false rejections out of all rejections. The FWER is the probability of making any false rejections at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.</p>
 <ul>
 <li><strong>What do the different temporal structures mean?</strong></li>
 </ul>
-<p>Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other.</p>
+<p>Offline refers to the case when all the hypotheses are tested simultaneously by an algorithm. Batch refers to the case when the hypotheses are tested as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are tested as they arrive sequentially, one after the other.</p>
 <ul>
 <li><strong>What do the different data dependencies mean?</strong></li>
 </ul>
-<p>‘Independent’ means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being ‘positively dependent’ is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, ‘arbitrary dependence’ includes the situation where some of your p-values just happen to be correlated with p-values from a long time ago.</p>
+<p>‘Independent’ means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being ‘positively dependent’ is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, ‘arbitrary dependence’ includes the situation where some of your p-values happen to be correlated with p-values from a long time ago.</p>
 <ul>
 <li><strong>What are the differences between some of the algorithms such as <code>LOND</code>, <code>LORD</code>, <code>SAFFRON</code>, and <code>ADDIS</code>?</strong></li>
 </ul>
-<p><code>SAFFRON</code> and <code>ADDIS</code> were developed after <code>LOND</code> and <code>LORD</code> so they have some improvements over the latter two algorithms.</p>
+<p><code>SAFFRON</code> and <code>ADDIS</code> were developed after <code>LOND</code> and <code>LORD</code>, so they have some improvements.</p>
 <p>That being said, <code>LOND</code> is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, <code>LOND</code> is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.</p>
 <p><code>LORD</code> improves upon <code>LOND</code> by taking advantage of “alpha investing” where it can regain some of its alpha-wealth when it makes a discovery/rejection. The adjusted significance levels depend not only on how many discoveries have been made, but also the timing of these discoveries. However, one drawback is that LORD does not take advantage of the strength of the signals present in the data (i.e. the size of the p-values).</p>
 <p><code>SAFFRON</code> improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are <em>a priori</em> more likely to be truly null hypotheses), <code>SAFFRON</code> preserves alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, <code>SAFFRON</code> will often be more powerful than <code>LORD</code>.</p>
-<p><code>ADDIS</code> is an even further improvement upon <code>SAFFRON</code> because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power.</p>
+<p><code>ADDIS</code> is a further improvement upon <code>SAFFRON</code> because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power.</p>
 </div>
 </div>
 <div id="quick-start" class="section level2">
@@ -166,7 +166,7 @@
 <div id="what-happens-to-the-input-data" class="section level4">
 <h4 class="hasAnchor">
 <a href="#what-happens-to-the-input-data" class="anchor"></a>What happens to the input data</h4>
-<p>If you’re using <code><a href="../reference/LOND.html">LOND()</a></code>, <code><a href="../reference/LORD.html">LORD()</a></code>, or <code><a href="../reference/SAFFRON.html">SAFFRON()</a></code>, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have an <em>a priori</em> belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected initially in the stream. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the <code>set.seed</code> function) before calling the wrapper function.</p>
+<p>If you’re using <code><a href="../reference/LOND.html">LOND()</a></code>, <code><a href="../reference/LORD.html">LORD()</a></code>, <code><a href="../reference/SAFFRON.html">SAFFRON()</a></code> or <code><a href="../reference/ADDIS.html">ADDIS()</a></code>, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have <em>a priori</em> knowledge that hypotheses should be ordered in such way such that the ones with smaller p-values are more likely to appear first. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the <code>set.seed</code> function) before calling the wrapper function.</p>
 <p>Otherwise, the other algorithms will take in the p-values in the original order of the data.</p>
 </div>
 <div id="understanding-the-output" class="section level4">
@@ -180,21 +180,21 @@
 <div id="using-onlinefdr-exploratively" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-onlinefdr-exploratively" class="anchor"></a>Using <code>onlineFDR</code> Exploratively</h3>
-<p>This package (and the corresponding <a href="https://mrc-bsu.shinyapps.io/onlineFDRExplore/">Shiny app</a>) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in <code>onlineFDR</code> to explore how you could control the FDR and how the different algorithms have different levels of power.</p>
-<p>First, we initialize a toy dataset with three columns: an identifier (‘id’), date (‘date’) and p-value (‘pval’). Note that date should be in the format “YYYY-MM-DD”.</p>
+<p>This package (and the corresponding <a href="http://shiny.mrc-bsu.cam.ac.uk/apps/onlineFDRexplore">Shiny app</a>) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in <code>onlineFDR</code> to explore how you could control the FDR and how the different algorithms have different levels of power.</p>
+<p>First, we initialize a toy dataset with three columns: an identifier (‘id’), date (‘date’) and p-value (‘pval’). Note that the date should be in the format “YYYY-MM-DD”.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
-        <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
-        <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
-    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
-                    <span class="st">"2016-11-12"</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-    pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
-            <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
-            <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
+         <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
+         <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
+  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
+                   <span class="st">"2016-11-12"</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
+           <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
+           <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Next, we call our algorithm of interest. Note that we also set a seed using the <code>set.seed</code> function in order for the results to be reproducible.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dsrobertson.github.io/onlineFDR/index.html">onlineFDR</a></span><span class="op">)</span>
@@ -222,60 +222,56 @@
 <span class="co">#&gt; 15 4.8700e-04 0.0005377472 1</span></code></pre></div>
 <p>To check how many hypotheses we’ve rejected, we can do:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">LOND_results</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">R</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">LOND_results</span><span class="op">$</span><span class="va">R</span><span class="op">)</span>
 <span class="co">#&gt; [1] 4</span></code></pre></div>
-<p>To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds like this:</p>
+<p>To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">LORD_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>
 
-<span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">LOND_results</span>, <span class="va">LORD_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span> <span class="op">%&gt;%</span>
-      <span class="fu">mutate</span><span class="op">(</span>index <span class="op">=</span> <span class="fu">row_number</span><span class="op">(</span><span class="op">)</span>,
-             LOND <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">alphai</span><span class="op">)</span>,
-             LORD <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">LORD_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>,
-             Bonferroni <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">/</span><span class="va">index</span><span class="op">)</span>,
-             Unadjusted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-      <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">LOND</span>, <span class="va">LORD</span>, <span class="va">Bonferroni</span>, <span class="va">Unadjusted</span><span class="op">)</span>,
-                   names_to <span class="op">=</span> <span class="st">"adjustment"</span>,
-                   values_to <span class="op">=</span> <span class="st">"alpha"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">index</span>, y <span class="op">=</span> <span class="va">alpha</span>, col <span class="op">=</span> <span class="va">adjustment</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Index"</span>,
-       y <span class="op">=</span> <span class="st">"logalpha_i"</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">LOND_results</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">9.1</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">LOND_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">8.5</span>, <span class="op">-</span><span class="fl">2.5</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'l'</span>, col <span class="op">=</span> <span class="st">"green"</span>,
+     xlab <span class="op">=</span> <span class="st">"Index"</span>, ylab <span class="op">=</span> <span class="st">"log(alphai)"</span>, panel.first <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/grid.html">grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># LOND</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">LORD_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="co"># LORD</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">/</span><span class="va">x</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="co"># Bonferroni</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"purple"</span><span class="op">)</span> <span class="co"># Unadjusted</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"right"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Unadjusted"</span>, <span class="st">"Bonferroni"</span>, <span class="st">"LORD"</span>, <span class="st">"LOND"</span><span class="op">)</span>,
+       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"purple"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span><span class="op">)</span>,
+       inset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.35</span>,<span class="fl">0</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="onlineFDR_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>Note that both LOND and LORD result in much lower significance thresholds (logalpha_i) than an offline Bonferroni adjustment. When log_alphai jumps, that indicates that the algorithm is recovering some of it’s “alpha wealth” when it makes a discovery. You can see how if the algorithm does not discover anything over time, it’s alpha wealth decreases (the line will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in “alpha wealth”) compared to LOND.</p>
+<p>Note that both LOND and LORD result in much lower significance thresholds (alpha_i) than the offline Bonferroni adjustment. When alphai jumps, that indicates that the algorithm is recovering some of its “alpha wealth” when it makes a discovery. You can see how if the algorithm does not discover anything over time, its alpha wealth decreases (the akphai will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in “alpha wealth”) compared to LOND.</p>
 </div>
 <div id="using-onlinefdr-sequentially" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-onlinefdr-sequentially" class="anchor"></a>Using <code>onlineFDR</code> Sequentially</h3>
-<p>This package can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), <em>the same seed should be used for all analyses</em>. Ideally, you will have selected your algorithm <em>a priori</em> based on your needs (click <a href="#which-function-do-i-use-">here</a>. You can pass your growing dataset to the same algorithm.</p>
+<p>This package can be used in a sequential manner as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), <em>the same seed should be used for all analyses</em>. Ideally, you will have selected your algorithm <em>a priori</em> based on your needs (click <a href="#which-function-do-i-use-">here</a>. You can pass your growing dataset to the same algorithm.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span><span class="op">)</span>,
-    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-    pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="co"># Initial experimental data</span>
+<span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span><span class="op">)</span>,
+  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">LOND_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#after you've completed more experiments</span>
+<code class="sourceCode R"><span class="co"># After you've completed more experiments</span>
 <span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
-        <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
-        <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
-    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
-                    <span class="st">"2016-11-12"</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-    pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
-            <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
-            <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span>
+  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
+         <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
+         <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
+  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
+                   <span class="st">"2016-11-12"</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
+           <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
+           <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">LOND_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></code></pre></div>
@@ -290,35 +286,35 @@
 <p>If your p-values came from hypothesis tests that were performed in batches, you might consider using the batch algorithms: <code><a href="../reference/BatchPRDS.html">BatchPRDS()</a></code>, <code><a href="../reference/BatchBH.html">BatchBH()</a></code>, and <code><a href="../reference/BatchStBH.html">BatchStBH()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
-    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
-    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
-pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
-        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
-        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,
-batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
+         <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
+         <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
+  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
+           <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
+           <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,
+  batch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">batchprds_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BatchPRDS.html">BatchPRDS</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="setting-a-bound" class="section level4">
 <h4 class="hasAnchor">
 <a href="#setting-a-bound" class="anchor"></a>Setting a Bound</h4>
-<p>In the cases where you <strong>a priori</strong> expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for only LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the <code>betai</code> or <code>gammai</code> argument in your chosen algorithm.</p>
+<p>In the cases where you <strong>a priori</strong> expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the <code>betai</code> or <code>gammai</code> argument in your chosen algorithm.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
-        <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
-        <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
-    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
-                    <span class="st">"2016-11-12"</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-    pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
-            <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
-            <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span>
+  id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,
+         <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,
+         <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,
+  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2014-12-01"</span>,<span class="fl">3</span><span class="op">)</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2015-09-21"</span>,<span class="fl">5</span><span class="op">)</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,
+                   <span class="st">"2016-11-12"</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,
+           <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,
+           <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co">#</span>
+<span class="co"># Assuming a bound of 20 hypotheses</span>
 <span class="va">bound</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/setBound.html">setBound</a></span><span class="op">(</span><span class="st">"LOND"</span>, alpha <span class="op">=</span> <span class="fl">0.04</span>, <span class="fl">20</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>

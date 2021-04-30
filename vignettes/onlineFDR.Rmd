@@ -1,7 +1,7 @@
 ---
 title: "Managing multiple testing challenges with sequential inference using the onlineFDR package"
 author: "David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp"
-date: "2021-02-05"
+date: "2021-04-30"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -13,13 +13,9 @@ output:
 ---
 
 ```{r setup, include = FALSE}
-library(dplyr)
-library(ggplot2)
-library(tidyr)
-
 knitr::opts_chunk$set(
-    collapse = TRUE,
-    comment = "#>"
+  collapse = TRUE,
+  comment = "#>"
 )
 
 knitr::include_graphics("stream-diagram.png")
@@ -29,26 +25,26 @@ knitr::include_graphics("stream-diagram.png")
 
 ## What is `onlineFDR`?
 
-Multiple hypothesis testing is a fundamental problem in statistical inference.
-The failure to manage the multiple testing problem has been highlighted as one
+Multiple hypothesis testing is a fundamental problem in statistical inference,
+and the failure to manage multiple testing problems has been highlighted as one
 of the elements contributing to the replicability crisis in science (Ioannidis
-2015). Methodologies have been developed for a family of hypotheses to adjust
-the significance levels to manage the multiple testing situation by controlling
-error metrics such as the familywise error rate (FWER) or the false discovery
-rate (FDR).  
+2015). Methodologies have been developed to manage the multiple testing
+situation by adjusting the significance levels for a family of hypotheses, in
+order to control error metrics such as the familywise error rate (FWER)
+or the false discovery rate (FDR).  
 
-Frequently, modern data analysis problems have a further complexity that the
+Frequently, modern data analysis problems have a further complexity in that the
 hypotheses arrive sequentially in a stream. 
 
 ![](stream-diagram.png)
 
 This introduces the challenge that
-at each step the investigator must decide whether to reject the current null
+at each step, the investigator must decide whether to reject the current null
 hypothesis without having access to the future p-values or the total number of
-hypotheses to be tested, but does have knowledge of the historic decisions to
+hypotheses to be tested, but with the knowledge of the historic decisions to
 date. 
 
-The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control FDR in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
+The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
 
 ![](alpha-wealth.gif)
 
@@ -70,19 +66,19 @@ We also have a provided a non-exhaustive list of answers to some questions you m
 
 * **What is the difference between FDR and FWER?**
 
-FDR is the expected proportion of false rejections out of all rejections. FWER is the probability of making any Type I errors at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
+The FDR is the expected proportion of false rejections out of all rejections. The FWER is the probability of making any false rejections at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
 
 * **What do the different temporal structures mean?**
 
-Offline refers to the case when all the hypotheses are considered simultaneously by an algorithm. Batch refers to the case when the hypotheses are considered as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are considered as they arrive sequentially, one after the other. 
+Offline refers to the case when all the hypotheses are tested simultaneously by an algorithm. Batch refers to the case when the hypotheses are tested as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are tested as they arrive sequentially, one after the other. 
 
 * **What do the different data dependencies mean?**
 
-'Independent' means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values just happen to be correlated with p-values from a long time ago.
+'Independent' means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values happen to be correlated with p-values from a long time ago.
 
 * **What are the differences between some of the algorithms such as `LOND`, `LORD`, `SAFFRON`, and `ADDIS`?**
 
-`SAFFRON` and `ADDIS` were developed after `LOND` and `LORD` so they have some improvements over the latter two algorithms. 
+`SAFFRON` and `ADDIS` were developed after `LOND` and `LORD`, so they have some improvements. 
 
 That being said, `LOND` is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, `LOND` is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.
 
@@ -90,7 +86,7 @@ That being said, `LOND` is a fairly simple algorithm where the significance leve
 
 `SAFFRON` improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are *a priori* more likely to be truly null hypotheses), `SAFFRON` preserves alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, `SAFFRON` will often be more powerful than `LORD`. 
 
-`ADDIS` is an even further improvement upon `SAFFRON` because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power. 
+`ADDIS` is a further improvement upon `SAFFRON` because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power. 
 
 ## Quick Start
 
@@ -109,7 +105,7 @@ just the significant p-values).  An exception to this would be if you have
 implemented an orthogonal filter to reduce the dataset size, such as discussed in (Burgon *et al.*, 2010).
 
 #### What happens to the input data
-If you're using `LOND()`, `LORD()`, or `SAFFRON()`, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have an *a priori* belief that hypotheses should be ordered in such way such that the ones with smaller p-values are rejected initially in the stream. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the `set.seed` function) before calling the wrapper function.
+If you're using `LOND()`, `LORD()`, `SAFFRON()` or `ADDIS()`, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have *a priori* knowledge that hypotheses should be ordered in such way such that the ones with smaller p-values are more likely to appear first. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the `set.seed` function) before calling the wrapper function.
 
 Otherwise, the other algorithms will take in the p-values in the original order of the data. 
 
@@ -124,23 +120,23 @@ Also calculated is an indicator function of discoveries (`R`), where `R[i] = 1` 
 A dataframe is returned with the original data and the newly calculated `alphai` and `R`.
 
 ### Using `onlineFDR` Exploratively
-This package (and the corresponding [Shiny app](https://mrc-bsu.shinyapps.io/onlineFDRExplore/)) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in `onlineFDR` to explore how you could control the FDR and how the different algorithms have different levels of power. 
+This package (and the corresponding [Shiny app](http://shiny.mrc-bsu.cam.ac.uk/apps/onlineFDRexplore)) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in `onlineFDR` to explore how you could control the FDR and how the different algorithms have different levels of power. 
 
-First, we initialize a toy dataset with three columns: an identifier ('id'), date ('date') and p-value ('pval'). Note that date should be in the format "YYYY-MM-DD".
+First, we initialize a toy dataset with three columns: an identifier ('id'), date ('date') and p-value ('pval'). Note that the date should be in the format "YYYY-MM-DD".
 
 ```{r}
 sample.df <- data.frame(
-    id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
-        'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
-        'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-    date = as.Date(c(rep("2014-12-01",3),
-                    rep("2015-09-21",5),
-                    rep("2016-05-19",2),
-                    "2016-11-12",
-                    rep("2017-03-27",4))),
-    pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
-            3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
-            0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
+  id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+         'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+         'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+  date = as.Date(c(rep("2014-12-01",3),
+                   rep("2015-09-21",5),
+                   rep("2016-05-19",2),
+                   "2016-11-12",
+                   rep("2017-03-27",4))),
+  pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
+           3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+           0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
 ```
 
 Next, we call our algorithm of interest. Note that we also set a seed using the `set.seed` function in order for the results to be reproducible.
@@ -156,63 +152,61 @@ LOND_results
 
 To check how many hypotheses we've rejected, we can do:
 ```{r}
-LOND_results %>%
-  filter(R == 1) %>%
-  nrow()
+sum(LOND_results$R)
 ```
 
-To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds like this:
+To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds:
 ```{r}
 set.seed(1)
 LORD_results <- LORD(sample.df)
 
-plot <- cbind(LOND_results, LORD_results$alphai) %>%
-      mutate(index = row_number(),
-             LOND = log(alphai),
-             LORD = log(LORD_results$alphai),
-             Bonferroni = log(0.05/index),
-             Unadjusted = rep(log(0.05), nrow(.))) %>%
-      pivot_longer(cols = c(LOND, LORD, Bonferroni, Unadjusted),
-                   names_to = "adjustment",
-                   values_to = "alpha") %>%
-  ggplot(aes(x = index, y = alpha, col = adjustment)) + 
-    geom_line() + 
-    theme_bw() + 
-  labs(x = "Index",
-       y = "logalpha_i")
+x <- seq_len(nrow(LOND_results))
+par(mar=c(5.1, 4.1, 4.1, 9.1))
 
-print(plot)
+plot(x, log(LOND_results$alphai), ylim = c(-8.5, -2.5), type = 'l', col = "green",
+     xlab = "Index", ylab = "log(alphai)", panel.first = grid()) # LOND
+
+lines(x, log(LORD_results$alphai), col = "blue") # LORD
+lines(x, log(0.05/x), col = "red") # Bonferroni
+lines(x, rep(log(0.05),length(x)), col = "purple") # Unadjusted
+
+legend("right", legend = c("Unadjusted", "Bonferroni", "LORD", "LOND"),
+       col = c("purple", "red", "blue", "green"), lty = rep(1,4),
+       inset = c(-0.35,0), xpd = TRUE)
+
+
 ```
 
-Note that both LOND and LORD result in much lower significance thresholds (logalpha_i) than an offline Bonferroni adjustment. When log_alphai jumps, that indicates that the algorithm is recovering some of it's "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, it's alpha wealth decreases (the line will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in "alpha wealth") compared to LOND.
+Note that both LOND and LORD result in much lower significance thresholds (alpha_i) than the offline Bonferroni adjustment. When alphai jumps, that indicates that the algorithm is recovering some of its "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, its alpha wealth decreases (the akphai will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in "alpha wealth") compared to LOND.
 
 ### Using `onlineFDR` Sequentially
-This package can be used in sequentially as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
+This package can be used in a sequential manner as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
 
 ```{r}
+# Initial experimental data
 sample.df <- data.frame(
-    id = c('A15432', 'B90969', 'C18705'),
-    date = as.Date(c(rep("2014-12-01",3))),
-    pval = c(2.90e-14, 0.06743, 0.01514))
+  id = c('A15432', 'B90969', 'C18705'),
+  date = as.Date(c(rep("2014-12-01",3))),
+  pval = c(2.90e-14, 0.06743, 0.01514))
 
 set.seed(1)
 LOND_results <- LOND(sample.df)
 ```
 
 ```{r}
-#after you've completed more experiments
+# After you've completed more experiments
 sample.df <- data.frame(
-    id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
-        'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
-        'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-    date = as.Date(c(rep("2014-12-01",3),
-                    rep("2015-09-21",5),
-                    rep("2016-05-19",2),
-                    "2016-11-12",
-                    rep("2017-03-27",4))),
-    pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
-            3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
-            0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
+  id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+         'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+         'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+  date = as.Date(c(rep("2014-12-01",3),
+                   rep("2015-09-21",5),
+                   rep("2016-05-19",2),
+                   "2016-11-12",
+                   rep("2017-03-27",4))),
+  pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
+           3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+           0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
 
 set.seed(1)
 LOND_results <- LOND(sample.df)
@@ -227,35 +221,35 @@ If your p-values came from hypothesis tests that were performed in batches, you 
 
 ```{r}
 sample.df <- data.frame(
-id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
-    'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
-    'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
-        3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
-        0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
-batch = c(rep(1,5), rep(2,6), rep(3,4)))
+  id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+         'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+         'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+  pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
+           3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+           0.69274, 0.30443, 0.00136, 0.72342, 0.54757),
+  batch = c(rep(1,5), rep(2,6), rep(3,4)))
 
 batchprds_results <- BatchPRDS(sample.df)
 ```
 
 #### Setting a Bound
-In the cases where you **a priori** expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for only LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the `betai` or `gammai` argument in your chosen algorithm.
+In the cases where you **a priori** expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the `betai` or `gammai` argument in your chosen algorithm.
 
 ```{r}
 sample.df <- data.frame(
-    id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
-        'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
-        'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
-    date = as.Date(c(rep("2014-12-01",3),
-                    rep("2015-09-21",5),
-                    rep("2016-05-19",2),
-                    "2016-11-12",
-                    rep("2017-03-27",4))),
-    pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
-            3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
-            0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
+  id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
+         'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
+         'D51456', 'C88669', 'E03673', 'A63155', 'B66033'),
+  date = as.Date(c(rep("2014-12-01",3),
+                   rep("2015-09-21",5),
+                   rep("2016-05-19",2),
+                   "2016-11-12",
+                   rep("2017-03-27",4))),
+  pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
+           3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
+           0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
 
-#
+# Assuming a bound of 20 hypotheses
 bound <- setBound("LOND", alpha = 0.04, 20)
 
 set.seed(1)
