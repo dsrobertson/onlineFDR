@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // addis_sync_faster
 DataFrame addis_sync_faster(NumericVector pval, NumericVector gammai, double lambda, double alpha, double tau, double w0, bool display_progress);
 RcppExport SEXP _onlineFDR_addis_sync_faster(SEXP pvalSEXP, SEXP gammaiSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP tauSEXP, SEXP w0SEXP, SEXP display_progressSEXP) {

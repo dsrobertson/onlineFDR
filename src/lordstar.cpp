@@ -2,9 +2,11 @@
 #include <progress.hpp>
 #include <progress_bar.hpp>
 #include <vector>
+#include <algorithm>
 
 using namespace Rcpp;
 using std::endl;
+using std::upper_bound;
 
 // Enable C++11 via this plugin (Rcpp 0.10.3 or later)
 // [[Rcpp::plugins(cpp11)]]
@@ -24,18 +26,28 @@ DataFrame lordstar_async_faster(NumericVector pval,
 	alphai[0] = gammai[0] * w0;
 	R[0] = (pval[0] <= alphai[0]);
 
-	std::vector<bool> r;
-
 	Progress p(N * N, display_progress);
 
 	for (int i = 1; i < N; i++) {
-		r.clear();
+	  NumericVector r(0);
+	  NumericVector cond(i);
+	  
 		for (int j = 0; j <= i-1; j++) {
 			p.increment();
-			if (R[j] && (E[j]-1 <= i-1))
-				r.push_back(j);
+		  
+			if (R[j] && (E[j]-1 <= i-1)) {
+				cond(j) = 1;
+			}
 		}
-
+		
+		NumericVector rcum = cumsum(cond);
+		
+		for (int y = 0; y < max(rcum); y++) {
+		  int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
+		  r.push_back(z);
+		}
+		
+		
 		if(r.size() <= 1) {
 
 			if(r.size() > 0){
@@ -44,7 +56,7 @@ DataFrame lordstar_async_faster(NumericVector pval,
 
 			} else {
 
-				alphai[i] = gammai[i] * w0 + (alpha - w0) * 0;
+				alphai[i] = gammai[i] * w0;
 			}
 
 			R[i] = (pval[i] <= alphai[i]); 
@@ -58,7 +70,8 @@ DataFrame lordstar_async_faster(NumericVector pval,
 				gammaisum += gammai[i-r[g]-1];
 			}
 
-			alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1] + alpha * gammaisum;
+			alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1] + 
+			  alpha * gammaisum;
 			R[i] = (pval[i] <= alphai[i]);
 		}
 	}
@@ -89,11 +102,22 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 	Progress p(N * N, display_progress);
 
 	for (int i = 1; i < N; i++) {
-		r.clear();
-		for (int j = 0; j <= i-1; j++) {
+	  NumericVector r(0);
+	  NumericVector cond(i);
+	  
+		for (int j = 0; j < i - L[i]; j++) {
 			p.increment();
-			if (R[j] && (j <= j - L[i]))
-				r.push_back(j);
+		  
+			if (R[j]){
+				cond(j) = 1;
+			}
+		}
+		
+		NumericVector rcum = cumsum(cond);
+		
+		for (int y = 0; y < max(rcum); y++) {
+		  int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
+		  r.push_back(z);
 		}
 
 		if(r.size() <= 1) {
@@ -104,7 +128,7 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 
 			} else {
 
-				alphai[i] = gammai[i] * w0 + (alpha - w0) * 0;
+				alphai[i] = gammai[i] * w0;
 
 			}
 			R[i] = (pval[i] <= alphai[i]); 
@@ -118,7 +142,8 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 				gammaisum += gammai[i-r[g]-1];
 			}
 			
-			alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1] + alpha * gammaisum;
+			alphai[i] = gammai[i] * w0 + (alpha - w0) * gammai[i-r[0]-1] + 
+			  alpha * gammaisum;
 			R[i] = (pval[i] <= alphai[i]);
 		}
 	}
@@ -144,8 +169,6 @@ List lordstar_batch_faster(NumericVector pval,
 	NumericMatrix alphai(B, max(batch));
 	LogicalMatrix R(B, max(batch));
 
-	IntegerVector batchclone = clone(batch);
-
 	int mysum = 0;
 	for (int a = 1; a < batch.size(); a++) {
 		mysum += batch[a];
@@ -166,10 +189,9 @@ List lordstar_batch_faster(NumericVector pval,
 			NumericVector r(0);
 			if (max(rcum) > 0) {
 				for (int y = 0; y < max(rcum); y++) {
-	
-					if (rcum[y] >= y)
-						r.push_back(y);
-				}
+          int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
+				  r.push_back(z);
+			  }
 			}
 
 			if(r.size() <= 1) {
@@ -178,9 +200,7 @@ List lordstar_batch_faster(NumericVector pval,
 					gammai[batchsum[b-1] + x - batchsum[r[0]]];
 
 				} else {
-					double simul = 0;
-					alphai(b,x) = gammai[batchsum[b-1] + x] * w0 + (alpha - w0) * 
-					simul;
+					alphai(b,x) = gammai[batchsum[b-1] + x] * w0;
 				}
 				R(b,x) = (pval[batchsum[b-1] + x] <= alphai(b,x));
 			} else {
