@@ -20,8 +20,8 @@ DataFrame londstar_async_faster(NumericVector pval,
 
 	NumericVector alphai(N);
 	LogicalVector R(N);
-	alphai[0] = betai[0];
-	R[0] = (pval[0] <= alphai[0]);
+	alphai(0) = betai(0);
+	R(0) = (pval(0) <= alphai(0));
 
 	Progress p(N * N, display_progress);
 
@@ -29,13 +29,13 @@ DataFrame londstar_async_faster(NumericVector pval,
 		int Dsum = 0;
 		for (int j = 0; j <= i-1; j++) {
 			p.increment();
-			if (R[j] && (E[j]-1 <= i-1))
+			if (R(j) && (E(j)-1 <= i-1))
 				Dsum++;
 
 		}
 		int D = std::max(Dsum, 1);
-		alphai[i] = betai[i] * D;
-		R[i] = (pval[i] <= alphai[i]);
+		alphai(i) = betai(i) * D;
+		R(i) = (pval(i) <= alphai(i));
 	}
 
 	return DataFrame::create(_["pval"] = pval,
@@ -54,8 +54,8 @@ DataFrame londstar_dep_faster(NumericVector pval,
 
 	NumericVector alphai(N);
 	LogicalVector R(N);
-	alphai[0] = betai[0];
-	R[0] = (pval[0] <= alphai[0]);
+	alphai(0) = betai(0);
+	R(0) = (pval(0) <= alphai(0));
 
 	Progress p(N * N, display_progress);
 
@@ -63,12 +63,12 @@ DataFrame londstar_dep_faster(NumericVector pval,
 		int Dsum = 0;
 		for (int j = 0; j <= i-1; j++) {
 			p.increment();
-			if (R[j] && (j <= j - L[i]))
+			if (R(j) && (j < i - L(i)))
 				Dsum++;
 		}
 		int D = std::max(Dsum, 1);
-		alphai[i] = betai[i] * D;
-		R[i] = (pval[i] <= alphai[i]);
+		alphai(i) = betai(i) * D;
+		R(i) = (pval(i) <= alphai(i));
 	}
 
 	return DataFrame::create(_["pval"] = pval,
@@ -91,14 +91,14 @@ List londstar_batch_faster(NumericVector pval,
 	NumericMatrix alphai(B, max(batch));
 	LogicalMatrix R(B, max(batch));
 
-	for (int i = 0; i < batch[0]; i++) {
-		alphai(0,i) = betai[i];
-		R(0,i) = (pval[i] <= alphai(0,i));
+	for (int i = 0; i < batch(0); i++) {
+		alphai(0,i) = betai(i);
+		R(0,i) = (pval(i) <= alphai(0,i));
 	}
 
 	int mysum = 0;
 	for (int a = 1; a < batch.size(); a++) {
-		mysum += batch[a];
+		mysum += batch(a);
 	}
 
 	Progress p(mysum, display_progress);
@@ -114,10 +114,10 @@ List londstar_batch_faster(NumericVector pval,
 			}
 		}
 		int D = std::max(Dsum, 1);
-		for (int x = 0; x < batch[b]; x++) {
+		for (int x = 0; x < batch(b); x++) {
 			p.increment();
-			alphai(b,x) = betai[batchsum[b-1] + x] * D;
-			R(b,x) = (pval[batchsum[b-1] + x] <= alphai(b,x));
+			alphai(b,x) = betai(batchsum(b-1) + x) * D;
+			R(b,x) = (pval(batchsum(b-1) + x) <= alphai(b,x));
 		}
 	}
 

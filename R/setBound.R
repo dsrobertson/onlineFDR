@@ -41,7 +41,7 @@ setBound <- function(alg, alpha = 0.05, N) {
                   
                   ADDIS = (1/(seq_len(N))^1.6)/sum(1/(seq_len(N))^1.6),
                   
-                  LONDstar = (1/sum(log(pmax(seq_len(N),2))/((seq_len(N)) * 
+                  LONDstar = (alpha/sum(log(pmax(seq_len(N),2))/((seq_len(N)) * 
                       exp(sqrt(log(seq_len(N)))))))*log(pmax(seq_len(N),2))/
                       ((seq_len(N))*exp(sqrt(log(seq_len(N))))),
                   
