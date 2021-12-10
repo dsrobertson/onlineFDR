@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,18 +42,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/onlineFDR.html">Get started</a>
 </li>
@@ -90,7 +86,7 @@
 
       
 
-      </header><script src="theory_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>The theory behind onlineFDR</h1>
@@ -104,9 +100,9 @@
     
     
 <hr>
-<div id="fdr-control" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fdr-control" class="anchor"></a>FDR Control</h2>
+<div class="section level2">
+<h2 id="fdr-control">FDR Control<a class="anchor" aria-label="anchor" href="#fdr-control"></a>
+</h2>
 <p>Consider a sequence of hypotheses <span class="math inline">\(H_1, H_2, H_3, \ldots\)</span> that arrive sequentially in a stream, with corresponding <span class="math inline">\(p\)</span>-values <span class="math inline">\((p_1, p_2, p_3, \ldots)\)</span>. A testing procedure provides a sequence of adjusted significance thresholds <span class="math inline">\(\alpha_i\)</span>, with corresponding decision rule: <span class="math display">\[
 R_i = \left\{\begin{array}{ccc}
 1 &amp; \text{if } p_i \leq \alpha_i &amp; (\text{reject } H_i)\\
@@ -115,16 +111,16 @@ R_i = \left\{\begin{array}{ccc}
 \]</span></p>
 <p>In <em>online</em> testing, the significance thresholds can only be functions of the prior decisions, i.e. <span class="math inline">\(\alpha_i = \alpha_i(R_1, R_2, \ldots, R_{i-1})\)</span>.</p>
 <p>Javanmard and Montanari (2015, 2018) proposed two procedures for online control. The first is LOND, which stands for (significance) Levels based On Number of Discoveries. The second is LORD, which stands for (significance) Levels based On Recent Discovery. LORD was subsequently extended by Ramdas <em>et al.</em> (2017). Ramdas <em>et al.</em> (2018) also proposed the SAFFRON procedure, which provides an adaptive method of online FDR control, which includes a variant of Alpha-investing. Finally, Tian &amp; Ramdas (2019) proposed the ADDIS procedure as an improvement of SAFFRON in the presence of conservative nulls.</p>
-<div id="LOND" class="section level3">
-<h3 class="hasAnchor">
-<a href="#LOND" class="anchor"></a>LOND</h3>
+<div class="section level3">
+<h3 id="LOND">LOND<a class="anchor" aria-label="anchor" href="#LOND"></a>
+</h3>
 <p>The LOND procedure controls the FDR for independent or positively dependent (PRDS) <span class="math inline">\(p\)</span>-values. Given an overall significance level <span class="math inline">\(\alpha\)</span>, we choose a sequence of non-negative numbers <span class="math inline">\(\beta = (\beta_i)_{i \in \mathbb{N}}\)</span> such that they sum to <span class="math inline">\(\alpha\)</span>. The values of the adjusted significance thresholds <span class="math inline">\(\alpha_i\)</span> are chosen as follows: <span class="math display">\[ \alpha_i = \beta_i (D(i-1) + 1) \]</span> where <span class="math inline">\(D(n) = \sum_{i=1}^n R_i\)</span> denotes the number of discoveries (i.e. rejections) in the first <span class="math inline">\(n\)</span> hypotheses tested.</p>
 <p>LOND can be adjusted to also control FDR under arbitrarily dependent <span class="math inline">\(p\)</span>-values. To do so, it is modified with <span class="math inline">\(\tilde{\beta}_i = \beta_i/H(i)\)</span> in place of <span class="math inline">\(\beta_i\)</span>, where <span class="math inline">\(H(i) = \sum_{j=1}^i \frac{1}{j}\)</span> is the <span class="math inline">\(i\)</span>-th harmonic number. Note that this leads to a substantial loss in power compared to the unadjusted LOND procedure. The correction factor is similar to the classical one used by Benjamini and Yekutieli (2001), except that in this case the <span class="math inline">\(i\)</span>-th hypothesis among <span class="math inline">\(N\)</span> is penalised by a factor of <span class="math inline">\(H(i)\)</span> to give consistent results across time (as compared to a factor <span class="math inline">\(H(N)\)</span> for the Benjamini and Yekutieli method).</p>
 <p><a name="LOND_beta"></a> The default sequence of <span class="math inline">\(\beta\)</span> is given by <span class="math display">\[\beta_j = C \alpha \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}\]</span> where <span class="math inline">\(C \approx 0.07720838\)</span>, as proposed by Javanmard and Montanari (2018) equation 31.</p>
 </div>
-<div id="LORD" class="section level3">
-<h3 class="hasAnchor">
-<a href="#LORD" class="anchor"></a>LORD</h3>
+<div class="section level3">
+<h3 id="LORD">LORD<a class="anchor" aria-label="anchor" href="#LORD"></a>
+</h3>
 <p>The LORD procedure controls the FDR for independent <span class="math inline">\(p\)</span>-values. We first fix a sequence of non-negative numbers <span class="math inline">\(\gamma = (\gamma_i)_{i \in \mathbb{N}}\)</span> such that <span class="math inline">\(\gamma_i \geq \gamma_j\)</span> for <span class="math inline">\(i \leq j\)</span> and <span class="math inline">\(\sum_{i=1}^{\infty} \gamma_i = 1\)</span>. At each time <span class="math inline">\(i\)</span>, let <span class="math inline">\(\tau_i\)</span> be the last time a discovery was made before <span class="math inline">\(i\)</span>: <span class="math display">\[
 \tau_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
 \]</span></p>
@@ -167,9 +163,9 @@ S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
 <p><a name="LORDdep_xi"></a> The default sequence of <span class="math inline">\(\xi\)</span> is given by <span class="math display">\[ \xi_j  = \frac{C \alpha }{b_0 j \log(\max(j, 2))^3}\]</span> where <span class="math inline">\(C \approx 0.139307\)</span>.</p>
 <p>Note that allowing for dependent p-values can lead to a substantial loss in power compared with the LORD procedures described above.</p>
 </div>
-<div id="SAFFRON" class="section level3">
-<h3 class="hasAnchor">
-<a href="#SAFFRON" class="anchor"></a>SAFFRON</h3>
+<div class="section level3">
+<h3 id="SAFFRON">SAFFRON<a class="anchor" aria-label="anchor" href="#SAFFRON"></a>
+</h3>
 <p>The SAFFRON procedure controls the FDR for independent p-values, and was proposed by Ramdas <em>et al.</em> (2018). The algorithm is based on an estimate of the proportion of true null hypotheses. More precisely, SAFFRON sets the adjusted test levels based on an estimate of the amount of alpha-wealth that is allocated to testing the true null hypotheses.</p>
 <p>SAFFRON depends on constants <span class="math inline">\(w_0\)</span> and <span class="math inline">\(\lambda\)</span>, where <span class="math inline">\(w_0\)</span> satisfies <span class="math inline">\(0 \leq w_0 &lt; (1 - \lambda)\alpha\)</span> and represents the initial ‘wealth’ of the procedure, and <span class="math inline">\(\lambda \in (0,1)\)</span> represents the threshold for a ‘candidate’ hypothesis. A ‘candidate’ refers to p-values smaller than <span class="math inline">\(\lambda\)</span>, since SAFFRON will never reject a p-value larger than <span class="math inline">\(\lambda\)</span>. These candidates can be thought of as the hypotheses that are a-priori more likely to be non-null.</p>
 <p>The SAFFRON procedure runs as follows:</p>
@@ -185,14 +181,14 @@ S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
 </ol>
 <p><a name="SAFFRON_gamma"></a> The default sequence of <span class="math inline">\(\gamma\)</span> for SAFFRON is given by <span class="math inline">\(\gamma_j \propto j^{-1.6}\)</span>.</p>
 </div>
-<div id="AlphaInvesting" class="section level3">
-<h3 class="hasAnchor">
-<a href="#AlphaInvesting" class="anchor"></a>Alpha-investing</h3>
+<div class="section level3">
+<h3 id="AlphaInvesting">Alpha-investing<a class="anchor" aria-label="anchor" href="#AlphaInvesting"></a>
+</h3>
 <p>Ramdas et al. (2018) proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control for independent p-values. This procedure uses SAFFRON’s update rule with the constant <span class="math inline">\(\lambda\)</span> replaced by a sequence <span class="math inline">\(\lambda_i = \alpha_i\)</span>. This is also equivalent to using the ADDIS algorithm (see below) with <span class="math inline">\(\tau = 1\)</span> and <span class="math inline">\(\lambda_i = \alpha_i\)</span>.</p>
 </div>
-<div id="ADDIS" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ADDIS" class="anchor"></a>ADDIS</h3>
+<div class="section level3">
+<h3 id="ADDIS">ADDIS<a class="anchor" aria-label="anchor" href="#ADDIS"></a>
+</h3>
 <p>The ADDIS procedure controls the FDR for independent p-values, and was proposed by Tian &amp; Ramdas (2019). The algorithm compensates for the power loss of SAFFRON with conservative nulls, by including both adaptivity in the fraction of null hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).</p>
 <p>ADDIS depends on constants <span class="math inline">\(w_0, \lambda\)</span> and <span class="math inline">\(\tau\)</span>. <span class="math inline">\(w_0\)</span> represents the initial `wealth’ of the procedure and satisfies <span class="math inline">\(0 \leq w_0 \leq \tau \lambda \alpha\)</span>. <span class="math inline">\(\tau \in (0,1)\)</span> represents the threshold for a hypothesis to be selected for testing: p-values greater than <span class="math inline">\(\tau\)</span> are implicitly ‘discarded’ by the procedure. Finally, <span class="math inline">\(\lambda \in (0,1)\)</span> sets the threshold for a p-value to be a candidate for rejection: ADDIS will never reject a p-value larger than <span class="math inline">\(\tau \lambda\)</span>.</p>
 <p>The significance thresholds for ADDIS are chosen as follows: <span class="math display">\[
@@ -211,34 +207,34 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 <p>The default sequence of <span class="math inline">\(\gamma\)</span> for ADDIS is the same as for SAFFRON given <a href="#SAFFRON_gamma">here</a>.</p>
 </div>
 </div>
-<div id="fwer-control" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fwer-control" class="anchor"></a>FWER Control</h2>
-<div id="Alpha-spending" class="section level3">
-<h3 class="hasAnchor">
-<a href="#Alpha-spending" class="anchor"></a>Alpha-spending</h3>
+<div class="section level2">
+<h2 id="fwer-control">FWER Control<a class="anchor" aria-label="anchor" href="#fwer-control"></a>
+</h2>
+<div class="section level3">
+<h3 id="Alpha-spending">Alpha-spending<a class="anchor" aria-label="anchor" href="#Alpha-spending"></a>
+</h3>
 <p>The Alpha-spending procedure controls the FWER for a potentially infinite stream of p-values using a Bonferroni-like test. Given an overall significance level <span class="math inline">\(\alpha\)</span>, the significance thresholds are chosen as <span class="math display">\[\alpha_i = \alpha \gamma_i\]</span> where <span class="math inline">\(\sum_{i=1}^{\infty} \gamma_i = 1\)</span> and <span class="math inline">\(\gamma_i \geq 0\)</span>. The procedure strongly controls the FWER for arbitrarily dependent p-values.</p>
 <p>Note that the procedure also controls the generalised familywise error rate (k-FWER) for <span class="math inline">\(k &gt; 1\)</span> if <span class="math inline">\(\alpha\)</span> is replaced by <span class="math inline">\(\min(1,k\alpha)\)</span>.</p>
 <p>The default sequence of <span class="math inline">\(\gamma\)</span> is the same as that for <span class="math inline">\(\xi\)</span> for LORD given <a href="#LORD_gamma">here</a>.</p>
 </div>
-<div id="onlineFallback" class="section level3">
-<h3 class="hasAnchor">
-<a href="#onlineFallback" class="anchor"></a>Online Fallback</h3>
+<div class="section level3">
+<h3 id="onlineFallback">Online Fallback<a class="anchor" aria-label="anchor" href="#onlineFallback"></a>
+</h3>
 <p>The online fallback procedure of Tian &amp; Ramdas (2019b) provides a uniformly more powerful method than Alpha-spending, by saving the significance level of a previous rejection. More specifically, online fallback tests hypothesis <span class="math inline">\(H_i\)</span> at level <span class="math display">\[\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}\]</span> where <span class="math inline">\(R_i = 1\{p_i \leq \alpha_i\}\)</span> denotes a rejected hypothesis. The procedure strongly controls the FWER for arbitrarily dependent p-values.</p>
 <p>The default sequence of <span class="math inline">\(\gamma\)</span> is the same as that for <span class="math inline">\(\xi\)</span> for LORD given <a href="#LORD_gamma">here</a>.</p>
 </div>
-<div id="ADDIS-spending" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ADDIS-spending" class="anchor"></a>ADDIS-spending</h3>
+<div class="section level3">
+<h3 id="ADDIS-spending">ADDIS-spending<a class="anchor" aria-label="anchor" href="#ADDIS-spending"></a>
+</h3>
 <p>The ADDIS-spending procedure strongly controls the FWER for independent p-values, and was proposed by Tian &amp; Ramdas (2019b). The procedure compensates for the power loss of Alpha-spending, by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls.</p>
 <p>ADDIS depends on constants <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\tau\)</span>, where <span class="math inline">\(\lambda &lt; \tau\)</span>. Here <span class="math inline">\(\tau \in (0,1)\)</span> represents the threshold for a hypothesis to be selected for testing: p-values greater than <span class="math inline">\(\tau\)</span> are implicitly `discarded’ by the procedure, while <span class="math inline">\(\lambda \in (0,1)\)</span> sets the threshold for a p-value to be a candidate for rejection: ADDIS-spending will never reject a p-value larger than <span class="math inline">\(\lambda\)</span>.</p>
 <p>Note that the procedure controls the generalised familywise error rate (k-FWER) for <span class="math inline">\(k &gt; 1\)</span> if <span class="math inline">\(\alpha\)</span> is replaced by <span class="math inline">\(\min(1,k\alpha)\)</span>. Tian and Ramdas (2019b) also presented a version for handling local dependence, see the Section on Asynchronous testing below.</p>
 <p>The default sequence of <span class="math inline">\(\gamma\)</span> for ADDIS-spending is the same as for SAFFRON given <a href="#SAFFRON_gamma">here</a>.</p>
 </div>
 </div>
-<div id="accounting-for-dependent-p-values" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accounting-for-dependent-p-values" class="anchor"></a>Accounting for dependent p-values</h2>
+<div class="section level2">
+<h2 id="accounting-for-dependent-p-values">Accounting for dependent p-values<a class="anchor" aria-label="anchor" href="#accounting-for-dependent-p-values"></a>
+</h2>
 <p>As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume independent p-values, while the LOND procedure is also valid under positive dependencies (like the Benjamini-Hochberg method, see below). Adjusted versions of LOND and LORD available for arbitrarily dependent p-values. Alpha-spending and online fallback also control the FWER and FDR for arbitrarily dependent p-values.</p>
 <p>By way of comparison, the usual Benjamini-Hochberg method for controlling the FDR assumes that the p-values are positively dependent (PRDS). As an example, the PRDS is satisfied for multivariate normal test statistics with a positive correlation matrix). See Benjamini &amp; Yekutieli (2001) for further technical details.</p>
 </div>
@@ -255,11 +251,13 @@ C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
 
 
       <footer><div class="copyright">
-  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
+  <p></p>
+<p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

@@ -1,78 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//index.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/404.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/ADDIS.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/articles/advanced-usage.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/ADDIS_spending.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/Alpha_investing.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/articles/onlineFDR-vignette.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/Alpha_spending.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/articles/onlineFDR.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/BatchBH.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/articles/theory.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/BatchPRDS.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/authors.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/BatchStBH.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/index.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/bonfInfinite.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/LOND.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/ADDIS.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/LONDstar.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/ADDIS.spending.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/LORD.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/ADDIS_spending.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/LORDdep.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/AlphaInvesting.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/LORDstar.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/AlphaSaving.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFDR-deprecated.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/AlphaSpending.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/onlineFDR-package.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/Alpha_investing.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/online_fallback.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/Alpha_spending.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRON.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/BatchBH.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/SAFFRONstar.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/BatchPRDS.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/setBound.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/BatchStBH.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/StoreyBH.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/bonfInfinite.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//reference/supLORD.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/figures/onlineFDR-diagram.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//articles/advanced-usage.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//articles/onlineFDR.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/LOND.html</loc>
   </url>
   <url>
-    <loc>https://dsrobertson.github.io/onlineFDR//articles/theory.html</loc>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/LONDstar.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/LORD.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/LORDdep.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/LORDstar.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/onlineFallback.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/onlineFDR-deprecated.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/onlineFDR-package.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/online_fallback.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/SAFFRON.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/SAFFRONstar.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/setBound.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/StoreyBH.html</loc>
+  </url>
+  <url>
+    <loc>https://dsrobertson.github.io/onlineFDR/reference/supLORD.html</loc>
   </url>
 </urlset>

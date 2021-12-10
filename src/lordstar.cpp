@@ -22,31 +22,36 @@ DataFrame lordstar_async_faster(NumericVector pval,
 	int N = pval.size();
 
 	NumericVector alphai(N);
+	NumericVector Rdec(0);
 	LogicalVector R(N);
 	alphai[0] = gammai[0] * w0;
 	R[0] = (pval[0] <= alphai[0]);
-
+	
+	NumericVector Rdectest(N);
+	Rdectest[1] = 1;
+	
 	Progress p(N * N, display_progress);
 
 	for (int i = 1; i < N; i++) {
 	  NumericVector r(0);
-	  NumericVector cond(i);
+	  int cond = 0;
 	  
 		for (int j = 0; j <= i-1; j++) {
 			p.increment();
 		  
 			if (R[j] && (E[j]-1 <= i-1)) {
-				cond(j) = 1;
+				cond += 1;
 			}
 		}
 		
-		NumericVector rcum = cumsum(cond);
+		Rdec.push_back(cond);
 		
-		for (int y = 0; y < max(rcum); y++) {
-		  int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
-		  r.push_back(z);
+		if(max(Rdec) > 0){
+		  for (int y = 0; y < max(Rdec); y++) {
+		    int z = upper_bound(Rdec.begin(), Rdec.end(), y) - Rdec.begin();
+		    r.push_back(z);
+		  }
 		}
-		
 		
 		if(r.size() <= 1) {
 
@@ -93,30 +98,31 @@ DataFrame lordstar_dep_faster(NumericVector pval,
 	int N = pval.size();
 
 	NumericVector alphai(N);
+	NumericVector Rlag(0);
 	LogicalVector R(N);
 	alphai[0] = gammai[0] * w0;
 	R[0] = (pval[0] <= alphai[0]);
-
-	std::vector<bool> r;
 
 	Progress p(N * N, display_progress);
 
 	for (int i = 1; i < N; i++) {
 	  NumericVector r(0);
-	  NumericVector cond(i);
+	  int cond = 0;
 	  
-		for (int j = 0; j < i - L[i]; j++) {
-			p.increment();
-		  
-			if (R[j]){
-				cond(j) = 1;
-			}
-		}
+	  if (i-1-L[i] >= 0){
+	    for (int j = 0; j < i - L[i]; j++) {
+	      p.increment();
+	      
+	      if (R[j]){
+	        cond += 1;
+	      }
+	    }
+	  }
+	  
+	  Rlag.push_back(cond);
 		
-		NumericVector rcum = cumsum(cond);
-		
-		for (int y = 0; y < max(rcum); y++) {
-		  int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
+		for (int y = 0; y < max(Rlag); y++) {
+		  int z = upper_bound(Rlag.begin(), Rlag.end(), y) - Rlag.begin();
 		  r.push_back(z);
 		}
 
