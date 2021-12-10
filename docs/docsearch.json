@@ -2,21 +2,21 @@
   "index_name": "onlinefdr",
   "start_urls": [
     {
-      "url": "https://dsrobertson.github.io/onlineFDR//index.html",
+      "url": "https://dsrobertson.github.io/onlineFDR/index.html",
       "selectors_key": "homepage",
       "tags": [
         "homepage"
       ]
     },
     {
-      "url": "https://dsrobertson.github.io/onlineFDR//reference",
+      "url": "https://dsrobertson.github.io/onlineFDR/reference",
       "selectors_key": "reference",
       "tags": [
         "reference"
       ]
     },
     {
-      "url": "https://dsrobertson.github.io/onlineFDR//articles",
+      "url": "https://dsrobertson.github.io/onlineFDR/articles",
       "selectors_key": "articles",
       "tags": [
         "articles"
@@ -30,7 +30,7 @@
     "/articles/index.html"
   ],
   "sitemap_urls": [
-    "https://dsrobertson.github.io/onlineFDR//sitemap.xml"
+    "https://dsrobertson.github.io/onlineFDR/sitemap.xml"
   ],
   "selectors": {
     "homepage": {

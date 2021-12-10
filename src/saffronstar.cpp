@@ -23,6 +23,7 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 	int N = pval.size();
 
 	NumericVector alphai(N);
+	NumericVector Rdec(0);
 	LogicalVector R(N);
 	IntegerVector cand(N);
 	IntegerVector Cjplus(N);
@@ -38,7 +39,7 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 		cand(i-1) = (pval(i-1) <= lambda);
 
 	  NumericVector r(0);
-	  NumericVector cond(i);
+	  int cond = 0;
 		
 		for (int j = 0; j <= i-1; j++) {
 		  p.increment();
@@ -46,15 +47,17 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 		  candsum += (int)(cand(j) && (E(j)-1 <= i-1));
 		  
 		  if (R(j) && (E(j)-1 <= i-1)) {
-		    cond(j) = 1;
+		    cond += 1;
 		  }
 		}
 		
-		NumericVector rcum = cumsum(cond);
+		Rdec.push_back(cond);
 		
-		for (int y = 0; y < max(rcum); y++) {
-		  int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
-		  r.push_back(z);
+		if(max(Rdec) > 0){
+		  for (int y = 0; y < max(Rdec); y++) {
+		    int z = upper_bound(Rdec.begin(), Rdec.end(), y) - Rdec.begin();
+		    r.push_back(z);
+		  }
 		}
 
 		int K = r.size();
@@ -124,6 +127,7 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 	int N = pval.size();
 
 	NumericVector alphai(N);
+	NumericVector Rlag(0);
 	LogicalVector R(N);
 	IntegerVector cand(N);
 	IntegerVector Cjplus(N);
@@ -135,7 +139,7 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 	for (int i = 1; i < N; i++) {
 	  
 	  NumericVector r(0);
-	  NumericVector cond(i);
+	  int cond = 0;
 
 		cand(i-1) = (pval(i-1) <= lambda);
 
@@ -143,14 +147,14 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 		  p.increment();
 		  
 		  if (R(j)){
-		    cond(j) = 1;
+		    cond += 1;
 		  }
 		}
 		
-		NumericVector rcum = cumsum(cond);
+		Rlag.push_back(cond);
 		
-		for (int y = 0; y < max(rcum); y++) {
-		  int z = upper_bound(rcum.begin(), rcum.end(), y) - rcum.begin();
+		for (int y = 0; y < max(Rlag); y++) {
+		  int z = upper_bound(Rlag.begin(), Rlag.end(), y) - Rlag.begin();
 		  r.push_back(z);
 		}
 		

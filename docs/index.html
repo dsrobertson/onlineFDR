@@ -32,6 +32,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -44,18 +46,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/onlineFDR.html">Get started</a>
 </li>
@@ -98,53 +94,52 @@
   <div class="contents col-md-9">
 
 
-<div id="onlinefdr-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#onlinefdr-" class="anchor"></a>onlineFDR <img src="reference/figures/logo.png" align="right">
+<div class="section level1">
+<div class="page-header"><h1 id="onlinefdr-">onlineFDR <img src="reference/figures/logo.png" align="right"><a class="anchor" aria-label="anchor" href="#onlinefdr-"></a>
 </h1></div>
 <p><code>onlineFDR</code> allows users to control the false discovery rate (FDR) or familywise error rate (FWER) for online hypothesis testing, where hypotheses arrive sequentially in a stream. In this framework, a null hypothesis is rejected based only on the previous decisions, as the future p-values and the number of hypotheses to be tested are unknown.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>To install the latest (development) version of the onlineFDR package from Bioconductor, please run the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
 
 <span class="co"># The following initializes usage of Bioc</span>
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></code></pre></div>
+<span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></code></pre></div>
 <p>Alternatively, you can install the package directly from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools") # If devtools not installed</span>
 
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"dsrobertson/onlineFDR"</span><span class="op">)</span></code></pre></div>
 <p>We recommend the GitHub version for faster implementations of the algorithms.</p>
 </div>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
 <p>Documentation is hosted at <a href="https://dsrobertson.github.io/onlineFDR/" class="uri">https://dsrobertson.github.io/onlineFDR/</a></p>
 <p>To view the vignette for the version of this package installed in your system, start R and enter:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span><span class="st">"onlineFDR"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>Aharoni, E. and Rosset, S. (2014). Generalized alpha-investing: definitions, optimality results and applications to public databases. <em>Journal of the Royal Statistical Society (Series B)</em>, 76(4):771–794.</p>
 <p>Foster, D. and Stine R. (2008). alpha-investing: a procedure for sequential control of expected false discoveries. <em>Journal of the Royal Statistical Society (Series B)</em>, 29(4):429-444.</p>
-<p>Javanmard, A., and Montanari, A. (2015). On Online Control of False Discovery Rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1502.06197" class="uri">https://arxiv.org/abs/1502.06197</a>.</p>
+<p>Javanmard, A., and Montanari, A. (2015). On Online Control of False Discovery Rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1502.06197" class="external-link uri">https://arxiv.org/abs/1502.06197</a>.</p>
 <p>Javanmard, A., and Montanari, A. (2018). Online Rules for Control of False Discovery Rate and False Discovery Exceedance. <em>Annals of Statistics</em>, 46(2):526-554.</p>
 <p>Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control of the false discovery rate with decaying memory. <em>Advances in Neural Information Processing Systems 30</em>, 5650-5659.</p>
 <p>Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an adaptive algorithm for online control of the false discovery rate. <em>Proceedings of the 35th International Conference in Machine Learning</em>, 80:4286-4294.</p>
-<p>Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery rate in biomedical research. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1809.07292" class="uri">https://arxiv.org/abs/1809.07292</a>.</p>
-<p>Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019). onlineFDR: an R package to control the false discovery rate for growing data repositories. <em>Bioinformatics</em>, 35:4196-4199, <a href="https://doi.org/10.1093/bioinformatics/btz191" class="uri">https://doi.org/10.1093/bioinformatics/btz191</a>.</p>
+<p>Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery rate in biomedical research. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1809.07292" class="external-link uri">https://arxiv.org/abs/1809.07292</a>.</p>
+<p>Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019). onlineFDR: an R package to control the false discovery rate for growing data repositories. <em>Bioinformatics</em>, 35:4196-4199, <a href="https://doi.org/10.1093/bioinformatics/btz191" class="external-link uri">https://doi.org/10.1093/bioinformatics/btz191</a>.</p>
 <p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for online FDR control with conservative nulls. <em>Advances in Neural Information Processing Systems</em>, 9388-9396.</p>
-<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate. <em>Statistical Methods for Medical Research</em> (to appear), <a href="https://arxiv.org/abs/1910.04900" class="uri">https://arxiv.org/abs/1910.04900</a>.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate. <em>Statistical Methods for Medical Research</em> (to appear), <a href="https://arxiv.org/abs/1910.04900" class="external-link uri">https://arxiv.org/abs/1910.04900</a>.</p>
 <p>Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching in Multiple Hypothesis Testing. <em>International Conference on Artificial Intelligence and Statistics</em>, 3806-3815.</p>
-<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear), <a href="https://arxiv.org/abs/1812.05068" class="uri">https://arxiv.org/abs/1812.05068</a>.</p>
+<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear), <a href="https://arxiv.org/abs/1812.05068" class="external-link uri">https://arxiv.org/abs/1812.05068</a>.</p>
 </div>
 </div>
 
@@ -152,52 +147,58 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/onlineFDR">https://​www.bioconductor.org/​packages/​onlineFDR</a>
-</li>
+<li><a href="https://www.bioconductor.org/packages/onlineFDR" class="external-link">View on Bioconductor</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing onlineFDR</a></li>
+<li><a href="authors.html#citation">Citing onlineFDR</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>David S. Robertson <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Lathan Liou <br><small class="roles"> Author </small>  </li>
 <li>Aaditya Ramdas <br><small class="roles"> Author </small>  </li>
 <li>Natasha A. Karp <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/dsrobertson/onlineFDR/actions"><img src="https://github.com/dsrobertson/onlineFDR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/dsrobertson/onlineFDR"><img src="https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://github.com/dsrobertson/onlineFDR/actions" class="external-link"><img src="https://github.com/dsrobertson/onlineFDR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/dsrobertson/onlineFDR" class="external-link"><img src="https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg" alt="codecov"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
+  <p></p>
+<p>Developed by David S. Robertson, Lathan Liou, Aaditya Ramdas, Natasha A. Karp.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
