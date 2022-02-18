@@ -65,12 +65,26 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          if (!require("BiocManager", quietly = TRUE))
+            install.packages("BiocManager")
+          BiocManager::install("BiocCheck")
         shell: Rscript {0}
 
-      - name: Check
+      - name: R CMD Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+        run: 
+          rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+          
+        shell: Rscript {0}
+        
+      - name: BiocCheck
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: |
+          library('BiocCheck')
+          BiocCheck::BiocCheck()
+        
         shell: Rscript {0}
 
       - name: Upload check results
