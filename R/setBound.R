@@ -7,6 +7,8 @@
 #'   LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, or
 #'   Alpha_investing
 #'
+#' @keywords internal
+#'
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05. The bounds for LOND and LORDdep depend on alpha.
 #'
