@@ -7,7 +7,6 @@
 #'   LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, or
 #'   Alpha_investing
 #'
-#' @keywords internal
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05. The bounds for LOND and LORDdep depend on alpha.
@@ -17,6 +16,7 @@
 #' @return \item{bound}{ A vector giving the values of a default sequence
 #' \eqn{\gamma_i} of nonnegative numbers.}
 #'   
+#' @keywords internal
 #' @export
 
 setBound <- function(alg, alpha = 0.05, N) {
