@@ -16,8 +16,7 @@
 #' @return \item{bound}{ A vector giving the values of a default sequence
 #' \eqn{\gamma_i} of nonnegative numbers.}
 #'   
-#' @keywords internal
-#' @export
+#' @noRd
 
 setBound <- function(alg, alpha = 0.05, N) {
   
