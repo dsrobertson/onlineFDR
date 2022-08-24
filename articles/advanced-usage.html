@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.1</span>
       </span>
     </div>
 
@@ -123,27 +123,27 @@
 </h3>
 <p>As a default, the <code>dep</code> argument is set to <code>FALSE</code>. Alternatively, this can be set to <code>TRUE</code> and will implement the LOND procedure to guarantee FDR control for arbitrarily dependent p-values. This method will in general be more conservative.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>    <span class="co"># for independent p-values</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># for dependent p-values</span>
-
-<span class="co"># compare adjusted significance thresholds</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>independent <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dependent <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>
-<span class="co">#&gt;        independent    dependent</span>
-<span class="co">#&gt;  [1,] 0.0026758385 0.0026758385</span>
-<span class="co">#&gt;  [2,] 0.0011638206 0.0007758804</span>
-<span class="co">#&gt;  [3,] 0.0009912499 0.0005406818</span>
-<span class="co">#&gt;  [4,] 0.0008243606 0.0003956931</span>
-<span class="co">#&gt;  [5,] 0.0006988870 0.0003060819</span>
-<span class="co">#&gt;  [6,] 0.0006045900 0.0002467714</span>
-<span class="co">#&gt;  [7,] 0.0005319444 0.0002051576</span>
-<span class="co">#&gt;  [8,] 0.0007117838 0.0002618915</span>
-<span class="co">#&gt;  [9,] 0.0006421423 0.0002269882</span>
-<span class="co">#&gt; [10,] 0.0007796504 0.0002661860</span>
-<span class="co">#&gt; [11,] 0.0007155186 0.0002369363</span>
-<span class="co">#&gt; [12,] 0.0006610273 0.0002130140</span>
-<span class="co">#&gt; [13,] 0.0006141682 0.0001931265</span>
-<span class="co">#&gt; [14,] 0.0005734509 0.0001763616</span>
-<span class="co">#&gt; [15,] 0.0005377472 0.0001620585</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>    <span class="co"># for independent p-values</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># for dependent p-values</span></span>
+<span></span>
+<span><span class="co"># compare adjusted significance thresholds</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>independent <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dependent <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        independent    dependent</span></span>
+<span><span class="co">#&gt;  [1,] 0.0026758385 0.0026758385</span></span>
+<span><span class="co">#&gt;  [2,] 0.0011638206 0.0007758804</span></span>
+<span><span class="co">#&gt;  [3,] 0.0009912499 0.0005406818</span></span>
+<span><span class="co">#&gt;  [4,] 0.0008243606 0.0003956931</span></span>
+<span><span class="co">#&gt;  [5,] 0.0006988870 0.0003060819</span></span>
+<span><span class="co">#&gt;  [6,] 0.0006045900 0.0002467714</span></span>
+<span><span class="co">#&gt;  [7,] 0.0005319444 0.0002051576</span></span>
+<span><span class="co">#&gt;  [8,] 0.0007117838 0.0002618915</span></span>
+<span><span class="co">#&gt;  [9,] 0.0006421423 0.0002269882</span></span>
+<span><span class="co">#&gt; [10,] 0.0007796504 0.0002661860</span></span>
+<span><span class="co">#&gt; [11,] 0.0007155186 0.0002369363</span></span>
+<span><span class="co">#&gt; [12,] 0.0006610273 0.0002130140</span></span>
+<span><span class="co">#&gt; [13,] 0.0006141682 0.0001931265</span></span>
+<span><span class="co">#&gt; [14,] 0.0005734509 0.0001763616</span></span>
+<span><span class="co">#&gt; [15,] 0.0005377472 0.0001620585</span></span></code></pre></div>
 <p>The vector <code>betai</code> is supplied by default, but can optionally be specified by the user (as described above, see the formula for <span class="math inline">\(\beta_j\)</span> <a href="#LOND_beta">here</a>).</p>
 </div>
 <div class="section level3">
@@ -151,32 +151,32 @@
 </h3>
 <p>The default version of LORD used is version ‘++’, but the user can optionally specify versions 3, ‘discard’ and ‘dep’ using the <code>version</code> argument (see <a href="#LORD">here</a> for further details about the different versions).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.discard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'discard'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span> 
-
-<span class="co"># compare adjusted significance thresholds</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>LORD.plus <span class="op">=</span> <span class="va">results.LORD.plus</span><span class="op">$</span><span class="va">alphai</span>,
-    LORD3 <span class="op">=</span> <span class="va">results.LORD3</span><span class="op">$</span><span class="va">alphai</span>,
-    LORD.discard  <span class="op">=</span> <span class="va">results.LORD.discard</span><span class="op">$</span><span class="va">alphai</span>,
-    LORD.dep <span class="op">=</span> <span class="va">results.LORD.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>
-<span class="co">#&gt;          LORD.plus        LORD3 LORD.discard     LORD.dep</span>
-<span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.091542e-03</span>
-<span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.002025e-02</span>
-<span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.677763e-03</span>
-<span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.262659e-04</span>
-<span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.201787e-04</span>
-<span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 1.933725e-04</span>
-<span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.293954e-04</span>
-<span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.548152e-04</span>
-<span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.166482e-04</span>
-<span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.422614e-04</span>
-<span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.145119e-04</span>
-<span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 9.432408e-05</span>
-<span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 7.916885e-05</span>
-<span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 6.749313e-05</span>
-<span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.discard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'discard'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># compare adjusted significance thresholds</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>LORD.plus <span class="op">=</span> <span class="va">results.LORD.plus</span><span class="op">$</span><span class="va">alphai</span>,</span>
+<span>    LORD3 <span class="op">=</span> <span class="va">results.LORD3</span><span class="op">$</span><span class="va">alphai</span>,</span>
+<span>    LORD.discard  <span class="op">=</span> <span class="va">results.LORD.discard</span><span class="op">$</span><span class="va">alphai</span>,</span>
+<span>    LORD.dep <span class="op">=</span> <span class="va">results.LORD.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          LORD.plus        LORD3 LORD.discard     LORD.dep</span></span>
+<span><span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.091542e-03</span></span>
+<span><span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.002025e-02</span></span>
+<span><span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.677763e-03</span></span>
+<span><span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.262659e-04</span></span>
+<span><span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.201787e-04</span></span>
+<span><span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 1.933725e-04</span></span>
+<span><span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.293954e-04</span></span>
+<span><span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.548152e-04</span></span>
+<span><span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.166482e-04</span></span>
+<span><span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.422614e-04</span></span>
+<span><span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.145119e-04</span></span>
+<span><span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 9.432408e-05</span></span>
+<span><span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 7.916885e-05</span></span>
+<span><span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 6.749313e-05</span></span>
+<span><span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05</span></span></code></pre></div>
 <p>By default <span class="math inline">\(w_0 = \alpha/10\)</span> and (for LORD 3 and LORD dep) <span class="math inline">\(b0 = alpha - w0\)</span>, but these parameters can optionally be specified by the user subject to the requirements that <span class="math inline">\(0 \leq w_0 \leq \alpha\)</span>, <span class="math inline">\(b_0 &gt; 0\)</span> and <span class="math inline">\(w_0+b_0 \leq \alpha\)</span>.</p>
 <p>The value of <code>gammai</code> is also supplied by default, but can optionally be specified by the user (as described above, see the formula for <span class="math inline">\(\gamma_j\)</span> <a href="#LORDdep_xi">here</a> for version=‘dep’ and <a href="#LORD_gamma">here</a> for all other versions of LORD).</p>
 </div>
@@ -229,7 +229,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
