@@ -101,7 +101,6 @@
 
     
     
-<hr>
 <div class="section level2">
 <h2 id="what-is-onlinefdr">What is <code>onlineFDR</code>?<a class="anchor" aria-label="anchor" href="#what-is-onlinefdr"></a>
 </h2>
@@ -112,7 +111,6 @@
 <p>The <code>onlineFDR</code> package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high-level, these algorithms rely on a concept called “alpha wealth” in which experiments cost some amount of error from your “budget” but a discovery earns some of the budget back.</p>
 <p><img src="alpha-wealth.gif"></p>
 <p>This vignette explains the two main uses of the package and demonstrates their typical workflows.</p>
-<hr>
 </div>
 <div class="section level2">
 <h2 id="which-algorithm-do-i-use">Which algorithm do I use?<a class="anchor" aria-label="anchor" href="#which-algorithm-do-i-use"></a>
@@ -314,7 +312,6 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">LOND_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, alpha <span class="op">=</span> <span class="fl">0.04</span>, betai <span class="op">=</span> <span class="va">bound</span><span class="op">)</span></span></code></pre></div>
-<hr>
 </div>
 </div>
 </div>
@@ -358,7 +355,6 @@
 <li><p><code><a href="../reference/online_fallback.html">online_fallback()</a></code> implements the online fallback algorithm for FWER control, as proposed by Tian &amp; Ramdas (2019b). Online fallback is a uniformly more powerful method than Alpha-spending, as it saves the significance level of a previous rejection. Online fallback strongly controls the FWER for arbitrarily dependent p-values.</p></li>
 <li><p><code><a href="../reference/ADDIS_spending.html">ADDIS_spending()</a></code> implements the ADDIS-spending algorithm for online FWER control, as proposed by Tian &amp; Ramdas (2019b). The algorithm compensates for the power loss of Alpha-spending, by including both adaptivity in the fraction of null hypotheses and the conservativeness of nulls. ADDIS-spending provides strong FWER control for independent p-values. Tian &amp; Ramdas (2019b) also presented a version for handling local dependence.</p></li>
 </ul>
-<hr>
 </div>
 </div>
 <div class="section level2">
@@ -367,13 +363,11 @@
 <p>All questions regarding onlineFDR should be posted to the <strong>Bioconductor support site</strong>, which serves as a searchable knowledge base of questions and answers:</p>
 <p><a href="https://support.bioconductor.org" class="external-link uri">https://support.bioconductor.org</a></p>
 <p>Posting a question and tagging with “onlineFDR” will automatically send an alert to the package authors to respond on the support site.</p>
-<hr>
 </div>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
 <p>We would like to thank the IMPC team (via Jeremy Mason and Hamed Haseli Mashhadi) for useful discussions during the development of the package.</p>
-<hr>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -394,7 +388,6 @@
 <p>Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for online FDR control with conservative nulls. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1905.11465" class="external-link uri">https://arxiv.org/abs/1905.11465</a>.</p>
 <p>Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1910.04900" class="external-link uri">https://arxiv.org/abs/1910.04900</a>.</p>
 <p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of Multiple Hypotheses. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1812.05068" class="external-link uri">https://arxiv.org/abs/1812.05068</a>.</p>
-<hr>
 </div>
   </div>
 
