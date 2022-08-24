@@ -206,4 +206,3 @@ A mini-batch represents a grouping of tests run asynchronously which
 result in dependent p-values. Once a mini-batch of tests is fully completed,
 a new one can start, testing hypotheses independent of the previous batch.
 
----

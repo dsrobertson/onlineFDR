@@ -18,7 +18,7 @@ presented by Zrnic et al. (2021)."><meta property="og:image" content="https://ds
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.1</span>
       </span>
     </div>
 
@@ -30,7 +30,7 @@ presented by Zrnic et al. (2021)."><meta property="og:image" content="https://ds
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -67,18 +67,18 @@ presented by Zrnic et al. (2021).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">SAFFRONstar</span><span class="op">(</span>
-  <span class="va">d</span>,
-  alpha <span class="op">=</span> <span class="fl">0.05</span>,
-  <span class="va">version</span>,
-  <span class="va">gammai</span>,
-  <span class="va">w0</span>,
-  lambda <span class="op">=</span> <span class="fl">0.5</span>,
-  <span class="va">batch.sizes</span>,
-  discard <span class="op">=</span> <span class="cn">FALSE</span>,
-  tau.discard <span class="op">=</span> <span class="fl">0.5</span>,
-  display_progress <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">SAFFRONstar</span><span class="op">(</span></span>
+<span>  <span class="va">d</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  <span class="va">version</span>,</span>
+<span>  <span class="va">gammai</span>,</span>
+<span>  <span class="va">w0</span>,</span>
+<span>  lambda <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  <span class="va">batch.sizes</span>,</span>
+<span>  discard <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tau.discard <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  display_progress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,35 +87,54 @@ presented by Zrnic et al. (2021).</p>
 <dd><p>Either a vector of p-values, or a dataframe with three columns: an
 identifier (`id'), p-value (`pval'), and either decision.times', or `lags',
 depending on which version you're using. See version for more details.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>Overall significance level of the procedure, the default is
 0.05.</p></dd>
+
+
 <dt>version</dt>
 <dd><p>Takes values 'async', 'dep' or 'batch'. This specifies the
   version of SAFFRONstar to use. <code>version='async'</code> requires a 
 column of decision times (`decision.times'). <code>version='dep'</code> requires a
 column of lags (`lags').
 <code>version='batch'</code> requires a vector of batch sizes (`batch.sizes').</p></dd>
+
+
 <dt>gammai</dt>
 <dd><p>Optional vector of \(\gamma_i\). A default is provided with
 \(\gamma_j\) proportional to \(1/j^(1.6)\).</p></dd>
+
+
 <dt>w0</dt>
 <dd><p>Initial `wealth' of the procedure, defaults to \(\alpha/10\).</p></dd>
+
+
 <dt>lambda</dt>
 <dd><p>Optional threshold for a `candidate' hypothesis, must be
 between 0 and 1. Defaults to 0.5.</p></dd>
+
+
 <dt>batch.sizes</dt>
 <dd><p>A vector of batch sizes, this is required for
 <code>version='batch'</code>.</p></dd>
+
+
 <dt>discard</dt>
 <dd><p>Logical. If <code>TRUE</code> then runs the ADDIS algorithm with
 adaptive discarding of conservative nulls. The default is <code>FALSE</code>.</p></dd>
+
+
 <dt>tau.discard</dt>
 <dd><p>Optional threshold for hypotheses to be selected for
 testing. Must be between 0 and 1, defaults to 0.5. This is required if
 <code>discard=TRUE</code>.</p></dd>
+
+
 <dt>display_progress</dt>
 <dd><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -125,6 +144,7 @@ testing. Must be between 0 and 1, defaults to 0.5. This is required if
   discoveries <code>R</code>. Hypothesis \(i\) is rejected if the \(i\)-th
   p-value is less than or equal to \(\alpha_i\), in which case <code>R[i] =
   1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -187,16 +207,16 @@ identical to <code><a href="ADDIS.html">ADDIS</a></code> with option <code>async
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span>
-<span class="r-in">    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</span>
-<span class="r-in">    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,</span>
-<span class="r-in">pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span>
-<span class="r-in">        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span>
-<span class="r-in">        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,</span>
-<span class="r-in">decision.times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">SAFFRONstar</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'async'</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>decision.times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">15</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">SAFFRONstar</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'async'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.005468627 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.001803974 0</span>
@@ -213,17 +233,17 @@ identical to <code><a href="ADDIS.html">ADDIS</a></code> with option <code>async
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.007874188 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.007874188 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.018811442 0</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">sample.df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span>
-<span class="r-in">    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</span>
-<span class="r-in">    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,</span>
-<span class="r-in">pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span>
-<span class="r-in">        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span>
-<span class="r-in">        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,</span>
-<span class="r-in">lags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">SAFFRONstar</span><span class="op">(</span><span class="va">sample.df2</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">sample.df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>lags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">SAFFRONstar</span><span class="op">(</span><span class="va">sample.df2</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval lag      alphai R</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08   1 0.005468627 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02   1 0.001803974 0</span>
@@ -240,7 +260,7 @@ identical to <code><a href="ADDIS.html">ADDIS</a></code> with option <code>async
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03   1 0.007874188 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01   1 0.007874188 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01   1 0.018811442 0</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -255,7 +275,7 @@ identical to <code><a href="ADDIS.html">ADDIS</a></code> with option <code>async
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

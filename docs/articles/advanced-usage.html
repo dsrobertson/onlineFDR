@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.1</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -102,112 +102,213 @@
 <div class="section level2">
 <h2 id="brief-background-of-the-onlinefdr-algorithms">Brief Background of the <code>onlineFDR</code> algorithms<a class="anchor" aria-label="anchor" href="#brief-background-of-the-onlinefdr-algorithms"></a>
 </h2>
-<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to control the FDR in an online manner (Javanmard and Montanari (2015, 2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The LOND procedure sets the adjusted significance thresholds based on the number of discoveries made so far, while LORD sets them according to the time of the most recent discovery. Ramdas <em>et al.</em> (2018) then proposed the SAFFRON procedure, which provides an adaptive method of online FDR control. They also proposed a variant of the Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR control, using SAFFRON’s update rule.</p>
-<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings. For both synchronous and asynchronous testing, Tian &amp; Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss in power in the presence of conservative nulls by adaptively ‘discarding’ these p-values.</p>
-<p>Finally, Tian &amp; Ramdas (2019b) proposed procedures that provide online control of the FWER. One procedure, online fallback, gives a uniform improvement to the naive Alpha-spending procedure (see below). The ADDIS-spending procedure compensates for the power loss of these procedures by including both adapativity in the fraction of null hypotheses and the conservativeness of nulls.</p>
+<p>Javanmard and Montanari proposed two procedures, LOND and LORD, to
+control the FDR in an online manner (Javanmard and Montanari (2015,
+2018)), with the latter extended by Ramdas <em>et al.</em> (2017). The
+LOND procedure sets the adjusted significance thresholds based on the
+number of discoveries made so far, while LORD sets them according to the
+time of the most recent discovery. Ramdas <em>et al.</em> (2018) then
+proposed the SAFFRON procedure, which provides an adaptive method of
+online FDR control. They also proposed a variant of the Alpha-investing
+algorithm of Foster and Stine (2008) that guarantees FDR control, using
+SAFFRON’s update rule.</p>
+<p>Subsequently, Zrnic <em>et al.</em> (2018) proposed procedures to
+control the modified FDR (mFDR) in the context of <em>asynchronous</em>
+testing, i.e. where each hypothesis test can itself be a sequential
+process and the tests can overlap in time. They presented asynchronous
+versions of the LOND, LORD and SAFFRON procedures for a variety of trial
+settings. For both synchronous and asynchronous testing, Tian &amp;
+Ramdas (2019a) proposed the ADDIS algorithms which compensate for the
+loss in power in the presence of conservative nulls by adaptively
+‘discarding’ these p-values.</p>
+<p>Finally, Tian &amp; Ramdas (2019b) proposed procedures that provide
+online control of the FWER. One procedure, online fallback, gives a
+uniform improvement to the naive Alpha-spending procedure (see below).
+The ADDIS-spending procedure compensates for the power loss of these
+procedures by including both adapativity in the fraction of null
+hypotheses and the conservativeness of nulls.</p>
 </div>
 <div class="section level2">
 <h2 id="variations-to-the-default-options">Variations to the default options<a class="anchor" aria-label="anchor" href="#variations-to-the-default-options"></a>
 </h2>
-<p>In the following section, we consider the arguments that a typical user might consider amending for their analysis.</p>
+<p>In the following section, we consider the arguments that a typical
+user might consider amending for their analysis.</p>
 <div class="section level3">
 <h3 id="common-arguments">Common arguments<a class="anchor" aria-label="anchor" href="#common-arguments"></a>
 </h3>
-<p>As a default, the <code>alpha</code> argument is set to 0.05, where <code>alpha</code> sets the overall significance level of the FDR of FWER controlling procedure. By convention, the standard significance level utilised is the 5%. However, there are applications where an alternate threshold could be considered. For example, a more stringent threshold might be appropriate when there are limited resources to follow up significant findings. A less stringent threshold might be appropriate when the downstream analysis is a global analysis which can tolerate a higher proportion of false positives.</p>
-<p>To ensure correct interpretation of the dates provided there is a date.format argument. As a default, the date format is set to receive dates as year-month(00-12)-day(number). The following website provides clear guidance on symbols used to interpret the date information: <a href="https://www.statmethods.net/input/dates.html" class="external-link uri">https://www.statmethods.net/input/dates.html</a></p>
-<p>As a default, the <code>random</code> argument is set to <code>TRUE</code>. In this situation, the order of p-values in each batch (i.e. with the same date) are randomised. This is to avoid the risk of p-values being ordered post-hoc, which can lead to an inflation of the FDR. As the dataset grows the data is reprocessed. To ensure the consistency of the output (with the randomisation within the previous batches remaining the same), it is necessary to set the same <code>seed</code> for all analyses.</p>
-<p>The user also has the option to turn off the randomisation step, by setting the <code>random</code> argument to <code>FALSE</code>. This approach would be appropriate if the user has both a date <em>and</em> a time stamp for the p-values, in which case the data should be ordered by date and time beforehand and then passed to a wrapper function. Another scenario would be when p-values within the batches are ordered using <em>independent</em> side information, so that hypotheses most likely to be rejected come first, which would potentially increase the power of the procedure (see Javanmard and Montanari (2018) and Li and Barber (2017)).</p>
+<p>As a default, the <code>alpha</code> argument is set to 0.05, where
+<code>alpha</code> sets the overall significance level of the FDR of
+FWER controlling procedure. By convention, the standard significance
+level utilised is the 5%. However, there are applications where an
+alternate threshold could be considered. For example, a more stringent
+threshold might be appropriate when there are limited resources to
+follow up significant findings. A less stringent threshold might be
+appropriate when the downstream analysis is a global analysis which can
+tolerate a higher proportion of false positives.</p>
+<p>To ensure correct interpretation of the dates provided there is a
+date.format argument. As a default, the date format is set to receive
+dates as year-month(00-12)-day(number). The following website provides
+clear guidance on symbols used to interpret the date information: <a href="https://www.statmethods.net/input/dates.html" class="external-link uri">https://www.statmethods.net/input/dates.html</a></p>
+<p>As a default, the <code>random</code> argument is set to
+<code>TRUE</code>. In this situation, the order of p-values in each
+batch (i.e. with the same date) are randomised. This is to avoid the
+risk of p-values being ordered post-hoc, which can lead to an inflation
+of the FDR. As the dataset grows the data is reprocessed. To ensure the
+consistency of the output (with the randomisation within the previous
+batches remaining the same), it is necessary to set the same
+<code>seed</code> for all analyses.</p>
+<p>The user also has the option to turn off the randomisation step, by
+setting the <code>random</code> argument to <code>FALSE</code>. This
+approach would be appropriate if the user has both a date <em>and</em> a
+time stamp for the p-values, in which case the data should be ordered by
+date and time beforehand and then passed to a wrapper function. Another
+scenario would be when p-values within the batches are ordered using
+<em>independent</em> side information, so that hypotheses most likely to
+be rejected come first, which would potentially increase the power of
+the procedure (see Javanmard and Montanari (2018) and Li and Barber
+(2017)).</p>
 </div>
 <div class="section level3">
 <h3 id="lond">LOND<a class="anchor" aria-label="anchor" href="#lond"></a>
 </h3>
-<p>As a default, the <code>dep</code> argument is set to <code>FALSE</code>. Alternatively, this can be set to <code>TRUE</code> and will implement the LOND procedure to guarantee FDR control for arbitrarily dependent p-values. This method will in general be more conservative.</p>
+<p>As a default, the <code>dep</code> argument is set to
+<code>FALSE</code>. Alternatively, this can be set to <code>TRUE</code>
+and will implement the LOND procedure to guarantee FDR control for
+arbitrarily dependent p-values. This method will in general be more
+conservative.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>    <span class="co"># for independent p-values</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># for dependent p-values</span>
-
-<span class="co"># compare adjusted significance thresholds</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>independent <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dependent <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>
-<span class="co">#&gt;        independent    dependent</span>
-<span class="co">#&gt;  [1,] 0.0026758385 0.0026758385</span>
-<span class="co">#&gt;  [2,] 0.0011638206 0.0007758804</span>
-<span class="co">#&gt;  [3,] 0.0009912499 0.0005406818</span>
-<span class="co">#&gt;  [4,] 0.0008243606 0.0003956931</span>
-<span class="co">#&gt;  [5,] 0.0006988870 0.0003060819</span>
-<span class="co">#&gt;  [6,] 0.0006045900 0.0002467714</span>
-<span class="co">#&gt;  [7,] 0.0005319444 0.0002051576</span>
-<span class="co">#&gt;  [8,] 0.0007117838 0.0002618915</span>
-<span class="co">#&gt;  [9,] 0.0006421423 0.0002269882</span>
-<span class="co">#&gt; [10,] 0.0007796504 0.0002661860</span>
-<span class="co">#&gt; [11,] 0.0007155186 0.0002369363</span>
-<span class="co">#&gt; [12,] 0.0006610273 0.0002130140</span>
-<span class="co">#&gt; [13,] 0.0006141682 0.0001931265</span>
-<span class="co">#&gt; [14,] 0.0005734509 0.0001763616</span>
-<span class="co">#&gt; [15,] 0.0005377472 0.0001620585</span></code></pre></div>
-<p>The vector <code>betai</code> is supplied by default, but can optionally be specified by the user (as described above, see the formula for <span class="math inline">\(\beta_j\)</span> <a href="#LOND_beta">here</a>).</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>    <span class="co"># for independent p-values</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># for dependent p-values</span></span>
+<span></span>
+<span><span class="co"># compare adjusted significance thresholds</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>independent <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dependent <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        independent    dependent</span></span>
+<span><span class="co">#&gt;  [1,] 0.0026758385 0.0026758385</span></span>
+<span><span class="co">#&gt;  [2,] 0.0011638206 0.0007758804</span></span>
+<span><span class="co">#&gt;  [3,] 0.0009912499 0.0005406818</span></span>
+<span><span class="co">#&gt;  [4,] 0.0008243606 0.0003956931</span></span>
+<span><span class="co">#&gt;  [5,] 0.0006988870 0.0003060819</span></span>
+<span><span class="co">#&gt;  [6,] 0.0006045900 0.0002467714</span></span>
+<span><span class="co">#&gt;  [7,] 0.0005319444 0.0002051576</span></span>
+<span><span class="co">#&gt;  [8,] 0.0007117838 0.0002618915</span></span>
+<span><span class="co">#&gt;  [9,] 0.0006421423 0.0002269882</span></span>
+<span><span class="co">#&gt; [10,] 0.0007796504 0.0002661860</span></span>
+<span><span class="co">#&gt; [11,] 0.0007155186 0.0002369363</span></span>
+<span><span class="co">#&gt; [12,] 0.0006610273 0.0002130140</span></span>
+<span><span class="co">#&gt; [13,] 0.0006141682 0.0001931265</span></span>
+<span><span class="co">#&gt; [14,] 0.0005734509 0.0001763616</span></span>
+<span><span class="co">#&gt; [15,] 0.0005377472 0.0001620585</span></span></code></pre></div>
+<p>The vector <code>betai</code> is supplied by default, but can
+optionally be specified by the user (as described above, see the formula
+for <span class="math inline">\(\beta_j\)</span> <a href="#LOND_beta">here</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="lord">LORD<a class="anchor" aria-label="anchor" href="#lord"></a>
 </h3>
-<p>The default version of LORD used is version ‘++’, but the user can optionally specify versions 3, ‘discard’ and ‘dep’ using the <code>version</code> argument (see <a href="#LORD">here</a> for further details about the different versions).</p>
+<p>The default version of LORD used is version ‘++’, but the user can
+optionally specify versions 3, ‘discard’ and ‘dep’ using the
+<code>version</code> argument (see <a href="#LORD">here</a> for further
+details about the different versions).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.discard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'discard'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span> 
-
-<span class="co"># compare adjusted significance thresholds</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>LORD.plus <span class="op">=</span> <span class="va">results.LORD.plus</span><span class="op">$</span><span class="va">alphai</span>,
-    LORD3 <span class="op">=</span> <span class="va">results.LORD3</span><span class="op">$</span><span class="va">alphai</span>,
-    LORD.discard  <span class="op">=</span> <span class="va">results.LORD.discard</span><span class="op">$</span><span class="va">alphai</span>,
-    LORD.dep <span class="op">=</span> <span class="va">results.LORD.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>
-<span class="co">#&gt;          LORD.plus        LORD3 LORD.discard     LORD.dep</span>
-<span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.091542e-03</span>
-<span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.002025e-02</span>
-<span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.677763e-03</span>
-<span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.262659e-04</span>
-<span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.201787e-04</span>
-<span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 1.933725e-04</span>
-<span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.293954e-04</span>
-<span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.548152e-04</span>
-<span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.166482e-04</span>
-<span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.422614e-04</span>
-<span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.145119e-04</span>
-<span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 9.432408e-05</span>
-<span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 7.916885e-05</span>
-<span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 6.749313e-05</span>
-<span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05</span></code></pre></div>
-<p>By default <span class="math inline">\(w_0 = \alpha/10\)</span> and (for LORD 3 and LORD dep) <span class="math inline">\(b0 = alpha - w0\)</span>, but these parameters can optionally be specified by the user subject to the requirements that <span class="math inline">\(0 \leq w_0 \leq \alpha\)</span>, <span class="math inline">\(b_0 &gt; 0\)</span> and <span class="math inline">\(w_0+b_0 \leq \alpha\)</span>.</p>
-<p>The value of <code>gammai</code> is also supplied by default, but can optionally be specified by the user (as described above, see the formula for <span class="math inline">\(\gamma_j\)</span> <a href="#LORDdep_xi">here</a> for version=‘dep’ and <a href="#LORD_gamma">here</a> for all other versions of LORD).</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.discard</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'discard'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># compare adjusted significance thresholds</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>LORD.plus <span class="op">=</span> <span class="va">results.LORD.plus</span><span class="op">$</span><span class="va">alphai</span>,</span>
+<span>    LORD3 <span class="op">=</span> <span class="va">results.LORD3</span><span class="op">$</span><span class="va">alphai</span>,</span>
+<span>    LORD.discard  <span class="op">=</span> <span class="va">results.LORD.discard</span><span class="op">$</span><span class="va">alphai</span>,</span>
+<span>    LORD.dep <span class="op">=</span> <span class="va">results.LORD.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          LORD.plus        LORD3 LORD.discard     LORD.dep</span></span>
+<span><span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.091542e-03</span></span>
+<span><span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.002025e-02</span></span>
+<span><span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.677763e-03</span></span>
+<span><span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.262659e-04</span></span>
+<span><span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.201787e-04</span></span>
+<span><span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 1.933725e-04</span></span>
+<span><span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.293954e-04</span></span>
+<span><span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.548152e-04</span></span>
+<span><span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.166482e-04</span></span>
+<span><span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.422614e-04</span></span>
+<span><span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.145119e-04</span></span>
+<span><span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 9.432408e-05</span></span>
+<span><span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 7.916885e-05</span></span>
+<span><span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 6.749313e-05</span></span>
+<span><span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05</span></span></code></pre></div>
+<p>By default <span class="math inline">\(w_0 = \alpha/10\)</span> and
+(for LORD 3 and LORD dep) <span class="math inline">\(b0 = alpha -
+w0\)</span>, but these parameters can optionally be specified by the
+user subject to the requirements that <span class="math inline">\(0 \leq
+w_0 \leq \alpha\)</span>, <span class="math inline">\(b_0 &gt;
+0\)</span> and <span class="math inline">\(w_0+b_0 \leq
+\alpha\)</span>.</p>
+<p>The value of <code>gammai</code> is also supplied by default, but can
+optionally be specified by the user (as described above, see the formula
+for <span class="math inline">\(\gamma_j\)</span> <a href="#LORDdep_xi">here</a> for version=‘dep’ and <a href="#LORD_gamma">here</a> for all other versions of LORD).</p>
 </div>
 <div class="section level3">
 <h3 id="saffron">SAFFRON<a class="anchor" aria-label="anchor" href="#saffron"></a>
 </h3>
-<p>By default <span class="math inline">\(w_0 = \alpha/2\)</span> and <span class="math inline">\(\lambda = 0.5\)</span>, but these parameters can optionally be specified by the user subject to the requirements that <span class="math inline">\(0 \leq w_0 &lt; \alpha\)</span> and <span class="math inline">\(0 &lt; \lambda &lt; 1\)</span>. The values of <code>gammai</code> are also supplied by default, but can optionally be specified by the user (as described above, see the formula for <span class="math inline">\(\gamma_j\)</span> <a href="#SAFFRON_gamma">here</a>).</p>
+<p>By default <span class="math inline">\(w_0 = \alpha/2\)</span> and
+<span class="math inline">\(\lambda = 0.5\)</span>, but these parameters
+can optionally be specified by the user subject to the requirements that
+<span class="math inline">\(0 \leq w_0 &lt; \alpha\)</span> and <span class="math inline">\(0 &lt; \lambda &lt; 1\)</span>. The values of
+<code>gammai</code> are also supplied by default, but can optionally be
+specified by the user (as described above, see the formula for <span class="math inline">\(\gamma_j\)</span> <a href="#SAFFRON_gamma">here</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="addis">ADDIS<a class="anchor" aria-label="anchor" href="#addis"></a>
 </h3>
-<p>By default <span class="math inline">\(w_0 = \tau \lambda \alpha/2\)</span> and <span class="math inline">\(\lambda = \tau = 0.5\)</span>, but these parameters can optionally be specified by the user subject to the requirements that <span class="math inline">\(0 \leq w_0 &lt; \tau \lambda \alpha\)</span>, <span class="math inline">\(0 &lt; \lambda &lt; 1\)</span> and <span class="math inline">\(0 &lt; \tau &lt; 1\)</span>. The values of <code>gammai</code> are also supplied by default, but can optionally be specified by the user.</p>
+<p>By default <span class="math inline">\(w_0 = \tau \lambda
+\alpha/2\)</span> and <span class="math inline">\(\lambda = \tau =
+0.5\)</span>, but these parameters can optionally be specified by the
+user subject to the requirements that <span class="math inline">\(0 \leq
+w_0 &lt; \tau \lambda \alpha\)</span>, <span class="math inline">\(0
+&lt; \lambda &lt; 1\)</span> and <span class="math inline">\(0 &lt; \tau
+&lt; 1\)</span>. The values of <code>gammai</code> are also supplied by
+default, but can optionally be specified by the user.</p>
 </div>
 <div class="section level3">
 <h3 id="alpha-spending-and-online-fallback">Alpha-spending and online fallback<a class="anchor" aria-label="anchor" href="#alpha-spending-and-online-fallback"></a>
 </h3>
-<p>The values of <code>gammai</code> are supplied by default, but can optionally be specified by the user.</p>
+<p>The values of <code>gammai</code> are supplied by default, but can
+optionally be specified by the user.</p>
 </div>
 <div class="section level3">
 <h3 id="addis-spending">ADDIS-spending<a class="anchor" aria-label="anchor" href="#addis-spending"></a>
 </h3>
-<p>By default <span class="math inline">\(\lambda = 0.25\)</span> and <span class="math inline">\(\tau = 0.5\)</span>, but these parameters can optionally be specified by the user subject to the requirements that <span class="math inline">\(\lambda &lt; \tau\)</span>, <span class="math inline">\(0 &lt; \lambda &lt; 1\)</span> and <span class="math inline">\(0 &lt; \tau &lt; 1\)</span>. The values of <code>gammai</code> are also supplied by default, but can optionally be specified by the user.</p>
+<p>By default <span class="math inline">\(\lambda = 0.25\)</span> and
+<span class="math inline">\(\tau = 0.5\)</span>, but these parameters
+can optionally be specified by the user subject to the requirements that
+<span class="math inline">\(\lambda &lt; \tau\)</span>, <span class="math inline">\(0 &lt; \lambda &lt; 1\)</span> and <span class="math inline">\(0 &lt; \tau &lt; 1\)</span>. The values of
+<code>gammai</code> are also supplied by default, but can optionally be
+specified by the user.</p>
 </div>
 <div class="section level3">
 <h3 id="asynchronous-testing">Asynchronous testing<a class="anchor" aria-label="anchor" href="#asynchronous-testing"></a>
 </h3>
-<p>Zrnic <em>et al.</em> (2018) proposed procedures to control the modified FDR (mFDR) in the context of <em>asynchronous</em> testing, i.e. where each hypothesis test can itself be a sequential process and the tests can overlap in time. They presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a variety of trial settings, including the following:</p>
-<p>1: <strong>Asynchronous online mFDR control</strong>: This is for an asynchronous testing process, consisting of tests that start and finish at (potentially) random times. The discretised finish times of the test correspond to the decision times.</p>
-<p>2: <strong>Online mFDR control under local dependence</strong>: For any <span class="math inline">\(t&gt;0\)</span> we allow the p-value <span class="math inline">\(p_t\)</span> to have arbitrary dependence on the previous <span class="math inline">\(L_t\)</span> p-values. The fixed sequence <span class="math inline">\(L_t\)</span> is referred to as `lags’.</p>
-<p>3: <strong>mFDR control in asynchronous mini-batch testing</strong>: A mini-batch represents a grouping of tests run asynchronously which result in dependent p-values. Once a mini-batch of tests is fully completed, a new one can start, testing hypotheses independent of the previous batch.</p>
-<hr>
+<p>Zrnic <em>et al.</em> (2018) proposed procedures to control the
+modified FDR (mFDR) in the context of <em>asynchronous</em> testing,
+i.e. where each hypothesis test can itself be a sequential process and
+the tests can overlap in time. They presented asynchronous versions of
+the LOND, LORD and SAFFRON procedures for a variety of trial settings,
+including the following:</p>
+<p>1: <strong>Asynchronous online mFDR control</strong>: This is for an
+asynchronous testing process, consisting of tests that start and finish
+at (potentially) random times. The discretised finish times of the test
+correspond to the decision times.</p>
+<p>2: <strong>Online mFDR control under local dependence</strong>: For
+any <span class="math inline">\(t&gt;0\)</span> we allow the p-value
+<span class="math inline">\(p_t\)</span> to have arbitrary dependence on
+the previous <span class="math inline">\(L_t\)</span> p-values. The
+fixed sequence <span class="math inline">\(L_t\)</span> is referred to
+as `lags’.</p>
+<p>3: <strong>mFDR control in asynchronous mini-batch testing</strong>:
+A mini-batch represents a grouping of tests run asynchronously which
+result in dependent p-values. Once a mini-batch of tests is fully
+completed, a new one can start, testing hypotheses independent of the
+previous batch.</p>
 </div>
 </div>
   </div>
@@ -229,7 +330,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

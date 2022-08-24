@@ -19,7 +19,7 @@ and Montanari (2018) and Ramdas et al. (2017)."><meta property="og:image" conten
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">onlineFDR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">2.5.1</span>
       </span>
     </div>
 
@@ -31,7 +31,7 @@ and Montanari (2018) and Ramdas et al. (2017)."><meta property="og:image" conten
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -69,18 +69,18 @@ and Montanari (2018) and Ramdas et al. (2017).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">LORD</span><span class="op">(</span>
-  <span class="va">d</span>,
-  alpha <span class="op">=</span> <span class="fl">0.05</span>,
-  <span class="va">gammai</span>,
-  version <span class="op">=</span> <span class="st">"++"</span>,
-  <span class="va">w0</span>,
-  <span class="va">b0</span>,
-  tau.discard <span class="op">=</span> <span class="fl">0.5</span>,
-  random <span class="op">=</span> <span class="cn">TRUE</span>,
-  display_progress <span class="op">=</span> <span class="cn">FALSE</span>,
-  date.format <span class="op">=</span> <span class="st">"%Y-%m-%d"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">LORD</span><span class="op">(</span></span>
+<span>  <span class="va">d</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  <span class="va">gammai</span>,</span>
+<span>  version <span class="op">=</span> <span class="st">"++"</span>,</span>
+<span>  <span class="va">w0</span>,</span>
+<span>  <span class="va">b0</span>,</span>
+<span>  tau.discard <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  random <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  display_progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  date.format <span class="op">=</span> <span class="st">"%Y-%m-%d"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,34 +90,53 @@ and Montanari (2018) and Ramdas et al. (2017).</p>
 identifier (`id'), date (`date') and p-value (`pval'). If no column of
 dates is provided, then the p-values are treated as being ordered
 sequentially with no batches.</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>Overall significance level of the FDR procedure, the default is
 0.05.</p></dd>
+
+
 <dt>gammai</dt>
 <dd><p>Optional vector of \(\gamma_i\). A default is provided as
 proposed by Javanmard and Montanari (2018), equation 31 for all versions of
 LORD except 'dep'. The latter is provided a default to satisfy a condition
 given in Javanmard and Montanari (2018), example 3.8.</p></dd>
+
+
 <dt>version</dt>
 <dd><p>Takes values '++', 3, 'discard', or 'dep'. This specifies the
 version of LORD to use, and defaults to '++'.</p></dd>
+
+
 <dt>w0</dt>
 <dd><p>Initial `wealth' of the procedure, defaults to \(\alpha/10\).</p></dd>
+
+
 <dt>b0</dt>
 <dd><p>The 'payout' for rejecting a hypothesis in all versions of LORD
 except for '++'. Defaults to \(\alpha - w_0\).</p></dd>
+
+
 <dt>tau.discard</dt>
 <dd><p>Optional threshold for hypotheses to be selected for
 testing. Must be between 0 and 1, defaults to 0.5. This is required if
 <code>version='discard'</code>.</p></dd>
+
+
 <dt>random</dt>
 <dd><p>Logical. If <code>TRUE</code> (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
 randomised.</p></dd>
+
+
 <dt>display_progress</dt>
 <dd><p>Logical. If <code>TRUE</code> prints out a progress bar for the algorithm runtime.</p></dd>
+
+
 <dt>date.format</dt>
 <dd><p>Optional string giving the format that is used for dates.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -128,6 +147,7 @@ randomised.</p></dd>
   function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
   \(i\)-th p-value is less than or equal to \(\alpha_i\), in which case
   <code>R[i] = 1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -189,20 +209,20 @@ and the tests can overlap in time.</p></div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span>
-<span class="r-in">    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</span>
-<span class="r-in">    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,</span>
-<span class="r-in">date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2014-12-01'</span>,<span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2015-09-21'</span>,<span class="fl">5</span><span class="op">)</span>,</span>
-<span class="r-in">                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2016-05-19'</span>,<span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">                <span class="st">'2016-11-12'</span>,</span>
-<span class="r-in">                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2017-03-27'</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span>
-<span class="r-in">        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span>
-<span class="r-in">        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, random<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sample.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'C38292'</span>, <span class="st">'A30619'</span>, <span class="st">'D46627'</span>, <span class="st">'E29198'</span>, <span class="st">'A41418'</span>,</span></span>
+<span class="r-in"><span>    <span class="st">'D51456'</span>, <span class="st">'C88669'</span>, <span class="st">'E03673'</span>, <span class="st">'A63155'</span>, <span class="st">'B66033'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2014-12-01'</span>,<span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2015-09-21'</span>,<span class="fl">5</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2016-05-19'</span>,<span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                <span class="st">'2016-11-12'</span>,</span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'2017-03-27'</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-08</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">3.60e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span></span>
+<span class="r-in"><span>        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, random<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0002675839 1 A15432</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0024664457 0 B90969</span>
@@ -219,8 +239,8 @@ and the tests can overlap in time.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0009256825 0 E03673</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.0008019657 0 A63155</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.0007059610 0 B66033</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 2.091542e-03 1 A15432</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 1.002025e-02 0 B90969</span>
@@ -237,8 +257,8 @@ and the tests can overlap in time.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 7.916885e-05 0 C88669</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 6.749313e-05 0 B66033</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 5.830055e-05 0 E03673</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'discard'</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'discard'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0002675839 1 A15432</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0011285264 0 B90969</span>
@@ -255,8 +275,8 @@ and the tests can overlap in time.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.0006438778 0 C88669</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.0005497556 0 B66033</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.0005497556 0 E03673</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, w0<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">LORD</span><span class="op">(</span><span class="va">sample.df</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, w0<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0026758385 1 A15432</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0032577488 0 B90969</span>
@@ -273,8 +293,8 @@ and the tests can overlap in time.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.0017477495 0 C88669</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.0015277362 0 B66033</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.0013569121 0 E03673</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -289,7 +309,7 @@ and the tests can overlap in time.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
