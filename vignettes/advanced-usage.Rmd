@@ -47,16 +47,16 @@ method of online FDR control. They also proposed a variant of the
 Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR
 control, using SAFFRON's update rule.
 
-Subsequently, Zrnic *et al.* (2018) proposed procedures to control the modified
+Subsequently, Zrnic *et al.* (2021) proposed procedures to control the modified
 FDR (mFDR) in the context of *asynchronous* testing, i.e. where each hypothesis
 test can itself be a sequential process and the tests can overlap in time. They
 presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a
 variety of trial settings. For both synchronous and asynchronous testing, Tian
-& Ramdas (2019a) proposed the ADDIS algorithms which compensate for the loss
+& Ramdas (2019) proposed the ADDIS algorithms which compensate for the loss
 in power in the presence of conservative nulls by adaptively 'discarding' these
 p-values.
 
-Finally, Tian & Ramdas (2019b) proposed procedures that provide online control
+Finally, Tian & Ramdas (2021) proposed procedures that provide online control
 of the FWER. One procedure, online fallback, gives a uniform improvement to the
 naive Alpha-spending procedure (see below). The ADDIS-spending procedure
 compensates for the power loss of these procedures by including both adapativity
@@ -186,7 +186,7 @@ specified by the user.
 
 ### Asynchronous testing
 
-Zrnic *et al.* (2018) proposed procedures to control the modified
+Zrnic *et al.* (2021) proposed procedures to control the modified
 FDR (mFDR) in the context of *asynchronous* testing, i.e. where each hypothesis
 test can itself be a sequential process and the tests can overlap in time. They
 presented asynchronous versions of the LOND, LORD and SAFFRON procedures for a 

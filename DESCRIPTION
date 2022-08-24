@@ -1,7 +1,7 @@
 Package: onlineFDR
 Version: 2.5.1
 Date: 2022-08-24
-Title: Online error control
+Title: Online error rate control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),
              person("Lathan", "Liou", role = "aut"),
@@ -12,10 +12,10 @@ Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
              person("Tijana", "Zrnic", role = "ctb"),
              person(c("Natasha", "A."), "Karp", role = "aut"))
 Description: This package allows users to control the false discovery rate (FDR)
-  or familywise error rate (FWER) for online hypothesis testing, where
-  hypotheses arrive sequentially in a stream. In this framework, a null
-  hypothesis is rejected based only on the previous decisions, as the future
-  p-values and the number of hypotheses to be tested are unknown.
+  or familywise error rate (FWER) for online multiple hypothesis testing, where
+  hypotheses arrive in a stream. In this framework, a null hypothesis is
+  rejected based on the evidence against it and on the previous rejection
+  decisions.
 URL: https://dsrobertson.github.io/onlineFDR/index.html
 License: GPL-3
 RoxygenNote: 7.1.2
@@ -23,9 +23,6 @@ Encoding: UTF-8
 Imports: stats,
 	Rcpp,
 	RcppProgress,
-	dplyr,
-	tidyr,
-	ggplot2,
 	progress
 Suggests: knitr,
     rmarkdown,

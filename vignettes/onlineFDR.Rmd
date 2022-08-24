@@ -1,7 +1,7 @@
 ---
-title: "Managing multiple testing challenges with sequential inference using the onlineFDR package"
+title: "Managing online multiple hypothesis testing using the onlineFDR package"
 author: "David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp"
-date: "2021-04-30"
+date: "2022-08-24"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -33,15 +33,11 @@ order to control error metrics such as the familywise error rate (FWER)
 or the false discovery rate (FDR).  
 
 Frequently, modern data analysis problems have a further complexity in that the
-hypotheses arrive sequentially in a stream. 
+hypotheses arrive in a stream. 
 
 ![](stream-diagram.png)
 
-This introduces the challenge that
-at each step, the investigator must decide whether to reject the current null
-hypothesis without having access to the future p-values or the total number of
-hypotheses to be tested, but with the knowledge of the historic decisions to
-date. 
+This introduces the challenge that at each step, the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but with the knowledge of the historic decisions to date. 
 
 The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
 
@@ -65,11 +61,11 @@ We also have a provided a non-exhaustive list of answers to some questions you m
 
 * **What is the difference between FDR and FWER?**
 
-The FDR is the expected proportion of false rejections out of all rejections. The FWER is the probability of making any false rejections at all. Controlling the FWER is generally more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
+The FDR is the expected proportion of false rejections out of all rejections. The FWER is the probability of making any false rejections at all. Controlling the FWER is more conservative than controlling the FDR. Note that in the case when all null hypotheses are true, the FDR and FWER are the same.
 
 * **What do the different temporal structures mean?**
 
-Offline refers to the case when all the hypotheses are tested simultaneously by an algorithm. Batch refers to the case when the hypotheses are tested as they arrive sequentially but in batches. Fully sequential refers to the case when hypotheses are tested as they arrive sequentially, one after the other. 
+Offline refers to the case when all the hypotheses are tested simultaneously by an algorithm. Batch refers to the case when the hypotheses are tested as they arrive in batches. Fully sequential refers to the case when hypotheses are tested as they arrive one-by-one. 
 
 * **What do the different data dependencies mean?**
 
@@ -77,15 +73,13 @@ Offline refers to the case when all the hypotheses are tested simultaneously by 
 
 * **What are the differences between some of the algorithms such as `LOND`, `LORD`, `SAFFRON`, and `ADDIS`?**
 
-`SAFFRON` and `ADDIS` were developed after `LOND` and `LORD`, so they have some improvements. 
-
-That being said, `LOND` is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of a sequential experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, `LOND` is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.
+`LOND` is a fairly simple algorithm where the significance levels are multiplied by the number of discoveries/rejections that have been made thus far. It also provably controls the FDR when the p-values are positively correlated. However, the drawback is that unless many discoveries are continually being made right from the start of an online experiment, the adjusted significance levels (and hence the power) will very quickly go towards zero. In this way, `LOND` is oblivious to the information it gained from the previous hypothesis tests and does not take full advantage of its alpha-wealth.
 
 `LORD` improves upon `LOND` by taking advantage of "alpha investing" where it can regain some of its alpha-wealth when it makes a discovery/rejection. The adjusted significance levels depend not only on how many discoveries have been made, but also the timing of these discoveries. However, one drawback is that LORD does not take advantage of the strength of the signals present in the data (i.e. the size of the p-values).
 
-`SAFFRON` improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are *a priori* more likely to be truly null hypotheses), `SAFFRON` preserves alpha-wealth. When there is a substantial fraction of non-nulls in the sequential experiment, `SAFFRON` will often be more powerful than `LORD`. 
+`SAFFRON` improves upon this by focusing on the stronger signals in the experiment (i.e. the smaller p-values). By removing the possibility of ever rejecting weaker signals (those which are *a priori* more likely to be truly null hypotheses), `SAFFRON` preserves alpha-wealth. When there is a substantial fraction of non-nulls in the online experiment, `SAFFRON` will often be more powerful than `LORD`. 
 
-`ADDIS` is a further improvement upon `SAFFRON` because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This results in even higher power. 
+`ADDIS` is a further improvement upon `SAFFRON` because it invests alpha-wealth more effectively by explicitly discarding the weakest signals (i.e. the largest p-values) in a principled way. This can result in an even higher power. 
 
 ## Quick Start
 
@@ -95,9 +89,9 @@ This Quick Start guide is meant to provide a framework for you to use any of the
 
 #### Input data
 
-In general, your dataset should contain, at the minimum, a column of p-values ('pval')). You can also pass in an id column ('id') or a date column ('date'), but that is optional; the p-values will be treated as being ordered sequentially. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered sequentially. 
+In general, your dataset should contain, at the minimum, a column of p-values ('pval')). You can also pass in an id column ('id') or a date column ('date'), but that is optional; the p-values will be treated as being ordered in sequence. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered in sequence. 
 
-If you are using the Batch algorithms, ensure that your dataset contains a column ('batch') where batches are defined sequentially starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see `LONDstar()`, `LORDstar()`, and `SAFFRONstar()`). If you are not sure which algorithm to use, click [here](#which-function-do-i-use-).
+If you are using the Batch algorithms, ensure that your dataset contains a column ('batch') where batches are defined in sequence starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see `LONDstar()`, `LORDstar()`, and `SAFFRONstar()`). If you are not sure which algorithm to use, click [here](#which-function-do-i-use-).
 
 All p-values generated should be passed to the function (and not
 just the significant p-values).  An exception to this would be if you have
@@ -142,7 +136,6 @@ Next, we call our algorithm of interest. Note that we also set a seed using the 
 
 ```{r}
 library(onlineFDR)
-library(Rcpp)
 
 set.seed(1)
 LOND_results <- LOND(sample.df)
@@ -178,8 +171,8 @@ legend("right", legend = c("Unadjusted", "Bonferroni", "LORD", "LOND"),
 
 Note that both LOND and LORD result in much lower significance thresholds (alpha_i) than the offline Bonferroni adjustment. When alphai jumps, that indicates that the algorithm is recovering some of its "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, its alpha wealth decreases (the akphai will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in "alpha wealth") compared to LOND.
 
-### Using `onlineFDR` Sequentially
-This package can be used in a sequential manner as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
+### Using `onlineFDR` over time
+This package can be used over time as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
 
 ```{r}
 # Initial experimental data
@@ -258,7 +251,7 @@ LOND_results <- LOND(sample.df, alpha = 0.04, betai = bound)
 
 ## API
 
-### Fully Sequential FDR Control
+### Online FDR Control
 * `LOND()`
 implements the LOND procedure for online FDR control, where LOND stands for
 (significance) Levels based On Number of Discoveries, as presented by Javanmard
@@ -307,15 +300,15 @@ implements the BatchSt-BH algorithm for online FDR control, as presented by Zrni
 ### Asynchronous FDR Control
 * `LONDstar()`
 implements the LOND algorithm for asynchronous online testing, as presented 
-by Zrnic *et al.* (2018). This controls the mFDR.
+by Zrnic *et al.* (2021). This controls the mFDR.
 
 * `LORDstar()`
 implements LORD algorithms for asynchronous online testing, as presented by
-Zrnic *et al.* (2018). This controls the mFDR.
+Zrnic *et al.* (2021). This controls the mFDR.
 
 * `SAFFRONstar()`
 implements the SAFFRON algorithm for asynchronous online testing, as
-presented by Zrnic *et al.* (2018). This controls the mFDR.
+presented by Zrnic *et al.* (2021). This controls the mFDR.
 
 ### FWER Control
 * `Alpha_spending()`
@@ -324,16 +317,16 @@ provides strong FWER control for arbitrarily dependent p-values.
 
 * `online_fallback()`
 implements the online fallback algorithm for FWER control, as proposed by
-Tian & Ramdas (2019b). Online fallback is a uniformly more powerful method than
+Tian & Ramdas (2021). Online fallback is a uniformly more powerful method than
 Alpha-spending, as it saves the significance level of a previous rejection.
 Online fallback strongly controls the FWER for arbitrarily dependent p-values.
 
 * `ADDIS_spending()`
 implements the ADDIS-spending algorithm for online FWER control, as proposed by
-Tian & Ramdas (2019b). The algorithm compensates for the power loss of
+Tian & Ramdas (2021). The algorithm compensates for the power loss of
 Alpha-spending, by including both adaptivity in the fraction of null hypotheses
 and the conservativeness of nulls. ADDIS-spending provides strong FWER control
-for independent p-values. Tian & Ramdas (2019b) also presented a version for
+for independent p-values. Tian & Ramdas (2021) also presented a version for
 handling local dependence.
 
 
@@ -406,18 +399,23 @@ adaptive algorithm for online control of the false discovery rate.
 Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
 rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
 
+Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple hypothesis testing for reproducible research. *arXiv preprint*, https://arxiv.org/abs/.
+
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 Online control of the false discovery rate in biomedical research.
 *Bioinformatics*, 35:4196-4199, https://doi.org/10.1093/bioinformatics/btz191.
 
-Tian, J. and Ramdas, A. (2019a). ADDIS: an adaptive discarding algorithm for 
-online FDR control with conservative nulls. *arXiv preprint*, 
-https://arxiv.org/abs/1905.11465.
+Storey, J. D. (2002). A direct approach to false discovery rates. *JRSS B*, 64(3):479–498.
 
-Tian, J. and Ramdas, A. (2019b). Online control of the familywise error rate.
-*arXiv preprint*, https://arxiv.org/abs/1910.04900.
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
+online FDR control with conservative nulls. *Advances in Neural Information Processing Systems*, 32.
 
-Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous Online Testing of
-Multiple Hypotheses. *arXiv preprint*, https://arxiv.org/abs/1812.05068.
+Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+*Statistical Methods in Medical Research*, 30(4):976–993.
+
+Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The power of batching in multiple hypothesis testing. *International Conference on Artificial Intelligence and Statistics (AISTATS) 2020*, PMLR, 108:3806-3815.
+
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+Multiple Hypotheses. *JMLR*, 22:1-33.
 
 
