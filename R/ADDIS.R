@@ -8,19 +8,19 @@
 #' SAFFRON).
 #'
 #' The function takes as its input either a vector of p-values, or a dataframe
-#' with three columns. For the fully sequential version, the dataframe requires
-#' an identifier (`id'), date (`date') and p-value (`pval'). If the asynchronous
+#' with three columns. The dataframe requires an identifier (`id'), 
+#' date (`date') and p-value (`pval'). If the asynchronous
 #' version is specified (see below), then the column date should be replaced 
 #' by the decision times. 
 #' 
 #' Given an overall significance level \eqn{\alpha}, ADDIS depends on constants
 #' \eqn{w_0}, \eqn{\lambda} and \eqn{\tau}. Here \eqn{w_0} represents the
-#' initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \tau
-#' \lambda \alpha}. \eqn{\tau \in (0,1)} represents the threshold for a
+#' initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \alpha}.
+#' \eqn{\tau \in (0,1)} represents the threshold for a
 #' hypothesis to be selected for testing: p-values greater than \eqn{\tau} are
-#' implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in (0,1)}
+#' implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in [0,\tau)}
 #' sets the threshold for a p-value to be a candidate for rejection: ADDIS will
-#' never reject a p-value larger than \eqn{\tau \lambda}. The algorithm also
+#' never reject a p-value larger than \eqn{\lambda}. The algorithm also
 #' require a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 #' sum to 1.
 #'
@@ -35,8 +35,7 @@
 #' (2019).
 #'
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
-#'   identifier (`id'), 
-#'   p-value (`pval'), and decision times 
+#'   identifier (`id'), p-value (`pval'), and decision times 
 #'   (`decision.times').
 #'
 #' @param alpha Overall significance level of the procedure, the default is
@@ -45,14 +44,13 @@
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
 #'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
 #'
-#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\tau \lambda
-#'   \alpha/2}.
-#'
-#' @param lambda Optional parameter that sets the threshold for `candidate'
-#'   hypotheses. Must be between 0 and 1, defaults to 0.5.
-#'
+#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.
+#'   
 #' @param tau Optional threshold for hypotheses to be selected for testing. Must
 #'   be between 0 and 1, defaults to 0.5.
+#'
+#' @param lambda Optional parameter that sets the threshold for `candidate'
+#'   hypotheses. Must be between 0 and tau, defaults to 0.25.
 #'
 #' @param async Logical. If \code{TRUE} runs the version for an asynchronous
 #'   testing process. Defaults to FALSE.
@@ -99,7 +97,7 @@
 #'         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
 #'         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 #' 
-#' ADDIS(sample.df1, random=FALSE) # Fully sequential
+#' ADDIS(sample.df1, random=FALSE)
 #' 
 #' 
 #' sample.df2 <- data.frame(
@@ -116,7 +114,7 @@
 #'
 #' @export
 
-ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
+ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
                   async = FALSE, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
@@ -144,14 +142,14 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
         stop("alpha must be between 0 and 1.")
     }
     
-    if (lambda <= 0 || lambda > 1) {
-        stop("lambda must be between 0 and 1.")
+    if (tau <= 0 || tau > 1) {
+      stop("tau must be between 0 and 1.")
     }
     
-    if (tau <= 0 || tau > 1) {
-        stop("tau must be between 0 and 1.")
+    if (lambda <= 0 || lambda > tau) {
+        stop("lambda must be between 0 and tau.")
     }
-
+    
     N <- length(pval)
     
     if (missing(gammai)) {
@@ -163,11 +161,11 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, tau = 0.5,
     }
     
     if (missing(w0)) {
-        w0 = tau * lambda * alpha/2
+        w0 = alpha/2
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
-    } else if (w0 > tau * lambda * alpha) {
-        stop("w0 must be less than tau*lambda*alpha")
+    } else if (w0 > alpha) {
+        stop("w0 must be less than alpha.")
     }
     
     if (!(async)) {

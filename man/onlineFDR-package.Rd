@@ -7,9 +7,9 @@
 \description{
 The onlineFDR package provides methods to control the false discovery rate
 (FDR) or familywise error rate (FWER) for online hypothesis testing, where
-hypotheses arrive sequentially in a stream. A null hypothesis is rejected
-based only on the previous decisions, as the future p-values and the number
-of hypotheses to be tested are unknown.
+hypotheses arrive in a stream. A null hypothesis is rejected
+based based on the evidence against it and on the previous rejection
+decisions.
 }
 \section{Details}{
 
@@ -17,8 +17,8 @@ of hypotheses to be tested are unknown.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 2.1.1\cr
-Date: \tab 2021-10-30\cr
+Version: \tab 2.5.1\cr
+Date: \tab 2022-08-24\cr
 License: \tab GPL-3 \cr
 }
 
@@ -143,6 +143,10 @@ Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
 discovery rate in biomedical research. \emph{arXiv preprint},
 \url{https://arxiv.org/abs/1809.07292}.
 
+Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple
+hypothesis testing for reproducible research.\emph{arXiv preprint},
+\url{https://arxiv.org/abs/2208.11418}.
+
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 onlineFDR: an R package to control the false discovery rate for growing data
 repositories. \emph{Bioinformatics}, 35:4196-4199, 
@@ -153,21 +157,19 @@ online FDR control with conservative nulls.
 \emph{Advances in Neural Information Processing Systems}, 9388-9396.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-\emph{Statistical Methods for Medical Research} (to appear),
-\url{https://arxiv.org/abs/1910.04900}.
+\emph{Statistical Methods for Medical Research}, 30(4):976–993.
 
 Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online 
-Multiple Testing. \emph{arXiv preprint}, 
-\url{https://arxiv.org/abs/2010.13953}.
+Multiple Testing. \emph{Annual Conference on Mathematical and Scientific 
+Machine Learning}, PMLR, 145:955-986.
 
 Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
 Batching in Multiple Hypothesis Testing.
 \emph{International Conference on Artificial Intelligence and Statistics},
-3806-3815.
+PMLR, 108:3806-3815.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-\url{https://arxiv.org/abs/1812.05068}.
+Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
 }
 \author{
 David S. Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}),

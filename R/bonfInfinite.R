@@ -8,7 +8,7 @@
 #' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 #' The case where p-values arrive in batches corresponds to multiple instances of
 #' the same date. If no column of dates is provided, then the p-values are
-#' treated as being ordered sequentially with no batches.
+#' treated as being ordered in sequence, arriving one at a time.
 #'
 #' The procedure controls FDR for a potentially infinite stream of p-values by
 #' using a Bonferroni-like test. Given an overall significance level
@@ -19,8 +19,8 @@
 #'
 #'@param d Either a vector of p-values, or a dataframe with three columns: an
 #'  identifier (`id'), date (`date') and p-value (`pval'). If no column of dates
-#'  is provided, then the p-values are treated as being ordered sequentially
-#'  with no batches.
+#'  is provided, then the p-values are treated as being ordered in sequence,
+#'  arriving one at a time.
 #'
 #'@param alpha Overall significance level of the FDR procedure, the default is
 #'  0.05.

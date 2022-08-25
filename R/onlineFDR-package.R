@@ -143,7 +143,7 @@
 #' 
 #' Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple
 #' hypothesis testing for reproducible research.\emph{arXiv preprint},
-#' \url{https://arxiv.org/abs/}.
+#' \url{https://arxiv.org/abs/2208.11418}.
 #' 
 #' Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 #' onlineFDR: an R package to control the false discovery rate for growing data
@@ -158,8 +158,8 @@
 #' \emph{Statistical Methods for Medical Research}, 30(4):976–993.
 #' 
 #' Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online 
-#' Multiple Testing. \emph{Annual Conference on Mathematical and Scientific Machine Learning}, 
-#' PMLR, 145:955-986.
+#' Multiple Testing. \emph{Annual Conference on Mathematical and Scientific 
+#' Machine Learning}, PMLR, 145:955-986.
 #' 
 #' Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
 #' Batching in Multiple Hypothesis Testing.

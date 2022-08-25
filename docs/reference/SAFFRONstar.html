@@ -75,8 +75,6 @@ presented by Zrnic et al. (2021).</p>
 <span>  <span class="va">w0</span>,</span>
 <span>  lambda <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  <span class="va">batch.sizes</span>,</span>
-<span>  discard <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  tau.discard <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  display_progress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -119,17 +117,6 @@ between 0 and 1. Defaults to 0.5.</p></dd>
 <dt>batch.sizes</dt>
 <dd><p>A vector of batch sizes, this is required for
 <code>version='batch'</code>.</p></dd>
-
-
-<dt>discard</dt>
-<dd><p>Logical. If <code>TRUE</code> then runs the ADDIS algorithm with
-adaptive discarding of conservative nulls. The default is <code>FALSE</code>.</p></dd>
-
-
-<dt>tau.discard</dt>
-<dd><p>Optional threshold for hypotheses to be selected for
-testing. Must be between 0 and 1, defaults to 0.5. This is required if
-<code>discard=TRUE</code>.</p></dd>
 
 
 <dt>display_progress</dt>
@@ -175,7 +162,7 @@ The batch sizes are given as the input <code>batch.sizes</code> for this version
 the SAFFRONstar algorithm.</p>
 <p>Given an overall significance level \(\alpha\), SAFFRONstar depends on
 constants \(w_0\) and \(\lambda\), where \(w_0\) satisfies \(0 \le
-w_0 \le (1 - \lambda)\alpha\) and represents the intial `wealth' of the
+w_0 \le \alpha\) and represents the intial `wealth' of the
 procedure, and \(0 &lt; \lambda &lt; 1\) represents the threshold for a
 `candidate' hypothesis. A `candidate' refers to p-values smaller than
 \(\lambda\), since SAFFRONstar will never reject a p-value larger than
@@ -189,20 +176,14 @@ assumed to be independent.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous
-  Online Testing of Multiple Hypotheses. <em>arXiv preprint</em>,
-  <a href="https://arxiv.org/abs/1812.05068" class="external-link">https://arxiv.org/abs/1812.05068</a>.</p>
-<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear),
-<a href="https://arxiv.org/abs/1812.05068" class="external-link">https://arxiv.org/abs/1812.05068</a>.</p>
+    <p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+Multiple Hypotheses. <em>Journal of Machine Learning Research</em>, 22:1-33.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="SAFFRON.html">SAFFRON</a></code> presents versions of SAFFRON for <em>synchronous</em>
 p-values, i.e. where each test can only start when the previous test has
-finished.</p>
-<p>If <code>version='async'</code> and <code>discard=TRUE</code>, then SAFFRONstar is
-identical to <code><a href="ADDIS.html">ADDIS</a></code> with option <code>async=TRUE</code>.</p></div>
+finished.</p></div>
     </div>
 
     <div id="ref-examples">

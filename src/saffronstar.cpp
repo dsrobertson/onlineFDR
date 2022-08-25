@@ -15,7 +15,7 @@ using std::upper_bound;
 DataFrame saffronstar_async_faster(NumericVector pval,
 	IntegerVector E,
 	NumericVector gammai,
-	double w0 = 0.0125,
+	double w0 = 0.025,
 	double lambda = 0.5,
 	double alpha = 0.05,
 	bool display_progress = true) {
@@ -27,7 +27,7 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 	LogicalVector R(N);
 	IntegerVector cand(N);
 	IntegerVector Cjplus(N);
-	alphai(0) = std::min(gammai(0)*w0, lambda);
+	alphai(0) = std::min((1-lambda)*gammai(0)*w0, lambda);
 	R(0) = (pval(0) <= alphai(0));
 
 	Progress p(N * N, display_progress);
@@ -83,11 +83,9 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 			}
 			
 			Cjplussum -= gammai(i-r(0)-Cjplus(0)-1);
-			
 
-
-			alphaitilde = w0*gammai(i-candsum) + ((1-lambda)*alpha - w0)*
-			gammai(i-r(0)-Cjplus(0)-1) + (1-lambda)*alpha*Cjplussum;
+			alphaitilde = (1-lambda)*(w0*gammai(i-candsum) + (alpha - w0)*
+			gammai(i-r(0)-Cjplus(0)-1) + alpha*Cjplussum);
 			
 		} else if (K == 1) {
 			
@@ -98,11 +96,11 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 				if (cand(j) && E(j)-1 <= i-1)
 					Cjplus(0)++;
 			}
-			alphaitilde = w0*gammai(i-candsum) + ((1-lambda)*alpha-w0)*
-			gammai(i-r(0)-Cjplus(0)-1);
+			alphaitilde = (1-lambda)*(w0*gammai(i-candsum) + (alpha-w0)*
+			gammai(i-r(0)-Cjplus(0)-1));
 			
 		} else {
-			alphaitilde = w0*gammai(i-candsum);
+			alphaitilde = (1-lambda)*w0*gammai(i-candsum);
 		}
 		alphai(i) = std::min(lambda, alphaitilde);
 		if (pval(i) <= alphai(i)) {
@@ -119,7 +117,7 @@ DataFrame saffronstar_async_faster(NumericVector pval,
 DataFrame saffronstar_dep_faster(NumericVector pval,
 	IntegerVector L,
 	NumericVector gammai,
-	double w0 = 0.0125,
+	double w0 = 0.025,
 	double lambda = 0.5,
 	double alpha = 0.05,
 	bool display_progress = true) {
@@ -131,7 +129,7 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 	LogicalVector R(N);
 	IntegerVector cand(N);
 	IntegerVector Cjplus(N);
-	alphai(0) = std::min(gammai(0)*w0, lambda);
+	alphai(0) = std::min((1-lambda)*gammai(0)*w0, lambda);
 	R(0) = (pval(0) <= alphai(0));
 
 	Progress p(N * N, display_progress);
@@ -188,8 +186,8 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 
 			Cjplussum -= gammai(i-r(0)-Cjplus(0)-1);
 
-			alphaitilde = w0*gammai(i-candsum) + ((1-lambda)*alpha-w0)*
-			gammai(i-r(0)-Cjplus(0)-1) + (1-lambda)*alpha*Cjplussum;
+			alphaitilde = (1-lambda)*(w0*gammai(i-candsum) + (alpha-w0)*
+			gammai(i-r(0)-Cjplus(0)-1) + alpha*Cjplussum);
 
 		} else if (K == 1) {
 			
@@ -200,11 +198,11 @@ DataFrame saffronstar_dep_faster(NumericVector pval,
 				if (cand(j) && j < i-L(i))
 					Cjplus(0)++;
 			}
-			alphaitilde = w0*gammai(i-candsum) + ((1-lambda)*alpha-w0)*
-			gammai(i-r(0)-Cjplus(0)-1);
+			alphaitilde = (1-lambda)*(w0*gammai(i-candsum) + (alpha-w0)*
+			gammai(i-r(0)-Cjplus(0)-1));
 			
 		} else {
-			alphaitilde = w0*gammai(i-candsum);
+			alphaitilde = (1-lambda)*w0*gammai(i-candsum);
 		}
 		alphai(i) = std::min(lambda, alphaitilde);
 		if (pval(i) <= alphai(i)) {
@@ -223,7 +221,7 @@ List saffronstar_batch_faster(NumericVector pval,
 	IntegerVector batch,
 	IntegerVector batchsum,
 	NumericVector gammai,
-	double w0 = 0.0125,
+	double w0 = 0.025,
 	double lambda = 0.5,
 	double alpha = 0.05,
 	bool display_progress = true) {
@@ -245,7 +243,7 @@ List saffronstar_batch_faster(NumericVector pval,
 
 	for (int i = 0; i < batch(0); i++) {
 		cand(i) = (pval(i) <= lambda);
-		alphai(0,i) = gammai(i) * w0;
+		alphai(0,i) = (1-lambda)*gammai(i) * w0;
 		R(0,i) = (pval(i) <= alphai(0,i));
 	}
 
@@ -298,9 +296,9 @@ List saffronstar_batch_faster(NumericVector pval,
 				
 				Cjplussum -= gammai(batchsum(b-1) + x - batchsum(r(0)) - Cjplus(0));
 				
-				alphaitilde = w0*gammai(batchsum(b-1) + x - candsum) + 
-				  ((1-lambda)*alpha - w0)*gammai(batchsum(b-1) + x - batchsum(r(0)) - Cjplus(0)) + 
-				  (1-lambda)*alpha*Cjplussum;
+				alphaitilde = (1-lambda)*(w0*gammai(batchsum(b-1) + x - candsum) + 
+				  (alpha - w0)*gammai(batchsum(b-1) + x - batchsum(r(0)) - Cjplus(0)) + 
+				  alpha*Cjplussum);
 				
 				alphai(b,x) = std::min(lambda, alphaitilde);
 				
@@ -324,14 +322,14 @@ List saffronstar_batch_faster(NumericVector pval,
 				  Cjplus(0) = 0;
 				}
 				
-				alphaitilde = w0*gammai(batchsum(b-1) + x - candsum) + ((1-lambda)*alpha-w0)*
-				gammai(batchsum(b-1) + x - batchsum(r(0)) - Cjplus(0));
+				alphaitilde = (1-lambda)*(w0*gammai(batchsum(b-1) + x - candsum) + 
+				  (alpha-w0)*gammai(batchsum(b-1) + x - batchsum(r(0)) - Cjplus(0)));
 				
 				alphai(b,x) = std::min(lambda, alphaitilde);
 				R(b,x) = (pval(batchsum(b-1) + x) <= alphai(b,x));
 
 			} else {
-				alphaitilde = w0*gammai(batchsum(b-1) + x - candsum);
+				alphaitilde = (1-lambda)*w0*gammai(batchsum(b-1) + x - candsum);
 				alphai(b,x) = std::min(lambda, alphaitilde);
 				R(b,x) = (pval(batchsum(b-1) + x) <= alphai(b,x));
 			}

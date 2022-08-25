@@ -93,8 +93,7 @@ ADDIS_spending(sample.df, dep = TRUE) #Locally dependent
 }
 \references{
 Tian, J. and Ramdas, A. (2021). Online control of the familywise
-  error rate. \emph{Statistical Methods for Medical Research} (to appear),
-  \url{https://arxiv.org/abs/1910.04900}.
+  error rate. \emph{Statistical Methods for Medical Research} 30(4):976–993.
 }
 \seealso{
 \code{\link{ADDIS}} provides online control of the FDR.

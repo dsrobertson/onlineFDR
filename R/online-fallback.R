@@ -7,7 +7,7 @@
 #' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 #' The case where p-values arrive in batches corresponds to multiple instances
 #' of the same date. If no column of dates is provided, then the p-values are
-#' treated as being ordered sequentially with no batches. Given an overall
+#' treated as being ordered in sequence, arriving one at a time. Given an overall
 #' significance level \eqn{\alpha}, we choose a sequence of non-negative
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #' 
@@ -24,7 +24,7 @@
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
 #'   identifier (`id'), date (`date') and p-value (`pval'). If no column of
 #'   dates is provided, then the p-values are treated as being ordered
-#'   sequentially with no batches.
+#'   in sequence, arriving one at a time.
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05.
@@ -36,7 +36,8 @@
 #'   p-values in each batch (i.e. those that have exactly the same date) is
 #'   randomised.
 #'
-#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
+#' @param display_progress Logical. If \code{TRUE} prints out a progress bar for
+#'  the algorithm runtime. 
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
@@ -50,8 +51,7 @@
 #'
 #'
 #' @references Tian, J. and Ramdas, A. (2021). Online control of the familywise
-#' error rate. \emph{Statistical Methods for Medical Research} (to appear),
-#' \url{https://arxiv.org/abs/1910.04900}.
+#' error rate. \emph{Statistical Methods for Medical Research}, 30(4):976–993.
 #'
 #'
 #' @examples

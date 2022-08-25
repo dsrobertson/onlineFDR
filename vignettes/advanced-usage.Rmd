@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 )
 
 library(onlineFDR)
-library(Rcpp)
 
 sample.df <- data.frame(
     id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
@@ -156,16 +155,16 @@ versions of LORD).
 
 By default $w_0 = \alpha/2$ and $\lambda = 0.5$, but these parameters can
 optionally be specified by the user subject to the requirements that
-$0 \leq w_0 < \alpha$ and $0 < \lambda < 1$. The values of `gammai` are also
+$0 \leq w_0 \leq \alpha$ and $0 < \lambda < 1$. The values of `gammai` are also
 supplied by default, but can optionally be specified by the user (as described
 above, see the formula for $\gamma_j$ [here](#SAFFRON_gamma)).
 
 
 ### ADDIS
 
-By default $w_0 = \tau \lambda \alpha/2$ and $\lambda = \tau = 0.5$, but these
+By default $w_0 = \alpha/2$, $\tau = 0.5$ and $\lambda = 0.25$, but these
 parameters can optionally be specified by the user subject to the requirements
-that $0 \leq w_0 < \tau \lambda \alpha$, $0 < \lambda < 1$ and $0 < \tau < 1$.
+that $0 \leq w_0 < \alpha$, $0 < \tau < 1$ and $0 < \lambda < \tau$.
 The values of `gammai` are also supplied by default, but can optionally be
 specified by the user.
 

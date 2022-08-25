@@ -94,7 +94,7 @@ using the onlineFDR package</h1>
                         <h4 data-toc-skip class="author">David S.
 Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp</h4>
             
-            <h4 data-toc-skip class="date">2022-08-24</h4>
+            <h4 data-toc-skip class="date">2022-08-25</h4>
       
       
       <div class="hidden name"><code>onlineFDR.Rmd</code></div>
@@ -157,13 +157,13 @@ mean?</strong></li>
 </ul>
 <p>Offline refers to the case when all the hypotheses are tested
 simultaneously by an algorithm. Batch refers to the case when the
-hypotheses are tested as they arrive in batches. Fully sequential refers
-to the case when hypotheses are tested as they arrive one-by-one.</p>
+hypotheses are tested as they arrive in batches. One-by-one refers to
+the case when hypotheses are tested as they arrive, one at a time.</p>
 <ul>
 <li><strong>What do the different data dependencies mean?</strong></li>
 </ul>
 <p>‘Independent’ means that a given null p-value does not depend on any
-other nonnull p-values. A simple way to think about p-values being
+other non null p-values. A simple way to think about p-values being
 ‘positively dependent’ is to consider correlated hypothesis tests. For
 instance, consider testing for pairwise differences in means between 4
 groups. If group A has an especially low mean, then not only would A
@@ -285,7 +285,7 @@ in the format “YYYY-MM-DD”.</p>
 <span>                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"2016-05-19"</span>,<span class="fl">2</span><span class="op">)</span>,</span>
 <span>                   <span class="st">"2016-11-12"</span>,</span>
 <span>                   <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"2017-03-27"</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.06743</span>, <span class="fl">0.01514</span>, <span class="fl">0.08174</span>, <span class="fl">0.00171</span>,</span>
+<span>  pval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.90e-14</span>, <span class="fl">0.00143</span>, <span class="fl">0.06514</span>, <span class="fl">0.00174</span>, <span class="fl">0.00171</span>,</span>
 <span>           <span class="fl">3.61e-05</span>, <span class="fl">0.79149</span>, <span class="fl">0.27201</span>, <span class="fl">0.28295</span>, <span class="fl">7.59e-08</span>,</span>
 <span>           <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.000487</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Next, we call our algorithm of interest. Note that we also set a seed
@@ -299,9 +299,9 @@ reproducible.</p>
 <span><span class="va">LOND_results</span></span>
 <span><span class="co">#&gt;          pval       alphai R</span></span>
 <span><span class="co">#&gt; 1  2.9000e-14 0.0026758385 1</span></span>
-<span><span class="co">#&gt; 2  6.7430e-02 0.0011638206 0</span></span>
-<span><span class="co">#&gt; 3  1.5140e-02 0.0009912499 0</span></span>
-<span><span class="co">#&gt; 4  8.1740e-02 0.0008243606 0</span></span>
+<span><span class="co">#&gt; 2  1.4300e-03 0.0011638206 0</span></span>
+<span><span class="co">#&gt; 3  6.5140e-02 0.0009912499 0</span></span>
+<span><span class="co">#&gt; 4  1.7400e-03 0.0008243606 0</span></span>
 <span><span class="co">#&gt; 5  1.7100e-03 0.0006988870 0</span></span>
 <span><span class="co">#&gt; 6  2.7201e-01 0.0006045900 0</span></span>
 <span><span class="co">#&gt; 7  3.6100e-05 0.0005319444 1</span></span>
@@ -323,30 +323,31 @@ the adjusted significance thresholds:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">LORD_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">Bonf_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Alpha_spending.html">Alpha_spending</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span> <span class="co"># Bonferroni-like test</span></span>
+<span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">LOND_results</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">9.1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">LOND_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">8.5</span>, <span class="op">-</span><span class="fl">2.5</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'l'</span>, col <span class="op">=</span> <span class="st">"green"</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Index"</span>, ylab <span class="op">=</span> <span class="st">"log(alphai)"</span>, panel.first <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/grid.html" class="external-link">grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="co"># LOND</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">LOND_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">9.5</span>, <span class="op">-</span><span class="fl">2.5</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'l'</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"green"</span>, xlab <span class="op">=</span> <span class="st">"Index"</span>, ylab <span class="op">=</span> <span class="st">"log(alphai)"</span>, panel.first <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/grid.html" class="external-link">grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">LORD_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="co"># LORD</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">/</span><span class="va">x</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="co"># Bonferroni</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">Bonf_results</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="co"># Bonferroni-like test</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">0.05</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"purple"</span><span class="op">)</span> <span class="co"># Unadjusted</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"right"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Unadjusted"</span>, <span class="st">"Bonferroni"</span>, <span class="st">"LORD"</span>, <span class="st">"LOND"</span><span class="op">)</span>,</span>
 <span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"purple"</span>, <span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span><span class="op">)</span>,</span>
 <span>       inset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.35</span>,<span class="fl">0</span><span class="op">)</span>, xpd <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="onlineFDR_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>Note that both LOND and LORD result in much lower significance
-thresholds (alpha_i) than the offline Bonferroni adjustment. When alphai
-jumps, that indicates that the algorithm is recovering some of its
-“alpha wealth” when it makes a discovery. You can see how if the
-algorithm does not discover anything over time, its alpha wealth
-decreases (the akphai will monotonically decrease), and it becomes
-harder to reject a null hypothesis since the significance threshold gets
-smaller and smaller. In this toy example, we also see that LORD is more
-powerful (bigger jumps or recoveries in “alpha wealth”) compared to
-LOND.</p>
+<p>Note that both LOND and LORD result in higher significance thresholds
+(alpha_i) than a Bonferroni adjustment. When alphai jumps, that
+indicates that the algorithm is recovering some of its “alpha wealth”
+when it makes a discovery. You can see how if the algorithm does not
+discover anything over time, its alpha wealth decreases (the alphai will
+monotonically decrease), and it becomes harder to reject a null
+hypothesis since the significance threshold gets smaller and
+smaller.</p>
 </div>
 <div class="section level3">
 <h3 id="using-onlinefdr-over-time">Using <code>onlineFDR</code> over time<a class="anchor" aria-label="anchor" href="#using-onlinefdr-over-time"></a>
@@ -599,7 +600,7 @@ Learning</em>, 80:4286-4294.</p>
 discovery rate in biomedical research. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1809.07292" class="external-link uri">https://arxiv.org/abs/1809.07292</a>.</p>
 <p>Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple
 hypothesis testing for reproducible research. <em>arXiv preprint</em>,
-<a href="https://arxiv.org/abs/" class="external-link uri">https://arxiv.org/abs/</a>.</p>
+<a href="https://arxiv.org/abs/2208.11418" class="external-link uri">https://arxiv.org/abs/2208.11418</a>.</p>
 <p>Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 Online control of the false discovery rate in biomedical research.
 <em>Bioinformatics</em>, 35:4196-4199, <a href="https://doi.org/10.1093/bioinformatics/btz191" class="external-link uri">https://doi.org/10.1093/bioinformatics/btz191</a>.</p>

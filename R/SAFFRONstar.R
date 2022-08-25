@@ -35,7 +35,7 @@
 #'
 #' Given an overall significance level \eqn{\alpha}, SAFFRONstar depends on
 #' constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
-#' w_0 \le (1 - \lambda)\alpha} and represents the intial `wealth' of the
+#' w_0 \le \alpha} and represents the intial `wealth' of the
 #' procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
 #' `candidate' hypothesis. A `candidate' refers to p-values smaller than
 #' \eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
@@ -73,14 +73,7 @@
 #'
 #' @param batch.sizes A vector of batch sizes, this is required for
 #'   \code{version='batch'}.
-#'
-#' @param discard Logical. If \code{TRUE} then runs the ADDIS algorithm with
-#'   adaptive discarding of conservative nulls. The default is \code{FALSE}.
-#'
-#' @param tau.discard Optional threshold for hypotheses to be selected for
-#'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
-#'   \code{discard=TRUE}.
-#'   
+#'  
 #' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
 #' @return \item{out}{A dataframe with the original p-values \code{pval}, the
@@ -90,13 +83,8 @@
 #'   1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Zrnic, T., Ramdas, A. and Jordan, M.I. (2018). Asynchronous
-#'   Online Testing of Multiple Hypotheses. \emph{arXiv preprint},
-#'   \url{https://arxiv.org/abs/1812.05068}.
-#'
-#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-#' \url{https://arxiv.org/abs/1812.05068}.
+#' @references Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
 #'
 #'
 #' @seealso
@@ -104,9 +92,6 @@
 #' \code{\link{SAFFRON}} presents versions of SAFFRON for \emph{synchronous}
 #' p-values, i.e. where each test can only start when the previous test has
 #' finished.
-#'
-#' If \code{version='async'} and \code{discard=TRUE}, then SAFFRONstar is
-#' identical to \code{\link{ADDIS}} with option \code{async=TRUE}.
 #'
 #'
 #' @examples
@@ -135,7 +120,7 @@
 #' @export
 
 SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batch.sizes, 
-    discard = FALSE, tau.discard = 0.5, display_progress = FALSE) {
+    display_progress = FALSE) {
     
     d <- checkPval(d)
     
@@ -162,10 +147,6 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         stop("lambda must be between 0 and 1.")
     }
     
-    if (version == "async" && discard) {
-        return(ADDIS(d, alpha, gammai, w0, lambda, tau.discard, async = TRUE))
-    }
-    
     N <- length(pval)
     
     if (missing(gammai)) {
@@ -177,11 +158,11 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
     }
     
     if (missing(w0)) {
-        w0 = (1 - lambda) * alpha/2
+        w0 = alpha/2
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
-    } else if (w0 >= (1 - lambda) * alpha) {
-        stop("w0 must be less than (1-lambda)*alpha")
+    } else if (w0 > alpha) {
+        stop("w0 must be less than alpha")
     }
     
     version <- checkStarVersion(d, N, version, batch.sizes)

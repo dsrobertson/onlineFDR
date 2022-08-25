@@ -1,7 +1,7 @@
 ---
 title: "Managing online multiple hypothesis testing using the onlineFDR package"
 author: "David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp"
-date: "2022-08-24"
+date: "2022-08-25"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -65,11 +65,11 @@ The FDR is the expected proportion of false rejections out of all rejections. Th
 
 * **What do the different temporal structures mean?**
 
-Offline refers to the case when all the hypotheses are tested simultaneously by an algorithm. Batch refers to the case when the hypotheses are tested as they arrive in batches. Fully sequential refers to the case when hypotheses are tested as they arrive one-by-one. 
+Offline refers to the case when all the hypotheses are tested simultaneously by an algorithm. Batch refers to the case when the hypotheses are tested as they arrive in batches. One-by-one refers to the case when hypotheses are tested as they arrive, one at a time. 
 
 * **What do the different data dependencies mean?**
 
-'Independent' means that a given null p-value does not depend on any other nonnull p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values happen to be correlated with p-values from a long time ago.
+'Independent' means that a given null p-value does not depend on any other non null p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values happen to be correlated with p-values from a long time ago.
 
 * **What are the differences between some of the algorithms such as `LOND`, `LORD`, `SAFFRON`, and `ADDIS`?**
 
@@ -127,7 +127,7 @@ sample.df <- data.frame(
                    rep("2016-05-19",2),
                    "2016-11-12",
                    rep("2017-03-27",4))),
-  pval = c(2.90e-14, 0.06743, 0.01514, 0.08174, 0.00171,
+  pval = c(2.90e-14, 0.00143, 0.06514, 0.00174, 0.00171,
            3.61e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
            0.69274, 0.30443, 0.000487, 0.72342, 0.54757))
 ```
@@ -152,14 +152,17 @@ To compare the results of one algorithm to another, we can visualize the adjuste
 set.seed(1)
 LORD_results <- LORD(sample.df)
 
+set.seed(1)
+Bonf_results <- Alpha_spending(sample.df) # Bonferroni-like test
+
 x <- seq_len(nrow(LOND_results))
 par(mar=c(5.1, 4.1, 4.1, 9.1))
 
-plot(x, log(LOND_results$alphai), ylim = c(-8.5, -2.5), type = 'l', col = "green",
-     xlab = "Index", ylab = "log(alphai)", panel.first = grid()) # LOND
+plot(x, log(LOND_results$alphai), ylim = c(-9.5, -2.5), type = 'l',
+     col = "green", xlab = "Index", ylab = "log(alphai)", panel.first = grid())
 
 lines(x, log(LORD_results$alphai), col = "blue") # LORD
-lines(x, log(0.05/x), col = "red") # Bonferroni
+lines(x, log(Bonf_results$alphai), col = "red") # Bonferroni-like test
 lines(x, rep(log(0.05),length(x)), col = "purple") # Unadjusted
 
 legend("right", legend = c("Unadjusted", "Bonferroni", "LORD", "LOND"),
@@ -169,7 +172,7 @@ legend("right", legend = c("Unadjusted", "Bonferroni", "LORD", "LOND"),
 
 ```
 
-Note that both LOND and LORD result in much lower significance thresholds (alpha_i) than the offline Bonferroni adjustment. When alphai jumps, that indicates that the algorithm is recovering some of its "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, its alpha wealth decreases (the akphai will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller. In this toy example, we also see that LORD is more powerful (bigger jumps or recoveries in "alpha wealth") compared to LOND.
+Note that both LOND and LORD result in higher significance thresholds (alpha_i) than a Bonferroni adjustment. When alphai jumps, that indicates that the algorithm is recovering some of its "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, its alpha wealth decreases (the alphai will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller.
 
 ### Using `onlineFDR` over time
 This package can be used over time as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
@@ -399,7 +402,7 @@ adaptive algorithm for online control of the false discovery rate.
 Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
 rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
 
-Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple hypothesis testing for reproducible research. *arXiv preprint*, https://arxiv.org/abs/.
+Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple hypothesis testing for reproducible research. *arXiv preprint*, https://arxiv.org/abs/2208.11418.
 
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 Online control of the false discovery rate in biomedical research.

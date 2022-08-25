@@ -10,7 +10,7 @@ test_that("Errors for edge cases", {
                "alpha must be between 0 and 1.")
   
   expect_error(ADDIS(test.df, lambda = -0.1),
-               "lambda must be between 0 and 1.")
+               "lambda must be between 0 and tau.")
   
   expect_error(ADDIS(test.df, tau = -0.1),
                "tau must be between 0 and 1.")
@@ -24,8 +24,8 @@ test_that("Errors for edge cases", {
   expect_error(ADDIS(test.df, w0 = -0.01),
                "w0 must be non-negative.")
   
-  # expect_error(ADDIS(0.1, w0 = 1),
-  #              "w0 must be less than tau*lambda*alpha")
+  expect_error(ADDIS(0.1, w0 = 1),
+                "w0 must be less than alpha.")
   
   expect_error(ADDIS(test.df2, async=TRUE),
               "Please provide a decision time for each p-value.")
@@ -44,15 +44,6 @@ test_that("Correct rejections", {
 test_that("Check that ADDIS with async=FALSE is a special case of async=TRUE", {
               expect_equal(ADDIS(test.pval, async=FALSE)$alphai,
                            ADDIS(test.df4, async=TRUE)$alphai)
-})
-
-test_that("Check that ADDIS gives same results as SAFFRON and SAFFRONstar
-          algorithms with discard=TRUE", {
-              expect_equal(ADDIS(test.pval)$alphai,
-                           SAFFRON(test.df, discard=TRUE)$alphai)
-              
-              expect_equal(ADDIS(test.df3, async=TRUE)$alphai,
-                           SAFFRONstar(test.df3, version='async', discard=TRUE)$alphai)
 })
 
 test_that("ADDIS inputs are correct with async=TRUE", {

@@ -10,7 +10,7 @@
 #' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 #' The case where p-values arrive in batches corresponds to multiple instances
 #' of the same date. If no column of dates is provided, then the p-values are
-#' treated as being ordered sequentially with no batches.
+#' treated as being ordered in sequence.
 #'
 #' The Alpha-investing procedure provably controls FDR for independent p-values.
 #' Given an overall significance level \eqn{\alpha}, we choose a sequence of
@@ -25,7 +25,7 @@
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
 #'   identifier (`id'), date (`date') and p-value (`pval'). If no column of
 #'   dates is provided, then the p-values are treated as being ordered
-#'   sequentially with no batches.
+#'   in sequence.
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05.

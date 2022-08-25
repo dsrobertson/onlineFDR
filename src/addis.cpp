@@ -26,10 +26,10 @@ using std::endl;
 // [[Rcpp::export]]
 DataFrame addis_sync_faster(NumericVector pval,
 	NumericVector gammai,
-	double lambda = 0.5,
+	double lambda = 0.25,
 	double alpha = 0.05,
 	double tau = 0.5,
-	double w0 = 0.00625,
+	double w0 = 0.025,
 	bool display_progress = true) {
 	int N = pval.size();
 
@@ -40,9 +40,9 @@ DataFrame addis_sync_faster(NumericVector pval,
 	LogicalVector selected = (pval <= tau);
 	NumericVector S = cumsum(static_cast<NumericVector>(selected));
 
-	alphai[0] = w0*gammai[0];
+	alphai[0] = std::min((tau-lambda)*gammai[0]*w0, lambda);
 	R[0] = (pval[0] <= alphai[0]);
-
+  
 	int K = sum(R);
 	int candsum = 0; 
 	IntegerVector kappai(1);
@@ -51,7 +51,7 @@ DataFrame addis_sync_faster(NumericVector pval,
 
 	for (int i = 1; i < N; i++) {
 
-		cand[i-1] = (pval[i-1] <= tau*lambda);
+		cand[i-1] = (pval[i-1] <= lambda);
 		candsum += cand[i-1];
 
 		double alphaitilde;
@@ -95,9 +95,8 @@ DataFrame addis_sync_faster(NumericVector pval,
 			Cjplussum += gammai[ S[i-1]-kappaistar[K-1]-Cjplus[K-1] ] - 
 			gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ];
 
-			alphaitilde = w0*gammai[ S[i-1]-candsum ] + 
-			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] +
-			tau*(1-lambda)*alpha*Cjplussum;
+			alphaitilde = (tau - lambda)*(w0*gammai[ S[i-1]-candsum ] + 
+			(alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] + alpha*Cjplussum);
 
 		} else if (K == 1) {
 
@@ -116,16 +115,16 @@ DataFrame addis_sync_faster(NumericVector pval,
 					Cjplus[0]++;
 			}
 
-			alphaitilde = w0*gammai[ S[i-1] - candsum  ] + 
-			    (tau*(1-lambda)*alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ];
+			alphaitilde = (tau - lambda)*(w0*gammai[ S[i-1] - candsum  ] + 
+			    (alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ]);
 
 		} else {
 
-			alphaitilde = w0*gammai[ S[i-1] - candsum ];
+			alphaitilde = (tau - lambda)*w0*gammai[ S[i-1] - candsum ];
 
 		}
 
-		alphai[i] = std::min(tau*lambda, alphaitilde);
+		alphai[i] = std::min(lambda, alphaitilde);
 		if (pval[i] <= alphai[i]) {
 			R[i] = 1;
 			K++;
@@ -141,10 +140,10 @@ DataFrame addis_sync_faster(NumericVector pval,
 DataFrame addis_async_faster(NumericVector pval,
 	IntegerVector E,
 	NumericVector gammai,
-	double lambda = 0.5,
+	double lambda = 0.25,
 	double alpha = 0.05,
 	double tau = 0.5,
-	double w0 = 0.00625,
+	double w0 = 0.025,
 	bool display_progress = false) {
 
 	int N = pval.size();
@@ -156,7 +155,7 @@ DataFrame addis_async_faster(NumericVector pval,
 	IntegerVector Cjplus(N);
 	LogicalVector selected = (pval <= tau);
 
-	alphai[0] = w0*gammai[0];
+	alphai[0] = std::min((tau-lambda)*w0*gammai[0], lambda);
 	R[0] = (pval[0] <= alphai[0]);
 
 	int K;
@@ -235,9 +234,8 @@ DataFrame addis_async_faster(NumericVector pval,
 			}
 			Cjplussum -= gammai[ S[i-1] - kappaistar[0] - Cjplus[0] ];
 			
-			alphaitilde = w0*gammai[ S[i-1]-candsum ] + 
-			(tau*(1-lambda)*alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] +
-			tau*(1-lambda)*alpha*Cjplussum;
+			alphaitilde = (tau-lambda)*(w0*gammai[ S[i-1]-candsum ] + 
+			(alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] + alpha*Cjplussum);
 			
 		}  else if (K == 1) {
 
@@ -253,16 +251,16 @@ DataFrame addis_async_faster(NumericVector pval,
 					Cjplus[0]++;
 			}
 
-			alphaitilde = w0 * gammai[ S[i-1] - candsum  ] + 
-			    (tau*(1-lambda)*alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ];
+			alphaitilde = (tau-lambda)*(w0 * gammai[ S[i-1] - candsum  ] + 
+			    (alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ]);
 			
 		} else {
 
-			alphaitilde = w0*gammai[ S[i-1]-candsum ];
+			alphaitilde = (tau-lambda)*w0*gammai[ S[i-1]-candsum ];
 
 		}
 
-		alphai[i] = std::min(tau*lambda, alphaitilde);
+		alphai[i] = std::min(lambda, alphaitilde);
 		if (pval[i] <= alphai[i]) {
 			R[i] = 1;
 	    //K++;

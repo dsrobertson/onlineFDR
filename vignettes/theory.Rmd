@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
 options(tinytex.verbose = TRUE)
 
 library(onlineFDR)
-library(Rcpp)
 
 sample.df <- data.frame(
     id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
@@ -183,7 +182,7 @@ test levels based on an estimate of the amount of alpha-wealth that is allocated
 to testing the true null hypotheses.
 
 SAFFRON depends on constants $w_0$ and $\lambda$, where $w_0$ satisfies
-$0 \leq w_0 < (1 - \lambda)\alpha$ and represents the initial 'wealth' of the
+$0 \leq w_0 \leq \alpha$ and represents the initial 'wealth' of the
 procedure, and $\lambda \in (0,1)$ represents the threshold for a 'candidate'
 hypothesis. A 'candidate' refers to p-values smaller than $\lambda$, since
 SAFFRON will never reject a p-value larger than $\lambda$. These candidates can
@@ -191,19 +190,17 @@ be thought of as the hypotheses that are a-priori more likely to be non-null.
 
 The SAFFRON procedure runs as follows:
 
-1. Set the initial alpha-wealth $w_0 < (1-\lambda)\alpha$
+1. At each time $t$, define the number of candidates after the $j$-th rejection
+as \[ C_{j+} = C_{j+}(t) = \sum_{i = \tau_j + 1}^{t-1} C_i\]
+where $C_t = 1\{p_t \leq \lambda \}$ is the indicator for candidacy.
 
-2. At each time $i$, define the number of candidates after the $k$-th rejection
-as \[ C_{k+} = C_{k+}(i) = \sum_{j = \tau_k + 1}^{i-1} C_j\]
-where $C_j = 1\{p_j \leq \lambda \}$ is the indicator for candidacy.
-
-3. SAFFRON starts with $\alpha_1 = \min\{\gamma_1 w_0, \lambda\}$. Subsequent
-test levels are chosen as $\alpha_i = \min\{ \lambda, \tilde{\alpha}_i\}$, where
+3. SAFFRON starts with $\alpha_1 = \min\{(1 - \lambda)\gamma_1 w_0, \lambda\}$. Subsequent
+test levels are chosen as $\alpha_t = \min\{ \lambda, \tilde{\alpha}_t\}$, where
 \[
-\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} +
-((1-\lambda)\alpha - w_0)\gamma_{i-\tau_1-C_{1+}} +
-(1-\lambda)\alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1}
-\gamma_{i - \tau_j- C_{j+}}
+\tilde{\alpha}_t = (1 - \lambda) [w_0 \gamma_{t-C_{0+}} +
+(\alpha - w_0)\gamma_{t-\tau_1-C_{1+}} +
+\alpha \sum_{j \geq 2}
+\gamma_{t - \tau_j- C_{j+}}]
 \]
 
 <a name="SAFFRON_gamma"></a> The default sequence of $\gamma$ for SAFFRON is
@@ -227,25 +224,23 @@ with conservative nulls, by including both adaptivity in the fraction of null
 hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
 
 ADDIS depends on constants $w_0, \lambda$ and $\tau$. $w_0$ represents the
-initial `wealth' of the procedure and satisfies $0 \leq w_0 \leq \tau \lambda
-\alpha$. $\tau \in (0,1)$ represents the threshold for a hypothesis to be
+initial `wealth' of the procedure and satisfies $0 \leq w_0 \leq \alpha$. $\tau \in (0,1]$ represents the threshold for a hypothesis to be
 selected for testing: p-values greater than $\tau$ are implicitly 'discarded' by
-the procedure. Finally, $\lambda \in (0,1)$ sets the threshold for a p-value to
-be a candidate for rejection: ADDIS will never reject a p-value larger than
-$\tau \lambda$.
+the procedure. Finally, $\lambda \in [0,\tau)$ sets the threshold for a p-value to
+be a candidate for rejection: ADDIS will never reject a p-value larger than $\lambda$.
 
 The significance thresholds for ADDIS are chosen as follows: \[
-\alpha_t = \min\{\tau\lambda, \tilde{\alpha}_t\}
+\alpha_t = \min\{\lambda, \tilde{\alpha}_t\}
 \] where \[
-\tilde{\alpha}_t = w_0 \gamma_{S^t-C_{0+}} +
-(\tau(1-\lambda)\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
-\tau(1-\lambda)\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
+\tilde{\alpha}_t = (\tau - \lambda)[w_0 \gamma_{S^t-C_{0+}} + 
+(\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
+\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
 \] and \[
 \kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i < t} 1 \{p_i \leq \tau \}, \;
-C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
+C_{j+} = \sum_{i = \kappa_j + 1}^{t-1} 1\{p_i \leq \lambda\}
 \]
 
 The default sequence of $\gamma$ for ADDIS is the same as for SAFFRON given
@@ -285,7 +280,7 @@ The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
 ### ADDIS-spending {#ADDIS-spending}
 
 The ADDIS-spending procedure strongly controls the FWER for independent
-p-values, and was proposed by Tian & Ramdas (2019b). The procedure compensates
+p-values, and was proposed by Tian & Ramdas (2021). The procedure compensates
 for the power loss of Alpha-spending, by including both adapativity in the
 fraction of null hypotheses and the conservativeness of nulls.
 
@@ -311,7 +306,8 @@ As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume
 independent p-values, while the LOND procedure is also valid under positive
 dependencies (like the Benjamini-Hochberg method, see below). Adjusted
 versions of LOND and LORD available for arbitrarily dependent p-values.
-Alpha-spending and online fallback also control the FWER and FDR for arbitrarily dependent p-values.
+Alpha-spending and online fallback also control the FWER and FDR for arbitrarily
+dependent p-values.
 
 By way of comparison, the usual Benjamini-Hochberg method for controlling
 the FDR assumes that the p-values are positively dependent (PRDS). As an

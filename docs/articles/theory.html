@@ -251,29 +251,27 @@ SAFFRON sets the adjusted test levels based on an estimate of the amount
 of alpha-wealth that is allocated to testing the true null
 hypotheses.</p>
 <p>SAFFRON depends on constants <span class="math inline">\(w_0\)</span>
-and <span class="math inline">\(\lambda\)</span>, where <span class="math inline">\(w_0\)</span> satisfies <span class="math inline">\(0 \leq w_0 &lt; (1 - \lambda)\alpha\)</span> and
-represents the initial ‘wealth’ of the procedure, and <span class="math inline">\(\lambda \in (0,1)\)</span> represents the
+and <span class="math inline">\(\lambda\)</span>, where <span class="math inline">\(w_0\)</span> satisfies <span class="math inline">\(0 \leq w_0 \leq \alpha\)</span> and represents the
+initial ‘wealth’ of the procedure, and <span class="math inline">\(\lambda \in (0,1)\)</span> represents the
 threshold for a ‘candidate’ hypothesis. A ‘candidate’ refers to p-values
 smaller than <span class="math inline">\(\lambda\)</span>, since SAFFRON
 will never reject a p-value larger than <span class="math inline">\(\lambda\)</span>. These candidates can be thought
 of as the hypotheses that are a-priori more likely to be non-null.</p>
 <p>The SAFFRON procedure runs as follows:</p>
 <ol style="list-style-type: decimal">
-<li><p>Set the initial alpha-wealth <span class="math inline">\(w_0 &lt;
-(1-\lambda)\alpha\)</span></p></li>
-<li><p>At each time <span class="math inline">\(i\)</span>, define the
-number of candidates after the <span class="math inline">\(k\)</span>-th
-rejection as <span class="math display">\[ C_{k+} = C_{k+}(i) = \sum_{j
-= \tau_k + 1}^{i-1} C_j\]</span> where <span class="math inline">\(C_j =
-1\{p_j \leq \lambda \}\)</span> is the indicator for candidacy.</p></li>
+<li><p>At each time <span class="math inline">\(t\)</span>, define the
+number of candidates after the <span class="math inline">\(j\)</span>-th
+rejection as <span class="math display">\[ C_{j+} = C_{j+}(t) = \sum_{i
+= \tau_j + 1}^{t-1} C_i\]</span> where <span class="math inline">\(C_t =
+1\{p_t \leq \lambda \}\)</span> is the indicator for candidacy.</p></li>
 <li><p>SAFFRON starts with <span class="math inline">\(\alpha_1 =
-\min\{\gamma_1 w_0, \lambda\}\)</span>. Subsequent test levels are
-chosen as <span class="math inline">\(\alpha_i = \min\{ \lambda,
-\tilde{\alpha}_i\}\)</span>, where <span class="math display">\[
-\tilde{\alpha}_i = w_0 \gamma_{i-C_{0+}} +
-((1-\lambda)\alpha - w_0)\gamma_{i-\tau_1-C_{1+}} +
-(1-\lambda)\alpha \sum_{j : \tau_j &lt; i, \tau_j \neq \tau_1}
-\gamma_{i - \tau_j- C_{j+}}
+\min\{(1 - \lambda)\gamma_1 w_0, \lambda\}\)</span>. Subsequent test
+levels are chosen as <span class="math inline">\(\alpha_t = \min\{
+\lambda, \tilde{\alpha}_t\}\)</span>, where <span class="math display">\[
+\tilde{\alpha}_t = (1 - \lambda) [w_0 \gamma_{t-C_{0+}} +
+(\alpha - w_0)\gamma_{t-\tau_1-C_{1+}} +
+\alpha \sum_{j \geq 2}
+\gamma_{t - \tau_j- C_{j+}}]
 \]</span></p></li>
 </ol>
 <p><a name="SAFFRON_gamma"></a> The default sequence of <span class="math inline">\(\gamma\)</span> for SAFFRON is given by <span class="math inline">\(\gamma_j \propto j^{-1.6}\)</span>.</p>
@@ -299,24 +297,24 @@ conservativeness of nulls (unlike SAFFRON).</p>
 <p>ADDIS depends on constants <span class="math inline">\(w_0,
 \lambda\)</span> and <span class="math inline">\(\tau\)</span>. <span class="math inline">\(w_0\)</span> represents the initial `wealth’ of
 the procedure and satisfies <span class="math inline">\(0 \leq w_0 \leq
-\tau \lambda \alpha\)</span>. <span class="math inline">\(\tau \in
-(0,1)\)</span> represents the threshold for a hypothesis to be selected
-for testing: p-values greater than <span class="math inline">\(\tau\)</span> are implicitly ‘discarded’ by the
-procedure. Finally, <span class="math inline">\(\lambda \in
-(0,1)\)</span> sets the threshold for a p-value to be a candidate for
-rejection: ADDIS will never reject a p-value larger than <span class="math inline">\(\tau \lambda\)</span>.</p>
+\alpha\)</span>. <span class="math inline">\(\tau \in (0,1]\)</span>
+represents the threshold for a hypothesis to be selected for testing:
+p-values greater than <span class="math inline">\(\tau\)</span> are
+implicitly ‘discarded’ by the procedure. Finally, <span class="math inline">\(\lambda \in [0,\tau)\)</span> sets the threshold
+for a p-value to be a candidate for rejection: ADDIS will never reject a
+p-value larger than <span class="math inline">\(\lambda\)</span>.</p>
 <p>The significance thresholds for ADDIS are chosen as follows: <span class="math display">\[
-\alpha_t = \min\{\tau\lambda, \tilde{\alpha}_t\}
+\alpha_t = \min\{\lambda, \tilde{\alpha}_t\}
 \]</span> where <span class="math display">\[
-\tilde{\alpha}_t = w_0 \gamma_{S^t-C_{0+}} +
-(\tau(1-\lambda)\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
-\tau(1-\lambda)\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
+\tilde{\alpha}_t = (\tau - \lambda)[w_0 \gamma_{S^t-C_{0+}} +
+(\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
+\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
 \]</span> and <span class="math display">\[
 \kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}, \;
-C_{j+} = \sum_{i = \tau_k + 1}^{t-1} 1\{p_i \leq \tau\}
+C_{j+} = \sum_{i = \kappa_j + 1}^{t-1} 1\{p_i \leq \lambda\}
 \]</span></p>
 <p>The default sequence of <span class="math inline">\(\gamma\)</span>
 for ADDIS is the same as for SAFFRON given <a href="#SAFFRON_gamma">here</a>.</p>
@@ -360,7 +358,7 @@ LORD given <a href="#LORD_gamma">here</a>.</p>
 <h3 id="ADDIS-spending">ADDIS-spending<a class="anchor" aria-label="anchor" href="#ADDIS-spending"></a>
 </h3>
 <p>The ADDIS-spending procedure strongly controls the FWER for
-independent p-values, and was proposed by Tian &amp; Ramdas (2019b). The
+independent p-values, and was proposed by Tian &amp; Ramdas (2021). The
 procedure compensates for the power loss of Alpha-spending, by including
 both adapativity in the fraction of null hypotheses and the
 conservativeness of nulls.</p>

@@ -54,7 +54,7 @@ Zrnic et al. (2021).
 \details{
 The function takes as its input either a vector of p-values, or a dataframe
 with three columns: an identifier (`id'),
-p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+p-value (`pval'), and a column describing the conflict sets for the hypotheses. 
 This takes the form of a vector of decision times or lags. Batch sizes can be 
 specified as a separate argument (see below).
 
@@ -121,8 +121,7 @@ of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 Statistics}, 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-\url{https://arxiv.org/abs/1812.05068}.
+Multiple Hypotheses. \emph{Journal of Machine Learning Research} 22:1-33.
 }
 \seealso{
 \code{\link{LORD}} presents versions of LORD for \emph{synchronous} p-values,

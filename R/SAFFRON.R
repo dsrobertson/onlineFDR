@@ -11,7 +11,7 @@
 #' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 #' The case where p-values arrive in batches corresponds to multiple instances
 #' of the same date. If no column of dates is provided, then the p-values are
-#' treated as being ordered sequentially with no batches.
+#' treated as being ordered in sequence, arriving one at a time.
 #'
 #' SAFFRON procedure provably controls FDR for independent p-values. Given an
 #' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
@@ -40,7 +40,7 @@
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
 #'   identifier (`id'), date (`date') and p-value (`pval'). If no column of
 #'   dates is provided, then the p-values are treated as being ordered
-#'   sequentially with no batches.
+#'   in sequence, arriving one at a time.
 #'
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05.
@@ -53,13 +53,6 @@
 #'
 #' @param lambda Optional threshold for a `candidate' hypothesis, must be
 #'   between 0 and 1. Defaults to 0.5.
-#'
-#' @param discard Logical. If \code{TRUE} then runs the ADDIS algorithm with
-#'   adaptive discarding of conservative nulls. The default is \code{FALSE}.
-#'
-#' @param tau.discard Optional threshold for hypotheses to be selected for
-#'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
-#'   \code{discard=TRUE}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
 #'   p-values in each batch (i.e. those that have exactly the same date) is
@@ -89,8 +82,6 @@
 #' \emph{asynchronous} testing, i.e. where each hypothesis test can itself be a
 #' sequential process and the tests can overlap in time.
 #'
-#' If option \code{discard=TRUE}, SAFFRON is the same as \code{\link{ADDIS}}.
-#'
 #'
 #' @examples
 #' sample.df <- data.frame(
@@ -112,12 +103,11 @@
 #' 
 #' set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 #'
-#' SAFFRON(sample.df, discard=TRUE, random=FALSE)
 #'
 #' @export
 
-SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, display_progress = FALSE, date.format = "%Y-%m-%d", 
-    discard = FALSE, tau.discard = 0.5) {
+SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE,
+                    display_progress = FALSE, date.format = "%Y-%m-%d") {
     
     d <- checkPval(d)
     
@@ -140,15 +130,6 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, di
         stop("lambda must be between 0 and 1.")
     }
     
-    if (discard) {
-        if (missing(tau.discard)) {
-            tau.discard = 0.5
-        } else if (tau.discard <= 0 || tau.discard > 1) {
-            stop("tau.discard must be between 0 and 1.")
-        }
-        return(ADDIS(pval, alpha, gammai, w0, lambda, tau.discard))
-    }
-    
     if (missing(gammai)) {
         gammai <- 0.4374901658/(seq_len(N)^(1.6))
     } else if (any(gammai < 0)) {
@@ -161,7 +142,7 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE, di
         w0 = alpha/2
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
-    } else if (w0 >= alpha) {
+    } else if (w0 > alpha) {
         stop("w0 must be less than alpha.")
     }
     

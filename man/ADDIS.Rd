@@ -9,7 +9,7 @@ ADDIS(
   alpha = 0.05,
   gammai,
   w0,
-  lambda = 0.5,
+  lambda = 0.25,
   tau = 0.5,
   async = FALSE,
   random = TRUE,
@@ -19,8 +19,7 @@ ADDIS(
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), 
-p-value (`pval'), and decision times 
+identifier (`id'), p-value (`pval'), and decision times 
 (`decision.times').}
 
 \item{alpha}{Overall significance level of the procedure, the default is
@@ -29,11 +28,10 @@ p-value (`pval'), and decision times
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
-\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\tau \lambda
-\alpha/2}.}
+\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.}
 
 \item{lambda}{Optional parameter that sets the threshold for `candidate'
-hypotheses. Must be between 0 and 1, defaults to 0.5.}
+hypotheses. Must be between 0 and tau, defaults to 0.25.}
 
 \item{tau}{Optional threshold for hypotheses to be selected for testing. Must
 be between 0 and 1, defaults to 0.5.}
@@ -66,19 +64,19 @@ SAFFRON).
 }
 \details{
 The function takes as its input either a vector of p-values, or a dataframe
-with three columns. For the fully sequential version, the dataframe requires
-an identifier (`id'), date (`date') and p-value (`pval'). If the asynchronous
+with three columns. The dataframe requires an identifier (`id'), 
+date (`date') and p-value (`pval'). If the asynchronous
 version is specified (see below), then the column date should be replaced 
 by the decision times. 
 
 Given an overall significance level \eqn{\alpha}, ADDIS depends on constants
 \eqn{w_0}, \eqn{\lambda} and \eqn{\tau}. Here \eqn{w_0} represents the
-initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \tau
-\lambda \alpha}. \eqn{\tau \in (0,1)} represents the threshold for a
+initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \alpha}.
+\eqn{\tau \in (0,1)} represents the threshold for a
 hypothesis to be selected for testing: p-values greater than \eqn{\tau} are
-implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in (0,1)}
+implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in [0,\tau)}
 sets the threshold for a p-value to be a candidate for rejection: ADDIS will
-never reject a p-value larger than \eqn{\tau \lambda}. The algorithm also
+never reject a p-value larger than \eqn{\lambda}. The algorithm also
 require a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 sum to 1.
 
@@ -106,7 +104,7 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         3.60e-05, 0.79149, 0.27201, 0.28295, 7.59e-08,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
-ADDIS(sample.df1, random=FALSE) # Fully sequential
+ADDIS(sample.df1, random=FALSE)
 
 
 sample.df2 <- data.frame(

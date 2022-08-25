@@ -12,16 +12,14 @@ SAFFRON(
   lambda = 0.5,
   random = TRUE,
   display_progress = FALSE,
-  date.format = "\%Y-\%m-\%d",
-  discard = FALSE,
-  tau.discard = 0.5
+  date.format = "\%Y-\%m-\%d"
 )
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
 identifier (`id'), date (`date') and p-value (`pval'). If no column of
 dates is provided, then the p-values are treated as being ordered
-sequentially with no batches.}
+in sequence, arriving one at a time.}
 
 \item{alpha}{Overall significance level of the FDR procedure, the default is
 0.05.}
@@ -42,13 +40,6 @@ randomised.}
 \item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
-
-\item{discard}{Logical. If \code{TRUE} then runs the ADDIS algorithm with
-adaptive discarding of conservative nulls. The default is \code{FALSE}.}
-
-\item{tau.discard}{Optional threshold for hypotheses to be selected for
-testing. Must be between 0 and 1, defaults to 0.5. This is required if
-\code{discard=TRUE}.}
 }
 \value{
 \item{out}{ A dataframe with the original data \code{d} (which
@@ -71,7 +62,7 @@ The function takes as its input either a vector of p-values or a dataframe
 with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
-treated as being ordered sequentially with no batches.
+treated as being ordered in sequence, arriving one at a time.
 
 SAFFRON procedure provably controls FDR for independent p-values. Given an
 overall significance level \eqn{\alpha}, we choose a sequence of non-negative
@@ -116,7 +107,6 @@ set.seed(1); SAFFRON(sample.df)
 
 set.seed(1); SAFFRON(sample.df, alpha=0.1, w0=0.025)
 
-SAFFRON(sample.df, discard=TRUE, random=FALSE)
 
 }
 \references{
@@ -129,6 +119,4 @@ Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
 \code{\link{SAFFRONstar}} presents versions of SAFFRON for
 \emph{asynchronous} testing, i.e. where each hypothesis test can itself be a
 sequential process and the tests can overlap in time.
-
-If option \code{discard=TRUE}, SAFFRON is the same as \code{\link{ADDIS}}.
 }
