@@ -8,9 +8,9 @@
 
 `onlineFDR` allows users to control the false discovery rate (FDR) or
 familywise error rate (FWER) for online hypothesis testing, where
-hypotheses arrive sequentially in a stream. In this framework, a null
-hypothesis is rejected based on the evidence against it and the previous
-rejection decisions.
+hypotheses arrive in a stream. In this framework, a null hypothesis is
+rejected based on the evidence against it and on the previous rejection
+decisions.
 
 ## Installation
 
@@ -77,7 +77,7 @@ discovery rate in biomedical research. *arXiv preprint*,
 <https://arxiv.org/abs/1809.07292>.
 
 Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple
-hypothesis testing for reproducible research.*arXiv preprint*,
+hypothesis testing for reproducible research. *arXiv preprint*,
 <https://arxiv.org/abs/2208.11418>.
 
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
@@ -97,4 +97,5 @@ Batching in Multiple Hypothesis Testing. *International Conference on
 Artificial Intelligence and Statistics*, PMLR, 108:3806-3815.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
-Testing of Multiple Hypotheses. *Journal of Machine Learning Research*, 22:1-33.
+Testing of Multiple Hypotheses. *Journal of Machine Learning Research*,
+22:1-33.

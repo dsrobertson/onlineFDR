@@ -8,8 +8,7 @@
 The onlineFDR package provides methods to control the false discovery rate
 (FDR) or familywise error rate (FWER) for online hypothesis testing, where
 hypotheses arrive in a stream. A null hypothesis is rejected
-based based on the evidence against it and on the previous rejection
-decisions.
+based on the evidence against it and on the previous rejection decisions.
 }
 \section{Details}{
 
