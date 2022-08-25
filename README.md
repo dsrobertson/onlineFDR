@@ -9,8 +9,8 @@
 `onlineFDR` allows users to control the false discovery rate (FDR) or
 familywise error rate (FWER) for online hypothesis testing, where
 hypotheses arrive sequentially in a stream. In this framework, a null
-hypothesis is rejected based only on the previous decisions, as the
-future p-values and the number of hypotheses to be tested are unknown.
+hypothesis is rejected based on the evidence against it and the previous
+rejection decisions.
 
 ## Installation
 
@@ -34,9 +34,6 @@ Alternatively, you can install the package directly from GitHub:
 
 devtools::install_github("dsrobertson/onlineFDR")
 ```
-
-We recommend the GitHub version for faster implementations of the
-algorithms.
 
 ## Documentation
 
@@ -79,6 +76,10 @@ Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
 discovery rate in biomedical research. *arXiv preprint*,
 <https://arxiv.org/abs/1809.07292>.
 
+Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple
+hypothesis testing for reproducible research.*arXiv preprint*,
+<https://arxiv.org/abs/2208.11418>.
+
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 onlineFDR: an R package to control the false discovery rate for growing
 data repositories. *Bioinformatics*, 35:4196-4199,
@@ -89,13 +90,11 @@ for online FDR control with conservative nulls. *Advances in Neural
 Information Processing Systems*, 9388-9396.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error
-rate. *Statistical Methods for Medical Research* (to appear),
-<https://arxiv.org/abs/1910.04900>.
+rate. *Statistical Methods for Medical Research*, 30(4):976–993.
 
 Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
 Batching in Multiple Hypothesis Testing. *International Conference on
-Artificial Intelligence and Statistics*, 3806-3815.
+Artificial Intelligence and Statistics*, PMLR, 108:3806-3815.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
-Testing of Multiple Hypotheses. *Journal of Machine Learning Research*
-(to appear), <https://arxiv.org/abs/1812.05068>.
+Testing of Multiple Hypotheses. *Journal of Machine Learning Research*, 22:1-33.
