@@ -89,7 +89,7 @@ and Montanari (2018) and Ramdas et al. (2017).</p>
 <dd><p>Either a vector of p-values, or a dataframe with three columns: an
 identifier (`id'), date (`date') and p-value (`pval'). If no column of
 dates is provided, then the p-values are treated as being ordered
-sequentially with no batches.</p></dd>
+in sequence, arriving one at a time.</p></dd>
 
 
 <dt>alpha</dt>
@@ -155,7 +155,7 @@ randomised.</p></dd>
 with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
-treated as being ordered sequentially with no batches.</p>
+treated as being ordered in sequence, arriving one at a time..</p>
 <p>The LORD procedure provably controls FDR for independent p-values (see below
 for dependent p-values). Given an overall significance level \(\alpha\), we
 choose a sequence of non-negative non-increasing numbers \(\gamma_i\) that
