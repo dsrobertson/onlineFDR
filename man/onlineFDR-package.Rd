@@ -3,7 +3,7 @@
 \docType{package}
 \name{onlineFDR-package}
 \alias{onlineFDR-package}
-\title{onlineFDR: A package for online FDR control}
+\title{onlineFDR: A package for online error rate control}
 \description{
 The onlineFDR package provides methods to control the false discovery rate
 (FDR) or familywise error rate (FWER) for online hypothesis testing, where

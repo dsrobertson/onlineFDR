@@ -1,4 +1,4 @@
-#' onlineFDR: A package for online FDR control
+#' onlineFDR: A package for online error rate control
 #'
 #' The onlineFDR package provides methods to control the false discovery rate
 #' (FDR) or familywise error rate (FWER) for online hypothesis testing, where
