@@ -159,7 +159,7 @@ DataFrame addis_async_faster(NumericVector pval,
 	R[0] = (pval[0] <= alphai[0]);
 
 	int K;
-	std::vector<bool> kappai;
+	std::vector<int> kappai;
 
 	Progress p(N * N, display_progress);
 
@@ -174,7 +174,7 @@ DataFrame addis_async_faster(NumericVector pval,
 
 		K = kappai.size();
 
-		cand[i-1] = (pval[i-1] <= tau*lambda);
+		cand[i-1] = (pval[i-1] <= lambda);
 
 		int candsum = 0;
 		//C++ trick to loop "seq_len" and use conditional incrementor for "sum"
