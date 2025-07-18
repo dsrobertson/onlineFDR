@@ -1,5 +1,12 @@
 # A NEWS File to document package updates
 
+CHANGES IN VERSION 2.7.2
+-----------------------
+MODIFICATIONS:
+
+    * fixed bugs in ADDIS
+
+
 CHANGES IN VERSION 2.2.0
 -----------------------
 MODIFICATIONS:
