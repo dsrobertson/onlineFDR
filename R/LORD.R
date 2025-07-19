@@ -206,7 +206,7 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
             gammai <- 0.139307 /(seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
         } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if (sum(gammai) > alpha/b0) {
+        } else if (sum(gammai) > alpha/b0 + 100 * .Machine$double.eps * length(gammai)) {
             stop("The sum of the elements of gammai must be <= alpha/b0.")
         }
     } else {
@@ -217,7 +217,7 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
             gammai <- gammai / sum(gammai)
         } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if (sum((w0 + b0*log(seq_len(N)))*gammai) > alpha) {
+        } else if (sum((w0 + b0*log(seq_len(N)))*gammai) > alpha + 100 * .Machine$double.eps * length(gammai)) {
             stop("The sum of the elements of (w0 + b0*log(seq_len(N)))*gammai must be <= alpha.")
         }
     }

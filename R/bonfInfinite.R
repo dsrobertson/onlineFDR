@@ -75,7 +75,7 @@ bonfInfinite <- function(d, alpha = 0.05, alphai, random = TRUE, date.format = "
         alphai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
     } else if (any(alphai < 0)) {
         stop("All elements of alphai must be non-negative.")
-    } else if (sum(alphai) > alpha) {
+    } else if (sum(alphai) > alpha + 100 * .Machine$double.eps * length(alphai)) {
         stop("The sum of the elements of alphai must not be greater than alpha.")
     }
     
