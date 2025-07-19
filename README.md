@@ -12,6 +12,7 @@ hypotheses arrive in a stream. In this framework, a null hypothesis is
 rejected based on the evidence against it and on the previous rejection
 decisions.
 
+
 ## Installation
 
 To install the latest (development) version of the onlineFDR package
