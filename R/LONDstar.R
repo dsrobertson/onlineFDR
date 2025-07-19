@@ -154,7 +154,7 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes, display_progr
     } else if (any(betai < 0)) {
 
         stop("All elements of betai must be non-negative.")
-    } else if (sum(betai) > alpha) {
+    } else if (sum(betai) > alpha + .Machine$double.eps * length(betai)) {
         stop("The sum of the elements of betai must be <= alpha.")
     }
     
