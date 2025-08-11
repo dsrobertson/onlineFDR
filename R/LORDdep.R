@@ -92,7 +92,7 @@ LORDdep <- function(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0, random 
         xi <- 0.139307 * alpha/(b0 * seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
     } else if (any(xi < 0)) {
         stop("All elements of xi must be non-negative.")
-    } else if (sum(xi) > alpha/b0 + 100 * .Machine$double.eps * length(xi)) {
+    } else if (sum(xi) > alpha/b0) {
         stop("The sum of the elements of xi must not be greater than alpha/b0.")
     }
     
