@@ -2,6 +2,7 @@
 % Please edit documentation in R/onlineFDR-package.R
 \docType{package}
 \name{onlineFDR-package}
+\alias{onlineFDR}
 \alias{onlineFDR-package}
 \title{onlineFDR: A package for online error rate control}
 \description{
@@ -16,8 +17,8 @@ based on the evidence against it and on the previous rejection decisions.
 \tabular{ll}{
 Package: \tab onlineFDR \cr
 Type: \tab Package\cr
-Version: \tab 2.5.1\cr
-Date: \tab 2022-08-24\cr
+Version: \tab 2.7.1\cr
+Date: \tab 2023-04-12\cr
 License: \tab GPL-3 \cr
 }
 
@@ -149,7 +150,7 @@ hypothesis testing for reproducible research.\emph{arXiv preprint},
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 onlineFDR: an R package to control the false discovery rate for growing data
 repositories. \emph{Bioinformatics}, 35:4196-4199, 
-\url{https://doi.org/10.1093/bioinformatics/btz191}.
+\doi{10.1093/bioinformatics/btz191}.
 
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
 online FDR control with conservative nulls.
@@ -170,8 +171,17 @@ PMLR, 108:3806-3815.
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://dsrobertson.github.io/onlineFDR/}
+  \item \url{https://dsrobertson.github.io/onlineFDR/index.html}
+}
+
+}
 \author{
 David S. Robertson (\email{david.robertson@mrc-bsu.cam.ac.uk}),
 Lathan Liou, Adel Javanmard, Aaditya Ramdas, Jinjin Tian, Tijana Zrnic,
 Andrea Montanari and Natasha A. Karp.
 }
+\keyword{internal}

@@ -1,32 +1,37 @@
-citHeader("To cite 'onlineFDR' in publications, please use:")
-
-vers <- meta$Version
-
-citEntry(entry = "manual",
+bibentry(
+  bibtype = "Manual",
+  title = "onlineFDR: Online Error Rate Control",
   author = c(
-        person(c("David", "S."), "Robertson"),
-        person("Lathan", "Liou"),
-        person("Aaditya", "Ramdas"),
-        person(c("Natasha", "A."), "Karp")),
-  title = "onlineFDR: Online error control",
-  year = "2022",
-  note = paste0("R package ", meta$Version),
-  textVersion = "Robertson DS, Liou L, Ramdas A, Karp NA (2022). onlineFDR: Online error rate control. R package version 2.5.0, <URL: https://doi.org/doi:10.18129/B9.bioc.onlineFDR>."
+    person(c("David", "S."), "Robertson"),
+    person("Lathan", "Liou"),
+    person("Aaditya", "Ramdas"),
+    person("Adel", "Javanmard"),
+    person("Andrea", "Montanari"),
+    person("Jinjin", "Tian"),
+    person("Tijana", "Zrnic"),
+    person(c("Natasha", "A."), "Karp"),
+    person("Nikita", "Mozgunov")
+  ),
+  year = "2025",
+  note = paste0("R package version ", meta$Version),
+  url = "https://doi.org/doi:10.18129/B9.bioc.onlineFDR",
+  textVersion = sprintf("Robertson DS, Liou L, Ramdas A, Javanmard A, Montanari A, Tian J, Zrnic T, Karp NA, Mozgunov N (2025). onlineFDR: Online error rate control. R package version %s, <URL: https://doi.org/doi:10.18129/B9.bioc.onlineFDR>.", meta$Version)
 )
 
 
-
-citEntry(entry = "article",
-  author = c(
-        person(c("David", "S."), "Robertson"),
-        person("Jan", "Wildenhain"),
-        person("Adel", "Javanmard"),
-        person(c("Natasha", "A."), "Karp")),
+bibentry(
+  bibtype = "Article",
   title = "onlineFDR: an R package to control the false discovery rate for growing data repositories",
+  author = c(
+    person(c("David", "S."), "Robertson"),
+    person("Jan", "Wildenhain"),
+    person("Adel", "Javanmard"),
+    person(c("Natasha", "A."), "Karp")
+  ),
   journal = "Bioinformatics",
   year = "2019",
   volume = "35",
-  pages = "4196–4199",
-  doi =  "10.1093/bioinformatics/btz191",
+  pages = "4196-4199",
+  doi = "10.1093/bioinformatics/btz191",
   textVersion = "Robertson DS, Wildenhain J, Javanmard A, Karp NA (2019). 'onlineFDR: an R package to control the false discovery rate for growing data repositories.' Bioinformatics, 35:4196-4199. doi: 10.1093/bioinformatics/btz191"
 )

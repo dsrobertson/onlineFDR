@@ -1,6 +1,7 @@
 url: https://dsrobertson.github.io/onlineFDR/
 
 template:
+  bootstrap: 5
   params:
     bootswatch: cosmo
     docsearch:
@@ -11,6 +12,7 @@ reference:
   - title: Fully Sequential FDR Control
     contents:
     - "ADDIS"
+    - "ADDIS_exhaustive"
     - "Alpha_investing"
     - "LOND"
     - "LORD"
@@ -42,3 +44,10 @@ reference:
     - "onlineFDR-package"
     - "StoreyBH"
     - "setBound"
+
+articles:
+  - title: Articles
+    contents:
+      - onlineFDR
+      - advanced-usage
+      - theory

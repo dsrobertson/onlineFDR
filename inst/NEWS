@@ -1,5 +1,13 @@
 # A NEWS File to document package updates
 
+CHANGES IN VERSION 2.19.1
+-----------------------
+MODIFICATIONS:
+
+    * added the ADDIS_exhaustive procedure and documentation
+    * refreshed documentation and pkgdown site for the new release
+    * tidied build ignores for development-only files
+
 CHANGES IN VERSION 2.7.2
 -----------------------
 MODIFICATIONS:

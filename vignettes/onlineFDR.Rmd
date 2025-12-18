@@ -1,5 +1,5 @@
 ---
-title: "Managing online multiple hypothesis testing using the onlineFDR package"
+title: "Using the onlineFDR package"
 author: "David S. Robertson, Lathan Liou, Aaditya Ramdas and Natasha A. Karp"
 date: "2022-08-25"
 output:
@@ -35,13 +35,13 @@ or the false discovery rate (FDR).
 Frequently, modern data analysis problems have a further complexity in that the
 hypotheses arrive in a stream. 
 
-![](stream-diagram.png)
+![Diagram showing hypotheses arriving sequentially over time](stream-diagram.png)
 
 This introduces the challenge that at each step, the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but with the knowledge of the historic decisions to date. 
 
 The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
 
-![](alpha-wealth.gif)
+![Animation illustrating alpha-wealth accumulation and spending](alpha-wealth.gif)
 
 This vignette explains the two main uses of the package and demonstrates their typical workflows.
 
@@ -54,7 +54,7 @@ Please see the flowchart below to decide which function is best to solve
 your problem. The interactive version (click-to-functions) is available
 [here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html).
 
-![](onlineFDR-diagram.png)
+![Flowchart guiding the choice of onlineFDR procedure](onlineFDR-diagram.png)
 
 ### Frequently Asked Questions
 We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
@@ -148,7 +148,7 @@ sum(LOND_results$R)
 ```
 
 To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds:
-```{r}
+```{r alphai-comparison, fig.alt="Line plot comparing log adjusted significance thresholds for LOND, LORD, Bonferroni-like and unadjusted procedures"}
 set.seed(1)
 LORD_results <- LORD(sample.df)
 

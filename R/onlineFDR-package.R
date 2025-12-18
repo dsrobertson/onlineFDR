@@ -147,7 +147,7 @@
 #' Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 #' onlineFDR: an R package to control the false discovery rate for growing data
 #' repositories. \emph{Bioinformatics}, 35:4196-4199, 
-#' \url{https://doi.org/10.1093/bioinformatics/btz191}.
+#' \doi{10.1093/bioinformatics/btz191}.
 #'
 #' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
 #' online FDR control with conservative nulls.
@@ -168,9 +168,9 @@
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 #' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
 #' 
-#' @docType package
-#' @name onlineFDR-package
-#' 
+#' @keywords internal
+"_PACKAGE"
+
 ## usethis namespace: start
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib onlineFDR, .registration = TRUE

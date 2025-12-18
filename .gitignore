@@ -5,3 +5,9 @@
 onlineFDR.Rproj
 Meta
 doc
+IMPC_ProcessedData_Continuous.csv
+
+src/*.o
+src/*.so
+src/*.dll
+onlineFDR.Rcheck/
