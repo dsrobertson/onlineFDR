@@ -8,3 +8,13 @@
 ^Meta$
 ^pkgdown$
 ^\.github$
+^src/MakeVars\.rtf$
+IMPC_ProcessedData_Continuous.csv
+^Lassie$
+^perfomance_test\.R$
+^compare_addis_exhaustive\.R$
+^plan-addisExhaustive\.prompt\.md$
+^test_lond_fix\.R$
+^developement$
+^\.vscode$
+^README.Rmd$

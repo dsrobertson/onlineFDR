@@ -81,7 +81,7 @@ To ensure correct interpretation of the dates provided there is a date.format
 argument. As a default, the date format is set to receive dates as 
 year-month(00-12)-day(number).  The following website provides clear guidance
 on symbols used to interpret the date information: 
-https://www.statmethods.net/input/dates.html
+https://stat.ethz.ch/R-manual/R-devel/library/base/html/strptime.html
 
 As a default, the `random` argument is set to `TRUE`. In this situation, the
 order of p-values in each batch (i.e. with the same date) are randomised. This

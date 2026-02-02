@@ -1,10 +1,10 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/dsrobertson/onlineFDR/workflows/R-CMD-check/badge.svg)](https://github.com/dsrobertson/onlineFDR/actions)
-[![codecov](https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg)](https://codecov.io/gh/dsrobertson/onlineFDR)
+[![codecov](https://codecov.io/gh/dsrobertson/onlineFDR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/dsrobertson/onlineFDR)
 <!-- badges: end -->
 
-# onlineFDR <img src="man/figures/logo.png" align="right" />
+# onlineFDR <img src="man/figures/logo.png" align="right" alt="onlineFDR package logo" />
 
 `onlineFDR` allows users to control the false discovery rate (FDR) or
 familywise error rate (FWER) for online hypothesis testing, where
@@ -12,22 +12,31 @@ hypotheses arrive in a stream. In this framework, a null hypothesis is
 rejected based on the evidence against it and on the previous rejection
 decisions.
 
+
 ## Installation
 
-To install the latest (development) version of the onlineFDR package
-from Bioconductor, please run the following code:
+You can install onlineFDR from Bioconductor (release or devel) or from GitHub:
+
+### Bioconductor (release)
 
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-# The following initializes usage of Bioc
-BiocManager::install()
-
 BiocManager::install("onlineFDR")
 ```
 
-Alternatively, you can install the package directly from GitHub:
+### Bioconductor (devel)
+
+``` r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(version = "devel")
+BiocManager::install("onlineFDR")
+```
+
+### GitHub (development snapshot)
 
 ``` r
 # install.packages("devtools") # If devtools not installed

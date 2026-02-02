@@ -130,7 +130,7 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, display_pro
         betai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
     } else if (any(betai < 0)) {
         stop("All elements of betai must be non-negative.")
-    } else if (sum(betai) > alpha) {
+    } else if (sum(betai) > alpha + .Machine$double.eps * length(betai)) {
         stop("The sum of the elements of betai must not be greater than alpha.")
     }
     
