@@ -14,6 +14,7 @@ GitHub:
 ### Bioconductor (release)
 
 ``` r
+
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -23,6 +24,7 @@ BiocManager::install("onlineFDR")
 ### Bioconductor (devel)
 
 ``` r
+
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -33,6 +35,7 @@ BiocManager::install("onlineFDR")
 ### GitHub (development snapshot)
 
 ``` r
+
 # install.packages("devtools") # If devtools not installed
 
 devtools::install_github("dsrobertson/onlineFDR")
@@ -46,6 +49,7 @@ To view the vignette for the version of this package installed in your
 system, start R and enter:
 
 ``` r
+
 browseVignettes("onlineFDR")
 ```
 

@@ -78,6 +78,7 @@ FDR control for arbitrarily dependent p-values. This method will in
 general be more conservative.
 
 ``` r
+
 set.seed(1); results.indep <- LOND(sample.df)    # for independent p-values
 set.seed(1); results.dep <- LOND(sample.df, dep=TRUE)   # for dependent p-values
 
@@ -103,7 +104,7 @@ cbind(independent = results.indep$alphai, dependent = results.dep$alphai)
 
 The vector `betai` is supplied by default, but can optionally be
 specified by the user (as described above, see the formula for
-$\beta_{j}$[here](#LOND_beta)).
+$`\beta_j`$[here](#LOND_beta)).
 
 ### LORD
 
@@ -113,6 +114,7 @@ argument (see [here](#LORD) for further details about the different
 versions).
 
 ``` r
+
 set.seed(1); results.LORD.plus <- LORD(sample.df)
 set.seed(1); results.LORD3 <- LORD(sample.df, version=3)
 set.seed(1); results.LORD.discard <- LORD(sample.df, version='discard')
@@ -141,31 +143,31 @@ cbind(LORD.plus = results.LORD.plus$alphai,
 #> [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05
 ```
 
-By default $w_{0} = \alpha/10$ and (for LORD 3 and LORD dep)
-$b0 = alpha - w0$, but these parameters can optionally be specified by
-the user subject to the requirements that $0 \leq w_{0} \leq \alpha$,
-$b_{0} > 0$ and $w_{0} + b_{0} \leq \alpha$.
+By default $`w_0 = \alpha/10`$ and (for LORD 3 and LORD dep)
+$`b0 = alpha - w0`$, but these parameters can optionally be specified by
+the user subject to the requirements that $`0 \leq w_0 \leq \alpha`$,
+$`b_0 > 0`$ and $`w_0+b_0 \leq \alpha`$.
 
 The value of `gammai` is also supplied by default, but can optionally be
 specified by the user (as described above, see the formula for
-$\gamma_{j}$[here](#LORDdep_xi) for version=‘dep’ and
+$`\gamma_j`$[here](#LORDdep_xi) for version=‘dep’ and
 [here](#LORD_gamma) for all other versions of LORD).
 
 ### SAFFRON
 
-By default $w_{0} = \alpha/2$ and $\lambda = 0.5$, but these parameters
-can optionally be specified by the user subject to the requirements that
-$0 \leq w_{0} \leq \alpha$ and $0 < \lambda < 1$. The values of `gammai`
-are also supplied by default, but can optionally be specified by the
-user (as described above, see the formula for
-$\gamma_{j}$[here](#SAFFRON_gamma)).
+By default $`w_0 = \alpha/2`$ and $`\lambda = 0.5`$, but these
+parameters can optionally be specified by the user subject to the
+requirements that $`0 \leq w_0 \leq \alpha`$ and $`0 < \lambda < 1`$.
+The values of `gammai` are also supplied by default, but can optionally
+be specified by the user (as described above, see the formula for
+$`\gamma_j`$[here](#SAFFRON_gamma)).
 
 ### ADDIS
 
-By default $w_{0} = \alpha/2$, $\tau = 0.5$ and $\lambda = 0.25$, but
-these parameters can optionally be specified by the user subject to the
-requirements that $0 \leq w_{0} < \alpha$, $0 < \tau < 1$ and
-$0 < \lambda < \tau$. The values of `gammai` are also supplied by
+By default $`w_0 = \alpha/2`$, $`\tau = 0.5`$ and $`\lambda = 0.25`$,
+but these parameters can optionally be specified by the user subject to
+the requirements that $`0 \leq w_0 < \alpha`$, $`0 < \tau < 1`$ and
+$`0 < \lambda < \tau`$. The values of `gammai` are also supplied by
 default, but can optionally be specified by the user.
 
 ### Alpha-spending and online fallback
@@ -175,11 +177,11 @@ specified by the user.
 
 ### ADDIS-spending
 
-By default $\lambda = 0.25$ and $\tau = 0.5$, but these parameters can
-optionally be specified by the user subject to the requirements that
-$\lambda < \tau$, $0 < \lambda < 1$ and $0 < \tau < 1$. The values of
-`gammai` are also supplied by default, but can optionally be specified
-by the user.
+By default $`\lambda = 0.25`$ and $`\tau = 0.5`$, but these parameters
+can optionally be specified by the user subject to the requirements that
+$`\lambda < \tau`$, $`0 < \lambda < 1`$ and $`0 < \tau < 1`$. The values
+of `gammai` are also supplied by default, but can optionally be
+specified by the user.
 
 ### Asynchronous testing
 
@@ -195,9 +197,9 @@ testing process, consisting of tests that start and finish at
 (potentially) random times. The discretised finish times of the test
 correspond to the decision times.
 
-2: **Online mFDR control under local dependence**: For any $t > 0$ we
-allow the p-value $p_{t}$ to have arbitrary dependence on the previous
-$L_{t}$ p-values. The fixed sequence $L_{t}$ is referred to as \`lags’.
+2: **Online mFDR control under local dependence**: For any $`t>0`$ we
+allow the p-value $`p_t`$ to have arbitrary dependence on the previous
+$`L_t`$ p-values. The fixed sequence $`L_t`$ is referred to as \`lags’.
 
 3: **mFDR control in asynchronous mini-batch testing**: A mini-batch
 represents a grouping of tests run asynchronously which result in

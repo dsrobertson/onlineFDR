@@ -75,6 +75,7 @@ Artificial Intelligence and Statistics*: 3806-3815
 ## Examples
 
 ``` r
+
 sample.df <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
     'C38292', 'A30619', 'D46627', 'E29198', 'A41418',

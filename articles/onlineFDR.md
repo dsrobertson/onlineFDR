@@ -195,6 +195,7 @@ First, we initialize a toy dataset with three columns: an identifier
 in the format “YYYY-MM-DD”.
 
 ``` r
+
 sample.df <- data.frame(
   id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
          'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
@@ -214,6 +215,7 @@ using the `set.seed` function in order for the results to be
 reproducible.
 
 ``` r
+
 library(onlineFDR)
 
 set.seed(1)
@@ -240,6 +242,7 @@ LOND_results
 To check how many hypotheses we’ve rejected, we can do:
 
 ``` r
+
 sum(LOND_results$R)
 #> [1] 4
 ```
@@ -248,6 +251,7 @@ To compare the results of one algorithm to another, we can visualize the
 adjusted significance thresholds:
 
 ``` r
+
 set.seed(1)
 LORD_results <- LORD(sample.df)
 
@@ -292,6 +296,7 @@ your algorithm *a priori* based on your needs (click
 the same algorithm.
 
 ``` r
+
 # Initial experimental data
 sample.df <- data.frame(
   id = c('A15432', 'B90969', 'C18705'),
@@ -303,6 +308,7 @@ LOND_results <- LOND(sample.df)
 ```
 
 ``` r
+
 # After you've completed more experiments
 sample.df <- data.frame(
   id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
@@ -336,6 +342,7 @@ and
 [`BatchStBH()`](https://dsrobertson.github.io/onlineFDR/reference/BatchStBH.md).
 
 ``` r
+
 sample.df <- data.frame(
   id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
          'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
@@ -357,6 +364,7 @@ bound is the same alpha value used for the algorithm. Supply your bound
 to either the `betai` or `gammai` argument in your chosen algorithm.
 
 ``` r
+
 sample.df <- data.frame(
   id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
          'C38292', 'A30619', 'D46627', 'E29198', 'A41418',
@@ -500,7 +508,7 @@ Mashhadi) for useful discussions during the development of the package.
 
 ## References
 
-Aharoni, E. and Rosset, S. (2014). Generalized $\alpha$-investing:
+Aharoni, E. and Rosset, S. (2014). Generalized $`\alpha`$-investing:
 definitions, optimality results and applications to public databases.
 *Journal of the Royal Statistical Society (Series B)*, 76(4):771–794.
 
@@ -512,7 +520,7 @@ Bourgon, R., Gentleman, R., and Huber, W. (2010). Independent filtering
 increases detection power for high-throughput experiments. *Proceedings
 of the National Academy of Sciences*, 107(21), 9546-9551.
 
-Foster, D. and Stine R. (2008). $\alpha$-investing: a procedure for
+Foster, D. and Stine R. (2008). $`\alpha`$-investing: a procedure for
 sequential control of expected false discoveries. *Journal of the Royal
 Statistical Society (Series B)*, 29(4):429-444.
 

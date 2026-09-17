@@ -120,6 +120,7 @@ Learning*, PMLR, 145:955-986.
 ## Examples
 
 ``` r
+
 set.seed(1)
 N <- 1000
 B <- rbinom(N, 1, 0.5)
