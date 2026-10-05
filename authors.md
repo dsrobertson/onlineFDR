@@ -24,14 +24,14 @@
 
 Robertson DS, Liou L, Ramdas A, Javanmard A, Montanari A, Tian J, Zrnic
 T, Karp NA, Mozgunov N (2025). onlineFDR: Online error rate control. R
-package version 2.19.1, \<URL:
+package version 2.21.1, \<URL:
 https://doi.org/doi:10.18129/B9.bioc.onlineFDR\>.
 
     @Manual{,
       title = {onlineFDR: Online Error Rate Control},
       author = {David S. Robertson and Lathan Liou and Aaditya Ramdas and Adel Javanmard and Andrea Montanari and Jinjin Tian and Tijana Zrnic and Natasha A. Karp and Nikita Mozgunov},
       year = {2025},
-      note = {R package version 2.19.1},
+      note = {R package version 2.21.1},
       url = {https://doi.org/doi:10.18129/B9.bioc.onlineFDR},
     }
 

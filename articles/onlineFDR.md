@@ -43,7 +43,7 @@ their typical workflows.
 We strive to make our R package as easy to use as possible. Please see
 the flowchart below to decide which function is best to solve your
 problem. The interactive version (click-to-functions) is available
-[here](https://dsrobertson.github.io/onlineFDR/onlineFDR-diagram.html).
+[here](https://dsrobertson.github.io/onlineFDR/reference/figures/onlineFDR-diagram.html).
 
 ![Flowchart guiding the choice of onlineFDR
 procedure](onlineFDR-diagram.png)
