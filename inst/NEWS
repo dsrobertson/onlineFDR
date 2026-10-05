@@ -1,19 +1,14 @@
 # A NEWS File to document package updates
 
-CHANGES IN VERSION 2.19.1
+CHANGES IN VERSION 2.21.1
 -----------------------
 MODIFICATIONS:
 
     * added the ADDIS_exhaustive procedure and documentation
+    * fixed bugs in ADDIS
+    * fixed a floating-point precision issue in the LOND check on betai
     * refreshed documentation and pkgdown site for the new release
     * tidied build ignores for development-only files
-
-CHANGES IN VERSION 2.7.2
------------------------
-MODIFICATIONS:
-
-    * fixed bugs in ADDIS
-
 
 CHANGES IN VERSION 2.2.0
 -----------------------
