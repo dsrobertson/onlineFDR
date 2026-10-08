@@ -1,7 +1,7 @@
 #' LORD (dep): Online FDR control based on recent discovery for dependent
 #' p-values
 #'
-#' This funcion is deprecated, please use \code{\link{LORD}} instead with
+#' This function is deprecated, please use \code{\link{LORD}} instead with
 #' \code{version = 'dep'}.
 #'
 #' LORDdep implements the LORD procedure for online FDR control for dependent
@@ -20,7 +20,7 @@
 #' Montanari (2018), example 3.8.
 #'
 #' The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where \eqn{w_0
-#' \ge 0} represents the intial `wealth' and \eqn{b_0 > 0} represents the
+#' \ge 0} represents the initial `wealth' and \eqn{b_0 > 0} represents the
 #' `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha} for
 #' FDR control to hold.
 #'

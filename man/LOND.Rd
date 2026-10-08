@@ -41,7 +41,7 @@ randomised.}
 
 \item{original}{Logical. If \code{TRUE}, runs the original LOND algorithm 
 of Javanmard and Montanari (2015), otherwise runs the modified algorithm 
-of Zrnic et al. (2018). Defaults to \code{TRUE}.}
+of Zrnic et al. (2021). Defaults to \code{TRUE}.}
 }
 \value{
 \item{out}{ A dataframe with the original data \code{d} (which
@@ -76,7 +76,7 @@ max(D(i-1), 1)\beta_i} provably controls the FDR under positive dependence
 (PRDS condition), see Zrnic et al. (2021).
 
 For arbitrarily dependent p-values, LOND controls the FDR if it is modified
-with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the
+with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(i)} is the
 i-th harmonic number.
 
 Further details of the LOND algorithm can be found in Javanmard and Montanari
@@ -112,11 +112,10 @@ Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-\url{https://arxiv.org/abs/1812.05068}.
+Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 }
 \seealso{
-\code{\link{LONDstar}} presents versions of LORD for \emph{synchronous}
-p-values, i.e. where each test can only start when the previous test has
-finished.
+\code{\link{LONDstar}} presents versions of LOND for \emph{asynchronous}
+testing, i.e. where each hypothesis test can itself be a sequential process
+and the tests can overlap in time.
 }

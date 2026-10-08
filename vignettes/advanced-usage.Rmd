@@ -58,7 +58,7 @@ p-values.
 Finally, Tian & Ramdas (2021) proposed procedures that provide online control
 of the FWER. One procedure, online fallback, gives a uniform improvement to the
 naive Alpha-spending procedure (see below). The ADDIS-spending procedure
-compensates for the power loss of these procedures by including both adapativity
+compensates for the power loss of these procedures by including both adaptivity
 in the fraction of null hypotheses and the conservativeness of nulls.
 
 ## Variations to the default options
@@ -69,8 +69,8 @@ consider amending for their analysis.
 ### Common arguments
 
 As a default, the `alpha` argument is set to 0.05, where `alpha` sets the
-overall significance level of the FDR of FWER controlling procedure. By
-convention, the standard significance level utilised is the 5%.  However, there
+overall significance level of the FDR or FWER controlling procedure. By
+convention, the standard significance level utilised is 5%.  However, there
 are applications where an alternate threshold could be considered. For example,
 a more stringent threshold might be appropriate when there are limited resources
 to follow up significant findings. A less stringent threshold might be
@@ -79,12 +79,12 @@ a higher proportion of false positives.
 
 To ensure correct interpretation of the dates provided there is a date.format 
 argument. As a default, the date format is set to receive dates as 
-year-month(00-12)-day(number).  The following website provides clear guidance
+year-month(01-12)-day(number).  The following website provides clear guidance
 on symbols used to interpret the date information: 
 https://stat.ethz.ch/R-manual/R-devel/library/base/html/strptime.html
 
 As a default, the `random` argument is set to `TRUE`. In this situation, the
-order of p-values in each batch (i.e. with the same date) are randomised. This
+order of p-values in each batch (i.e. with the same date) is randomised. This
 is to avoid the risk of p-values being ordered post-hoc, which can lead to an
 inflation of the FDR. As the dataset grows the data is reprocessed. To ensure 
 the consistency of the output (with the randomisation within the previous
@@ -118,14 +118,14 @@ cbind(independent = results.indep$alphai, dependent = results.dep$alphai)
 ```
 
 The vector `betai` is supplied by default, but can optionally be specified by the
-user (as described above, see the formula for $\beta_j$ [here](#LOND_beta)).
+user (see the formula for $\beta_j$ in the [theory vignette](theory.html#LOND_beta)).
 
 
 ### LORD
 
 The default version of LORD used is version '++', but the user can optionally
 specify versions 3, 'discard' and 'dep' using the `version` argument (see
-[here](#LORD) for further details about the different versions).
+[here](theory.html#LORD) for further details about the different versions).
 
 ```{r}
 set.seed(1); results.LORD.plus <- LORD(sample.df)
@@ -141,14 +141,14 @@ cbind(LORD.plus = results.LORD.plus$alphai,
 
 ```
 
-By default $w_0 = \alpha/10$ and (for LORD 3 and LORD dep) $b0 = alpha - w0$,
+By default $w_0 = \alpha/10$ and (for LORD 3 and LORD dep) $b_0 = \alpha - w_0$,
 but these parameters can optionally be specified by the user subject to the
 requirements that $0 \leq w_0 \leq \alpha$, $b_0 > 0$ and $w_0+b_0 \leq \alpha$.
 
 The value of `gammai` is also supplied by default, but can optionally be
-specified by the user (as described above, see the formula for $\gamma_j$
-[here](#LORDdep_xi) for version='dep' and [here](#LORD_gamma) for all other
-versions of LORD).
+specified by the user (see the formula for $\xi_j$
+[here](theory.html#LORDdep_xi) for version='dep' and for $\gamma_j$
+[here](theory.html#LORD_gamma) for all other versions of LORD).
 
 
 ### SAFFRON
@@ -156,15 +156,15 @@ versions of LORD).
 By default $w_0 = \alpha/2$ and $\lambda = 0.5$, but these parameters can
 optionally be specified by the user subject to the requirements that
 $0 \leq w_0 \leq \alpha$ and $0 < \lambda < 1$. The values of `gammai` are also
-supplied by default, but can optionally be specified by the user (as described
-above, see the formula for $\gamma_j$ [here](#SAFFRON_gamma)).
+supplied by default, but can optionally be specified by the user (see the formula
+for $\gamma_j$ [here](theory.html#SAFFRON_gamma)).
 
 
 ### ADDIS
 
 By default $w_0 = \alpha/2$, $\tau = 0.5$ and $\lambda = 0.25$, but these
 parameters can optionally be specified by the user subject to the requirements
-that $0 \leq w_0 < \alpha$, $0 < \tau < 1$ and $0 < \lambda < \tau$.
+that $0 \leq w_0 \leq \alpha$, $0 < \tau \leq 1$ and $0 < \lambda < \tau$.
 The values of `gammai` are also supplied by default, but can optionally be
 specified by the user.
 
@@ -179,7 +179,7 @@ be specified by the user.
 
 By default $\lambda = 0.25$ and $\tau = 0.5$, but these
 parameters can optionally be specified by the user subject to the requirements
-that $\lambda < \tau$, $0 < \lambda < 1$ and $0 < \tau < 1$.
+that $0 < \lambda < \tau \leq 1$.
 The values of `gammai` are also supplied by default, but can optionally be
 specified by the user.
 
@@ -193,15 +193,51 @@ variety of trial settings, including the following:
 
 1: **Asynchronous online mFDR control**: 
 This is for an asynchronous testing process, consisting of tests that start and
-finish at (potentially) random times. The discretised finish times of the test
+finish at (potentially) random times. The discretised finish times of the tests
 correspond to the decision times.
 
 2: **Online mFDR control under local dependence**: 
 For any $t>0$ we allow the p-value $p_t$ to have arbitrary dependence on the
-previous $L_t$ p-values. The fixed sequence $L_t$ is referred to as `lags'.
+previous $L_t$ p-values. The fixed sequence $L_t$ is referred to as 'lags'.
 
 3: **mFDR control in asynchronous mini-batch testing**: 
 A mini-batch represents a grouping of tests run asynchronously which
 result in dependent p-values. Once a mini-batch of tests is fully completed,
 a new one can start, testing hypotheses independent of the previous batch.
+
+## References
+
+Foster, D. and Stine, R. (2008). $\alpha$-investing: a procedure for sequential
+control of expected false discoveries.
+*Journal of the Royal Statistical Society (Series B)*, 70(2):429-444.
+
+Javanmard, A., and Montanari, A. (2015). On Online Control of False
+Discovery Rate. *arXiv preprint*, https://arxiv.org/abs/1502.06197.
+
+Javanmard, A., and Montanari, A. (2018). Online Rules for Control of False
+Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
+46(2):526-554.
+
+Li, A., and Barber, R.F. (2017). Accumulation Tests for FDR Control in Ordered
+Hypothesis Testing. *Journal of the American Statistical Association*,
+112(518):837-849.
+
+Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
+of the false discovery rate with decaying memory.
+*Advances in Neural Information Processing Systems 30*, 5650-5659.
+
+Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018). SAFFRON: an
+adaptive algorithm for online control of the false discovery rate.
+*Proceedings of the 35th International Conference on Machine Learning*,
+80:4286-4294.
+
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+online FDR control with conservative nulls.
+*Advances in Neural Information Processing Systems 32*, 9388-9396.
+
+Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+*Statistical Methods in Medical Research*, 30(4):976–993.
+
+Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+Multiple Hypotheses. *Journal of Machine Learning Research*, 22(33):1-39.
 

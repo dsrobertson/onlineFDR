@@ -35,9 +35,9 @@
 #'   the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
 #'   (otherwise \code{R[i] = 0}).}
 #'
-#' @references Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+#' @references Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of
 #'   Batching in Multiple Hypothesis Testing. \emph{International Conference on
-#'   Artificial Intelligence and Statistics}, 3806-3815.
+#'   Artificial Intelligence and Statistics}, PMLR, 108:3806-3815.
 #'
 #' @examples
 #'

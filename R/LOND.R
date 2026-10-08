@@ -23,7 +23,7 @@
 #' (PRDS condition), see Zrnic et al. (2021).
 #'
 #' For arbitrarily dependent p-values, LOND controls the FDR if it is modified
-#' with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the
+#' with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(i)} is the
 #' i-th harmonic number.
 #'
 #' Further details of the LOND algorithm can be found in Javanmard and Montanari
@@ -55,7 +55,7 @@
 #'
 #' @param original Logical. If \code{TRUE}, runs the original LOND algorithm 
 #' of Javanmard and Montanari (2015), otherwise runs the modified algorithm 
-#' of Zrnic et al. (2018). Defaults to \code{TRUE}.
+#' of Zrnic et al. (2021). Defaults to \code{TRUE}.
 #'
 #'
 #' @return \item{out}{ A dataframe with the original data \code{d} (which
@@ -74,15 +74,14 @@
 #' 46(2):526-554.
 #'
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-#' \url{https://arxiv.org/abs/1812.05068}.
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #' 
 #'
 #' @seealso
 #'
-#' \code{\link{LONDstar}} presents versions of LORD for \emph{synchronous}
-#' p-values, i.e. where each test can only start when the previous test has
-#' finished.
+#' \code{\link{LONDstar}} presents versions of LOND for \emph{asynchronous}
+#' testing, i.e. where each hypothesis test can itself be a sequential process
+#' and the tests can overlap in time.
 #'
 #' @examples
 #' sample.df <- data.frame(
@@ -130,6 +129,8 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, display_pro
         betai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
     } else if (any(betai < 0)) {
         stop("All elements of betai must be non-negative.")
+    } else if (length(betai) < N) {
+        stop("betai must have length at least equal to the number of p-values.")
     } else if (sum(betai) > alpha + .Machine$double.eps * length(betai)) {
         stop("The sum of the elements of betai must not be greater than alpha.")
     }

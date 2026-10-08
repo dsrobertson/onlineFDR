@@ -67,9 +67,9 @@ BatchStBH(sample.df)
 }
 \references{
 Storey, J.D. (2002). A direct approach to false discovery rates.
-  \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
+  \emph{Journal of the Royal Statistical Society (Series B)}, 64(3):479-498.
 
-  Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching
+  Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of Batching
   in Multiple Hypothesis Testing. \emph{International Conference on
-  Artificial Intelligence and Statistics}: 3806-3815
+  Artificial Intelligence and Statistics}, PMLR, 108:3806-3815.
 }

@@ -18,7 +18,7 @@ identifier (`id'), date (`date') and p-value (`pval'). If no column of dates
 is provided, then the p-values are treated as being ordered in sequence,
 arriving one at a time.}
 
-\item{alpha}{Overall significance level of the FDR procedure, the default is
+\item{alpha}{Overall significance level of the FWER procedure, the default is
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}, where hypothesis \eqn{i} is
@@ -35,7 +35,7 @@ randomised.}
 \value{
 \item{out}{ A dataframe with the original data \code{d} (which will
  be reordered if there are batches and \code{random = TRUE}), the adjusted
- signifcance thresholds \code{alphai} and the indicator function of
+ significance thresholds \code{alphai} and the indicator function of
  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 }
@@ -88,6 +88,5 @@ Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
  Statistics}, 46(2):526-554.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-\emph{Statistical Methods for Medical Research} (to appear),
-\url{https://arxiv.org/abs/1910.04900}.
+\emph{Statistical Methods in Medical Research}, 30(4):976–993.
 }

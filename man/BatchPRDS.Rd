@@ -2,7 +2,7 @@
 % Please edit documentation in R/BatchPRDS.R
 \name{BatchPRDS}
 \alias{BatchPRDS}
-\title{BatchPRDS: Online batch FDR control under Positive Dependence}
+\title{BatchPRDS: Online batch FDR control under positive dependence}
 \usage{
 BatchPRDS(d, alpha = 0.05, gammai, display_progress = FALSE)
 }
@@ -62,7 +62,7 @@ BatchPRDS(sample.df)
 
 }
 \references{
-Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of
   Batching in Multiple Hypothesis Testing. \emph{International Conference on
-  Artificial Intelligence and Statistics}: 3806-3815
+  Artificial Intelligence and Statistics}, PMLR, 108:3806-3815.
 }

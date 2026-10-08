@@ -47,7 +47,7 @@ function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 }
 \description{
-This funcion is deprecated, please use \code{\link{LORD}} instead with
+This function is deprecated, please use \code{\link{LORD}} instead with
 \code{version = 'dep'}.
 }
 \details{
@@ -67,7 +67,7 @@ numbers \eqn{\xi_i} such that they satisfy a condition given in Javanmard and
 Montanari (2018), example 3.8.
 
 The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where \eqn{w_0
-\ge 0} represents the intial `wealth' and \eqn{b_0 > 0} represents the
+\ge 0} represents the initial `wealth' and \eqn{b_0 > 0} represents the
 `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha} for
 FDR control to hold.
 

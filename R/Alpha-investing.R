@@ -47,19 +47,19 @@
 #'
 #' @return \item{out}{ A dataframe with the original data \code{d} (which will
 #'   be reordered if there are batches and \code{random = TRUE}), the
-#'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+#'   adjusted significance thresholds \eqn{\alpha_i} and the indicator
 #'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 #'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
 #'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Foster, D. and Stine R. (2008). \eqn{\alpha}-investing: a
+#' @references Foster, D. and Stine, R. (2008). \eqn{\alpha}-investing: a
 #'   procedure for sequential control of expected false discoveries.
-#'   \emph{Journal of the Royal Statistical Society (Series B)}, 29(4):429-444.
+#'   \emph{Journal of the Royal Statistical Society (Series B)}, 70(2):429-444.
 #'
-#'   Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+#'   Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018). SAFFRON: an
 #'   adaptive algorithm for online control of the false discovery rate.
-#'   \emph{Proceedings of the 35th International Conference in Machine
+#'   \emph{Proceedings of the 35th International Conference on Machine
 #'   Learning}, 80:4286-4294.
 #'
 #' @seealso

@@ -58,11 +58,11 @@ p-value (`pval'), and a column describing the conflict sets for the hypotheses.
 This takes the form of a vector of decision times or lags. Batch sizes can be 
 specified as a separate argument (see below).
 
-Zrnic et al. (2021) present explicit three versions of LORDstar:
+Zrnic et al. (2021) present three explicit versions of LORDstar:
 
 1) \code{version='async'} is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The discretised
-finish times of the test correspond to the decision times. These decision
+finish times of the tests correspond to the decision times. These decision
 times are given as the input \code{decision.times} for this version of the
 LORDstar algorithm.
 
@@ -80,7 +80,7 @@ The batch sizes are given as the input \code{batch.sizes} for this version of
 the LORDstar algorithm.
 
 Given an overall significance level \eqn{\alpha}, LORDstar depends on
-\eqn{w_0} (where \eqn{0 \le w_0 \le \alpha}), which represents the intial
+\eqn{w_0} (where \eqn{0 \le w_0 \le \alpha}), which represents the initial
 `wealth' of the procedure. The algorithms also require a sequence of
 non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 
@@ -121,7 +121,7 @@ of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 Statistics}, 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. \emph{Journal of Machine Learning Research} 22:1-33.
+Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 }
 \seealso{
 \code{\link{LORD}} presents versions of LORD for \emph{synchronous} p-values,

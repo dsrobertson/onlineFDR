@@ -1,6 +1,6 @@
 #' Online FDR control based on a Bonferroni-like test
 #'
-#' This funcion is deprecated, please use \code{\link{Alpha_spending}} instead.
+#' This function is deprecated, please use \code{\link{Alpha_spending}} instead.
 #'
 #' Implements online FDR control using a Bonferroni-like test.
 #'
@@ -39,7 +39,7 @@
 #'
 #'@return \item{d.out}{ A dataframe with the original data \code{d} (which
 #'  will be reordered if there are batches and \code{random = TRUE}), the
-#'  adjusted signifcance thresholds \code{alphai} and the indicator function of
+#'  adjusted significance thresholds \code{alphai} and the indicator function of
 #'  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
 #'  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 #'

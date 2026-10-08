@@ -43,5 +43,5 @@ StoreyBH(pvals)
 }
 \references{
 Storey, J.D. (2002). A direct approach to false discovery rates.
-  \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
+  \emph{Journal of the Royal Statistical Society (Series B)}, 64(3):479-498.
 }

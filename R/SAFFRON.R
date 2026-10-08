@@ -13,8 +13,8 @@
 #' of the same date. If no column of dates is provided, then the p-values are
 #' treated as being ordered in sequence, arriving one at a time.
 #'
-#' SAFFRON procedure provably controls FDR for independent p-values. Given an
-#' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+#' The SAFFRON procedure provably controls the FDR for independent p-values.
+#' Given an overall significance level \eqn{\alpha}, we choose a sequence of non-negative
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
 #' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0}
@@ -29,9 +29,8 @@
 #' independent from the non-null p-values.
 #'
 #' The SAFFRON procedure can lose power in the presence of conservative nulls,
-#' which can be compensated for by adaptively `discarding' these p-values. This
-#' option is called by setting \code{discard=TRUE}, which is the same algorithm
-#' as ADDIS.
+#' which can be compensated for by adaptively `discarding' these p-values, as
+#' in the ADDIS algorithm (see \code{\link{ADDIS}}).
 #'
 #' Further details of the SAFFRON procedure can be found in Ramdas et al.
 #' (2018).
@@ -65,15 +64,15 @@
 #'
 #' @return \item{out}{ A dataframe with the original data \code{d} (which
 #'   will be reordered if there are batches and \code{random = TRUE}), the
-#'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+#'   adjusted significance thresholds \eqn{\alpha_i} and the indicator
 #'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
 #'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
 #'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
+#' @references Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018).
 #'   SAFFRON: an adaptive algorithm for online control of the false discovery
-#'   rate. \emph{Proceedings of the 35th International Conference in Machine
+#'   rate. \emph{Proceedings of the 35th International Conference on Machine
 #'   Learning}, 80:4286-4294.
 #'
 #' @seealso
