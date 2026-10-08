@@ -18,7 +18,7 @@ Alpha_investing}
 }
 \value{
 \item{bound}{ A vector giving the values of a default sequence
-\eqn{\gamma_i} of nonnegative numbers.}
+\eqn{\gamma_i} of non-negative numbers.}
 }
 \description{
 Calculates a default sequence of non-negative numbers \eqn{\gamma_i} that sum

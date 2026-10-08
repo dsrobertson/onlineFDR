@@ -19,7 +19,7 @@ identifier (`id'), date (`date') and p-value (`pval'). If no column of
 dates is provided, then the p-values are treated as being ordered
 in sequence, arriving one at a time.}
 
-\item{alpha}{Overall significance level of the FDR procedure, the default is
+\item{alpha}{Overall significance level of the FWER procedure, the default is
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided as
@@ -37,7 +37,7 @@ the algorithm runtime.}
 \value{
 \item{out}{ A dataframe with the original data \code{d} (which will
   be reordered if there are batches and \code{random = TRUE}), the
-  LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
+  adjusted significance thresholds \eqn{\alpha_i} and the indicator
   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
@@ -87,5 +87,5 @@ set.seed(1); online_fallback(sample.df, alpha=0.1)
 }
 \references{
 Tian, J. and Ramdas, A. (2021). Online control of the familywise
-error rate. \emph{Statistical Methods for Medical Research}, 30(4):976–993.
+error rate. \emph{Statistical Methods in Medical Research}, 30(4):976–993.
 }

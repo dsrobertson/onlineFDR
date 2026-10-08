@@ -25,7 +25,7 @@
 #'  is provided, then the p-values are treated as being ordered in sequence,
 #'  arriving one at a time.
 #'
-#'@param alpha Overall significance level of the FDR procedure, the default is
+#'@param alpha Overall significance level of the FWER procedure, the default is
 #'  0.05.
 #'
 #'@param gammai Optional vector of \eqn{\gamma_i}, where hypothesis \eqn{i} is
@@ -42,7 +42,7 @@
 #'
 #'@return \item{out}{ A dataframe with the original data \code{d} (which will
 #'  be reordered if there are batches and \code{random = TRUE}), the adjusted
-#'  signifcance thresholds \code{alphai} and the indicator function of
+#'  significance thresholds \code{alphai} and the indicator function of
 #'  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
 #'  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 #'
@@ -52,8 +52,7 @@
 #'  Statistics}, 46(2):526-554.
 #'
 #' Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-#' \emph{Statistical Methods for Medical Research} (to appear),
-#' \url{https://arxiv.org/abs/1910.04900}.
+#' \emph{Statistical Methods in Medical Research}, 30(4):976–993.
 #'
 #'
 #' @examples

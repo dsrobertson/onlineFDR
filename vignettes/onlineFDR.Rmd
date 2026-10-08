@@ -27,7 +27,7 @@ knitr::include_graphics("stream-diagram.png")
 Multiple hypothesis testing is a fundamental problem in statistical inference,
 and the failure to manage multiple testing problems has been highlighted as one
 of the elements contributing to the replicability crisis in science (Ioannidis
-2015). Methodologies have been developed to manage the multiple testing
+2005). Methodologies have been developed to manage the multiple testing
 situation by adjusting the significance levels for a family of hypotheses, in
 order to control error metrics such as the familywise error rate (FWER)
 or the false discovery rate (FDR).  
@@ -39,7 +39,7 @@ hypotheses arrive in a stream.
 
 This introduces the challenge that at each step, the investigator must decide whether to reject the current null hypothesis without having access to the future p-values or the total number of hypotheses to be tested, but with the knowledge of the historic decisions to date. 
 
-The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high-level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
+The `onlineFDR` package provides a family of algorithms you can apply to a historic or growing dataset to control the FDR or FWER in an online manner. At a high level, these algorithms rely on a concept called "alpha wealth" in which experiments cost some amount of error from your "budget" but a discovery earns some of the budget back. 
 
 ![Animation illustrating alpha-wealth accumulation and spending](alpha-wealth.gif)
 
@@ -57,7 +57,7 @@ your problem. The interactive version (click-to-functions) is available
 ![Flowchart guiding the choice of onlineFDR procedure](onlineFDR-diagram.png)
 
 ### Frequently Asked Questions
-We also have a provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
+We have also provided a non-exhaustive list of answers to some questions you may have when navigating the flowchart.
 
 * **What is the difference between FDR and FWER?**
 
@@ -69,7 +69,7 @@ Offline refers to the case when all the hypotheses are tested simultaneously by 
 
 * **What do the different data dependencies mean?**
 
-'Independent' means that a given null p-value does not depend on any other non null p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values happen to be correlated with p-values from a long time ago.
+'Independent' means that a given null p-value does not depend on any other non-null p-values. A simple way to think about p-values being 'positively dependent' is to consider correlated hypothesis tests. For instance, consider testing for pairwise differences in means between 4 groups. If group A has an especially low mean, then not only would A vs. B yield a small p-value, but also A vs. C and A vs. D. Finally, 'arbitrary dependence' includes the situation where some of your p-values happen to be correlated with p-values from a long time ago.
 
 * **What are the differences between some of the algorithms such as `LOND`, `LORD`, `SAFFRON`, and `ADDIS`?**
 
@@ -89,16 +89,16 @@ This Quick Start guide is meant to provide a framework for you to use any of the
 
 #### Input data
 
-In general, your dataset should contain, at the minimum, a column of p-values ('pval')). You can also pass in an id column ('id') or a date column ('date'), but that is optional; the p-values will be treated as being ordered in sequence. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered in sequence. 
+In general, your dataset should contain, at the minimum, a column of p-values ('pval'). You can also pass in an id column ('id') or a date column ('date'), but these are optional; if no date column is given, the p-values will be treated as being ordered in sequence. Alternatively, you can also use just the vector of p-values, in which case, the p-values will also be treated as being ordered in sequence. 
 
-If you are using the Batch algorithms, ensure that your dataset contains a column ('batch') where batches are defined in sequence starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see `LONDstar()`, `LORDstar()`, and `SAFFRONstar()`). If you are not sure which algorithm to use, click [here](#which-function-do-i-use-).
+If you are using the Batch algorithms, ensure that your dataset contains a column ('batch') where batches are defined in sequence starting from 1. For more complex data structures, you may want to consider using the STAR algorithms (see `LONDstar()`, `LORDstar()`, and `SAFFRONstar()`). If you are not sure which algorithm to use, click [here](#which-algorithm-do-i-use).
 
 All p-values generated should be passed to the function (and not
 just the significant p-values).  An exception to this would be if you have
-implemented an orthogonal filter to reduce the dataset size, such as discussed in (Burgon *et al.*, 2010).
+implemented an orthogonal filter to reduce the dataset size, as discussed by Bourgon *et al.* (2010).
 
 #### What happens to the input data
-If you're using `LOND()`, `LORD()`, `SAFFRON()` or `ADDIS()`, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have *a priori* knowledge that hypotheses should be ordered in such way such that the ones with smaller p-values are more likely to appear first. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the `set.seed` function) before calling the wrapper function.
+If you're using `LOND()`, `LORD()`, `SAFFRON()` or `ADDIS()`, it orders the p-values by date. If there are multiple p-values with the same date (i.e. the same batch), the order of the p-values within each batch is randomised by default. Generally, users should randomise unless they have *a priori* knowledge that hypotheses should be ordered in such a way that the ones with smaller p-values are more likely to appear first. In order for the randomisation of the p-values to be reproducible, it is necessary to set a seed (via the `set.seed` function) before calling the wrapper function.
 
 Otherwise, the other algorithms will take in the p-values in the original order of the data. 
 
@@ -115,7 +115,7 @@ A dataframe is returned with the original data and the newly calculated `alphai`
 ### Using `onlineFDR` Exploratively
 This package (and the corresponding [Shiny app](http://shiny.mrc-bsu.cam.ac.uk/apps/onlineFDRexplore)) can be used in an exploratory way post-hoc. If you have a dataset of p-values for a series of experiments that have completed, you can use the algorithms provided in `onlineFDR` to explore how you could control the FDR and how the different algorithms have different levels of power. 
 
-First, we initialize a toy dataset with three columns: an identifier ('id'), date ('date') and p-value ('pval'). Note that the date should be in the format "YYYY-MM-DD".
+First, we initialise a toy dataset with three columns: an identifier ('id'), date ('date') and p-value ('pval'). Note that the date should be in the format "YYYY-MM-DD".
 
 ```{r}
 sample.df <- data.frame(
@@ -147,7 +147,7 @@ To check how many hypotheses we've rejected, we can do:
 sum(LOND_results$R)
 ```
 
-To compare the results of one algorithm to another, we can visualize the adjusted significance thresholds:
+To compare the results of one algorithm to another, we can visualise the adjusted significance thresholds:
 ```{r alphai-comparison, fig.alt="Line plot comparing log adjusted significance thresholds for LOND, LORD, Bonferroni-like and unadjusted procedures"}
 set.seed(1)
 LORD_results <- LORD(sample.df)
@@ -175,7 +175,7 @@ legend("right", legend = c("Unadjusted", "Bonferroni", "LORD", "LOND"),
 Note that both LOND and LORD result in higher significance thresholds (alpha_i) than a Bonferroni adjustment. When alphai jumps, that indicates that the algorithm is recovering some of its "alpha wealth" when it makes a discovery. You can see how if the algorithm does not discover anything over time, its alpha wealth decreases (the alphai will monotonically decrease), and it becomes harder to reject a null hypothesis since the significance threshold gets smaller and smaller.
 
 ### Using `onlineFDR` over time
-This package can be used over time as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-function-do-i-use-). You can pass your growing dataset to the same algorithm. 
+This package can be used over time as your dataset grows. In order for the randomisation of the data within the previous batches to remain the same (and hence to allow for reproducibility of the results), *the same seed should be used for all analyses*. Ideally, you will have selected your algorithm *a priori* based on your needs (click [here](#which-algorithm-do-i-use)). You can pass your growing dataset to the same algorithm. 
 
 ```{r}
 # Initial experimental data
@@ -228,7 +228,7 @@ batchprds_results <- BatchPRDS(sample.df)
 ```
 
 #### Setting a Bound
-In the cases where you **a priori** expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the `betai` or `gammai` argument in your chosen algorithm.
+In the cases where you *a priori* expect a certain number of hypothesis tests, you can set a bound. Note that the bounds for LOND and LORDdep depend on alpha, so ensure that the alpha value used for the bound is the same alpha value used for the algorithm. Supply your bound to either the `betai` or `gammai` argument in your chosen algorithm.
 
 ```{r}
 sample.df <- data.frame(
@@ -277,7 +277,7 @@ hypotheses, as presented by Ramdas *et al.* (2018). The procedure provides an
 adaptive method of online FDR control.
 
 * `Alpha_investing()`
-Implements a variant of the Alpha-investing algorithm of Foster and Stine (2008)
+implements a variant of the Alpha-investing algorithm of Foster and Stine (2008)
 that guarantees FDR control, as proposed by Ramdas et al. (2018). This procedure
 uses a variant of SAFFRON's update rule. This procedure controls the FDR for
 independent p-values.
@@ -313,6 +313,12 @@ Zrnic *et al.* (2021). This controls the mFDR.
 implements the SAFFRON algorithm for asynchronous online testing, as
 presented by Zrnic *et al.* (2021). This controls the mFDR.
 
+### False Discovery Exceedance Control
+* `supLORD()`
+implements the supLORD algorithm of Xu & Ramdas (2021), which controls the
+false discovery exceedance (FDX) and the FDR at stopping times, for p-values
+that are conditionally superuniform under the null.
+
 ### FWER Control
 * `Alpha_spending()`
 implements online FWER control using a Bonferroni-like test. Alpha-spending
@@ -331,6 +337,11 @@ Alpha-spending, by including both adaptivity in the fraction of null hypotheses
 and the conservativeness of nulls. ADDIS-spending provides strong FWER control
 for independent p-values. Tian & Ramdas (2021) also presented a version for
 handling local dependence.
+
+* `ADDIS_exhaustive()`
+implements the exhaustive ADDIS-spending algorithm for online FWER control, as
+proposed by Fischer *et al.* (2024). It is a uniform improvement of
+ADDIS-spending and provides strong FWER control for independent p-values.
 
 
 
@@ -357,7 +368,7 @@ Mashhadi) for useful discussions during the development of the package.
 ## References
 
 Aharoni, E. and Rosset, S. (2014). Generalized $\alpha$-investing: definitions, 
-optimality results and applications to public databases.
+optimality results and application to public databases.
 *Journal of the Royal Statistical Society (Series B)*, 76(4):771--794.
 
 Benjamini, Y., and Yekutieli, D. (2001). The control of the false discovery rate
@@ -368,12 +379,15 @@ Bourgon, R., Gentleman, R., and Huber, W. (2010). Independent filtering
 increases detection power for high-throughput experiments. 
 *Proceedings of the National Academy of Sciences*, 107(21), 9546-9551.
 
-Foster, D. and Stine R. (2008). $\alpha$-investing: a procedure for sequential
+Fischer, L., Bofill Roig, M. and Brannath, W. (2024). An exhaustive ADDIS
+principle for online FWER control. *Biometrical Journal*, 66(3):2300237.
+
+Foster, D. and Stine, R. (2008). $\alpha$-investing: a procedure for sequential
 control of expected false discoveries.
-*Journal of the Royal Statistical Society (Series B)*, 29(4):429-444.
+*Journal of the Royal Statistical Society (Series B)*, 70(2):429-444.
 
 Ioannidis, J.P.A. (2005). Why most published research findings are false.
-*PLoS Medicine*, 2.8:e124.
+*PLoS Medicine*, 2(8):e124.
 
 Javanmard, A., and Montanari, A. (2015). On Online Control of False
 Discovery Rate. *arXiv preprint*, https://arxiv.org/abs/1502.06197.
@@ -384,41 +398,45 @@ Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
 
 Koscielny, G., *et al*. (2013). The International Mouse Phenotyping Consortium
 Web Portal, a unified point of access for knockout mice and related phenotyping
-data. *Nucleic Acids Research*, 42.D1:D802-D809.
+data. *Nucleic Acids Research*, 42(D1):D802-D809.
 
-Li, A., and Barber, F.G. (2017). Accumulation Tests for FDR Control in Ordered
+Li, A., and Barber, R.F. (2017). Accumulation Tests for FDR Control in Ordered
 Hypothesis Testing. *Journal of the American Statistical Association*, 
 112(518):837-849.
 
-Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
 of the false discovery rate with decaying memory. 
 *Advances in Neural Information Processing Systems 30*, 5650-5659.
 
-Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018). SAFFRON: an
 adaptive algorithm for online control of the false discovery rate. 
-*Proceedings of the 35th International Conference in Machine Learning*,
+*Proceedings of the 35th International Conference on Machine Learning*,
 80:4286-4294.
 
 Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
 rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
 
-Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple hypothesis testing for reproducible research. *arXiv preprint*, https://arxiv.org/abs/2208.11418.
+Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2023). Online multiple hypothesis testing. *Statistical Science*, 38(4):557-575, https://doi.org/10.1214/23-STS901.
 
 Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
-Online control of the false discovery rate in biomedical research.
-*Bioinformatics*, 35:4196-4199, https://doi.org/10.1093/bioinformatics/btz191.
+onlineFDR: an R package to control the false discovery rate for growing data
+repositories. *Bioinformatics*, 35(20):4196-4199, https://doi.org/10.1093/bioinformatics/btz191.
 
-Storey, J. D. (2002). A direct approach to false discovery rates. *JRSS B*, 64(3):479–498.
+Storey, J. D. (2002). A direct approach to false discovery rates. *Journal of the Royal Statistical Society (Series B)*, 64(3):479–498.
 
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for 
-online FDR control with conservative nulls. *Advances in Neural Information Processing Systems*, 32.
+online FDR control with conservative nulls. *Advances in Neural Information Processing Systems 32*, 9388-9396.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
 *Statistical Methods in Medical Research*, 30(4):976–993.
 
+Xu, Z. and Ramdas, A. (2021). Dynamic algorithms for online multiple testing.
+*Annual Conference on Mathematical and Scientific Machine Learning*, PMLR,
+145:955-986.
+
 Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The power of batching in multiple hypothesis testing. *International Conference on Artificial Intelligence and Statistics (AISTATS) 2020*, PMLR, 108:3806-3815.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. *JMLR*, 22:1-33.
+Multiple Hypotheses. *Journal of Machine Learning Research*, 22(33):1-39.
 
 

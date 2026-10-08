@@ -26,6 +26,9 @@ test_that("Errors for edge cases", {
     
     expect_error(LOND(0.1, betai=2),
     "The sum of the elements of betai must not be greater than alpha.")
+
+    expect_error(LOND(c(0.1, 0.2, 0.3), betai = c(0.01, 0.01)),
+    "betai must have length at least equal to the number of p-values.")
 })
 
 test_that("LOND gives same results when dep = TRUE for N = 1", {

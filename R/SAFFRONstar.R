@@ -5,20 +5,20 @@
 #'
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with three columns: an identifier (`id'),
-#' p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+#' p-value (`pval'), and a column describing the conflict sets for the hypotheses. 
 #' This takes the form of a vector of decision times or lags. Batch sizes can be 
 #' specified as a separate argument (see below).
 #'
-#' Zrnic et al. (2021) present explicit three versions of SAFFRONstar:
+#' Zrnic et al. (2021) present three explicit versions of SAFFRONstar:
 #'
 #' 1) \code{version='async'} is for an asynchronous testing process, consisting
 #' of tests that start and finish at (potentially) random times. The discretised
-#' finish times of the test correspond to the decision times. These decision
+#' finish times of the tests correspond to the decision times. These decision
 #' times are given as the input \code{decision.times} for this version of the
 #' SAFFRONstar algorithm. For this version of SAFFRONstar, Tian and Ramdas
 #' (2019) presented an algorithm that can improve the power of the procedure in
 #' the presence of conservative nulls by adaptively `discarding' these p-values.
-#' This can be called by setting the option \code{discard=TRUE}.
+#' This is implemented by \code{\link{ADDIS}} with \code{async=TRUE}.
 #'
 #' 2) \code{version='dep'} is for online testing under local dependence of the
 #' p-values. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t} to
@@ -35,7 +35,7 @@
 #'
 #' Given an overall significance level \eqn{\alpha}, SAFFRONstar depends on
 #' constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
-#' w_0 \le \alpha} and represents the intial `wealth' of the
+#' w_0 \le \alpha} and represents the initial `wealth' of the
 #' procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
 #' `candidate' hypothesis. A `candidate' refers to p-values smaller than
 #' \eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
@@ -51,7 +51,7 @@
 #'
 #'
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
-#'   identifier (`id'), p-value (`pval'), and either decision.times', or `lags',
+#'   identifier (`id'), p-value (`pval'), and either `decision.times', or `lags',
 #'   depending on which version you're using. See version for more details.
 #'
 #' @param alpha Overall significance level of the procedure, the default is
@@ -84,7 +84,7 @@
 #'
 #'
 #' @references Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #'
 #'
 #' @seealso

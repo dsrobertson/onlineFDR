@@ -146,125 +146,61 @@ DataFrame addis_async_faster(NumericVector pval,
 	double w0 = 0.025,
 	bool display_progress = false) {
 
+	// ADDIS*_async of Tian and Ramdas (2019), Algorithm 3. Test i (0-based) starts at
+	// time t = i + 1 and its outcome is known from time t onwards if E[j] < t, i.e.
+	// E[j] <= i. Rejection times kappa_j, kappa_j^* and C_j^+ are all defined by
+	// decision times.
+
 	int N = pval.size();
 
 	NumericVector alphai(N);
 	LogicalVector R(N);
-	IntegerVector S(N);
-	IntegerVector cand(N);
-	IntegerVector Cjplus(N);
-	LogicalVector selected = (pval <= tau);
 
-	alphai[0] = std::min((tau-lambda)*w0*gammai[0], lambda);
-	R[0] = (pval[0] <= alphai[0]);
+	// Numbers of started tests that are selected (p <= tau) or candidates
+	// (p <= lambda), by decision time; decision times beyond N are never known
+	std::vector<int> selDec(N + 2, 0), candDec(N + 2, 0);
+	std::vector<int> prefSel(N + 1, 0), prefCand(N + 1, 0);
+	std::vector<int> kappa;
 
-	int K;
-	std::vector<int> kappai;
+	Progress p(N, display_progress);
 
-	Progress p(N * N, display_progress);
+	for (int i = 0; i < N; i++) {
 
-	for (int i = 1; i < N; i++) {
-
-		kappai.clear();
-		// nightmare to code the which statement
-		for (int j = 0; j <= i-1; j++) {
-			if (R[j] && (E[j]-1 <= i-1))
-				kappai.push_back(j);
+		if (i > 0) {
+			int d = std::min(std::max((int)E[i-1], 1), N + 1);
+			selDec[d] += (pval[i-1] <= tau);
+			candDec[d] += (pval[i-1] <= lambda);
 		}
 
-		K = kappai.size();
-
-		cand[i-1] = (pval[i-1] <= lambda);
-
-		int candsum = 0;
-		//C++ trick to loop "seq_len" and use conditional incrementor for "sum"
-		for (int j = 0; j <= i-1; j++) {
-			if (cand[j] && (E[j]-1 <= i-1))
-				candsum++;
+		// prefix sums over decision times 1, ..., i (outcomes known at time i + 1)
+		for (int d = 1; d <= i; d++) {
+			prefSel[d] = prefSel[d-1] + selDec[d];
+			prefCand[d] = prefCand[d-1] + candDec[d];
 		}
 
-		int Ssum = 0;
-		for (int j = 0; j <= i-1; j++) {
-			if (selected[j] && (E[j]-1 <= i-1))
-				Ssum++;
-			if (E[j]-1 >= i)
-				Ssum++;
+		int pending = 0;
+		kappa.clear();
+		for (int j = 0; j < i; j++) {
+			if (E[j] > i)
+				pending++;
+			else if (R[j])
+				kappa.push_back(std::max((int)E[j], 1));
+		}
+		std::sort(kappa.begin(), kappa.end());
+
+		int S = prefSel[i] + pending;   // S^t
+		int C0 = prefCand[i];           // C_0^+
+
+		double wealth = w0 * gammai[S - C0];
+		for (std::size_t j = 0; j < kappa.size(); j++) {
+			int kstar = prefSel[kappa[j]];               // kappa_j^*
+			int Cj = C0 - prefCand[kappa[j]];            // C_j^+
+			wealth += (j == 0 ? alpha - w0 : alpha) * gammai[S - kstar - Cj];
 		}
 
-		S[i-1] = Ssum;
-
-		double alphaitilde;
-		if (K > 1) {
-
-	    //sapply, also nightmare to code 
-			NumericVector kappaistar(kappai.size());
-
-			int mysum = 0;
-			int index = 0;
-			int bound = kappai[kappai.size()-1];
-			for (int k = 0; k <= bound; k++) {
-				mysum += selected[k];
-		//this is the sapply workaround
-				if (kappai[index] == k){
-					kappaistar[index] = mysum;
-					index++;
-				}
-			}
-
-	    //update Cjplus
-			for (int j = 0; j < K; j++) {
-				p.increment();
-
-				int from = kappai[j]+1;
-				int to = std::max(i-1, kappai[j]+1);
-				int sum = 0;
-
-				for (int k = from; k <= to; k++) {
-					if (cand[k] && E[k]-1 <= i-1)
-						sum++;
-				}
-
-				Cjplus[j] = sum;
-			}
-
-			double Cjplussum = 0;
-			//indexing gammai is a nightmare
-			for (int j = 0; j < K; j++) {
-				Cjplussum += gammai[ S[i-1] - kappaistar[j] - Cjplus[j] ];
-			}
-			Cjplussum -= gammai[ S[i-1] - kappaistar[0] - Cjplus[0] ];
-			
-			alphaitilde = (tau-lambda)*(w0*gammai[ S[i-1]-candsum ] + 
-			(alpha-w0)*gammai[ S[i-1]-kappaistar[0]-Cjplus[0] ] + alpha*Cjplussum);
-			
-		}  else if (K == 1) {
-
-			int kappaistar = 0;
-			for (int j = 0; j <= kappai[0]; j++)
-				kappaistar += selected[j];
-
-			int from = kappai[0]+1;
-			int to = std::max(i-1, kappai[0]+1);
-			Cjplus[0] = 0;
-			for (int j = from; j <= to; j++) {
-				if (cand[j] && E[j]-1 <= i-1)
-					Cjplus[0]++;
-			}
-
-			alphaitilde = (tau-lambda)*(w0 * gammai[ S[i-1] - candsum  ] + 
-			    (alpha-w0)*gammai[ S[i-1] - kappaistar - Cjplus[0] ]);
-			
-		} else {
-
-			alphaitilde = (tau-lambda)*w0*gammai[ S[i-1]-candsum ];
-
-		}
-
-		alphai[i] = std::min(lambda, alphaitilde);
-		if (pval[i] <= alphai[i]) {
-			R[i] = 1;
-	    //K++;
-		}
+		alphai[i] = std::min(lambda, (tau - lambda) * wealth);
+		R[i] = (pval[i] <= alphai[i]);
+		p.increment();
 	}
 
 	return DataFrame::create(_["pval"] = pval,

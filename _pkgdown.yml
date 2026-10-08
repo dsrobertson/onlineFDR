@@ -12,7 +12,6 @@ reference:
   - title: Fully Sequential FDR Control
     contents:
     - "ADDIS"
-    - "ADDIS_exhaustive"
     - "Alpha_investing"
     - "LOND"
     - "LORD"
@@ -34,6 +33,7 @@ reference:
     - "supLORD"
   - title: FWER Control
     contents:
+    - "ADDIS_exhaustive"
     - "ADDIS_spending"
     - "Alpha_spending"
     - "online_fallback"

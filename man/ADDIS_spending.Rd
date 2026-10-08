@@ -25,7 +25,7 @@ identifier (`id'), p-value (`pval'), and lags (`lags').}
 \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
 
 \item{lambda}{Optional parameter that sets the threshold for `candidate'
-hypotheses. Must be between 0 and 1, defaults to 0.25.}
+hypotheses. Must be between 0 and tau, defaults to 0.25.}
 
 \item{tau}{Optional threshold for hypotheses to be selected for testing. Must
 be between 0 and 1, defaults to 0.5.}
@@ -54,7 +54,7 @@ The function takes as its input either a vector of p-values, or a dataframe
 with three columns: an identifier (`id'), p-value (`pval'), and lags, if the
 dependent version is specified (see below). Given an overall significance
 level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and \eqn{\tau},
-where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1)} represents the
+where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1]} represents the
 threshold for a hypothesis to be selected for testing: p-values greater than
 \eqn{\tau} are implicitly `discarded' by the procedure, while \eqn{\lambda
 \in (0,1)} sets the threshold for a p-value to be a candidate for rejection:
@@ -93,7 +93,7 @@ ADDIS_spending(sample.df, dep = TRUE) #Locally dependent
 }
 \references{
 Tian, J. and Ramdas, A. (2021). Online control of the familywise
-  error rate. \emph{Statistical Methods for Medical Research} 30(4):976–993.
+  error rate. \emph{Statistical Methods in Medical Research} 30(4):976–993.
 }
 \seealso{
 \code{\link{ADDIS}} provides online control of the FDR.

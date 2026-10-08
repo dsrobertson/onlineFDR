@@ -13,7 +13,7 @@
 #' @param N An upper bound on the number of hypotheses to be tested
 #'
 #' @return \item{bound}{ A vector giving the values of a default sequence
-#' \eqn{\gamma_i} of nonnegative numbers.}
+#' \eqn{\gamma_i} of non-negative numbers.}
 #'   
 #' @export
 

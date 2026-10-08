@@ -1,5 +1,25 @@
 # A NEWS File to document package updates
 
+CHANGES IN VERSION 2.21.2
+-----------------------
+MODIFICATIONS:
+
+    * ADDIS_exhaustive now checks that lambda >= alpha * tau, as required by
+      Fischer et al. (2024); this also ensures no p-value above lambda is
+      rejected
+    * ADDIS_exhaustive now rejects alpha = 1, lambda = tau and gamma summing
+      to more than 1, which previously gave invalid results without an error
+    * ADDIS now rejects lambda = tau, as required by Tian and Ramdas (2019)
+    * ADDIS with async = TRUE now follows Algorithm 3 of Tian and Ramdas (2019)
+      exactly. Rejection times and candidate counts were previously based on the
+      order in which tests started rather than on their decision times, which
+      gave different (sometimes higher) test levels when tests overlapped
+    * LOND now checks that a user-supplied betai is at least as long as the
+      number of p-values
+    * added tests of ADDIS_exhaustive testing levels and of the async ADDIS
+      candidate threshold
+    * corrected errors in the documentation, vignettes and references
+
 CHANGES IN VERSION 2.21.1
 -----------------------
 MODIFICATIONS:
@@ -51,7 +71,7 @@ MODIFICATIONS:
     * added the Alpha-investing procedure of Ramdas et al. [2018]
     * updated vignette
     * deprecated LORDdep and added functionality to LORD
-    * deprecated Bonfinifinite, which is replaced by AlphaSpending
+    * deprecated bonfInfinite, which is replaced by Alpha_spending
     * removed LORD versions 1 and 2
     * added unit tests
     * updated references

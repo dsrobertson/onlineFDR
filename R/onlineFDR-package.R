@@ -10,8 +10,6 @@
 #' \tabular{ll}{
 #' Package: \tab onlineFDR \cr
 #' Type: \tab Package\cr
-#' Version: \tab 2.7.1\cr
-#' Date: \tab 2023-04-12\cr
 #' License: \tab GPL-3 \cr
 #' }
 #'
@@ -23,25 +21,25 @@
 #' \code{version='discard'} implements a modified version of LORD that can
 #' improve the power of the procedure in the presence of conservative nulls by
 #' adaptively `discarding' these p-values, as proposed by Tian and Ramdas
-#' (2019a). All these LORD procedures provably control the FDR under
+#' (2019). All these LORD procedures provably control the FDR under
 #' independence of the p-values. However, setting \code{version='dep'} provides
 #' a modified version of LORD that is valid for arbitrarily dependent p-values.
 #' 
 #' The second method is LOND, which stands for (significance) Levels based On
 #' Number of Discoveries and is implemented by the function \code{\link{LOND}}.
 #' This procedure controls the FDR under independence of the p-values, but the
-#' slightly modified version of LOND proposed by Zrnic et al. (2018) also
-#' provably controls the FDR under positive dependence (PRDS conditioN). In
-#' addition, by specifying \code{dep = TRUE}, thus function runs a modified
+#' slightly modified version of LOND proposed by Zrnic et al. (2021) also
+#' provably controls the FDR under positive dependence (PRDS condition). In
+#' addition, by specifying \code{dep = TRUE}, this function runs a modified
 #' version of LOND which is valid for arbitrarily dependent p-values.
 #' 
 #' Another method for online FDR control proposed by Ramdas et al. (2018) is the
 #' \code{\link{SAFFRON}} procedure, which stands for Serial estimate of the
-#' Alpha Fraction that is Futiley Rationed On true Null hypotheses. This
+#' Alpha Fraction that is Futilely Rationed On true Null hypotheses. This
 #' provides an adaptive algorithm for online FDR control. SAFFRON is related to 
 #' the Alpha-investing procedure of Foster and Stine (2008), a monotone version
 #' of which is implemented by the function \code{\link{Alpha_investing}}. Both 
-#' these procedure provably control the FDR under independence of the p-values.
+#' these procedures provably control the FDR under independence of the p-values.
 #' 
 #' Tian and Ramdas (2019) proposed the \code{\link{ADDIS}}
 #' algorithm, which stands for an ADaptive algorithm that DIScards conservative
@@ -68,7 +66,7 @@
 #' 
 #' 1) \code{version='async'} is for an asynchronous testing
 #' process, consisting of tests that start and finish at (potentially) random 
-#' times. The discretised finish times of the test correspond to the decision 
+#' times. The discretised finish times of the tests correspond to the decision 
 #' times.
 #' 
 #' 2) \code{version='dep'} is for online testing under local
@@ -89,36 +87,43 @@
 #'
 #' Finally, Tian and Ramdas (2021) proposed a number of algorithms for online
 #' FWER control. The only previously existing procedure for online FWER control
-#' is Alpha-spending, which is an online analog of the Bonferroni procedure.
+#' is Alpha-spending, which is an online analogue of the Bonferroni procedure.
 #' This is implemented by the function \code{\link{Alpha_spending}}, and
 #' provides strong FWER control for arbitrarily dependent p-values. A uniformly
 #' more powerful method is \code{\link{online_fallback}}, which again strongly
 #' controls the FWER even under arbitrary dependence amongst the p-values. The
 #' \code{\link{ADDIS_spending}} procedure compensates for the power loss of
-#' Alpha-spending and online fallback, by including both adapativity in the
+#' Alpha-spending and online fallback, by including both adaptivity in the
 #' fraction of null hypotheses and the conservativeness of nulls. This procedure
 #' controls the FWER in the strong sense for independent p-values. Tian and
 #' Ramdas (2021) also presented a version for handling local dependence, which
-#' can be specified by setting \code{dep=TRUE}.
+#' can be specified by setting \code{dep=TRUE}. Fischer et al. (2024) proposed
+#' an exhaustive version of ADDIS-spending, implemented by the function
+#' \code{\link{ADDIS_exhaustive}}, which is a uniform improvement of
+#' ADDIS-spending and also strongly controls the FWER for independent p-values.
 #'
-#' Further details on all these procedures can be found in Javanmard and
-#' Montanari (2015, 2018), Ramdas et al. (2017, 2018), Robertson and Wason
-#' (2018), Tian and Ramdas (2019, 2021), Xu and Ramdas (2021), and Zrnic et al.
-#' (2020, 2021).
+#' Further details on all these procedures can be found in Fischer et al.
+#' (2024), Javanmard and Montanari (2015, 2018), Ramdas et al. (2017, 2018),
+#' Robertson and Wason (2018), Tian and Ramdas (2019, 2021), Xu and Ramdas
+#' (2021), and Zrnic et al. (2020, 2021).
 #' 
 #' @author David S. Robertson (\email{david.robertson@@mrc-bsu.cam.ac.uk}),
 #' Lathan Liou, Adel Javanmard, Aaditya Ramdas, Jinjin Tian, Tijana Zrnic,
-#' Andrea Montanari and Natasha A. Karp.
+#' Andrea Montanari, Natasha A. Karp and Nikita Mozgunov.
 #'
 #' @references
 #' 
 #' Aharoni, E. and Rosset, S. (2014). Generalized \eqn{\alpha}-investing:
-#' definitions, optimality results and applications to publci databases.
+#' definitions, optimality results and application to public databases.
 #' \emph{Journal of the Royal Statistical Society (Series B)}, 76(4):771--794.
 #' 
-#' Foster, D. and Stine R. (2008). \eqn{\alpha}-investing: a procedure for 
+#' Fischer, L., Bofill Roig, M. and Brannath, W. (2024). An exhaustive ADDIS
+#' principle for online FWER control. \emph{Biometrical Journal},
+#' 66(3):2300237.
+#' 
+#' Foster, D. and Stine, R. (2008). \eqn{\alpha}-investing: a procedure for 
 #' sequential control of expected false discoveries. \emph{Journal of the Royal
-#' Statistical Society (Series B)}, 29(4):429-444.
+#' Statistical Society (Series B)}, 70(2):429-444.
 #' 
 #' Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
 #' Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}.
@@ -127,46 +132,46 @@
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #'
-#' Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+#' Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
 #' of the false discovery rate with decaying memory. \emph{Advances in Neural
 #' Information Processing Systems 30}, 5650-5659.
 #'
-#' Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+#' Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018). SAFFRON: an
 #' adaptive algorithm for online control of the false discovery rate.
-#' \emph{Proceedings of the 35th International Conference in Machine Learning},
+#' \emph{Proceedings of the 35th International Conference on Machine Learning},
 #' 80:4286-4294.
 #'
 #' Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
 #' discovery rate in biomedical research. \emph{arXiv preprint},
 #' \url{https://arxiv.org/abs/1809.07292}.
 #' 
-#' Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2022). Online multiple
-#' hypothesis testing for reproducible research.\emph{arXiv preprint},
-#' \url{https://arxiv.org/abs/2208.11418}.
+#' Robertson, D.S., Wason, J.M.S. and Ramdas, A. (2023). Online multiple
+#' hypothesis testing. \emph{Statistical Science}, 38(4):557-575,
+#' \doi{10.1214/23-STS901}.
 #' 
 #' Robertson, D.S., Wildenhain, J., Javanmard, A. and Karp, N.A. (2019).
 #' onlineFDR: an R package to control the false discovery rate for growing data
-#' repositories. \emph{Bioinformatics}, 35:4196-4199, 
+#' repositories. \emph{Bioinformatics}, 35(20):4196-4199, 
 #' \doi{10.1093/bioinformatics/btz191}.
 #'
 #' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
 #' online FDR control with conservative nulls.
-#' \emph{Advances in Neural Information Processing Systems}, 9388-9396.
+#' \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 #'
 #' Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-#' \emph{Statistical Methods for Medical Research}, 30(4):976–993.
+#' \emph{Statistical Methods in Medical Research}, 30(4):976–993.
 #' 
 #' Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online 
 #' Multiple Testing. \emph{Annual Conference on Mathematical and Scientific 
 #' Machine Learning}, PMLR, 145:955-986.
 #' 
-#' Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+#' Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of
 #' Batching in Multiple Hypothesis Testing.
 #' \emph{International Conference on Artificial Intelligence and Statistics},
 #' PMLR, 108:3806-3815.
 #'
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #' 
 #' @keywords internal
 "_PACKAGE"

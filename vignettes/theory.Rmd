@@ -96,8 +96,12 @@ The LORD procedure controls the FDR for independent $p$-values. We first fix a
 sequence of non-negative numbers $\gamma = (\gamma_i)_{i \in \mathbb{N}}$ such
 that $\gamma_i \geq \gamma_j$ for
 $i \leq j$ and $\sum_{i=1}^{\infty} \gamma_i = 1$. At each time $i$, let
-$\tau_i$ be the last time a discovery was made before $i$: \[
-\tau_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
+$\rho_i$ be the last time a discovery was made before $i$: \[
+\rho_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
+\]
+with $\rho_i = 0$ if no discovery has been made before $i$. Also let $\kappa_j$
+be the time of the $j$-th discovery: \[
+\kappa_j = \min \left\{ i \in \mathbb{N} : \sum_{l \leq i} R_l \geq j \right\}
 \]
 
 LORD depends on constants $w_0$ and $b_0$, where $w_0 \geq 0$ represents the
@@ -111,16 +115,16 @@ Versions 1 and 2 have since been superseded by the LORD++ procedure of
 Ramdas *et al.* (2017), so we do not describe them here.
 
 * **LORD++**: The significance thresholds for LORD++ are chosen as follows: \[
-\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} +
-\alpha \sum_{j : \tau_j < i, \tau_j \neq \tau_1} \gamma_{i - \tau_j}
+\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\kappa_1} +
+\alpha \sum_{j : \kappa_j < i, \kappa_j \neq \kappa_1} \gamma_{i - \kappa_j}
 \]
 
 * **LORD 3**: The significance thresholds depend on the time of the last
-discovery time and the wealth accumulated at that time, with
+discovery and the wealth accumulated at that time, with
 \[
-\alpha_i  = \gamma_{i - \tau_i} W(\tau_i)
+\alpha_i  = \gamma_{i - \rho_i} W(\rho_i)
 \]
-where $\tau_1 = 0$. Here $\{W(j)\}_{j \geq 0}$ represents the 'wealth' available
+where $\rho_i$ is as defined above (so $\rho_1 = 0$). Here $\{W(j)\}_{j \geq 0}$ represents the 'wealth' available
 at time $j$, and is defined recursively: 
 
 \[
@@ -148,8 +152,8 @@ S^t = \sum_{i < t} 1 \{p_i \leq \tau \}
 LORD++ is an instance of a monotone rule, and provably controls the FDR for
 independent p-values provided $w_0 \leq \alpha$. LORD 3 is a non-monotone rule,
 and FDR control is only demonstrated empirically. In some scenarios with large
-$N$, LORD 3 will have a slightly higher power than LORD++ (see Robertson *et
-al.*, 2018), but since it is a non-monotone rule we would recommend using LORD++
+$N$, LORD 3 will have a slightly higher power than LORD++ (see Robertson and
+Wason, 2018), but since it is a non-monotone rule we would recommend using LORD++
 (which is the default), especially since it also has a provable guarantee of FDR
 control.
 
@@ -161,9 +165,9 @@ equation 31.
 
 Javanmard and Montanari (2018) also proposed an adjusted version of LORD that
 is valid for arbitrarily *dependent* p-values. Similarly to LORD 3, the adjusted
-significance thresholds are set equal to \[ \alpha_i = \xi_i W(\tau_i)\] where
+significance thresholds are set equal to \[ \alpha_i = \xi_i W(\rho_i)\] where
 (assuming $w_0 \leq b_0$),
-$\sum_{j=1}^{\infty} \xi_i (1 + \log(j)) \leq \alpha / b_0$
+$\sum_{j=1}^{\infty} \xi_j (1 + \log(j)) \leq \alpha / b_0$
 
 <a name="LORDdep_xi"></a> The default sequence of $\xi$ is given by
 \[ \xi_j  = \frac{C \alpha }{b_0 j \log(\max(j, 2))^3}\]
@@ -186,21 +190,22 @@ $0 \leq w_0 \leq \alpha$ and represents the initial 'wealth' of the
 procedure, and $\lambda \in (0,1)$ represents the threshold for a 'candidate'
 hypothesis. A 'candidate' refers to p-values smaller than $\lambda$, since
 SAFFRON will never reject a p-value larger than $\lambda$. These candidates can
-be thought of as the hypotheses that are a-priori more likely to be non-null.
+be thought of as the hypotheses that are *a priori* more likely to be non-null.
 
 The SAFFRON procedure runs as follows:
 
 1. At each time $t$, define the number of candidates after the $j$-th rejection
-as \[ C_{j+} = C_{j+}(t) = \sum_{i = \tau_j + 1}^{t-1} C_i\]
-where $C_t = 1\{p_t \leq \lambda \}$ is the indicator for candidacy.
+as \[ C_{j+} = C_{j+}(t) = \sum_{i = \kappa_j + 1}^{t-1} C_i\]
+where $C_t = 1\{p_t \leq \lambda \}$ is the indicator for candidacy, $\kappa_j$ is
+the time of the $j$-th rejection (as defined for LORD) and $\kappa_0 = 0$.
 
-3. SAFFRON starts with $\alpha_1 = \min\{(1 - \lambda)\gamma_1 w_0, \lambda\}$. Subsequent
+2. SAFFRON starts with $\alpha_1 = \min\{(1 - \lambda)\gamma_1 w_0, \lambda\}$. Subsequent
 test levels are chosen as $\alpha_t = \min\{ \lambda, \tilde{\alpha}_t\}$, where
 \[
 \tilde{\alpha}_t = (1 - \lambda) [w_0 \gamma_{t-C_{0+}} +
-(\alpha - w_0)\gamma_{t-\tau_1-C_{1+}} +
+(\alpha - w_0)\gamma_{t-\kappa_1-C_{1+}} +
 \alpha \sum_{j \geq 2}
-\gamma_{t - \tau_j- C_{j+}}]
+\gamma_{t - \kappa_j- C_{j+}}]
 \]
 
 <a name="SAFFRON_gamma"></a> The default sequence of $\gamma$ for SAFFRON is
@@ -224,9 +229,9 @@ with conservative nulls, by including both adaptivity in the fraction of null
 hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
 
 ADDIS depends on constants $w_0, \lambda$ and $\tau$. $w_0$ represents the
-initial `wealth' of the procedure and satisfies $0 \leq w_0 \leq \alpha$. $\tau \in (0,1]$ represents the threshold for a hypothesis to be
+initial 'wealth' of the procedure and satisfies $0 \leq w_0 \leq \alpha$. $\tau \in (0,1]$ represents the threshold for a hypothesis to be
 selected for testing: p-values greater than $\tau$ are implicitly 'discarded' by
-the procedure. Finally, $\lambda \in [0,\tau)$ sets the threshold for a p-value to
+the procedure. Finally, $\lambda \in (0,\tau)$ sets the threshold for a p-value to
 be a candidate for rejection: ADDIS will never reject a p-value larger than $\lambda$.
 
 The significance thresholds for ADDIS are chosen as follows: \[
@@ -234,7 +239,7 @@ The significance thresholds for ADDIS are chosen as follows: \[
 \] where \[
 \tilde{\alpha}_t = (\tau - \lambda)[w_0 \gamma_{S^t-C_{0+}} + 
 (\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
-\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
+\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}]
 \] and \[
 \kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
@@ -260,20 +265,20 @@ strongly controls the FWER for arbitrarily dependent p-values.
 Note that the procedure also controls the generalised familywise error rate
 (k-FWER) for $k > 1$ if $\alpha$ is replaced by $\min(1,k\alpha)$.
 
-The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
+The default sequence of $\gamma$ is the same as that for $\gamma$ for LORD given
 [here](#LORD_gamma).
 
 
 ### Online Fallback {#onlineFallback}
 
-The online fallback procedure of Tian & Ramdas (2019b) provides a uniformly more
+The online fallback procedure of Tian & Ramdas (2021) provides a uniformly more
 powerful method than Alpha-spending, by saving the significance level of a
 previous rejection. More specifically, online fallback tests hypothesis $H_i$ at
 level \[\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}\] where $R_i = 1\{p_i
 \leq \alpha_i\}$ denotes a rejected hypothesis. The procedure strongly controls
 the FWER for arbitrarily dependent p-values.
 
-The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
+The default sequence of $\gamma$ is the same as that for $\gamma$ for LORD given
 [here](#LORD_gamma).
 
 
@@ -281,20 +286,20 @@ The default sequence of $\gamma$ is the same as that for $\xi$ for LORD given
 
 The ADDIS-spending procedure strongly controls the FWER for independent
 p-values, and was proposed by Tian & Ramdas (2021). The procedure compensates
-for the power loss of Alpha-spending, by including both adapativity in the
+for the power loss of Alpha-spending, by including both adaptivity in the
 fraction of null hypotheses and the conservativeness of nulls.
 
-ADDIS depends on constants $\lambda$ and $\tau$, where $\lambda < \tau$. Here
-$\tau \in (0,1)$ represents the threshold for a hypothesis to be selected for
-testing: p-values greater than $\tau$ are implicitly `discarded' by the
+ADDIS-spending depends on constants $\lambda$ and $\tau$, where $\lambda < \tau$. Here
+$\tau \in (0,1]$ represents the threshold for a hypothesis to be selected for
+testing: p-values greater than $\tau$ are implicitly 'discarded' by the
 procedure, while $\lambda \in (0,1)$ sets the threshold for a p-value to be a
 candidate for rejection: ADDIS-spending will never reject a p-value larger than
 $\lambda$.
 
 Note that the procedure controls the generalised familywise error rate (k-FWER)
 for $k > 1$ if $\alpha$ is replaced by $\min(1,k\alpha)$. Tian and Ramdas
-(2019b) also presented a version for handling local dependence, see the Section
-on Asynchronous testing below.
+(2021) also presented a version for handling local dependence (see
+`?ADDIS_spending`).
 
 The default sequence of $\gamma$ for ADDIS-spending is the same as for SAFFRON
 given [here](#SAFFRON_gamma).
@@ -305,12 +310,48 @@ given [here](#SAFFRON_gamma).
 As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume
 independent p-values, while the LOND procedure is also valid under positive
 dependencies (like the Benjamini-Hochberg method, see below). Adjusted
-versions of LOND and LORD available for arbitrarily dependent p-values.
+versions of LOND and LORD are available for arbitrarily dependent p-values.
 Alpha-spending and online fallback also control the FWER and FDR for arbitrarily
 dependent p-values.
 
 By way of comparison, the usual Benjamini-Hochberg method for controlling
 the FDR assumes that the p-values are positively dependent (PRDS). As an
 example, the PRDS is satisfied for multivariate normal test statistics with a
-positive correlation matrix). See Benjamini & Yekutieli (2001) for further
+positive correlation matrix. See Benjamini & Yekutieli (2001) for further
 technical details.
+
+## References
+
+Benjamini, Y., and Yekutieli, D. (2001). The control of the false discovery rate
+in multiple testing under dependency. *The Annals of Statistics*,
+29(4):1165-1188.
+
+Foster, D. and Stine, R. (2008). $\alpha$-investing: a procedure for sequential
+control of expected false discoveries.
+*Journal of the Royal Statistical Society (Series B)*, 70(2):429-444.
+
+Javanmard, A., and Montanari, A. (2015). On Online Control of False
+Discovery Rate. *arXiv preprint*, https://arxiv.org/abs/1502.06197.
+
+Javanmard, A., and Montanari, A. (2018). Online Rules for Control of False
+Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
+46(2):526-554.
+
+Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
+of the false discovery rate with decaying memory.
+*Advances in Neural Information Processing Systems 30*, 5650-5659.
+
+Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018). SAFFRON: an
+adaptive algorithm for online control of the false discovery rate.
+*Proceedings of the 35th International Conference on Machine Learning*,
+80:4286-4294.
+
+Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false discovery
+rate in biomedical research. *arXiv preprint*, https://arxiv.org/abs/1809.07292.
+
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
+online FDR control with conservative nulls.
+*Advances in Neural Information Processing Systems 32*, 9388-9396.
+
+Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
+*Statistical Methods in Medical Research*, 30(4):976–993.

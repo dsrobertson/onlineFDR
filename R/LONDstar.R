@@ -5,15 +5,15 @@
 #'
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with three columns: an identifier (`id'),
-#' p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+#' p-value (`pval'), and a column describing the conflict sets for the hypotheses. 
 #' This takes the form of a vector of decision times or lags. Batch sizes can be 
 #' specified as a separate argument (see below).
 #'
-#' Zrnic et al. (2021) present explicit three versions of LONDstar:
+#' Zrnic et al. (2021) present three explicit versions of LONDstar:
 #'
 #' 1) \code{version='async'} is for an asynchronous testing
 #' process, consisting of tests that start and finish at (potentially) random 
-#' times. The discretised finish times of the test correspond to the decision 
+#' times. The discretised finish times of the tests correspond to the decision 
 #' times. These decision times are given as the input \code{decision.times}
 #' for this version of the LONDstar algorithm.
 #' 
@@ -78,8 +78,7 @@
 #' 46(2):526-554.
 #' 
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-#' \url{https://arxiv.org/abs/1812.05068}.
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #'
 #'
 #' @seealso

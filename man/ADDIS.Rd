@@ -19,7 +19,8 @@ ADDIS(
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), p-value (`pval'), and decision times 
+identifier (`id'), date (`date') and p-value (`pval'). For the
+asynchronous version, the date column is replaced by decision times
 (`decision.times').}
 
 \item{alpha}{Overall significance level of the procedure, the default is
@@ -72,18 +73,18 @@ by the decision times.
 Given an overall significance level \eqn{\alpha}, ADDIS depends on constants
 \eqn{w_0}, \eqn{\lambda} and \eqn{\tau}. Here \eqn{w_0} represents the
 initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \alpha}.
-\eqn{\tau \in (0,1)} represents the threshold for a
+\eqn{\tau \in (0,1]} represents the threshold for a
 hypothesis to be selected for testing: p-values greater than \eqn{\tau} are
-implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in [0,\tau)}
+implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in (0,\tau)}
 sets the threshold for a p-value to be a candidate for rejection: ADDIS will
 never reject a p-value larger than \eqn{\lambda}. The algorithm also
-require a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
+requires a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 sum to 1.
 
 The ADDIS procedure provably controls the FDR for independent p-values. Tian
 and Ramdas (2019) also presented a version for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random
-times. The discretised finish times of the test correspond to the decision
+times. The discretised finish times of the tests correspond to the decision
 times. These decision times are given as the input \code{decision.times}.
 Note that this asynchronous version controls a modified version of the FDR.
 
@@ -123,11 +124,10 @@ ADDIS(sample.df2, async = TRUE) # Asynchronous
 \references{
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
   algorithm for online FDR control with conservative nulls.
-  \emph{Advances in Neural Information Processing Systems}, 9388-9396.
+  \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 }
 \seealso{
-ADDIS is identical to \code{\link{SAFFRON}} with option \code{discard=TRUE}.
+\code{\link{SAFFRON}} is the special case of ADDIS with \code{tau = 1}.
 
-ADDIS with option \code{async=TRUE} is identical to \code{\link{SAFFRONstar}}
-with option \code{discard=TRUE}.
+\code{\link{SAFFRONstar}} provides asynchronous versions of SAFFRON.
 }

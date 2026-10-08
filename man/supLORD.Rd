@@ -67,7 +67,7 @@ The function takes as its input either a vector of p-values or a dataframe
 with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
-treated as being ordered in sequence, arriving one at a time..
+treated as being ordered in sequence, arriving one at a time.
 
 The supLORD procedure provably controls the FDX for p-values that are 
 conditionally superuniform under the null. supLORD also controls the supFDR 

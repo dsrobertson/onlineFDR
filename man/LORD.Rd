@@ -69,7 +69,7 @@ The function takes as its input either a vector of p-values or a dataframe
 with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
-treated as being ordered in sequence, arriving one at a time..
+treated as being ordered in sequence, arriving one at a time.
 
 The LORD procedure provably controls FDR for independent p-values (see below
 for dependent p-values). Given an overall significance level \eqn{\alpha}, we
@@ -100,7 +100,7 @@ corresponding to true nulls are mutually independent, and independent from
 the non-null p-values.
 
 For dependent p-values, a modified LORD procedure was proposed in Javanmard
-and Montanari (2018), which is called be setting \code{version='dep'}. Given
+and Montanari (2018), which is called by setting \code{version='dep'}. Given
 an overall significance level \eqn{\alpha}, we choose a sequence of
 non-negative numbers \eqn{\xi_i} such that they satisfy a condition given in
 Javanmard and Montanari (2018), example 3.8.
@@ -137,13 +137,13 @@ Javanmard, A. and Montanari, A. (2018) Online Rules for Control
 of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 Statistics}, 46(2):526-554.
 
-Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
 of the false discovery rate with decaying memory. \emph{Advances in Neural
 Information Processing Systems 30}, 5650-5659.
 
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
 online FDR control with conservative nulls.
-\emph{Advances in Neural Information Processing Systems}, 9388-9396.
+\emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 }
 \seealso{
 \code{\link{LORDstar}} presents versions of LORD for \emph{asynchronous}
