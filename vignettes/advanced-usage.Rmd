@@ -55,7 +55,7 @@ variety of trial settings. For both synchronous and asynchronous testing, Tian
 in power in the presence of conservative nulls by adaptively 'discarding' these
 p-values.
 
-Finally, Tian & Ramdas (2021) proposed procedures that provide online control
+Finally, Tian and Ramdas (2021) proposed procedures that provide online control
 of the FWER. One procedure, online fallback, gives a uniform improvement to the
 naive Alpha-spending procedure (see below). The ADDIS-spending procedure
 compensates for the power loss of these procedures by including both adaptivity
@@ -144,6 +144,10 @@ cbind(LORD.plus = results.LORD.plus$alphai,
 By default $w_0 = \alpha/10$ and (for LORD 3 and LORD dep) $b_0 = \alpha - w_0$,
 but these parameters can optionally be specified by the user subject to the
 requirements that $0 \leq w_0 \leq \alpha$, $b_0 > 0$ and $w_0+b_0 \leq \alpha$.
+For LORD with discarding (`version = 'discard'`), the default is
+$w_0 = \min(\alpha/10, \tau\alpha/2)$ and the requirement is
+$0 \leq w_0 \leq \tau\alpha$, where $\tau$ is the discarding threshold
+`tau.discard`.
 
 The value of `gammai` is also supplied by default, but can optionally be
 specified by the user (see the formula for $\xi_j$
@@ -236,7 +240,7 @@ online FDR control with conservative nulls.
 *Advances in Neural Information Processing Systems 32*, 9388-9396.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-*Statistical Methods in Medical Research*, 30(4):976–993.
+*Statistical Methods in Medical Research*, 30(4):976-993.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 Multiple Hypotheses. *Journal of Machine Learning Research*, 22(33):1-39.

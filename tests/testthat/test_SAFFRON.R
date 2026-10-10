@@ -37,7 +37,7 @@ test_that("Errors for edge cases", {
                  "w0 must be non-negative.")
     
     expect_error(SAFFRON(0.1, w0 = 1),
-                 "w0 must be less than alpha.")
+                 "w0 must not be greater than alpha.")
 })
 
 test_that("Correct rejections for sample dataframes", {

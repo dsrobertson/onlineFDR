@@ -33,7 +33,7 @@ test_that("Errors for edge cases", {
                  "All elements of gammai must be non-negative.")
     
     expect_error(LORD(0.1, version='dep', gammai=2),
-                 "The sum of the elements of gammai must be <= alpha/b0.")
+                 "The sum of the elements of gammai\\*\\(1 \\+ log\\(i\\)\\) must be <= alpha/b0.")
     
     expect_error(LORD(0.1, w0 = -0.01),
                  "w0 must be non-negative.")

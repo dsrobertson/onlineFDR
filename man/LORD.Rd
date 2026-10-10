@@ -29,18 +29,20 @@ in sequence, arriving one at a time.}
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided as
 proposed by Javanmard and Montanari (2018), equation 31 for all versions of
 LORD except 'dep'. The latter is provided a default to satisfy a condition
-given in Javanmard and Montanari (2018), example 3.8.}
+given in Javanmard and Montanari (2018), example 3.7.}
 
 \item{version}{Takes values '++', 3, 'discard', or 'dep'. This specifies the
 version of LORD to use, and defaults to '++'.}
 
-\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
+\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}
+(\eqn{\min(\alpha/10, \tau\alpha/2)} for \code{version='discard'}).
+Version 'discard' requires \eqn{w_0 \le \tau\alpha}.}
 
-\item{b0}{The 'payout' for rejecting a hypothesis in all versions of LORD
-except for '++'. Defaults to \eqn{\alpha - w_0}.}
+\item{b0}{The `payout' for rejecting a hypothesis in versions 3 and 'dep' of
+LORD. Defaults to \eqn{\alpha - w_0}.}
 
 \item{tau.discard}{Optional threshold for hypotheses to be selected for
-testing. Must be between 0 and 1, defaults to 0.5. This is required if
+testing. Must be in (0, 1], defaults to 0.5. This is only used if
 \code{version='discard'}.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
@@ -52,12 +54,13 @@ randomised.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{d.out}{ A dataframe with the original data \code{d} (which
-  will be reordered if there are batches and \code{random = TRUE}), the
-  LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
-  function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-  \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-  \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+\item{d.out}{ A dataframe with the p-values \code{pval} (reordered if
+  there are batches and \code{random = TRUE}), the LORD-adjusted
+  significance thresholds \eqn{\alpha_i}, the indicator function of
+  discoveries \code{R} and, if \code{d} is a dataframe with a column
+  \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+  the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+  case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the LORD procedure for online FDR control, where LORD stands for
@@ -71,8 +74,10 @@ The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
 treated as being ordered in sequence, arriving one at a time.
 
-The LORD procedure provably controls FDR for independent p-values (see below
-for dependent p-values). Given an overall significance level \eqn{\alpha}, we
+LORD++ and the discarding version of LORD provably control the FDR for
+independent p-values; for LORD 3 this has only been shown empirically (see
+below for dependent p-values). Given an overall significance level
+\eqn{\alpha}, we
 choose a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 sum to 1.
 
@@ -92,7 +97,7 @@ where \eqn{0 \le w_0 \le \alpha} represents the initial `wealth' of the
 procedure and \eqn{b_0 > 0} represents the `payout' for rejecting a
 hypothesis. We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
 Version 'discard' also depends on a constant \eqn{\tau}, where \eqn{\tau \in
-(0,1)} represents the threshold for a hypothesis to be selected for testing:
+(0,1]} represents the threshold for a hypothesis to be selected for testing:
 p-values greater than \eqn{\tau} are implicitly `discarded' by the procedure.
 
 Note that FDR control also holds for the LORD procedure if only the p-values
@@ -102,8 +107,11 @@ the non-null p-values.
 For dependent p-values, a modified LORD procedure was proposed in Javanmard
 and Montanari (2018), which is called by setting \code{version='dep'}. Given
 an overall significance level \eqn{\alpha}, we choose a sequence of
-non-negative numbers \eqn{\xi_i} such that they satisfy a condition given in
-Javanmard and Montanari (2018), example 3.8.
+non-negative numbers \eqn{\xi_i} (supplied through the argument
+\code{gammai}) such that \eqn{\sum_i \xi_i (1 + \log i) \le \alpha/b_0} if
+\eqn{w_0 \le b_0}, which is the condition in Javanmard and Montanari (2018),
+example 3.7. If \eqn{w_0 > b_0}, the condition is instead \eqn{\sum_i (w_0 +
+b_0 \log i) \xi_i \le \alpha}, which follows from their Theorem 3.6.
 
 Further details of the LORD procedures can be found in Javanmard and
 Montanari (2018), Ramdas et al. (2017) and Tian and Ramdas (2019).
@@ -133,7 +141,7 @@ set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control
 of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 Statistics}, 46(2):526-554.
 

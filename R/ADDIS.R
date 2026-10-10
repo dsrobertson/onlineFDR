@@ -29,7 +29,9 @@
 #' process, consisting of tests that start and finish at (potentially) random
 #' times. The discretised finish times of the tests correspond to the decision
 #' times. These decision times are given as the input \code{decision.times}.
-#' Note that this asynchronous version controls a modified version of the FDR.
+#' Note that this asynchronous version controls the modified FDR (mFDR) and,
+#' under the conditions given in Tian and Ramdas (2019), Appendix C, also the
+#' FDR.
 #' 
 #' Further details of the ADDIS algorithms can be found in Tian and Ramdas
 #' (2019).
@@ -43,7 +45,7 @@
 #'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.
 #'   
@@ -64,11 +66,13 @@
 #'   
 #' @param date.format Optional string giving the format that is used for dates.
 #'
-#' @return \item{out}{A dataframe with the original p-values \code{pval}, the
-#'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
-#'   discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-#'   p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
-#'   1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{out}{ A dataframe with the p-values \code{pval} (reordered if
+#'   there are batches, \code{async = FALSE} and \code{random = TRUE}), the
+#'   adjusted significance thresholds \eqn{\alpha_i}, the indicator function of
+#'   discoveries \code{R} and, if \code{d} is a dataframe with a column
+#'   \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+#'   the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+#'   case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #'
 #' @references Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
@@ -156,8 +160,13 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
         gammai <- 0.4374901658/(seq_len(N + 1)^(1.6))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (!isNonIncreasing(gammai)) {
+        stop("The elements of gammai must be non-increasing.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     if (missing(w0)) {
@@ -165,7 +174,7 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
     } else if (w0 > alpha) {
-        stop("w0 must be less than alpha.")
+        stop("w0 must not be greater than alpha.")
     }
     
     if (!(async)) {
@@ -185,12 +194,12 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
         
     } else {
         
-        if (any(is.na(d$decision.times))) {
-            stop("Please provide a decision time for each p-value.")
-        }
-        
-        E <- d$decision.times
-        
+        checkStarVersion(d, N, "async")
+
+        # decision times after the last test are never reached, so capping them
+        # at N + 1 leaves the result unchanged and avoids integer overflow
+        E <- pmin(d$decision.times, N + 1)
+
         out <- addis_async_faster(pval, 
                                   E,
                                   gammai,

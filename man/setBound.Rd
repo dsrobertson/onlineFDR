@@ -8,11 +8,11 @@ setBound(alg, alpha = 0.05, N)
 }
 \arguments{
 \item{alg}{A string that takes the value of one of the following: LOND, LORD,
-LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, or
-Alpha_investing}
+LORDdep, SAFFRON, ADDIS, LONDstar, LORDstar, SAFFRONstar, Alpha_investing,
+Alpha_spending, ADDIS_spending or online_fallback}
 
 \item{alpha}{Overall significance level of the FDR procedure, the default is
-0.05. The bounds for LOND and LORDdep depend on alpha.}
+0.05. The bounds for LOND and LONDstar depend on alpha.}
 
 \item{N}{An upper bound on the number of hypotheses to be tested}
 }
@@ -22,5 +22,10 @@ Alpha_investing}
 }
 \description{
 Calculates a default sequence of non-negative numbers \eqn{\gamma_i} that sum
-to 1, given an upper bound \eqn{N} on the number of hypotheses to be tested.
+to 1 (for LOND and LONDstar, a sequence \eqn{\beta_i} that sums to
+\eqn{\alpha}), given an upper bound \eqn{N} on the number of hypotheses to be
+tested.
+For LORDdep the sequence \eqn{\xi_i} instead satisfies \eqn{\sum_{i=1}^N
+\xi_i (1 + \log i) = 1}, the condition in Javanmard and Montanari (2018),
+example 3.7, for \code{LORD(version='dep')}.
 }

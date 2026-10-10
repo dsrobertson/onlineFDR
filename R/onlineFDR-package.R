@@ -21,15 +21,17 @@
 #' \code{version='discard'} implements a modified version of LORD that can
 #' improve the power of the procedure in the presence of conservative nulls by
 #' adaptively `discarding' these p-values, as proposed by Tian and Ramdas
-#' (2019). All these LORD procedures provably control the FDR under
-#' independence of the p-values. However, setting \code{version='dep'} provides
+#' (2019). LORD++ and the discarding version provably control the FDR under
+#' independence of the p-values; for LORD 3 this has only been shown
+#' empirically. Setting \code{version='dep'} provides
 #' a modified version of LORD that is valid for arbitrarily dependent p-values.
 #' 
 #' The second method is LOND, which stands for (significance) Levels based On
 #' Number of Discoveries and is implemented by the function \code{\link{LOND}}.
 #' This procedure controls the FDR under independence of the p-values, but the
-#' slightly modified version of LOND proposed by Zrnic et al. (2021) also
-#' provably controls the FDR under positive dependence (PRDS condition). In
+#' slightly modified version of LOND of Javanmard and Montanari (2015, Remark
+#' 2.3) also provably controls the FDR under positive dependence (PRDS
+#' condition), as shown by Zrnic et al. (2021). In
 #' addition, by specifying \code{dep = TRUE}, this function runs a modified
 #' version of LOND which is valid for arbitrarily dependent p-values.
 #' 
@@ -59,7 +61,10 @@
 #' Zrnic et al. (2021) generalised LOND, LORD and SAFFRON for asynchronous
 #' online testing, where each hypothesis test can itself be a sequential process
 #' and the tests can overlap in time. Note though that these algorithms are
-#' designed for the control of a modified FDR (mFDR). They are implemented by
+#' designed for the control of a modified FDR (mFDR), although LORDstar and
+#' SAFFRONstar with \code{version='async'} also control the FDR when the null
+#' p-values are independent of each other and of the non-nulls. They are
+#' implemented by
 #' the functions \code{\link{LONDstar}}, \code{\link{LORDstar}} and
 #' \code{\link{SAFFRONstar}}. Zrnic et al. (2021) presented three explicit
 #' versions of these algorithms:
@@ -87,7 +92,7 @@
 #'
 #' Finally, Tian and Ramdas (2021) proposed a number of algorithms for online
 #' FWER control. The only previously existing procedure for online FWER control
-#' is Alpha-spending, which is an online analogue of the Bonferroni procedure.
+#' was Alpha-spending, which is an online analogue of the Bonferroni procedure.
 #' This is implemented by the function \code{\link{Alpha_spending}}, and
 #' provides strong FWER control for arbitrarily dependent p-values. A uniformly
 #' more powerful method is \code{\link{online_fallback}}, which again strongly
@@ -115,7 +120,7 @@
 #' 
 #' Aharoni, E. and Rosset, S. (2014). Generalized \eqn{\alpha}-investing:
 #' definitions, optimality results and application to public databases.
-#' \emph{Journal of the Royal Statistical Society (Series B)}, 76(4):771--794.
+#' \emph{Journal of the Royal Statistical Society (Series B)}, 76(4):771-794.
 #' 
 #' Fischer, L., Bofill Roig, M. and Brannath, W. (2024). An exhaustive ADDIS
 #' principle for online FWER control. \emph{Biometrical Journal},
@@ -125,10 +130,10 @@
 #' sequential control of expected false discoveries. \emph{Journal of the Royal
 #' Statistical Society (Series B)}, 70(2):429-444.
 #' 
-#' Javanmard, A. and Montanari, A. (2015) On Online Control of False Discovery
+#' Javanmard, A. and Montanari, A. (2015). On Online Control of False Discovery
 #' Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}.
 #'
-#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+#' Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #'
@@ -159,13 +164,13 @@
 #' \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 #'
 #' Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-#' \emph{Statistical Methods in Medical Research}, 30(4):976–993.
+#' \emph{Statistical Methods in Medical Research}, 30(4):976-993.
 #' 
 #' Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online 
 #' Multiple Testing. \emph{Annual Conference on Mathematical and Scientific 
 #' Machine Learning}, PMLR, 145:955-986.
 #' 
-#' Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of
+#' Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The Power of
 #' Batching in Multiple Hypothesis Testing.
 #' \emph{International Conference on Artificial Intelligence and Statistics},
 #' PMLR, 108:3806-3815.

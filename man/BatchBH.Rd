@@ -14,18 +14,19 @@ batch numbers (`batch') and p-values (`pval').}
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
 \item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
-\item{out}{ A dataframe with the original data \code{d} and the
-  indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
-  if the \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal
-  to \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value
-  within an ordered set and \eqn{n} is the total number of hypotheses within
-  the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
-  (otherwise \code{R[i] = 0}).}
+\item{out}{ A dataframe with the original data \code{d}, the
+  indicator function of discoveries \code{R} and the test level
+  \code{alphai} (\eqn{\alpha_t}) of each hypothesis's batch. Hypothesis
+  \eqn{i} in the \eqn{t}-th batch is rejected if its p-value is less than or
+  equal to \eqn{(k/n)\alpha_t}, where \eqn{n} is the number of hypotheses in
+  the batch and \eqn{k} is the largest \eqn{r} such that the \eqn{r}-th
+  smallest p-value in the batch is at most \eqn{(r/n)\alpha_t}. If hypothesis
+  \eqn{i} is rejected, \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the BatchBH algorithm for online FDR control, as presented by 
@@ -60,7 +61,8 @@ BatchBH(sample.df)
 
 }
 \references{
-Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of
-  Batching in Multiple Hypothesis Testing. \emph{International Conference on
+Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The
+  Power of Batching in Multiple Hypothesis Testing. \emph{International
+  Conference on
   Artificial Intelligence and Statistics}, PMLR, 108:3806-3815.
 }

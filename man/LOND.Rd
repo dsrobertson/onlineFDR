@@ -39,17 +39,20 @@ randomised.}
 
 \item{date.format}{Optional string giving the format that is used for dates.}
 
-\item{original}{Logical. If \code{TRUE}, runs the original LOND algorithm 
-of Javanmard and Montanari (2015), otherwise runs the modified algorithm 
-of Zrnic et al. (2021). Defaults to \code{TRUE}.}
+\item{original}{Logical. If \code{TRUE}, runs the original LOND algorithm
+of Javanmard and Montanari (2015), otherwise runs the modified algorithm
+with \eqn{\alpha_i = \max(D(i-1), 1)\beta_i} (Javanmard and Montanari, 2015,
+Remark 2.3), which also controls the FDR under positive dependence (Zrnic et
+al., 2021). Defaults to \code{TRUE}.}
 }
 \value{
-\item{out}{ A dataframe with the original data \code{d} (which
-will be reordered if there are batches and \code{random = TRUE}), the
-LOND-adjusted significance thresholds \eqn{\alpha_i} and the indicator
-function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-\eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-\code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+\item{out}{ A dataframe with the p-values \code{pval} (reordered if
+  there are batches and \code{random = TRUE}), the LOND-adjusted
+  significance thresholds \eqn{\alpha_i}, the indicator function of
+  discoveries \code{R} and, if \code{d} is a dataframe with a column
+  \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+  the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+  case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the LOND algorithm for online FDR control, where LOND stands for
@@ -72,8 +75,9 @@ thresholds \eqn{\alpha_i} are chosen as follows: \deqn{\alpha_i = (D(i-1) +
 \eqn{n} hypotheses.
 
 A slightly modified version of LOND with thresholds \eqn{\alpha_i =
-max(D(i-1), 1)\beta_i} provably controls the FDR under positive dependence
-(PRDS condition), see Zrnic et al. (2021).
+\max(D(i-1), 1)\beta_i} (Javanmard and Montanari, 2015, Remark 2.3)
+provably controls the FDR under positive dependence (PRDS condition), see
+Zrnic et al. (2021).
 
 For arbitrarily dependent p-values, LOND controls the FDR if it is modified
 with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(i)} is the
@@ -104,10 +108,11 @@ set.seed(1); LOND(sample.df, alpha=0.1)
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2015) On Online Control of False
-Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}.
+Javanmard, A. and Montanari, A. (2015). On Online Control of
+False Discovery Rate. \emph{arXiv preprint},
+\url{https://arxiv.org/abs/1502.06197}.
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 46(2):526-554.
 

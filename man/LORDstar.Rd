@@ -116,7 +116,7 @@ LORDstar(sample.df2, version='dep')
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control
 of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 Statistics}, 46(2):526-554.
 

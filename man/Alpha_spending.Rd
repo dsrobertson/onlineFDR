@@ -57,8 +57,8 @@ non-negative numbers \eqn{\gamma_i} such that they sum to 1. Hypothesis
 \eqn{\alpha \gamma_i}.
 
 Note that the procedure controls the generalised familywise error rate
-(k-FWER) for \eqn{k > 1} if \eqn{\alpha} is replaced by min(\eqn{1,
-k\alpha}).
+(k-FWER) for \eqn{k > 1} if \eqn{\alpha} is replaced by
+\eqn{\min(1, k\alpha)}.
 }
 \examples{
 sample.df <- data.frame(
@@ -83,10 +83,10 @@ set.seed(1); Alpha_spending(sample.df, alpha=0.1)
 
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
- False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control
+ of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
  Statistics}, 46(2):526-554.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-\emph{Statistical Methods in Medical Research}, 30(4):976–993.
+\emph{Statistical Methods in Medical Research}, 30(4):976-993.
 }

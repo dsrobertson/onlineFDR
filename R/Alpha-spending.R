@@ -16,8 +16,8 @@
 #' \eqn{\alpha \gamma_i}.
 #' 
 #' Note that the procedure controls the generalised familywise error rate
-#' (k-FWER) for \eqn{k > 1} if \eqn{\alpha} is replaced by min(\eqn{1,
-#' k\alpha}).
+#' (k-FWER) for \eqn{k > 1} if \eqn{\alpha} is replaced by
+#' \eqn{\min(1, k\alpha)}.
 #' 
 #'
 #'@param d Either a vector of p-values, or a dataframe with three columns: an
@@ -47,12 +47,12 @@
 #'  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 #'
 #'
-#'@references Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
-#'  False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+#'@references Javanmard, A. and Montanari, A. (2018). Online Rules for Control
+#'  of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 #'  Statistics}, 46(2):526-554.
 #'
 #' Tian, J. and Ramdas, A. (2021). Online control of the familywise error rate.
-#' \emph{Statistical Methods in Medical Research}, 30(4):976–993.
+#' \emph{Statistical Methods in Medical Research}, 30(4):976-993.
 #'
 #'
 #' @examples
@@ -99,11 +99,15 @@ Alpha_spending <- function(d, alpha = 0.05, gammai, random = TRUE, date.format =
     }
     
     if (missing(gammai)) {
-        gammai <- 0.07720838 * log(pmax(seq_len(N), 2))/((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
+        gammai <- 0.07908197 * log(pmax(seq_len(N), 2))/
+            ((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     R <- as.numeric(pval <= alpha * gammai[seq_len(N)])

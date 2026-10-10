@@ -15,7 +15,6 @@ reference:
     - "Alpha_investing"
     - "LOND"
     - "LORD"
-    - "LORDdep"
     - "SAFFRON"
   - title: Batch FDR Control
     contents:
@@ -40,6 +39,7 @@ reference:
   - title: Other
     contents:
     - "bonfInfinite"
+    - "LORDdep"
     - "onlineFDR-deprecated"
     - "onlineFDR-package"
     - "StoreyBH"

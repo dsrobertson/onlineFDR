@@ -27,7 +27,7 @@ asynchronous version, the date column is replaced by decision times
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.}
 
@@ -49,11 +49,13 @@ randomised. Only needed if async=FALSE.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{out}{A dataframe with the original p-values \code{pval}, the
-  adjusted testing levels \eqn{\alpha_i} and the indicator function of
-  discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-  p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
-  1}  (otherwise \code{R[i] = 0}).}
+\item{out}{ A dataframe with the p-values \code{pval} (reordered if
+  there are batches, \code{async = FALSE} and \code{random = TRUE}), the
+  adjusted significance thresholds \eqn{\alpha_i}, the indicator function of
+  discoveries \code{R} and, if \code{d} is a dataframe with a column
+  \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+  the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+  case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
@@ -86,7 +88,9 @@ and Ramdas (2019) also presented a version for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random
 times. The discretised finish times of the tests correspond to the decision
 times. These decision times are given as the input \code{decision.times}.
-Note that this asynchronous version controls a modified version of the FDR.
+Note that this asynchronous version controls the modified FDR (mFDR) and,
+under the conditions given in Tian and Ramdas (2019), Appendix C, also the
+FDR.
 
 Further details of the ADDIS algorithms can be found in Tian and Ramdas
 (2019).

@@ -1,9 +1,19 @@
 checkPval <- function(d) {
     
     if (is.data.frame(d)) {
+        if (!("pval" %in% colnames(d))) {
+            stop("The dataframe d is missing a column 'pval' of p-values.")
+        }
+
         if (any(is.na(d$pval))) {
+            # decision times and lags refer to positions in the sequence, so
+            # rows cannot be dropped without changing their meaning
+            if (any(c("decision.times", "lags") %in% colnames(d))) {
+                stop("Missing p-values cannot be omitted when d contains ",
+                     "decision times or lags.")
+            }
             warning("Your data contains missing p-values. Missing p-values were omitted.")
-            d <- stats::na.omit(d)
+            d <- d[!is.na(d$pval), , drop = FALSE]
         }
         
         if (!(is.numeric(d$pval))) {
@@ -24,7 +34,9 @@ checkPval <- function(d) {
             stop("All p-values must be between 0 and 1.")
         }
     }
+
+    if (length(if (is.data.frame(d)) d$pval else d) == 0) {
+        stop("d must contain at least one p-value.")
+    }
     return(d)
 }
-TRUE
-TRUE

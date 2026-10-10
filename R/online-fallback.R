@@ -14,8 +14,9 @@
 #' The online fallback procedure provides a uniformly more powerful method than
 #' Alpha-spending, by saving the significance level of a previous rejection.
 #' More specifically, the procedure tests hypothesis \eqn{H_i} at level
-#' \deqn{\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}} where \eqn{R_i =
-#' 1\{p_i \leq \alpha_i\}} denotes a rejected hypothesis.
+#' \deqn{\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}} for \eqn{i \ge 2},
+#' with \eqn{\alpha_1 = \alpha\gamma_1}, where \eqn{R_i = 1\{p_i \leq
+#' \alpha_i\}} denotes a rejected hypothesis.
 #'
 #' Further details of the online fallback procedure can be found in Tian and
 #' Ramdas (2021).
@@ -42,16 +43,22 @@
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return \item{out}{ A dataframe with the original data \code{d} (which will
-#'   be reordered if there are batches and \code{random = TRUE}), the
-#'   adjusted significance thresholds \eqn{\alpha_i} and the indicator
-#'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{out}{ A dataframe with the p-values \code{pval} (reordered if
+#'   there are batches and \code{random = TRUE}), the adjusted
+#'   significance thresholds \eqn{\alpha_i}, the indicator function of
+#'   discoveries \code{R} and, if \code{d} is a dataframe with a column
+#'   \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+#'   the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+#'   case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Tian, J. and Ramdas, A. (2021). Online control of the familywise
-#' error rate. \emph{Statistical Methods in Medical Research}, 30(4):976–993.
+#' @references Javanmard, A. and Montanari, A. (2018). Online Rules for Control
+#' of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+#' Statistics},
+#' 46(2):526-554.
+#'
+#' Tian, J. and Ramdas, A. (2021). Online control of the familywise
+#' error rate. \emph{Statistical Methods in Medical Research}, 30(4):976-993.
 #'
 #'
 #' @examples
@@ -96,11 +103,15 @@ online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, display_prog
     }
     
     if (missing(gammai)) {
-        gammai <- 0.07720838 * log(pmax(seq_len(N), 2))/((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
+        gammai <- 0.07908197 * log(pmax(seq_len(N), 2))/
+            ((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     ### Start algorithm
@@ -109,5 +120,8 @@ online_fallback <- function(d, alpha = 0.05, gammai, random = TRUE, display_prog
                                   alpha = alpha,
                                   display_progress = display_progress)
     out$R <- as.numeric(out$R)
+    if(is.data.frame(d) && !is.null(d$id)) {
+        out$id <- d$id
+    }
     out
 }

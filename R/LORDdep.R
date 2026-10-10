@@ -17,12 +17,12 @@
 #' This modified LORD procedure controls FDR for dependent p-values. Given an
 #' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
 #' numbers \eqn{\xi_i} such that they satisfy a condition given in Javanmard and
-#' Montanari (2018), example 3.8.
+#' Montanari (2018), example 3.7.
 #'
 #' The procedure depends on constants \eqn{w_0} and \eqn{b_0}, where \eqn{w_0
 #' \ge 0} represents the initial `wealth' and \eqn{b_0 > 0} represents the
-#' `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha} for
-#' FDR control to hold.
+#' `payout' for rejecting a hypothesis. We require \eqn{w_0+b_0 \le \alpha} and
+#' \eqn{w_0 \le b_0} for FDR control to hold.
 #'
 #' Further details of the modified LORD procedure can be found in Javanmard and
 #' Montanari (2018).
@@ -59,7 +59,7 @@
 #' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+#' @references Javanmard, A. and Montanari, A. (2018). Online Rules for Control
 #' of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 #' Statistics}, 46(2):526-554.
 #'
@@ -72,8 +72,10 @@ LORDdep <- function(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0, random 
     
     .Deprecated("LORD", package = "onlineFDR", msg = "LORDdep is deprecated, please use LORD instead with version='dep'.")
     
+    d <- checkPval(d)
+
     if (is.data.frame(d)) {
-        checkdf(d, random, date.format)
+        d <- checkdf(d, random, date.format)
         pval <- d$pval
     } else if (is.vector(d)) {
         pval <- d
@@ -81,7 +83,6 @@ LORDdep <- function(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0, random 
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (alpha <= 0 || alpha > 1) {
@@ -89,17 +90,20 @@ LORDdep <- function(d, alpha = 0.05, xi, w0 = alpha/10, b0 = alpha - w0, random 
     }
     
     if (missing(xi)) {
-        xi <- 0.139307 * alpha/(b0 * seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
+        xi <- 0.1393066 * alpha/(b0 * seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
     } else if (any(xi < 0)) {
         stop("All elements of xi must be non-negative.")
-    } else if (sum(xi) > alpha/b0) {
-        stop("The sum of the elements of xi must not be greater than alpha/b0.")
+    } else if (sumExceeds(xi * (1 + log(seq_along(xi))), alpha/b0)) {
+        stop("The sum of the elements of xi*(1 + log(i)) must not be greater ",
+             "than alpha/b0.")
+    } else if (length(xi) < N) {
+        stop("xi must have length at least equal to the number of p-values.")
     }
     
     if (w0 < 0) {
         stop("w0 must be non-negative.")
     } else if (w0 > b0) {
-        stop("w0 must be less than b0.")
+        stop("w0 must not be greater than b0.")
     } else if (b0 <= 0) {
         stop("b0 must be positive.")
     } else if (w0 + b0 > alpha & !(isTRUE(all.equal(w0 + b0, alpha)))) {

@@ -44,8 +44,8 @@
 #'  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 #'
 #'
-#'@references Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
-#'  False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+#'@references Javanmard, A. and Montanari, A. (2018). Online Rules for Control
+#'  of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 #'  Statistics}, 46(2):526-554.
 #'
 #'@export
@@ -53,10 +53,14 @@
 bonfInfinite <- function(d, alpha = 0.05, alphai, random = TRUE, date.format = "%Y-%m-%d") {
     # nocov start
     
-    .Deprecated("bonfInfinite", package = "onlineFDR", msg = "bonfInfinite is deprecated, please use Alpha_spending instead.")
+    .Deprecated("Alpha_spending", package = "onlineFDR",
+                msg = paste("bonfInfinite is deprecated, please use",
+                            "Alpha_spending instead."))
     
+    d <- checkPval(d)
+
     if (is.data.frame(d)) {
-        checkdf(d, random, date.format)
+        d <- checkdf(d, random, date.format)
         pval <- d$pval
     } else if (is.vector(d)) {
         pval <- d
@@ -64,7 +68,6 @@ bonfInfinite <- function(d, alpha = 0.05, alphai, random = TRUE, date.format = "
         stop("d must either be a dataframe or a vector of p-values.")
     }
     
-    checkPval(pval)
     N <- length(pval)
     
     if (alpha < 0 || alpha > 1) {
@@ -72,11 +75,15 @@ bonfInfinite <- function(d, alpha = 0.05, alphai, random = TRUE, date.format = "
     }
     
     if (missing(alphai)) {
-        alphai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
+        alphai <- 0.07908197 * alpha * log(pmax(seq_len(N), 2))/
+            ((seq_len(N)) * exp(sqrt(log(seq_len(N)))))
     } else if (any(alphai < 0)) {
         stop("All elements of alphai must be non-negative.")
-    } else if (sum(alphai) > alpha) {
+    } else if (sumExceeds(alphai, alpha)) {
         stop("The sum of the elements of alphai must not be greater than alpha.")
+    } else if (length(alphai) < N) {
+        stop("alphai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     R <- as.numeric(pval <= alphai)
@@ -84,5 +91,3 @@ bonfInfinite <- function(d, alpha = 0.05, alphai, random = TRUE, date.format = "
     
     return(d.out)
 }  # nocov end
-TRUE
-TRUE

@@ -103,9 +103,9 @@ for online FDR control with conservative nulls. *Advances in Neural
 Information Processing Systems 32*, 9388-9396.
 
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error
-rate. *Statistical Methods in Medical Research*, 30(4):976–993.
+rate. *Statistical Methods in Medical Research*, 30(4):976-993.
 
-Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M. (2020). The Power of
+Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The Power of
 Batching in Multiple Hypothesis Testing. *International Conference on
 Artificial Intelligence and Statistics*, PMLR, 108:3806-3815.
 

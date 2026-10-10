@@ -18,3 +18,9 @@
 
   }
 }
+
+\value{
+  A dataframe with the p-values, the adjusted significance thresholds
+  \code{alphai} and the indicator function of discoveries \code{R}, as for
+  the replacement functions.
+}

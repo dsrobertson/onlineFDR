@@ -9,14 +9,15 @@
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with three columns: an identifier (`id'), p-value (`pval'), and lags, if the
 #' dependent version is specified (see below). Given an overall significance
-#' level \eqn{\alpha}, ADDIS depends on constants \eqn{\lambda} and \eqn{\tau},
-#' where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1]} represents the
-#' threshold for a hypothesis to be selected for testing: p-values greater than
-#' \eqn{\tau} are implicitly `discarded' by the procedure, while \eqn{\lambda
+#' level \eqn{\alpha}, ADDIS-spending depends on constants \eqn{\lambda} and
+#' \eqn{\tau}, where \eqn{\lambda < \tau}. Here \eqn{\tau \in (0,1]} represents
+#' the threshold for a hypothesis to be selected for testing: p-values greater
+#' than \eqn{\tau} are implicitly `discarded' by the procedure, while
+#' \eqn{\lambda
 #' \in (0,1)} sets the threshold for a p-value to be a candidate for rejection:
 #' ADDIS-spending will never reject a p-value larger than \eqn{\lambda}. The
-#' algorithms also require a sequence of non-negative non-increasing numbers
-#' \eqn{\gamma_i} that sum to 1.
+#' algorithms also require a sequence of non-negative numbers \eqn{\gamma_i}
+#' that sum to 1.
 #'
 #' The ADDIS-spending procedure provably controls the FWER in the strong sense
 #' for independent p-values. Note that the procedure also controls the
@@ -27,7 +28,8 @@
 #' dependence. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t}
 #' to have arbitrary dependence on the previous \eqn{L_t} p-values. The fixed
 #' sequence \eqn{L_t} is referred to as `lags', and is given as the input
-#' \code{lags} for this version of the ADDIS-spending algorithm.
+#' \code{lags} for this version of the ADDIS-spending algorithm. The lags must
+#' satisfy \eqn{L_{t+1} \le L_t + 1}.
 #'
 #' Further details of the ADDIS-spending algorithms can be found in Tian and
 #' Ramdas (2021).
@@ -39,7 +41,7 @@
 #'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.
 #'
 #' @param lambda Optional parameter that sets the threshold for `candidate'
 #'   hypotheses. Must be between 0 and tau, defaults to 0.25.
@@ -48,7 +50,7 @@
 #'   be between 0 and 1, defaults to 0.5.
 #'
 #' @param dep Logical. If \code{TRUE} runs the version for locally dependent
-#'   p-values
+#'   p-values.
 #'
 #' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
@@ -60,7 +62,7 @@
 #'
 #'
 #' @references Tian, J. and Ramdas, A. (2021). Online control of the familywise
-#'   error rate. \emph{Statistical Methods in Medical Research} 30(4):976–993.
+#'   error rate. \emph{Statistical Methods in Medical Research}, 30(4):976-993.
 #'
 #'
 #' @seealso
@@ -100,7 +102,7 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
         stop("alpha must be between 0 and 1.")
     }
     
-    if (lambda <= 0 || lambda > 1) {
+    if (lambda <= 0 || lambda >= 1) {
         stop("lambda must be between 0 and 1.")
     }
     
@@ -118,8 +120,11 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
         gammai <- 0.4374901658/(seq_len(N)^(1.6))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     if (!(dep)) {
@@ -135,6 +140,10 @@ ADDIS_spending <- function(d, alpha = 0.05, gammai, lambda = 0.25, tau = 0.5, de
             
     } else {
         
+        if (!is.data.frame(d) || !("lags" %in% colnames(d))) {
+            stop("d needs to be a dataframe with a column of lags")
+        }
+
         checkStarVersion(d, N, "dep")
         
         L <- d$lags

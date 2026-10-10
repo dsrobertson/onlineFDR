@@ -28,10 +28,10 @@ test_that("Errors for edge cases", {
                "w0 must be non-negative.")
   
   expect_error(ADDIS(0.1, w0 = 1),
-                "w0 must be less than alpha.")
+                "w0 must not be greater than alpha.")
   
   expect_error(ADDIS(test.df2, async=TRUE),
-              "Please provide a decision time for each p-value.")
+              "Please provide a decision time for all p-values.")
 })
 
 

@@ -23,12 +23,12 @@ DataFrame londstar_async_faster(NumericVector pval,
 	alphai(0) = betai(0);
 	R(0) = (pval(0) <= alphai(0));
 
-	Progress p(N * N, display_progress);
+	Progress p(N, display_progress);
 
 	for (int i = 1; i < N; i++) {
+		p.increment();
 		int Dsum = 0;
 		for (int j = 0; j <= i-1; j++) {
-			p.increment();
 			if (R(j) && (E(j)-1 <= i-1))
 				Dsum++;
 
@@ -57,12 +57,12 @@ DataFrame londstar_dep_faster(NumericVector pval,
 	alphai(0) = betai(0);
 	R(0) = (pval(0) <= alphai(0));
 
-	Progress p(N * N, display_progress);
+	Progress p(N, display_progress);
 
 	for (int i = 1; i < N; i++) {
+		p.increment();
 		int Dsum = 0;
 		for (int j = 0; j <= i-1; j++) {
-			p.increment();
 			if (R(j) && (j < i - L(i)))
 				Dsum++;
 		}

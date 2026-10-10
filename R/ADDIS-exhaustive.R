@@ -2,12 +2,14 @@
 #'
 #' Implements an exhaustive variant of the ADDIS-spending algorithm for online
 #' FWER control, as presented by Fischer et al. (2024). The procedure is a 
-#' uniform improvement of ADDIS-spending, and no other FWER controlling
-#' procedure can enlarge the event of rejecting any hypothesis.
+#' uniform improvement of ADDIS-spending, and, under the conditions of their
+#' Theorem 3.5, no other FWER controlling procedure can enlarge the event of
+#' rejecting any hypothesis.
 #' 
 #' The function takes as its input either a vector of p-values, or a dataframe
-#' with two columns: an identifier (`id') and p-value (`pval'). Given an overall
-#' significance level \eqn{\alpha}, ADDIS-exhaustive depends on constants
+#' with a column of p-values (`pval') and optionally an identifier (`id').
+#' Given an overall significance level \eqn{\alpha}, ADDIS-exhaustive depends
+#' on constants
 #' \eqn{\lambda} and \eqn{\tau}, where \eqn{\alpha\tau \le \lambda < \tau}.
 #' Here \eqn{\tau \in
 #' (0,1]} represents the threshold for a hypothesis to be selected for testing:
@@ -15,7 +17,7 @@
 #' while \eqn{\lambda \in (0,1)} sets the threshold for a p-value to be a
 #' candidate for rejection: ADDIS-exhaustive will never reject a p-value larger
 #' than \eqn{\lambda}. The algorithm also requires a sequence of non-negative
-#' non-increasing numbers \eqn{\gamma_i} that sum to at most 1.
+#' numbers \eqn{\gamma_i} that sum to at most 1.
 #'
 #' The ADDIS-exhaustive procedure provably controls the FWER in the strong sense
 #' for independent p-values.
@@ -28,7 +30,7 @@
 #' \emph{Biometrical Journal}, 66(3):2300237.
 #'
 #' @param d Either a vector of p-values, or a dataframe with at least a
-#'   `pval` column (and optionally `id`).
+#'   \code{pval} column (and optionally \code{id}).
 #' @param alpha Overall significance level of the procedure, default 0.05.
 #' @param tau Optional threshold for hypotheses to be selected for testing.
 #'   Must be between 0 and 1, defaults to 0.5.
@@ -36,11 +38,13 @@
 #'   hypotheses. Must be at least alpha * tau and less than tau, defaults to
 #'   0.25.
 #' @param gamma Optional vector of initial weights, with at least one more
-#'   element than the number of p-values and summing to at most 1. If `NULL` (the default), a decreasing sequence
-#'   proportional to j^(-1.6) is used, as in ADDIS().
+#'   element than the number of p-values and summing to at most 1. If
+#'   \code{NULL} (the default), a decreasing sequence proportional to
+#'   \eqn{j^{-1.6}} is used, as in \code{\link{ADDIS}}.
 #'
-#' @return A dataframe with the original p-values `pval`, the per-hypothesis
-#'   testing levels `alphai`, and the indicator of discoveries `R`.
+#' @return A dataframe with the original p-values \code{pval}, the
+#'   per-hypothesis testing levels \code{alphai}, and the indicator of
+#'   discoveries \code{R}.
 #'
 #' @export
 ADDIS_exhaustive <- function(d, alpha = 0.05, tau = 0.5, lambda = 0.25, gamma = NULL) {
@@ -109,7 +113,7 @@ ADDIS_exhaustive <- function(d, alpha = 0.05, tau = 0.5, lambda = 0.25, gamma = 
 		if (any(gamma < 0)) {
 			stop("All elements of gamma must be non-negative.")
 		}
-		if (sum(gamma) > 1) {
+		if (sumExceeds(gamma, 1)) {
 			stop("The sum of the elements of gamma must not be greater than 1.")
 		}
 		if (length(gamma) < n + 1) {

@@ -12,6 +12,10 @@ checkStarVersion <- function(d, N, version, batch.sizes) {
         if (any(is.na(d$decision.times))) {
             stop("Please provide a decision time for all p-values.")
         }
+
+        if (any(!is.finite(d$decision.times))) {
+            stop("All decision times should be finite.")
+        }
         
         if (any(!is.wholenumber(d$decision.times))) {
             stop("All decision times should be integers.")
@@ -62,5 +66,3 @@ checkStarVersion <- function(d, N, version, batch.sizes) {
     
     return(version)
 }
-TRUE
-TRUE

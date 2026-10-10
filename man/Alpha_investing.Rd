@@ -24,10 +24,10 @@ in sequence.}
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}. Must
-be between 0 and \eqn{\alpha}.}
+be at least 0 and less than \eqn{\alpha}.}
 
 \item{random}{Logical. If \code{TRUE} (the default), then the order of the
 p-values in each batch (i.e. those that have exactly the same date) is
@@ -38,12 +38,13 @@ randomised.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{out}{ A dataframe with the original data \code{d} (which will
-  be reordered if there are batches and \code{random = TRUE}), the
-  adjusted significance thresholds \eqn{\alpha_i} and the indicator
-  function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-  \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-  \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+\item{out}{ A dataframe with the p-values \code{pval} (reordered if
+  there are batches and \code{random = TRUE}), the adjusted
+  significance thresholds \eqn{\alpha_i}, the indicator function of
+  discoveries \code{R} and, if \code{d} is a dataframe with a column
+  \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+  the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+  case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements a variant of the Alpha-investing algorithm of Foster and Stine
@@ -63,7 +64,7 @@ The Alpha-investing procedure provably controls FDR for independent p-values.
 Given an overall significance level \eqn{\alpha}, we choose a sequence of
 non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 Alpha-investing depends on a constant \eqn{w_0}, which satisfies \eqn{0 \le
-w_0 \le \alpha} and represents the initial `wealth' of the procedure.
+w_0 < \alpha} and represents the initial `wealth' of the procedure.
 
 Further details of the Alpha-investing procedure and its modification can be
 found in Foster and Stine (2008) and Ramdas et al. (2018).

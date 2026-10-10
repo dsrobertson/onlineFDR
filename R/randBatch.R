@@ -8,5 +8,3 @@ randBatch <- function(d) {
     rownames(d) <- NULL
     return(d)
 }
-TRUE
-TRUE

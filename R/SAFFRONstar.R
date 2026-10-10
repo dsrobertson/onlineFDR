@@ -37,7 +37,7 @@
 #' constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
 #' w_0 \le \alpha} and represents the initial `wealth' of the
 #' procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
-#' `candidate' hypothesis. A `candidate' refers to p-values smaller than
+#' `candidate' hypothesis. A `candidate' refers to p-values no larger than
 #' \eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
 #' \eqn{\lambda}. The algorithms also require a sequence of non-negative
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
@@ -58,7 +58,7 @@
 #'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.
 #'
 #' @param version Takes values 'async', 'dep' or 'batch'. This specifies the
 #'   version of SAFFRONstar to use. \code{version='async'} requires a 
@@ -66,7 +66,7 @@
 #' column of lags (`lags').
 #' \code{version='batch'} requires a vector of batch sizes (`batch.sizes').
 #'
-#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
+#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.
 #'
 #' @param lambda Optional threshold for a `candidate' hypothesis, must be
 #'   between 0 and 1. Defaults to 0.5.
@@ -83,7 +83,11 @@
 #'   1}  (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
+#' @references Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+#'   algorithm for online FDR control with conservative nulls.
+#'   \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
+#'
+#' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 #' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #'
 #'
@@ -143,7 +147,7 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         stop("alpha must be between 0 and 1.")
     }
     
-    if (lambda <= 0 || lambda > 1) {
+    if (lambda <= 0 || lambda >= 1) {
         stop("lambda must be between 0 and 1.")
     }
     
@@ -153,8 +157,13 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         gammai <- 0.4374901658/(seq_len(N + 1)^(1.6))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (!isNonIncreasing(gammai)) {
+        stop("The elements of gammai must be non-increasing.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     if (missing(w0)) {
@@ -162,7 +171,7 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
     } else if (w0 > alpha) {
-        stop("w0 must be less than alpha")
+        stop("w0 must not be greater than alpha.")
     }
     
     version <- checkStarVersion(d, N, version, batch.sizes)
@@ -170,7 +179,9 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
     switch(version, {
         
         ## async = 1
-        E <- d$decision.times
+        # decision times after the last test are never reached, so capping them
+        # at N + 1 leaves the result unchanged and avoids integer overflow
+        E <- pmin(d$decision.times, N + 1)
         out <- saffronstar_async_faster(pval, 
                                         E, 
                                         gammai,
@@ -209,12 +220,10 @@ SAFFRONstar <- function(d, alpha = 0.05, version, gammai, w0, lambda = 0.5, batc
         
         alphai <- as.vector(t(list_out$alphai))
         R <- as.vector(t(list_out$R))
-        x <- alphai != 0
-        
-        if (length(x) > 0) {
-            alphai <- alphai[x]
-            R <- as.numeric(R[x])
-        }
+        # drop the padding of the batch-by-position matrices
+        x <- as.vector(t(outer(batch, seq_len(max(batch)), ">=")))
+        alphai <- alphai[x]
+        R <- as.numeric(R[x])
         
         batch.no <- rep(seq_len(length(batch)), batch)
         out <- data.frame(pval, batch = batch.no, alphai, R)

@@ -16,5 +16,3 @@ checkSTARdf <- function(d, version) {
     })
 }
 
-TRUE
-TRUE

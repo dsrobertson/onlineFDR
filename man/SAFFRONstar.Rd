@@ -30,9 +30,9 @@ column of lags (`lags').
 \code{version='batch'} requires a vector of batch sizes (`batch.sizes').}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
-\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
+\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.}
 
 \item{lambda}{Optional threshold for a `candidate' hypothesis, must be
 between 0 and 1. Defaults to 0.5.}
@@ -88,7 +88,7 @@ Given an overall significance level \eqn{\alpha}, SAFFRONstar depends on
 constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
 w_0 \le \alpha} and represents the initial `wealth' of the
 procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
-`candidate' hypothesis. A `candidate' refers to p-values smaller than
+`candidate' hypothesis. A `candidate' refers to p-values no larger than
 \eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
 \eqn{\lambda}. The algorithms also require a sequence of non-negative
 non-increasing numbers \eqn{\gamma_i} that sum to 1.
@@ -125,6 +125,10 @@ SAFFRONstar(sample.df2, version='dep')
 
 }
 \references{
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+  algorithm for online FDR control with conservative nulls.
+  \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
+
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 }
