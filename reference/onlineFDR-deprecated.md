@@ -14,3 +14,9 @@ replacement indicated below:
 
 - bonfInfinite:
   [`Alpha_spending`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_spending.md)
+
+## Value
+
+A dataframe with the p-values, the adjusted significance thresholds
+`alphai` and the indicator function of discoveries `R`, as for the
+replacement functions.

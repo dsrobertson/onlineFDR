@@ -28,7 +28,7 @@ online_fallback(
 
 - alpha:
 
-  Overall significance level of the FDR procedure, the default is 0.05.
+  Overall significance level of the FWER procedure, the default is 0.05.
 
 - gammai:
 
@@ -53,12 +53,12 @@ online_fallback(
 
 - out:
 
-  A dataframe with the original data `d` (which will be reordered if
-  there are batches and `random = TRUE`), the LORD-adjusted significance
-  thresholds \\\alpha_i\\ and the indicator function of discoveries `R`.
-  Hypothesis \\i\\ is rejected if the \\i\\-th p-value is less than or
-  equal to \\\alpha_i\\, in which case `R[i] = 1` (otherwise
-  `R[i] = 0`).
+  A dataframe with the p-values `pval` (reordered if there are batches
+  and `random = TRUE`), the adjusted significance thresholds
+  \\\alpha_i\\, the indicator function of discoveries `R` and, if `d` is
+  a dataframe with a column `id`, the identifiers `id`. Hypothesis \\i\\
+  is rejected if the \\i\\-th p-value is less than or equal to
+  \\\alpha_i\\, in which case `R[i] = 1` (otherwise `R[i] = 0`).
 
 ## Details
 
@@ -74,16 +74,21 @@ that sum to 1.
 The online fallback procedure provides a uniformly more powerful method
 than Alpha-spending, by saving the significance level of a previous
 rejection. More specifically, the procedure tests hypothesis \\H_i\\ at
-level \$\$\alpha_i = \alpha \gamma_i + R\_{i-1} \alpha\_{i-1}\$\$ where
-\\R_i = 1\\p_i \leq \alpha_i\\\\ denotes a rejected hypothesis.
+level \$\$\alpha_i = \alpha \gamma_i + R\_{i-1} \alpha\_{i-1}\$\$ for
+\\i \ge 2\\, with \\\alpha_1 = \alpha\gamma_1\\, where \\R_i = 1\\p_i
+\leq \alpha_i\\\\ denotes a rejected hypothesis.
 
 Further details of the online fallback procedure can be found in Tian
 and Ramdas (2021).
 
 ## References
 
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.
+
 Tian, J. and Ramdas, A. (2021). Online control of the familywise error
-rate. *Statistical Methods for Medical Research*, 30(4):976–993.
+rate. *Statistical Methods in Medical Research*, 30(4):976-993.
 
 ## Examples
 
@@ -102,56 +107,56 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 online_fallback(sample.df, random=FALSE)
-#>          pval       alphai R
-#> 1  2.9000e-08 0.0026758385 1
-#> 2  6.7430e-02 0.0032577488 0
-#> 3  1.5140e-02 0.0004956249 0
-#> 4  8.1740e-02 0.0004121803 0
-#> 5  1.7100e-03 0.0003494435 0
-#> 6  3.6000e-05 0.0003022950 1
-#> 7  7.9149e-01 0.0005682672 0
-#> 8  2.7201e-01 0.0002372613 0
-#> 9  2.8295e-01 0.0002140474 0
-#> 10 7.5900e-08 0.0001949126 1
-#> 11 6.9274e-01 0.0003737922 0
-#> 12 3.0443e-01 0.0001652568 0
-#> 13 1.3600e-03 0.0001535420 0
-#> 14 7.2342e-01 0.0001433627 0
-#> 15 5.4757e-01 0.0001344368 0
+#>          pval       alphai R     id
+#> 1  2.9000e-08 0.0027407722 1 A15432
+#> 2  6.7430e-02 0.0033368035 0 B90969
+#> 3  1.5140e-02 0.0005076521 0 C18705
+#> 4  8.1740e-02 0.0004221825 0 B49731
+#> 5  1.7100e-03 0.0003579233 0 E99902
+#> 6  3.6000e-05 0.0003096307 1 C38292
+#> 7  7.9149e-01 0.0005820572 0 A30619
+#> 8  2.7201e-01 0.0002430188 0 D46627
+#> 9  2.8295e-01 0.0002192416 0 E29198
+#> 10 7.5900e-08 0.0001996425 1 A41418
+#> 11 6.9274e-01 0.0003828629 0 D51456
+#> 12 3.0443e-01 0.0001692671 0 C88669
+#> 13 1.3600e-03 0.0001572680 0 E03673
+#> 14 7.2342e-01 0.0001468417 0 A63155
+#> 15 5.4757e-01 0.0001376991 0 B66033
 
 set.seed(1); online_fallback(sample.df)
-#>          pval       alphai R
-#> 1  2.9000e-08 0.0026758385 1
-#> 2  6.7430e-02 0.0032577488 0
-#> 3  1.5140e-02 0.0004956249 0
-#> 4  8.1740e-02 0.0004121803 0
-#> 5  1.7100e-03 0.0003494435 0
-#> 6  2.7201e-01 0.0003022950 0
-#> 7  3.6000e-05 0.0002659722 1
-#> 8  7.9149e-01 0.0005032335 0
-#> 9  7.5900e-08 0.0002140474 1
-#> 10 2.8295e-01 0.0004089600 0
-#> 11 6.9274e-01 0.0001788796 0
-#> 12 7.2342e-01 0.0001652568 0
-#> 13 3.0443e-01 0.0001535420 0
-#> 14 5.4757e-01 0.0001433627 0
-#> 15 1.3600e-03 0.0001344368 0
+#>          pval       alphai R     id
+#> 1  2.9000e-08 0.0027407722 1 A15432
+#> 2  6.7430e-02 0.0033368035 0 B90969
+#> 3  1.5140e-02 0.0005076521 0 C18705
+#> 4  8.1740e-02 0.0004221825 0 B49731
+#> 5  1.7100e-03 0.0003579233 0 E99902
+#> 6  2.7201e-01 0.0003096307 0 D46627
+#> 7  3.6000e-05 0.0002724265 1 C38292
+#> 8  7.9149e-01 0.0005154453 0 A30619
+#> 9  7.5900e-08 0.0002192416 1 A41418
+#> 10 2.8295e-01 0.0004188841 0 E29198
+#> 11 6.9274e-01 0.0001832205 0 D51456
+#> 12 7.2342e-01 0.0001692671 0 A63155
+#> 13 3.0443e-01 0.0001572680 0 C88669
+#> 14 5.4757e-01 0.0001468417 0 B66033
+#> 15 1.3600e-03 0.0001376991 0 E03673
 
 set.seed(1); online_fallback(sample.df, alpha=0.1)
-#>          pval       alphai R
-#> 1  2.9000e-08 0.0053516771 1
-#> 2  6.7430e-02 0.0065154977 0
-#> 3  1.5140e-02 0.0009912499 0
-#> 4  8.1740e-02 0.0008243606 0
-#> 5  1.7100e-03 0.0006988870 0
-#> 6  2.7201e-01 0.0006045900 0
-#> 7  3.6000e-05 0.0005319444 1
-#> 8  7.9149e-01 0.0010064670 0
-#> 9  7.5900e-08 0.0004280949 1
-#> 10 2.8295e-01 0.0008179201 0
-#> 11 6.9274e-01 0.0003577593 0
-#> 12 7.2342e-01 0.0003305137 0
-#> 13 3.0443e-01 0.0003070841 0
-#> 14 5.4757e-01 0.0002867254 0
-#> 15 1.3600e-03 0.0002688736 0
+#>          pval       alphai R     id
+#> 1  2.9000e-08 0.0054815445 1 A15432
+#> 2  6.7430e-02 0.0066736071 0 B90969
+#> 3  1.5140e-02 0.0010153042 0 C18705
+#> 4  8.1740e-02 0.0008443651 0 B49731
+#> 5  1.7100e-03 0.0007158466 0 E99902
+#> 6  2.7201e-01 0.0006192614 0 D46627
+#> 7  3.6000e-05 0.0005448529 1 C38292
+#> 8  7.9149e-01 0.0010308906 0 A30619
+#> 9  7.5900e-08 0.0004384833 1 A41418
+#> 10 2.8295e-01 0.0008377682 0 E29198
+#> 11 6.9274e-01 0.0003664409 0 D51456
+#> 12 7.2342e-01 0.0003385341 0 A63155
+#> 13 3.0443e-01 0.0003145360 0 C88669
+#> 14 5.4757e-01 0.0002936833 0 B66033
+#> 15 1.3600e-03 0.0002753983 0 E03673
 ```

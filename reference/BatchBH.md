@@ -23,7 +23,7 @@ BatchBH(d, alpha = 0.05, gammai, display_progress = FALSE)
 - gammai:
 
   Optional vector of \\\gamma_i\\. A default is provided with
-  \\\gamma_j\\ proportional to \\1/j^(1.6)\\.
+  \\\gamma_j\\ proportional to \\1/j^{1.6}\\.
 
 - display_progress:
 
@@ -34,12 +34,14 @@ BatchBH(d, alpha = 0.05, gammai, display_progress = FALSE)
 
 - out:
 
-  A dataframe with the original data `d` and the indicator function of
-  discoveries `R`. Hypothesis \\i\\ is rejected if the \\i\\-th p-value
-  within the \\t\\-th batch is less than or equal to \\(r/n)\alpha_t\\,
-  where \\r\\ is the rank of the \\i\\-th p-value within an ordered set
-  and \\n\\ is the total number of hypotheses within the \\t\\-th batch.
-  If hypothesis \\i\\ is rejected, `R[i] = 1` (otherwise `R[i] = 0`).
+  A dataframe with the original data `d`, the indicator function of
+  discoveries `R` and the test level `alphai` (\\\alpha_t\\) of each
+  hypothesis's batch. Hypothesis \\i\\ in the \\t\\-th batch is rejected
+  if its p-value is less than or equal to \\(k/n)\alpha_t\\, where \\n\\
+  is the number of hypotheses in the batch and \\k\\ is the largest
+  \\r\\ such that the \\r\\-th smallest p-value in the batch is at most
+  \\(r/n)\alpha_t\\. If hypothesis \\i\\ is rejected, `R[i] = 1`
+  (otherwise `R[i] = 0`).
 
 ## Details
 
@@ -59,9 +61,9 @@ Further details of the BatchBH algorithm can be found in Zrnic et al.
 
 ## References
 
-Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The Power of
 Batching in Multiple Hypothesis Testing. *International Conference on
-Artificial Intelligence and Statistics*, 3806-3815.
+Artificial Intelligence and Statistics*, PMLR, 108:3806-3815.
 
 ## Examples
 

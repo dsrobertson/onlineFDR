@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,11 +85,11 @@ settings. For both synchronous and asynchronous testing, Tian &amp;
 Ramdas (2019) proposed the ADDIS algorithms which compensate for the
 loss in power in the presence of conservative nulls by adaptively
 ‘discarding’ these p-values.</p>
-<p>Finally, Tian &amp; Ramdas (2021) proposed procedures that provide
+<p>Finally, Tian and Ramdas (2021) proposed procedures that provide
 online control of the FWER. One procedure, online fallback, gives a
 uniform improvement to the naive Alpha-spending procedure (see below).
 The ADDIS-spending procedure compensates for the power loss of these
-procedures by including both adapativity in the fraction of null
+procedures by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls.</p>
 </div>
 <div class="section level2">
@@ -101,23 +101,23 @@ user might consider amending for their analysis.</p>
 <h3 id="common-arguments">Common arguments<a class="anchor" aria-label="anchor" href="#common-arguments"></a>
 </h3>
 <p>As a default, the <code>alpha</code> argument is set to 0.05, where
-<code>alpha</code> sets the overall significance level of the FDR of
+<code>alpha</code> sets the overall significance level of the FDR or
 FWER controlling procedure. By convention, the standard significance
-level utilised is the 5%. However, there are applications where an
-alternate threshold could be considered. For example, a more stringent
-threshold might be appropriate when there are limited resources to
-follow up significant findings. A less stringent threshold might be
-appropriate when the downstream analysis is a global analysis which can
-tolerate a higher proportion of false positives.</p>
+level utilised is 5%. However, there are applications where an alternate
+threshold could be considered. For example, a more stringent threshold
+might be appropriate when there are limited resources to follow up
+significant findings. A less stringent threshold might be appropriate
+when the downstream analysis is a global analysis which can tolerate a
+higher proportion of false positives.</p>
 <p>To ensure correct interpretation of the dates provided there is a
 date.format argument. As a default, the date format is set to receive
-dates as year-month(00-12)-day(number). The following website provides
+dates as year-month(01-12)-day(number). The following website provides
 clear guidance on symbols used to interpret the date information: <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/strptime.html" class="external-link uri">https://stat.ethz.ch/R-manual/R-devel/library/base/html/strptime.html</a></p>
 <p>As a default, the <code>random</code> argument is set to
 <code>TRUE</code>. In this situation, the order of p-values in each
-batch (i.e. with the same date) are randomised. This is to avoid the
-risk of p-values being ordered post-hoc, which can lead to an inflation
-of the FDR. As the dataset grows the data is reprocessed. To ensure the
+batch (i.e. with the same date) is randomised. This is to avoid the risk
+of p-values being ordered post-hoc, which can lead to an inflation of
+the FDR. As the dataset grows the data is reprocessed. To ensure the
 consistency of the output (with the randomisation within the previous
 batches remaining the same), it is necessary to set the same
 <code>seed</code> for all analyses.</p>
@@ -147,33 +147,33 @@ conservative.</p>
 <span><span class="co"># compare adjusted significance thresholds</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>independent <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dependent <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        independent    dependent</span></span>
-<span><span class="co">#&gt;  [1,] 0.0026758385 0.0026758385</span></span>
-<span><span class="co">#&gt;  [2,] 0.0011638206 0.0007758804</span></span>
-<span><span class="co">#&gt;  [3,] 0.0009912499 0.0005406818</span></span>
-<span><span class="co">#&gt;  [4,] 0.0008243606 0.0003956931</span></span>
-<span><span class="co">#&gt;  [5,] 0.0006988870 0.0003060819</span></span>
-<span><span class="co">#&gt;  [6,] 0.0006045900 0.0002467714</span></span>
-<span><span class="co">#&gt;  [7,] 0.0005319444 0.0002051576</span></span>
-<span><span class="co">#&gt;  [8,] 0.0007117838 0.0002618915</span></span>
-<span><span class="co">#&gt;  [9,] 0.0006421423 0.0002269882</span></span>
-<span><span class="co">#&gt; [10,] 0.0007796504 0.0002661860</span></span>
-<span><span class="co">#&gt; [11,] 0.0007155186 0.0002369363</span></span>
-<span><span class="co">#&gt; [12,] 0.0006610273 0.0002130140</span></span>
-<span><span class="co">#&gt; [13,] 0.0006141682 0.0001931265</span></span>
-<span><span class="co">#&gt; [14,] 0.0005734509 0.0001763616</span></span>
-<span><span class="co">#&gt; [15,] 0.0005377472 0.0001620585</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1,] 0.0027407722 0.0027407722</span></span>
+<span><span class="co">#&gt;  [2,] 0.0011920626 0.0007947084</span></span>
+<span><span class="co">#&gt;  [3,] 0.0010153042 0.0005538023</span></span>
+<span><span class="co">#&gt;  [4,] 0.0008443651 0.0004052952</span></span>
+<span><span class="co">#&gt;  [5,] 0.0007158466 0.0003135095</span></span>
+<span><span class="co">#&gt;  [6,] 0.0006192614 0.0002527598</span></span>
+<span><span class="co">#&gt;  [7,] 0.0005448529 0.0002101361</span></span>
+<span><span class="co">#&gt;  [8,] 0.0007290564 0.0002682468</span></span>
+<span><span class="co">#&gt;  [9,] 0.0006577249 0.0002324964</span></span>
+<span><span class="co">#&gt; [10,] 0.0007985699 0.0002726455</span></span>
+<span><span class="co">#&gt; [11,] 0.0007328818 0.0002426860</span></span>
+<span><span class="co">#&gt; [12,] 0.0006770682 0.0002181831</span></span>
+<span><span class="co">#&gt; [13,] 0.0006290720 0.0001978131</span></span>
+<span><span class="co">#&gt; [14,] 0.0005873666 0.0001806413</span></span>
+<span><span class="co">#&gt; [15,] 0.0005507966 0.0001659911</span></span></code></pre></div>
 <p>The vector <code>betai</code> is supplied by default, but can
-optionally be specified by the user (as described above, see the formula
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math><a href="#LOND_beta">here</a>).</p>
+optionally be specified by the user (see the formula for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math>
+in the <a href="theory.html#LOND_beta">theory vignette</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="lord">LORD<a class="anchor" aria-label="anchor" href="#lord"></a>
 </h3>
 <p>The default version of LORD used is version ‘++’, but the user can
 optionally specify versions 3, ‘discard’ and ‘dep’ using the
-<code>version</code> argument (see <a href="#LORD">here</a> for further
-details about the different versions).</p>
+<code>version</code> argument (see <a href="theory.html#LORD">here</a>
+for further details about the different versions).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD.plus</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.LORD3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LORD.html">LORD</a></span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
@@ -186,35 +186,44 @@ details about the different versions).</p>
 <span>    LORD.discard  <span class="op">=</span> <span class="va">results.LORD.discard</span><span class="op">$</span><span class="va">alphai</span>,</span>
 <span>    LORD.dep <span class="op">=</span> <span class="va">results.LORD.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          LORD.plus        LORD3 LORD.discard     LORD.dep</span></span>
-<span><span class="co">#&gt;  [1,] 0.0002675839 0.0002675839 0.0002675839 2.091542e-03</span></span>
-<span><span class="co">#&gt;  [2,] 0.0024664457 0.0026615183 0.0011285264 1.002025e-02</span></span>
-<span><span class="co">#&gt;  [3,] 0.0005732818 0.0005787961 0.0002823266 1.677763e-03</span></span>
-<span><span class="co">#&gt;  [4,] 0.0004872805 0.0004929725 0.0002394680 6.262659e-04</span></span>
-<span><span class="co">#&gt;  [5,] 0.0004059066 0.0004099744 0.0001998165 3.201787e-04</span></span>
-<span><span class="co">#&gt;  [6,] 0.0003447286 0.0003475734 0.0001700069 1.933725e-04</span></span>
-<span><span class="co">#&gt;  [7,] 0.0002986627 0.0003006772 0.0001475152 1.293954e-04</span></span>
-<span><span class="co">#&gt;  [8,] 0.0029389397 0.0072216015 0.0014680343 1.548152e-04</span></span>
-<span><span class="co">#&gt;  [9,] 0.0008168502 0.0015704700 0.0014680343 1.166482e-04</span></span>
-<span><span class="co">#&gt; [10,] 0.0033835974 0.0091593329 0.0017451837 1.422614e-04</span></span>
-<span><span class="co">#&gt; [11,] 0.0011873999 0.0019918653 0.0006438778 1.145119e-04</span></span>
-<span><span class="co">#&gt; [12,] 0.0010225858 0.0016965126 0.0006438778 9.432408e-05</span></span>
-<span><span class="co">#&gt; [13,] 0.0008785607 0.0014108836 0.0006438778 7.916885e-05</span></span>
-<span><span class="co">#&gt; [14,] 0.0007679398 0.0011961369 0.0005497556 6.749313e-05</span></span>
-<span><span class="co">#&gt; [15,] 0.0006820264 0.0010347488 0.0005497556 5.830055e-05</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1,] 0.0002740772 0.0002740772 0.0002740772 2.091536e-03</span></span>
+<span><span class="co">#&gt;  [2,] 0.0025262981 0.0027257486 0.0011559120 1.002023e-02</span></span>
+<span><span class="co">#&gt;  [3,] 0.0005871934 0.0005927641 0.0002891777 1.677758e-03</span></span>
+<span><span class="co">#&gt;  [4,] 0.0004991051 0.0005048694 0.0002452791 6.262642e-04</span></span>
+<span><span class="co">#&gt;  [5,] 0.0004157566 0.0004198683 0.0002046653 3.201778e-04</span></span>
+<span><span class="co">#&gt;  [6,] 0.0003530941 0.0003559613 0.0001741324 1.933720e-04</span></span>
+<span><span class="co">#&gt;  [7,] 0.0003059103 0.0003079335 0.0001510949 1.293950e-04</span></span>
+<span><span class="co">#&gt;  [8,] 0.0030102579 0.0049234562 0.0015036586 1.548148e-04</span></span>
+<span><span class="co">#&gt;  [9,] 0.0008366724 0.0010706961 0.0015036586 1.166479e-04</span></span>
+<span><span class="co">#&gt; [10,] 0.0034657061 0.0070615791 0.0017875335 1.422610e-04</span></span>
+<span><span class="co">#&gt; [11,] 0.0012162141 0.0015356702 0.0006595026 1.145116e-04</span></span>
+<span><span class="co">#&gt; [12,] 0.0010474005 0.0013079618 0.0006595026 9.432385e-05</span></span>
+<span><span class="co">#&gt; [13,] 0.0008998804 0.0010877502 0.0006595026 7.916865e-05</span></span>
+<span><span class="co">#&gt; [14,] 0.0007865752 0.0009221867 0.0005630964 6.749296e-05</span></span>
+<span><span class="co">#&gt; [15,] 0.0006985769 0.0007977612 0.0005630964 5.830041e-05</span></span></code></pre></div>
 <p>By default
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>=</mo><mi>α</mi><mi>/</mi><mn>10</mn></mrow><annotation encoding="application/x-tex">w_0 = \alpha/10</annotation></semantics></math>
 and (for LORD 3 and LORD dep)
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mn>0</mn><mo>=</mo><mi>a</mi><mi>l</mi><mi>p</mi><mi>h</mi><mi>a</mi><mo>−</mo><mi>w</mi><mn>0</mn></mrow><annotation encoding="application/x-tex">b0 = alpha - w0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>0</mn></msub><mo>=</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">b_0 = \alpha - w_0</annotation></semantics></math>,
 but these parameters can optionally be specified by the user subject to
 the requirements that
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>w</mi><mn>0</mn></msub><mo>≤</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">0 \leq w_0 \leq \alpha</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>0</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b_0 &gt; 0</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><msub><mi>b</mi><mn>0</mn></msub><mo>≤</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">w_0+b_0 \leq \alpha</annotation></semantics></math>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><msub><mi>b</mi><mn>0</mn></msub><mo>≤</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">w_0+b_0 \leq \alpha</annotation></semantics></math>.
+For LORD with discarding (<code>version = 'discard'</code>), the default
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mi>/</mi><mn>10</mn><mo>,</mo><mi>τ</mi><mi>α</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">w_0 = \min(\alpha/10, \tau\alpha/2)</annotation></semantics></math>
+and the requirement is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>w</mi><mn>0</mn></msub><mo>≤</mo><mi>τ</mi><mi>α</mi></mrow><annotation encoding="application/x-tex">0 \leq w_0 \leq \tau\alpha</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
+is the discarding threshold <code>tau.discard</code>.</p>
 <p>The value of <code>gammai</code> is also supplied by default, but can
-optionally be specified by the user (as described above, see the formula
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\gamma_j</annotation></semantics></math><a href="#LORDdep_xi">here</a> for version=‘dep’ and <a href="#LORD_gamma">here</a> for all other versions of LORD).</p>
+optionally be specified by the user (see the formula for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ξ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\xi_j</annotation></semantics></math><a href="theory.html#LORDdep_xi">here</a> for version=‘dep’ and for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\gamma_j</annotation></semantics></math><a href="theory.html#LORD_gamma">here</a> for all other versions of
+LORD).</p>
 </div>
 <div class="section level3">
 <h3 id="saffron">SAFFRON<a class="anchor" aria-label="anchor" href="#saffron"></a>
@@ -229,9 +238,8 @@ the requirements that
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>λ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; \lambda &lt; 1</annotation></semantics></math>.
 The values of <code>gammai</code> are also supplied by default, but can
-optionally be specified by the user (as described above, see the formula
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\gamma_j</annotation></semantics></math><a href="#SAFFRON_gamma">here</a>).</p>
+optionally be specified by the user (see the formula for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\gamma_j</annotation></semantics></math><a href="theory.html#SAFFRON_gamma">here</a>).</p>
 </div>
 <div class="section level3">
 <h3 id="addis">ADDIS<a class="anchor" aria-label="anchor" href="#addis"></a>
@@ -243,8 +251,8 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.25</annotation></semantics></math>,
 but these parameters can optionally be specified by the user subject to
 the requirements that
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>w</mi><mn>0</mn></msub><mo>&lt;</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">0 \leq w_0 &lt; \alpha</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>τ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; \tau &lt; 1</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>w</mi><mn>0</mn></msub><mo>≤</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">0 \leq w_0 \leq \alpha</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>τ</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; \tau \leq 1</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>λ</mi><mo>&lt;</mo><mi>τ</mi></mrow><annotation encoding="application/x-tex">0 &lt; \lambda &lt; \tau</annotation></semantics></math>.
 The values of <code>gammai</code> are also supplied by default, but can
@@ -265,10 +273,7 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\tau = 0.5</annotation></semantics></math>,
 but these parameters can optionally be specified by the user subject to
 the requirements that
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&lt;</mo><mi>τ</mi></mrow><annotation encoding="application/x-tex">\lambda &lt; \tau</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>λ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; \lambda &lt; 1</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>τ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; \tau &lt; 1</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>λ</mi><mo>&lt;</mo><mi>τ</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0 &lt; \lambda &lt; \tau \leq 1</annotation></semantics></math>.
 The values of <code>gammai</code> are also supplied by default, but can
 optionally be specified by the user.</p>
 </div>
@@ -283,7 +288,7 @@ the LOND, LORD and SAFFRON procedures for a variety of trial settings,
 including the following:</p>
 <p>1: <strong>Asynchronous online mFDR control</strong>: This is for an
 asynchronous testing process, consisting of tests that start and finish
-at (potentially) random times. The discretised finish times of the test
+at (potentially) random times. The discretised finish times of the tests
 correspond to the decision times.</p>
 <p>2: <strong>Online mFDR control under local dependence</strong>: For
 any
@@ -294,13 +299,47 @@ to have arbitrary dependence on the previous
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mi>t</mi></msub><annotation encoding="application/x-tex">L_t</annotation></semantics></math>
 p-values. The fixed sequence
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mi>t</mi></msub><annotation encoding="application/x-tex">L_t</annotation></semantics></math>
-is referred to as `lags’.</p>
+is referred to as ‘lags’.</p>
 <p>3: <strong>mFDR control in asynchronous mini-batch testing</strong>:
 A mini-batch represents a grouping of tests run asynchronously which
 result in dependent p-values. Once a mini-batch of tests is fully
 completed, a new one can start, testing hypotheses independent of the
 previous batch.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Foster, D. and Stine, R. (2008).
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-investing:
+a procedure for sequential control of expected false discoveries.
+<em>Journal of the Royal Statistical Society (Series B)</em>,
+70(2):429-444.</p>
+<p>Javanmard, A., and Montanari, A. (2015). On Online Control of False
+Discovery Rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1502.06197" class="external-link uri">https://arxiv.org/abs/1502.06197</a>.</p>
+<p>Javanmard, A., and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. <em>Annals of
+Statistics</em>, 46(2):526-554.</p>
+<p>Li, A., and Barber, R.F. (2017). Accumulation Tests for FDR Control
+in Ordered Hypothesis Testing. <em>Journal of the American Statistical
+Association</em>, 112(518):837-849.</p>
+<p>Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017).
+Online control of the false discovery rate with decaying memory.
+<em>Advances in Neural Information Processing Systems 30</em>,
+5650-5659.</p>
+<p>Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018).
+SAFFRON: an adaptive algorithm for online control of the false discovery
+rate. <em>Proceedings of the 35th International Conference on Machine
+Learning</em>, 80:4286-4294.</p>
+<p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+algorithm for online FDR control with conservative nulls. <em>Advances
+in Neural Information Processing Systems 32</em>, 9388-9396.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
+error rate. <em>Statistical Methods in Medical Research</em>,
+30(4):976-993.</p>
+<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
+Testing of Multiple Hypotheses. <em>Journal of Machine Learning
+Research</em>, 22(33):1-39.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

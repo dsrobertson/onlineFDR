@@ -74,11 +74,11 @@ and a column describing the conflict sets for the hypotheses. This takes
 the form of a vector of decision times or lags. Batch sizes can be
 specified as a separate argument (see below).
 
-Zrnic et al. (2021) present explicit three versions of LORDstar:
+Zrnic et al. (2021) present three explicit versions of LORDstar:
 
 1\) `version='async'` is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The
-discretised finish times of the test correspond to the decision times.
+discretised finish times of the tests correspond to the decision times.
 These decision times are given as the input `decision.times` for this
 version of the LORDstar algorithm.
 
@@ -96,7 +96,7 @@ previous batch. The batch sizes are given as the input `batch.sizes` for
 this version of the LORDstar algorithm.
 
 Given an overall significance level \\\alpha\\, LORDstar depends on
-\\w_0\\ (where \\0 \le w_0 \le \alpha\\), which represents the intial
+\\w_0\\ (where \\0 \le w_0 \le \alpha\\), which represents the initial
 \`wealth' of the procedure. The algorithms also require a sequence of
 non-negative non-increasing numbers \\\gamma_i\\ that sum to 1.
 
@@ -109,13 +109,13 @@ Further details of the LORDstar algorithms can be found in Zrnic et al.
 
 ## References
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
-Testing of Multiple Hypotheses. *Journal of Machine Learning Research*
-22:1-33.
+Testing of Multiple Hypotheses. *Journal of Machine Learning Research*,
+22(33):1-39.
 
 ## See also
 
@@ -137,21 +137,21 @@ decision.times = seq_len(15) + 1)
 
 LORDstar(sample.df, version='async')
 #>          pval       alphai R
-#> 1  2.9000e-08 2.675839e-04 1
-#> 2  6.7430e-02 5.819103e-05 0
-#> 3  1.5140e-02 2.457817e-03 0
-#> 4  8.1740e-02 5.649373e-04 0
-#> 5  1.7100e-03 4.810068e-04 0
-#> 6  3.6000e-05 4.011918e-04 1
-#> 7  7.9149e-01 3.410964e-04 0
-#> 8  2.7201e-01 2.971630e-03 0
-#> 9  2.8295e-01 8.426900e-04 0
-#> 10 7.5900e-08 7.286513e-04 1
-#> 11 6.9274e-01 6.227110e-04 0
-#> 12 3.0443e-01 3.217229e-03 0
-#> 13 1.3600e-03 1.060551e-03 0
-#> 14 7.2342e-01 9.246646e-04 0
-#> 15 5.4757e-01 8.010731e-04 0
+#> 1  2.9000e-08 2.740772e-04 1
+#> 2  6.7430e-02 5.960313e-05 0
+#> 3  1.5140e-02 2.517460e-03 0
+#> 4  8.1740e-02 5.786464e-04 0
+#> 5  1.7100e-03 4.926792e-04 0
+#> 6  3.6000e-05 4.109274e-04 1
+#> 7  7.9149e-01 3.493736e-04 0
+#> 8  2.7201e-01 3.043742e-03 0
+#> 9  2.8295e-01 8.631393e-04 0
+#> 10 7.5900e-08 7.463333e-04 1
+#> 11 6.9274e-01 6.378221e-04 0
+#> 12 3.0443e-01 3.295300e-03 0
+#> 13 1.3600e-03 1.086287e-03 0
+#> 14 7.2342e-01 9.471031e-04 0
+#> 15 5.4757e-01 8.205125e-04 0
 
 sample.df2 <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
@@ -164,19 +164,19 @@ lags = rep(1,15))
 
 LORDstar(sample.df2, version='dep')
 #>          pval lag       alphai R
-#> 1  2.9000e-08   1 2.675839e-04 1
-#> 2  6.7430e-02   1 5.819103e-05 0
-#> 3  1.5140e-02   1 2.457817e-03 0
-#> 4  8.1740e-02   1 5.649373e-04 0
-#> 5  1.7100e-03   1 4.810068e-04 0
-#> 6  3.6000e-05   1 4.011918e-04 1
-#> 7  7.9149e-01   1 3.410964e-04 0
-#> 8  2.7201e-01   1 2.971630e-03 0
-#> 9  2.8295e-01   1 8.426900e-04 0
-#> 10 7.5900e-08   1 7.286513e-04 1
-#> 11 6.9274e-01   1 6.227110e-04 0
-#> 12 3.0443e-01   1 3.217229e-03 0
-#> 13 1.3600e-03   1 1.060551e-03 0
-#> 14 7.2342e-01   1 9.246646e-04 0
-#> 15 5.4757e-01   1 8.010731e-04 0
+#> 1  2.9000e-08   1 2.740772e-04 1
+#> 2  6.7430e-02   1 5.960313e-05 0
+#> 3  1.5140e-02   1 2.517460e-03 0
+#> 4  8.1740e-02   1 5.786464e-04 0
+#> 5  1.7100e-03   1 4.926792e-04 0
+#> 6  3.6000e-05   1 4.109274e-04 1
+#> 7  7.9149e-01   1 3.493736e-04 0
+#> 8  2.7201e-01   1 3.043742e-03 0
+#> 9  2.8295e-01   1 8.631393e-04 0
+#> 10 7.5900e-08   1 7.463333e-04 1
+#> 11 6.9274e-01   1 6.378221e-04 0
+#> 12 3.0443e-01   1 3.295300e-03 0
+#> 13 1.3600e-03   1 1.086287e-03 0
+#> 14 7.2342e-01   1 9.471031e-04 0
+#> 15 5.4757e-01   1 8.205125e-04 0
 ```

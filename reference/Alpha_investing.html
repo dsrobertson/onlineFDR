@@ -15,7 +15,7 @@ the ADDIS algorithm with \(\tau = 1\) and \(\lambda_i = \alpha_i\)."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,12 +79,12 @@ in sequence.</p></dd>
 
 <dt id="arg-gammai">gammai<a class="anchor" aria-label="anchor" href="#arg-gammai"></a></dt>
 <dd><p>Optional vector of \(\gamma_i\). A default is provided with
-\(\gamma_j\) proportional to \(1/j^(1.6)\).</p></dd>
+\(\gamma_j\) proportional to \(1/j^{1.6}\).</p></dd>
 
 
 <dt id="arg-w-">w0<a class="anchor" aria-label="anchor" href="#arg-w-"></a></dt>
 <dd><p>Initial `wealth' of the procedure, defaults to \(\alpha/2\). Must
-be between 0 and \(\alpha\).</p></dd>
+be at least 0 and less than \(\alpha\).</p></dd>
 
 
 <dt id="arg-random">random<a class="anchor" aria-label="anchor" href="#arg-random"></a></dt>
@@ -106,12 +106,13 @@ randomised.</p></dd>
 
 
 <dl><dt>out</dt>
-<dd><p>A dataframe with the original data <code>d</code> (which will
-  be reordered if there are batches and <code>random = TRUE</code>), the
-  LORD-adjusted significance thresholds \(\alpha_i\) and the indicator
-  function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
-  \(i\)-th p-value is less than or equal to \(\alpha_i\), in which case
-  <code>R[i] = 1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
+<dd><p>A dataframe with the p-values <code>pval</code> (reordered if
+  there are batches and <code>random = TRUE</code>), the adjusted
+  significance thresholds \(\alpha_i\), the indicator function of
+  discoveries <code>R</code> and, if <code>d</code> is a dataframe with a column
+  <code>id</code>, the identifiers <code>id</code>. Hypothesis \(i\) is rejected if
+  the \(i\)-th p-value is less than or equal to \(\alpha_i\), in which
+  case <code>R[i] = 1</code> (otherwise <code>R[i] = 0</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -125,18 +126,18 @@ treated as being ordered in sequence.</p>
 Given an overall significance level \(\alpha\), we choose a sequence of
 non-negative non-increasing numbers \(\gamma_i\) that sum to 1.
 Alpha-investing depends on a constant \(w_0\), which satisfies \(0 \le
-w_0 \le \alpha\) and represents the initial `wealth' of the procedure.</p>
+w_0 &lt; \alpha\) and represents the initial `wealth' of the procedure.</p>
 <p>Further details of the Alpha-investing procedure and its modification can be
 found in Foster and Stine (2008) and Ramdas et al. (2018).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Foster, D. and Stine R. (2008). \(\alpha\)-investing: a
+    <p>Foster, D. and Stine, R. (2008). \(\alpha\)-investing: a
   procedure for sequential control of expected false discoveries.
-  <em>Journal of the Royal Statistical Society (Series B)</em>, 29(4):429-444.</p>
-<p>Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON: an
+  <em>Journal of the Royal Statistical Society (Series B)</em>, 70(2):429-444.</p>
+<p>Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018). SAFFRON: an
   adaptive algorithm for online control of the false discovery rate.
-  <em>Proceedings of the 35th International Conference in Machine
+  <em>Proceedings of the 35th International Conference on Machine
   Learning</em>, 80:4286-4294.</p>
     </div>
     <div class="section level2">
@@ -161,58 +162,58 @@ constant \(\lambda\).</p></div>
 <span class="r-in"><span>        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">Alpha_investing</span><span class="op">(</span><span class="va">sample.df</span>, random<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.010818925 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.021406257 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.007164201 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.003757589 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.002374706 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.023680499 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.044095287 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.015842430 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.008711190 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.005700295 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.026865786 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.011205456 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.006863124 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.027979664 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.011945806 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R     id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.010818925 1 A15432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.021406257 0 B90969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.007164201 0 C18705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.003757589 0 B49731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.002374706 1 E99902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.023680499 1 C38292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.044095287 0 A30619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.015842430 0 D46627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.008711190 0 E29198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.005700295 1 A41418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.026865786 0 D51456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.011205456 0 C88669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.006863124 1 E03673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.027979664 0 A63155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.011945806 0 B66033</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">Alpha_investing</span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.010818925 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.021406257 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.007164201 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.003757589 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.002374706 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.023680499 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.008803369 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.029838354 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.012084065 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.032981505 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.014137539 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.008529625 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.005905508 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.004412045 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.003461425 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R     id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.010818925 1 A15432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.021406257 0 B90969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.007164201 0 C18705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.003757589 0 B49731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.002374706 1 E99902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.023680499 0 D46627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.008803369 1 C38292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.029838354 0 A30619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.012084065 1 A41418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.032981505 0 E29198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.014137539 0 D51456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.008529625 0 A63155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.005905508 0 C88669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.004412045 0 B66033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.003461425 1 E03673</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">Alpha_investing</span><span class="op">(</span><span class="va">sample.df</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, w0<span class="op">=</span><span class="fl">0.025</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.010818925 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.041915265 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.014226480 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.007487045 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.004738159 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.046265410 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.017453092 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.057947646 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.023879569 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.063856912 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.027880910 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.016914972 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.011741675 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.008785330 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.006898971 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          pval      alphai R     id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.010818925 1 A15432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.041915265 0 B90969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.014226480 0 C18705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.007487045 0 B49731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.004738159 1 E99902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.046265410 0 D46627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.017453092 1 C38292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.057947646 0 A30619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.023879569 1 A41418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.063856912 0 E29198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.027880910 0 D51456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.016914972 0 A63155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.011741675 0 C88669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.008785330 0 B66033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.006898971 1 E03673</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -9,7 +9,7 @@ by Zrnic et al. (2021)."><meta property="og:image" content="https://dsrobertson.
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,13 +106,13 @@ function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function takes as its input either a vector of p-values, or a dataframe
 with three columns: an identifier (`id'),
-p-value (`pval'), or a column describing the conflict sets for the hypotheses.
+p-value (`pval'), and a column describing the conflict sets for the hypotheses.
 This takes the form of a vector of decision times or lags. Batch sizes can be
 specified as a separate argument (see below).</p>
-<p>Zrnic et al. (2021) present explicit three versions of LONDstar:</p>
+<p>Zrnic et al. (2021) present three explicit versions of LONDstar:</p>
 <p>1) <code>version='async'</code> is for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random
-times. The discretised finish times of the test correspond to the decision
+times. The discretised finish times of the tests correspond to the decision
 times. These decision times are given as the input <code>decision.times</code>
 for this version of the LONDstar algorithm.</p>
 <p>2) <code>version='dep'</code> is for online testing under local
@@ -136,12 +136,11 @@ Zrnic et al. (2021).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+    <p>Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. <em>Annals of Statistics</em>,
 46(2):526-554.</p>
 <p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. <em>Journal of Machine Learning Research</em> (to appear),
-<a href="https://arxiv.org/abs/1812.05068" class="external-link">https://arxiv.org/abs/1812.05068</a>.</p>
+Multiple Hypotheses. <em>Journal of Machine Learning Research</em>, 22(33):1-39.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -162,21 +161,21 @@ i.e. where each test can only start when the previous test has finished.</p></di
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">LONDstar</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'async'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0026758385 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0005819103 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0004956249 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0004121803 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0003494435 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.0003022950 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.0002659722 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.0004745225 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.0004280949 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.0003898252 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0003577593 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.0004957705 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0004606261 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.0004300881 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.0004033104 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0027407722 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0005960313 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0005076521 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0004221825 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0003579233 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.0003096307 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.0002724265 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.0004860376 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.0004384833 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.0003992849 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0003664409 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.0005078012 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0004718040 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.0004405250 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.0004130974 0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sample.df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span></span>
@@ -189,21 +188,21 @@ i.e. where each test can only start when the previous test has finished.</p></di
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">LONDstar</span><span class="op">(</span><span class="va">sample.df2</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval lag       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08   1 0.0026758385 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02   1 0.0005819103 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02   1 0.0004956249 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02   1 0.0004121803 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03   1 0.0003494435 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05   1 0.0003022950 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01   1 0.0002659722 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01   1 0.0004745225 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01   1 0.0004280949 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08   1 0.0003898252 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01   1 0.0003577593 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01   1 0.0004957705 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03   1 0.0004606261 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01   1 0.0004300881 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01   1 0.0004033104 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08   1 0.0027407722 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02   1 0.0005960313 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02   1 0.0005076521 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02   1 0.0004221825 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03   1 0.0003579233 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05   1 0.0003096307 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01   1 0.0002724265 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01   1 0.0004860376 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01   1 0.0004384833 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08   1 0.0003992849 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01   1 0.0003664409 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01   1 0.0005078012 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03   1 0.0004718040 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01   1 0.0004405250 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01   1 0.0004130974 0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sample.df3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span></span>

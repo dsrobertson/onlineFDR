@@ -65,15 +65,15 @@ LONDstar(
 
 The function takes as its input either a vector of p-values, or a
 dataframe with three columns: an identifier (\`id'), p-value (\`pval'),
-or a column describing the conflict sets for the hypotheses. This takes
+and a column describing the conflict sets for the hypotheses. This takes
 the form of a vector of decision times or lags. Batch sizes can be
 specified as a separate argument (see below).
 
-Zrnic et al. (2021) present explicit three versions of LONDstar:
+Zrnic et al. (2021) present three explicit versions of LONDstar:
 
 1\) `version='async'` is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The
-discretised finish times of the test correspond to the decision times.
+discretised finish times of the tests correspond to the decision times.
 These decision times are given as the input `decision.times` for this
 version of the LONDstar algorithm.
 
@@ -101,13 +101,13 @@ Further details of the LONDstar algorithms can be found in Zrnic et al.
 
 ## References
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
-Testing of Multiple Hypotheses. *Journal of Machine Learning Research*
-(to appear), <https://arxiv.org/abs/1812.05068>.
+Testing of Multiple Hypotheses. *Journal of Machine Learning Research*,
+22(33):1-39.
 
 ## See also
 
@@ -129,21 +129,21 @@ decision.times = seq_len(15) + 1)
 
 LONDstar(sample.df, version='async')
 #>          pval       alphai R
-#> 1  2.9000e-08 0.0026758385 1
-#> 2  6.7430e-02 0.0005819103 0
-#> 3  1.5140e-02 0.0004956249 0
-#> 4  8.1740e-02 0.0004121803 0
-#> 5  1.7100e-03 0.0003494435 0
-#> 6  3.6000e-05 0.0003022950 1
-#> 7  7.9149e-01 0.0002659722 0
-#> 8  2.7201e-01 0.0004745225 0
-#> 9  2.8295e-01 0.0004280949 0
-#> 10 7.5900e-08 0.0003898252 1
-#> 11 6.9274e-01 0.0003577593 0
-#> 12 3.0443e-01 0.0004957705 0
-#> 13 1.3600e-03 0.0004606261 0
-#> 14 7.2342e-01 0.0004300881 0
-#> 15 5.4757e-01 0.0004033104 0
+#> 1  2.9000e-08 0.0027407722 1
+#> 2  6.7430e-02 0.0005960313 0
+#> 3  1.5140e-02 0.0005076521 0
+#> 4  8.1740e-02 0.0004221825 0
+#> 5  1.7100e-03 0.0003579233 0
+#> 6  3.6000e-05 0.0003096307 1
+#> 7  7.9149e-01 0.0002724265 0
+#> 8  2.7201e-01 0.0004860376 0
+#> 9  2.8295e-01 0.0004384833 0
+#> 10 7.5900e-08 0.0003992849 1
+#> 11 6.9274e-01 0.0003664409 0
+#> 12 3.0443e-01 0.0005078012 0
+#> 13 1.3600e-03 0.0004718040 0
+#> 14 7.2342e-01 0.0004405250 0
+#> 15 5.4757e-01 0.0004130974 0
 
 sample.df2 <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',
@@ -156,21 +156,21 @@ lags = rep(1,15))
 
 LONDstar(sample.df2, version='dep')
 #>          pval lag       alphai R
-#> 1  2.9000e-08   1 0.0026758385 1
-#> 2  6.7430e-02   1 0.0005819103 0
-#> 3  1.5140e-02   1 0.0004956249 0
-#> 4  8.1740e-02   1 0.0004121803 0
-#> 5  1.7100e-03   1 0.0003494435 0
-#> 6  3.6000e-05   1 0.0003022950 1
-#> 7  7.9149e-01   1 0.0002659722 0
-#> 8  2.7201e-01   1 0.0004745225 0
-#> 9  2.8295e-01   1 0.0004280949 0
-#> 10 7.5900e-08   1 0.0003898252 1
-#> 11 6.9274e-01   1 0.0003577593 0
-#> 12 3.0443e-01   1 0.0004957705 0
-#> 13 1.3600e-03   1 0.0004606261 0
-#> 14 7.2342e-01   1 0.0004300881 0
-#> 15 5.4757e-01   1 0.0004033104 0
+#> 1  2.9000e-08   1 0.0027407722 1
+#> 2  6.7430e-02   1 0.0005960313 0
+#> 3  1.5140e-02   1 0.0005076521 0
+#> 4  8.1740e-02   1 0.0004221825 0
+#> 5  1.7100e-03   1 0.0003579233 0
+#> 6  3.6000e-05   1 0.0003096307 1
+#> 7  7.9149e-01   1 0.0002724265 0
+#> 8  2.7201e-01   1 0.0004860376 0
+#> 9  2.8295e-01   1 0.0004384833 0
+#> 10 7.5900e-08   1 0.0003992849 1
+#> 11 6.9274e-01   1 0.0003664409 0
+#> 12 3.0443e-01   1 0.0005078012 0
+#> 13 1.3600e-03   1 0.0004718040 0
+#> 14 7.2342e-01   1 0.0004405250 0
+#> 15 5.4757e-01   1 0.0004130974 0
 
 sample.df3 <- data.frame(
 id = c('A15432', 'B90969', 'C18705', 'B49731', 'E99902',

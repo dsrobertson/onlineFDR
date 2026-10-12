@@ -32,8 +32,9 @@ supLORD(
 
 - delta:
 
-  The probability at which the FDP exceeds eps (at any time step after
-  making r rejections). Must be between 0 and 1, defaults to 0.05.
+  Upper bound on the probability that the FDP exceeds eps (at any time
+  step after making r rejections). Must be between 0 and 1, defaults to
+  0.05.
 
 - eps:
 
@@ -52,12 +53,13 @@ supLORD(
 - rho:
 
   Controls the length of time before the spending sequence exhausts the
-  wealth earned from a rejection. Must be a positive integer.
+  wealth earned from a rejection. Must be a positive integer, no greater
+  than the length of a user-supplied `gammai`.
 
 - gammai:
 
   Optional vector of \\\gamma_i\\. A default is provided as proposed by
-  Javanmard and Montanari (2018).
+  Javanmard and Montanari (2018), equation 31.
 
 - random:
 
@@ -91,7 +93,7 @@ dataframe with three columns: an identifier (\`id'), date (\`date') and
 p-value (\`pval'). The case where p-values arrive in batches corresponds
 to multiple instances of the same date. If no column of dates is
 provided, then the p-values are treated as being ordered in sequence,
-arriving one at a time..
+arriving one at a time.
 
 The supLORD procedure provably controls the FDX for p-values that are
 conditionally superuniform under the null. supLORD also controls the
@@ -101,17 +103,29 @@ non-increasing numbers \\\gamma_i\\ that sum to 1.
 
 supLORD requires the user to specify r, a threshold of rejections after
 which the error control begins to apply, eps, the upper bound on the
-false discovery proportion (FDP), and delta, the probability at which
-the FDP exceeds eps at any time step after making r rejections. As well,
-the user should specify the variables eta, which controls the pace at
-which wealth is spent (as a function of the algorithm's current wealth),
-and rho, which controls the length of time before the spending sequence
-exhausts the wealth earned from a rejection.
+false discovery proportion (FDP), and delta, an upper bound on the
+probability that the FDP exceeds eps at any time step after making r
+rejections. As well, the user should specify the variables eta, which
+controls the pace at which wealth is spent (as a function of the
+algorithm's current wealth), and rho, which controls the length of time
+before the spending sequence exhausts the wealth earned from a
+rejection.
+
+The test levels follow the dynamic alpha schedule of Xu and Ramdas
+(2021), equations 16 and 17, with the default boost sequence of their
+Appendix A, equation 21: the initial wealth and each of the first r - 1
+rejections earn \\\beta_0 = b - a/r\\, and the r-th and later rejections
+earn \\b = \epsilon a \log(1 + L/a)/L\\, where \\L = \log(1/\delta)\\.
+The offset \\a\\ is the canonical solution of their equation 20.
 
 Further details of the supLORD procedure can be found in Xu and Ramdas
 (2021).
 
 ## References
+
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.
 
 Xu, Z. and Ramdas, A. (2021). Dynamic Algorithms for Online Multiple
 Testing. *Annual Conference on Mathematical and Scientific Machine
@@ -130,12 +144,12 @@ pval <- pnorm(-Z)
 out <- supLORD(pval, eps=0.15, r=30, eta=0.05, rho=30, random=FALSE)
 head(out)
 #>              d       alphai R
-#> 1 4.691912e-01 0.0019301522 0
-#> 2 6.167166e-01 0.0004197471 0
-#> 3 3.462711e-02 0.0003575072 0
-#> 4 1.300690e-03 0.0002973164 0
-#> 5 1.606961e-01 0.0002520627 0
-#> 6 2.174486e-06 0.0002180533 1
+#> 1 4.691912e-01 0.0019769905 0
+#> 2 6.167166e-01 0.0004299329 0
+#> 3 3.462711e-02 0.0003661827 0
+#> 4 1.300690e-03 0.0003045313 0
+#> 5 1.606961e-01 0.0002581794 0
+#> 6 2.174486e-06 0.0002233447 1
 sum(out$R)
-#> [1] 390
+#> [1] 391
 ```

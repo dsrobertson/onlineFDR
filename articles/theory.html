@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,14 +91,13 @@ for (significance) Levels based On Recent Discovery. LORD was
 subsequently extended by Ramdas <em>et al.</em> (2017). Ramdas <em>et
 al.</em> (2018) also proposed the SAFFRON procedure, which provides an
 adaptive method of online FDR control, which includes a variant of
-Alpha-investing. Finally, Tian &amp; Ramdas (2019) proposed the ADDIS
+Alpha-investing. Finally, Tian and Ramdas (2019) proposed the ADDIS
 procedure as an improvement of SAFFRON in the presence of conservative
 nulls.</p>
 <div class="section level3">
 <h3 id="LOND">LOND<a class="anchor" aria-label="anchor" href="#LOND"></a>
 </h3>
-<p>The LOND procedure controls the FDR for independent or positively
-dependent (PRDS)
+<p>The LOND procedure controls the FDR for independent
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values.
 Given an overall significance level
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>,
@@ -115,6 +114,13 @@ where
 denotes the number of discoveries (i.e. rejections) in the first
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
 hypotheses tested.</p>
+<p>A slightly modified version of LOND, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>β</mi><mi>i</mi></msub><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\alpha_i = \beta_i \max(D(i-1), 1)</annotation></semantics></math>
+(Javanmard and Montanari, 2015, Remark 2.3), also controls the FDR for
+positively dependent (PRDS)
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
+(Zrnic <em>et al.</em>, 2021). It is used by setting
+<code>original = FALSE</code>.</p>
 <p>LOND can be adjusted to also control FDR under arbitrarily dependent
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values.
 To do so, it is modified with
@@ -142,8 +148,16 @@ for the Benjamini and Yekutieli method).</p>
 is given by
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>=</mo><mi>C</mi><mi>α</mi><mfrac><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>j</mi><msup><mi>e</mi><msqrt><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>j</mi></mrow></msqrt></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\beta_j = C \alpha \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}</annotation></semantics></math>
 where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.07720838</mn></mrow><annotation encoding="application/x-tex">C \approx 0.07720838</annotation></semantics></math>,
-as proposed by Javanmard and Montanari (2018) equation 31.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.07908197</mn></mrow><annotation encoding="application/x-tex">C \approx 0.07908197</annotation></semantics></math>
+is chosen so that the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math>
+sum to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
+This is the sequence proposed by Javanmard and Montanari (2018),
+equation 31, who give
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.07720838</mn></mrow><annotation encoding="application/x-tex">C \approx 0.07720838</annotation></semantics></math>;
+with that value the sum is about
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.976</mn><mi>α</mi></mrow><annotation encoding="application/x-tex">0.976\alpha</annotation></semantics></math>.</p>
 </div>
 <div class="section level3">
 <h3 id="LORD">LORD<a class="anchor" aria-label="anchor" href="#LORD"></a>
@@ -161,11 +175,22 @@ and
 At each time
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
 let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\tau_i</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ρ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\rho_i</annotation></semantics></math>
 be the last time a discovery was made before
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>i</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mrow><mo stretchy="true" form="prefix">{</mo><mi>l</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo><mo>:</mo><msub><mi>R</mi><mi>l</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="true" form="postfix">}</mo></mrow></mrow><annotation encoding="application/x-tex">
-\tau_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mi>i</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mrow><mo stretchy="true" form="prefix">{</mo><mi>l</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo><mo>:</mo><msub><mi>R</mi><mi>l</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="true" form="postfix">}</mo></mrow></mrow><annotation encoding="application/x-tex">
+\rho_i = \max \left\{ l \in \{1, \ldots, i-1\} : R_l = 1\right\}
+</annotation></semantics></math> with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\rho_i = 0</annotation></semantics></math>
+if no discovery has been made before
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>.
+Also let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>κ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\kappa_j</annotation></semantics></math>
+be the time of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
+discovery:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>j</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mrow><mo stretchy="true" form="prefix">{</mo><mi>i</mi><mo>∈</mo><mi>ℕ</mi><mo>:</mo><munder><mo>∑</mo><mrow><mi>l</mi><mo>≤</mo><mi>i</mi></mrow></munder><msub><mi>R</mi><mi>l</mi></msub><mo>≥</mo><mi>j</mi><mo stretchy="true" form="postfix">}</mo></mrow></mrow><annotation encoding="application/x-tex">
+\kappa_j = \min \left\{ i \in \mathbb{N} : \sum_{l \leq i} R_l \geq j \right\}
 </annotation></semantics></math></p>
 <p>LORD depends on constants
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mn>0</mn></msub><annotation encoding="application/x-tex">w_0</annotation></semantics></math>
@@ -187,34 +212,36 @@ Ramdas <em>et al.</em> (2017), so we do not describe them here.</p>
 <ul>
 <li><p><strong>LORD++</strong>: The significance thresholds for LORD++
 are chosen as follows:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>γ</mi><mi>i</mi></msub><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mrow><mi>i</mi><mo>−</mo><msub><mi>τ</mi><mn>1</mn></msub></mrow></msub><mo>+</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>τ</mi><mi>j</mi></msub><mo>&lt;</mo><mi>i</mi><mo>,</mo><msub><mi>τ</mi><mi>j</mi></msub><mo>≠</mo><msub><mi>τ</mi><mn>1</mn></msub></mrow></munder><msub><mi>γ</mi><mrow><mi>i</mi><mo>−</mo><msub><mi>τ</mi><mi>j</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">
-\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\tau_1} +
-\alpha \sum_{j : \tau_j &lt; i, \tau_j \neq \tau_1} \gamma_{i - \tau_j}
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>γ</mi><mi>i</mi></msub><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mrow><mi>i</mi><mo>−</mo><msub><mi>κ</mi><mn>1</mn></msub></mrow></msub><mo>+</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>κ</mi><mi>j</mi></msub><mo>&lt;</mo><mi>i</mi><mo>,</mo><msub><mi>κ</mi><mi>j</mi></msub><mo>≠</mo><msub><mi>κ</mi><mn>1</mn></msub></mrow></munder><msub><mi>γ</mi><mrow><mi>i</mi><mo>−</mo><msub><mi>κ</mi><mi>j</mi></msub></mrow></msub></mrow><annotation encoding="application/x-tex">
+\alpha_i = \gamma_i w_0 + (\alpha - w_0) \gamma_{i-\kappa_1} +
+\alpha \sum_{j : \kappa_j &lt; i, \kappa_j \neq \kappa_1} \gamma_{i - \kappa_j}
 </annotation></semantics></math></p></li>
 <li><p><strong>LORD 3</strong>: The significance thresholds depend on
-the time of the last discovery time and the wealth accumulated at that
-time, with
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>γ</mi><mrow><mi>i</mi><mo>−</mo><msub><mi>τ</mi><mi>i</mi></msub></mrow></msub><mi>W</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>τ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
-\alpha_i  = \gamma_{i - \tau_i} W(\tau_i)
+the time of the last discovery and the wealth accumulated at that time,
+with
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>γ</mi><mrow><mi>i</mi><mo>−</mo><msub><mi>ρ</mi><mi>i</mi></msub></mrow></msub><mi>W</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>ρ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+\alpha_i  = \gamma_{i - \rho_i} W(\rho_i)
 </annotation></semantics></math> where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mn>1</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\tau_1 = 0</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ρ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\rho_i</annotation></semantics></math>
+is as defined above (so
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mn>1</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\rho_1 = 0</annotation></semantics></math>).
 Here
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo><msub><mo stretchy="false" form="postfix">}</mo><mrow><mi>j</mi><mo>≥</mo><mn>0</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\{W(j)\}_{j \geq 0}</annotation></semantics></math>
 represents the ‘wealth’ available at time
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>,
 and is defined recursively:</p></li>
 </ul>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msub><mi>w</mi><mn>0</mn></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>α</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mn>0</mn></msub><msub><mi>R</mi><mi>j</mi></msub></mtd></mtr></mtable><annotation encoding="application/x-tex">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><msub><mi>w</mi><mn>0</mn></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mi>W</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>α</mi><mi>j</mi></msub><mo>+</mo><msub><mi>b</mi><mn>0</mn></msub><msub><mi>R</mi><mi>j</mi></msub></mtd></mtr></mtable><annotation encoding="application/x-tex">
 \begin{aligned}
 W(0) &amp;= w_0 \\
-W(j) &amp;= W(j-1) - \alpha_{j-1} + b_0 R_j
+W(j) &amp;= W(j-1) - \alpha_j + b_0 R_j
 \end{aligned}
 </annotation></semantics></math></p>
 <ul>
 <li>
 <strong>D-LORD</strong>: This is equivalent to the LORD++ procedure
 with discarding. Given a discarding threshold
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\tau \in (0,1)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\tau \in (0,1]</annotation></semantics></math>
 and initial wealth
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>≤</mo><mi>τ</mi><mi>α</mi></mrow><annotation encoding="application/x-tex">w_0 \leq \tau\alpha</annotation></semantics></math>
 the significance thresholds are chosen as follows:
@@ -231,8 +258,11 @@ the significance thresholds are chosen as follows:
 1 \{p_k \leq \alpha_k\} \geq j\}, \;
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}
-</annotation></semantics></math>
-</li>
+</annotation></semantics></math> Here the sequence
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+is indexed from 0, as in Tian and Ramdas (2019), so that the first
+element of <code>gammai</code> is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\gamma_0</annotation></semantics></math>.</li>
 </ul>
 <p>LORD++ is an instance of a monotone rule, and provably controls the
 FDR for independent p-values provided
@@ -240,31 +270,52 @@ FDR for independent p-values provided
 LORD 3 is a non-monotone rule, and FDR control is only demonstrated
 empirically. In some scenarios with large
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>,
-LORD 3 will have a slightly higher power than LORD++ (see Robertson
-<em>et al.</em>, 2018), but since it is a non-monotone rule we would
-recommend using LORD++ (which is the default), especially since it also
-has a provable guarantee of FDR control.</p>
-<p><a name="LORD_gamma"></a> In all versions, the default sequence of
+LORD 3 will have a slightly higher power than LORD++ (see Robertson and
+Wason, 2018), but since it is a non-monotone rule we would recommend
+using LORD++ (which is the default), especially since it also has a
+provable guarantee of FDR control.</p>
+<p><a name="LORD_gamma"></a> In all versions except ‘dep’, the default
+sequence of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 is given by
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mi>j</mi></msub><mo>=</mo><mi>C</mi><mfrac><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mi>j</mi><msup><mi>e</mi><msqrt><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mi>j</mi></mrow></msqrt></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\gamma_j = C \frac{\log(\max(j, 2))}{j e^{\sqrt{\log j}}}</annotation></semantics></math>
 where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.07720838</mn></mrow><annotation encoding="application/x-tex">C \approx 0.07720838</annotation></semantics></math>,
-as proposed by Javanmard and Montanari (2018) equation 31.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.07908197</mn></mrow><annotation encoding="application/x-tex">C \approx 0.07908197</annotation></semantics></math>
+is chosen so that the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\gamma_j</annotation></semantics></math>
+sum to 1. This is the sequence proposed by Javanmard and Montanari
+(2018), equation 31, who give
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.07720838</mn></mrow><annotation encoding="application/x-tex">C \approx 0.07720838</annotation></semantics></math>;
+with that value the sum is about 0.976.</p>
 <p>Javanmard and Montanari (2018) also proposed an adjusted version of
 LORD that is valid for arbitrarily <em>dependent</em> p-values.
 Similarly to LORD 3, the adjusted significance thresholds are set equal
 to
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>ξ</mi><mi>i</mi></msub><mi>W</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>τ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex"> \alpha_i = \xi_i W(\tau_i)</annotation></semantics></math>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><msub><mi>ξ</mi><mi>i</mi></msub><mi>W</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>ρ</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex"> \alpha_i = \xi_i W(\rho_i)</annotation></semantics></math>
 where (assuming
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>≤</mo><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">w_0 \leq b_0</annotation></semantics></math>),
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><msub><mi>ξ</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>α</mi><mi>/</mi><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\sum_{j=1}^{\infty} \xi_i (1 + \log(j)) \leq \alpha / b_0</annotation></semantics></math></p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><msub><mi>ξ</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>α</mi><mi>/</mi><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\sum_{j=1}^{\infty} \xi_j (1 + \log(j)) \leq \alpha / b_0</annotation></semantics></math>
+(Javanmard and Montanari, 2018, example 3.7). If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>0</mn></msub><mo>&gt;</mo><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">w_0 &gt; b_0</annotation></semantics></math>,
+the condition is instead
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><mo stretchy="false" form="prefix">(</mo><msub><mi>w</mi><mn>0</mn></msub><mo>+</mo><msub><mi>b</mi><mn>0</mn></msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><msub><mi>ξ</mi><mi>j</mi></msub><mo>≤</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">\sum_{j=1}^{\infty} (w_0 + b_0 \log(j)) \xi_j \leq \alpha</annotation></semantics></math>,
+which follows from their Theorem 3.6; the default sequence is then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ξ</mi><mi>j</mi></msub><mo>=</mo><msup><mi>C</mi><mo>′</mo></msup><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">)</mo><mn>3</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\xi_j = C'/(j \log(\max(j, 2))^3)</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>C</mi><mo>′</mo></msup><annotation encoding="application/x-tex">C'</annotation></semantics></math>
+chosen so that this sum equals
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.</p>
 <p><a name="LORDdep_xi"></a> The default sequence of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ξ</mi><annotation encoding="application/x-tex">\xi</annotation></semantics></math>
 is given by
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ξ</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><mi>C</mi><mi>α</mi></mrow><mrow><msub><mi>b</mi><mn>0</mn></msub><mi>j</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">)</mo><mn>3</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \xi_j  = \frac{C \alpha }{b_0 j \log(\max(j, 2))^3}</annotation></semantics></math>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ξ</mi><mi>j</mi></msub><mo>=</mo><mfrac><mi>C</mi><mrow><mi>j</mi><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>,</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><msup><mo stretchy="false" form="postfix">)</mo><mn>3</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \xi_j  = \frac{C}{j \log(\max(j, 2))^3}</annotation></semantics></math>
 where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.139307</mn></mrow><annotation encoding="application/x-tex">C \approx 0.139307</annotation></semantics></math>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>≈</mo><mn>0.1393066</mn></mrow><annotation encoding="application/x-tex">C \approx 0.1393066</annotation></semantics></math>
+is chosen so that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><msub><mi>ξ</mi><mi>j</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>+</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mn>1</mn><mo>≤</mo><mi>α</mi><mi>/</mi><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\sum_{j=1}^{\infty} \xi_j (1 + \log(j)) = 1 \leq \alpha / b_0</annotation></semantics></math>.
+(The deprecated function <code>LORDdep</code> multiplies this sequence
+by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mi>/</mi><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\alpha / b_0</annotation></semantics></math>.)</p>
 <p>Note that allowing for dependent p-values can lead to a substantial
 loss in power compared with the LORD procedures described above.</p>
 </div>
@@ -288,12 +339,12 @@ satisfies
 and represents the initial ‘wealth’ of the procedure, and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\lambda \in (0,1)</annotation></semantics></math>
 represents the threshold for a ‘candidate’ hypothesis. A ‘candidate’
-refers to p-values smaller than
+refers to p-values no larger than
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>,
 since SAFFRON will never reject a p-value larger than
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>.
-These candidates can be thought of as the hypotheses that are a-priori
-more likely to be non-null.</p>
+These candidates can be thought of as the hypotheses that are more
+likely to be non-null.</p>
 <p>The SAFFRON procedure runs as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>At each time
@@ -301,20 +352,25 @@ more likely to be non-null.</p>
 define the number of candidates after the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
 rejection as
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub><mo>=</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><msub><mi>τ</mi><mi>j</mi></msub><mo>+</mo><mn>1</mn></mrow><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>C</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex"> C_{j+} = C_{j+}(t) = \sum_{i = \tau_j + 1}^{t-1} C_i</annotation></semantics></math>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub><mo>=</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><msub><mi>κ</mi><mi>j</mi></msub><mo>+</mo><mn>1</mn></mrow><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>C</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex"> C_{j+} = C_{j+}(t) = \sum_{i = \kappa_j + 1}^{t-1} C_i</annotation></semantics></math>
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>t</mi></msub><mo>≤</mo><mi>λ</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">C_t = 1\{p_t \leq \lambda \}</annotation></semantics></math>
-is the indicator for candidacy.</p></li>
+is the indicator for candidacy,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>κ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\kappa_j</annotation></semantics></math>
+is the time of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th
+rejection (as defined for LORD) and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\kappa_0 = 0</annotation></semantics></math>.</p></li>
 <li><p>SAFFRON starts with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mn>1</mn></msub><msub><mi>w</mi><mn>0</mn></msub><mo>,</mo><mi>λ</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha_1 = \min\{(1 - \lambda)\gamma_1 w_0, \lambda\}</annotation></semantics></math>.
 Subsequent test levels are chosen as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>t</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>λ</mi><mo>,</mo><msub><mover><mi>α</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha_t = \min\{ \lambda, \tilde{\alpha}_t\}</annotation></semantics></math>,
 where
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>α</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">[</mo><msub><mi>w</mi><mn>0</mn></msub><msub><mi>γ</mi><mrow><mi>t</mi><mo>−</mo><msub><mi>C</mi><mrow><mn>0</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mrow><mi>t</mi><mo>−</mo><msub><mi>τ</mi><mn>1</mn></msub><mo>−</mo><msub><mi>C</mi><mrow><mn>1</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>j</mi><mo>≥</mo><mn>2</mn></mrow></munder><msub><mi>γ</mi><mrow><mi>t</mi><mo>−</mo><msub><mi>τ</mi><mi>j</mi></msub><mo>−</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>α</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">[</mo><msub><mi>w</mi><mn>0</mn></msub><msub><mi>γ</mi><mrow><mi>t</mi><mo>−</mo><msub><mi>C</mi><mrow><mn>0</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mrow><mi>t</mi><mo>−</mo><msub><mi>κ</mi><mn>1</mn></msub><mo>−</mo><msub><mi>C</mi><mrow><mn>1</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>j</mi><mo>≥</mo><mn>2</mn></mrow></munder><msub><mi>γ</mi><mrow><mi>t</mi><mo>−</mo><msub><mi>κ</mi><mi>j</mi></msub><mo>−</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">
 \tilde{\alpha}_t = (1 - \lambda) [w_0 \gamma_{t-C_{0+}} +
-(\alpha - w_0)\gamma_{t-\tau_1-C_{1+}} +
+(\alpha - w_0)\gamma_{t-\kappa_1-C_{1+}} +
 \alpha \sum_{j \geq 2}
-\gamma_{t - \tau_j- C_{j+}}]
+\gamma_{t - \kappa_j- C_{j+}}]
 </annotation></semantics></math></p></li>
 </ol>
 <p><a name="SAFFRON_gamma"></a> The default sequence of
@@ -325,10 +381,10 @@ for SAFFRON is given by
 <div class="section level3">
 <h3 id="AlphaInvesting">Alpha-investing<a class="anchor" aria-label="anchor" href="#AlphaInvesting"></a>
 </h3>
-<p>Ramdas et al. (2018) proposed a variant of the Alpha-investing
-algorithm of Foster and Stine (2008) that guarantees FDR control for
-independent p-values. This procedure uses SAFFRON’s update rule with the
-constant
+<p>Ramdas <em>et al.</em> (2018) proposed a variant of the
+Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR
+control for independent p-values. This procedure uses SAFFRON’s update
+rule with the constant
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
 replaced by a sequence
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>α</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\lambda_i = \alpha_i</annotation></semantics></math>.
@@ -341,7 +397,7 @@ and
 <h3 id="ADDIS">ADDIS<a class="anchor" aria-label="anchor" href="#ADDIS"></a>
 </h3>
 <p>The ADDIS procedure controls the FDR for independent p-values, and
-was proposed by Tian &amp; Ramdas (2019). The algorithm compensates for
+was proposed by Tian and Ramdas (2019). The algorithm compensates for
 the power loss of SAFFRON with conservative nulls, by including both
 adaptivity in the fraction of null hypotheses (like SAFFRON) and the
 conservativeness of nulls (unlike SAFFRON).</p>
@@ -350,14 +406,14 @@ conservativeness of nulls (unlike SAFFRON).</p>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>.
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mn>0</mn></msub><annotation encoding="application/x-tex">w_0</annotation></semantics></math>
-represents the initial `wealth’ of the procedure and satisfies
+represents the initial ‘wealth’ of the procedure and satisfies
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>w</mi><mn>0</mn></msub><mo>≤</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">0 \leq w_0 \leq \alpha</annotation></semantics></math>.
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\tau \in (0,1]</annotation></semantics></math>
 represents the threshold for a hypothesis to be selected for testing:
 p-values greater than
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
 are implicitly ‘discarded’ by the procedure. Finally,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mi>τ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\lambda \in [0,\tau)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>τ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\lambda \in (0,\tau)</annotation></semantics></math>
 sets the threshold for a p-value to be a candidate for rejection: ADDIS
 will never reject a p-value larger than
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>.</p>
@@ -365,10 +421,10 @@ will never reject a p-value larger than
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>t</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>λ</mi><mo>,</mo><msub><mover><mi>α</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
 \alpha_t = \min\{\lambda, \tilde{\alpha}_t\}
 </annotation></semantics></math> where
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>α</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>τ</mi><mo>−</mo><mi>λ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">[</mo><msub><mi>w</mi><mn>0</mn></msub><msub><mi>γ</mi><mrow><msup><mi>S</mi><mi>t</mi></msup><mo>−</mo><msub><mi>C</mi><mrow><mn>0</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mrow><msup><mi>S</mi><mi>t</mi></msup><mo>−</mo><msubsup><mi>κ</mi><mn>1</mn><mo>*</mo></msubsup><mo>−</mo><msub><mi>C</mi><mrow><mn>1</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>j</mi><mo>≥</mo><mn>2</mn></mrow></munder><msub><mi>γ</mi><mrow><msup><mi>S</mi><mi>t</mi></msup><mo>−</mo><msubsup><mi>κ</mi><mi>j</mi><mo>*</mo></msubsup><mo>−</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub></mrow></msub></mrow><annotation encoding="application/x-tex">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>α</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><mi>τ</mi><mo>−</mo><mi>λ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="prefix">[</mo><msub><mi>w</mi><mn>0</mn></msub><msub><mi>γ</mi><mrow><msup><mi>S</mi><mi>t</mi></msup><mo>−</mo><msub><mi>C</mi><mrow><mn>0</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mo stretchy="false" form="prefix">(</mo><mi>α</mi><mo>−</mo><msub><mi>w</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo><msub><mi>γ</mi><mrow><msup><mi>S</mi><mi>t</mi></msup><mo>−</mo><msubsup><mi>κ</mi><mn>1</mn><mo>*</mo></msubsup><mo>−</mo><msub><mi>C</mi><mrow><mn>1</mn><mo>+</mo></mrow></msub></mrow></msub><mo>+</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>j</mi><mo>≥</mo><mn>2</mn></mrow></munder><msub><mi>γ</mi><mrow><msup><mi>S</mi><mi>t</mi></msup><mo>−</mo><msubsup><mi>κ</mi><mi>j</mi><mo>*</mo></msubsup><mo>−</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">
 \tilde{\alpha}_t = (\tau - \lambda)[w_0 \gamma_{S^t-C_{0+}} + 
 (\alpha - w_0)\gamma_{S^t - \kappa_1^*-C_{1+}} +
-\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}
+\alpha \sum_{j \geq 2} \gamma_{S^t - \kappa_j^* - C_{j+}}]
 </annotation></semantics></math> and
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>κ</mi><mi>j</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>i</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mi>t</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>:</mo><munder><mo>∑</mo><mrow><mi>k</mi><mo>≤</mo><mi>i</mi></mrow></munder><mn>1</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>k</mi></msub><mo>≤</mo><msub><mi>α</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mi>j</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="0.278em"></mspace><msubsup><mi>κ</mi><mi>j</mi><mo>*</mo></msubsup><mo>=</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>≤</mo><msub><mi>κ</mi><mi>j</mi></msub></mrow></munder><mn>1</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>i</mi></msub><mo>≤</mo><mi>τ</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="0.278em"></mspace><msup><mi>S</mi><mi>t</mi></msup><mo>=</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>t</mi></mrow></munder><mn>1</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>i</mi></msub><mo>≤</mo><mi>τ</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="0.278em"></mspace><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo></mrow></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><msub><mi>κ</mi><mi>j</mi></msub><mo>+</mo><mn>1</mn></mrow><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><mn>1</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>i</mi></msub><mo>≤</mo><mi>λ</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
 \kappa_j = \min\{i \in [t-1] : \sum_{k \leq i}
@@ -376,7 +432,11 @@ will never reject a p-value larger than
 \kappa_j^* = \sum_{i \leq \kappa_j} 1 \{p_i \leq \tau \}, \;
 S^t = \sum_{i &lt; t} 1 \{p_i \leq \tau \}, \;
 C_{j+} = \sum_{i = \kappa_j + 1}^{t-1} 1\{p_i \leq \lambda\}
-</annotation></semantics></math></p>
+</annotation></semantics></math> Here the sequence
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+is indexed from 0, as in Tian and Ramdas (2019), so that the first
+element of <code>gammai</code> is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>γ</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\gamma_0</annotation></semantics></math>.</p>
 <p>The default sequence of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 for ADDIS is the same as for SAFFRON given <a href="#SAFFRON_gamma">here</a>.</p>
@@ -410,19 +470,23 @@ is replaced by
 <p>The default sequence of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 is the same as that for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ξ</mi><annotation encoding="application/x-tex">\xi</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 for LORD given <a href="#LORD_gamma">here</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="onlineFallback">Online Fallback<a class="anchor" aria-label="anchor" href="#onlineFallback"></a>
 </h3>
-<p>The online fallback procedure of Tian &amp; Ramdas (2019b) provides a
+<p>The online fallback procedure of Tian and Ramdas (2021) provides a
 uniformly more powerful method than Alpha-spending, by saving the
 significance level of a previous rejection. More specifically, online
 fallback tests hypothesis
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>i</mi></msub><annotation encoding="application/x-tex">H_i</annotation></semantics></math>
 at level
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><mi>α</mi><msub><mi>γ</mi><mi>i</mi></msub><mo>+</mo><msub><mi>R</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>α</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}</annotation></semantics></math>
+for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">i \geq 2</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><mi>α</mi><msub><mi>γ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\alpha_1 = \alpha\gamma_1</annotation></semantics></math>,
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>i</mi></msub><mo>≤</mo><msub><mi>α</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">R_i = 1\{p_i
 \leq \alpha_i\}</annotation></semantics></math> denotes a rejected
@@ -431,29 +495,29 @@ dependent p-values.</p>
 <p>The default sequence of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 is the same as that for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ξ</mi><annotation encoding="application/x-tex">\xi</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 for LORD given <a href="#LORD_gamma">here</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="ADDIS-spending">ADDIS-spending<a class="anchor" aria-label="anchor" href="#ADDIS-spending"></a>
 </h3>
 <p>The ADDIS-spending procedure strongly controls the FWER for
-independent p-values, and was proposed by Tian &amp; Ramdas (2021). The
+independent p-values, and was proposed by Tian and Ramdas (2021). The
 procedure compensates for the power loss of Alpha-spending, by including
-both adapativity in the fraction of null hypotheses and the
+both adaptivity in the fraction of null hypotheses and the
 conservativeness of nulls.</p>
-<p>ADDIS depends on constants
+<p>ADDIS-spending depends on constants
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>,
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&lt;</mo><mi>τ</mi></mrow><annotation encoding="application/x-tex">\lambda &lt; \tau</annotation></semantics></math>.
 Here
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\tau \in (0,1)</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\tau \in (0,1]</annotation></semantics></math>
 represents the threshold for a hypothesis to be selected for testing:
 p-values greater than
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
-are implicitly `discarded’ by the procedure, while
+are implicitly ‘discarded’ by the procedure, while
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\lambda \in (0,1)</annotation></semantics></math>
 sets the threshold for a p-value to be a candidate for rejection:
 ADDIS-spending will never reject a p-value larger than
@@ -465,8 +529,8 @@ if
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
 is replaced by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>,</mo><mi>k</mi><mi>α</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\min(1,k\alpha)</annotation></semantics></math>.
-Tian and Ramdas (2019b) also presented a version for handling local
-dependence, see the Section on Asynchronous testing below.</p>
+Tian and Ramdas (2021) also presented a version for handling local
+dependence (see <code><a href="../reference/ADDIS_spending.html">?ADDIS_spending</a></code>).</p>
 <p>The default sequence of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
 for ADDIS-spending is the same as for SAFFRON given <a href="#SAFFRON_gamma">here</a>.</p>
@@ -476,16 +540,54 @@ for ADDIS-spending is the same as for SAFFRON given <a href="#SAFFRON_gamma">her
 <h2 id="accounting-for-dependent-p-values">Accounting for dependent p-values<a class="anchor" aria-label="anchor" href="#accounting-for-dependent-p-values"></a>
 </h2>
 <p>As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending
-procedures assume independent p-values, while the LOND procedure is also
-valid under positive dependencies (like the Benjamini-Hochberg method,
-see below). Adjusted versions of LOND and LORD available for arbitrarily
-dependent p-values. Alpha-spending and online fallback also control the
-FWER and FDR for arbitrarily dependent p-values.</p>
+procedures assume independent p-values, while the modified LOND
+procedure (<code>original = FALSE</code>) is also valid under positive
+dependencies (like the Benjamini-Hochberg method, see below). Adjusted
+versions of LOND and LORD are available for arbitrarily dependent
+p-values. Alpha-spending and online fallback also control the FWER and
+FDR for arbitrarily dependent p-values.</p>
 <p>By way of comparison, the usual Benjamini-Hochberg method for
 controlling the FDR assumes that the p-values are positively dependent
-(PRDS). As an example, the PRDS is satisfied for multivariate normal
-test statistics with a positive correlation matrix). See Benjamini &amp;
-Yekutieli (2001) for further technical details.</p>
+(PRDS). As an example, the PRDS is satisfied for one-sided p-values from
+multivariate normal test statistics whose correlations are all
+non-negative. See Benjamini and Yekutieli (2001) for further technical
+details.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Benjamini, Y. and Yekutieli, D. (2001). The control of the false
+discovery rate in multiple testing under dependency. <em>The Annals of
+Statistics</em>, 29(4):1165-1188.</p>
+<p>Foster, D. and Stine, R. (2008).
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-investing:
+a procedure for sequential control of expected false discoveries.
+<em>Journal of the Royal Statistical Society (Series B)</em>,
+70(2):429-444.</p>
+<p>Javanmard, A. and Montanari, A. (2015). On Online Control of False
+Discovery Rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1502.06197" class="external-link uri">https://arxiv.org/abs/1502.06197</a>.</p>
+<p>Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. <em>Annals of
+Statistics</em>, 46(2):526-554.</p>
+<p>Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017).
+Online control of the false discovery rate with decaying memory.
+<em>Advances in Neural Information Processing Systems 30</em>,
+5650-5659.</p>
+<p>Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018).
+SAFFRON: an adaptive algorithm for online control of the false discovery
+rate. <em>Proceedings of the 35th International Conference on Machine
+Learning</em>, 80:4286-4294.</p>
+<p>Robertson, D.S. and Wason, J.M.S. (2018). Online control of the false
+discovery rate in biomedical research. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1809.07292" class="external-link uri">https://arxiv.org/abs/1809.07292</a>.</p>
+<p>Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+algorithm for online FDR control with conservative nulls. <em>Advances
+in Neural Information Processing Systems 32</em>, 9388-9396.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
+error rate. <em>Statistical Methods in Medical Research</em>,
+30(4):976-993.</p>
+<p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
+Testing of Multiple Hypotheses. <em>Journal of Machine Learning
+Research</em>, 22(33):1-39.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

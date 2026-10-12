@@ -23,9 +23,9 @@ SAFFRONstar(
 - d:
 
   Either a vector of p-values, or a dataframe with three columns: an
-  identifier (\`id'), p-value (\`pval'), and either decision.times', or
-  \`lags', depending on which version you're using. See version for more
-  details.
+  identifier (\`id'), p-value (\`pval'), and either \`decision.times',
+  or \`lags', depending on which version you're using. See version for
+  more details.
 
 - alpha:
 
@@ -42,11 +42,11 @@ SAFFRONstar(
 - gammai:
 
   Optional vector of \\\gamma_i\\. A default is provided with
-  \\\gamma_j\\ proportional to \\1/j^(1.6)\\.
+  \\\gamma_j\\ proportional to \\1/j^{1.6}\\.
 
 - w0:
 
-  Initial \`wealth' of the procedure, defaults to \\\alpha/10\\.
+  Initial \`wealth' of the procedure, defaults to \\\alpha/2\\.
 
 - lambda:
 
@@ -76,21 +76,22 @@ SAFFRONstar(
 
 The function takes as its input either a vector of p-values, or a
 dataframe with three columns: an identifier (\`id'), p-value (\`pval'),
-or a column describing the conflict sets for the hypotheses. This takes
+and a column describing the conflict sets for the hypotheses. This takes
 the form of a vector of decision times or lags. Batch sizes can be
 specified as a separate argument (see below).
 
-Zrnic et al. (2021) present explicit three versions of SAFFRONstar:
+Zrnic et al. (2021) present three explicit versions of SAFFRONstar:
 
 1\) `version='async'` is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The
-discretised finish times of the test correspond to the decision times.
+discretised finish times of the tests correspond to the decision times.
 These decision times are given as the input `decision.times` for this
 version of the SAFFRONstar algorithm. For this version of SAFFRONstar,
 Tian and Ramdas (2019) presented an algorithm that can improve the power
 of the procedure in the presence of conservative nulls by adaptively
-\`discarding' these p-values. This can be called by setting the option
-`discard=TRUE`.
+\`discarding' these p-values. This is implemented by
+[`ADDIS`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS.md)
+with `async=TRUE`.
 
 2\) `version='dep'` is for online testing under local dependence of the
 p-values. More precisely, for any \\t\>0\\ we allow the p-value \\p_t\\
@@ -107,12 +108,12 @@ this version of the SAFFRONstar algorithm.
 
 Given an overall significance level \\\alpha\\, SAFFRONstar depends on
 constants \\w_0\\ and \\\lambda\\, where \\w_0\\ satisfies \\0 \le w_0
-\le \alpha\\ and represents the intial \`wealth' of the procedure, and
+\le \alpha\\ and represents the initial \`wealth' of the procedure, and
 \\0 \< \lambda \< 1\\ represents the threshold for a \`candidate'
-hypothesis. A \`candidate' refers to p-values smaller than \\\lambda\\,
-since SAFFRONstar will never reject a p-value larger than \\\lambda\\.
-The algorithms also require a sequence of non-negative non-increasing
-numbers \\\gamma_i\\ that sum to 1.
+hypothesis. A \`candidate' refers to p-values no larger than
+\\\lambda\\, since SAFFRONstar will never reject a p-value larger than
+\\\lambda\\. The algorithms also require a sequence of non-negative
+non-increasing numbers \\\gamma_i\\ that sum to 1.
 
 Note that these SAFFRONstar algorithms control the *modified* FDR
 (mFDR). The \`async' version also controls the usual FDR if the p-values
@@ -123,9 +124,13 @@ al. (2021).
 
 ## References
 
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm
+for online FDR control with conservative nulls. *Advances in Neural
+Information Processing Systems 32*, 9388-9396.
+
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
 Testing of Multiple Hypotheses. *Journal of Machine Learning Research*,
-22:1-33.
+22(33):1-39.
 
 ## See also
 

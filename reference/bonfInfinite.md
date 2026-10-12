@@ -1,6 +1,6 @@
 # Online FDR control based on a Bonferroni-like test
 
-This funcion is deprecated, please use
+This function is deprecated, please use
 [`Alpha_spending`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_spending.md)
 instead.
 
@@ -50,7 +50,7 @@ bonfInfinite(
 - d.out:
 
   A dataframe with the original data `d` (which will be reordered if
-  there are batches and `random = TRUE`), the adjusted signifcance
+  there are batches and `random = TRUE`), the adjusted significance
   thresholds `alphai` and the indicator function of discoveries `R`,
   where `R[i] = 1` corresponds to hypothesis \\i\\ being rejected
   (otherwise `R[i] = 0`).
@@ -75,6 +75,6 @@ is rejected if the \\i\\-th p-value is less than or equal to
 
 ## References
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.

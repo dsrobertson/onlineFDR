@@ -9,7 +9,7 @@ Zrnic et al. (2021)."><meta property="og:image" content="https://dsrobertson.git
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,10 +114,10 @@ with three columns: an identifier (`id'),
 p-value (`pval'), and a column describing the conflict sets for the hypotheses.
 This takes the form of a vector of decision times or lags. Batch sizes can be
 specified as a separate argument (see below).</p>
-<p>Zrnic et al. (2021) present explicit three versions of LORDstar:</p>
+<p>Zrnic et al. (2021) present three explicit versions of LORDstar:</p>
 <p>1) <code>version='async'</code> is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The discretised
-finish times of the test correspond to the decision times. These decision
+finish times of the tests correspond to the decision times. These decision
 times are given as the input <code>decision.times</code> for this version of the
 LORDstar algorithm.</p>
 <p>2) <code>version='dep'</code> is for online testing under local dependence of the
@@ -132,7 +132,7 @@ a new one can start, testing hypotheses independent of the previous batch.
 The batch sizes are given as the input <code>batch.sizes</code> for this version of
 the LORDstar algorithm.</p>
 <p>Given an overall significance level \(\alpha\), LORDstar depends on
-\(w_0\) (where \(0 \le w_0 \le \alpha\)), which represents the intial
+\(w_0\) (where \(0 \le w_0 \le \alpha\)), which represents the initial
 `wealth' of the procedure. The algorithms also require a sequence of
 non-negative non-increasing numbers \(\gamma_i\) that sum to 1.</p>
 <p>Note that these LORDstar algorithms control the <em>modified</em> FDR (mFDR).
@@ -143,11 +143,11 @@ to be independent.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+    <p>Javanmard, A. and Montanari, A. (2018). Online Rules for Control
 of False Discovery Rate and False Discovery Exceedance. <em>Annals of
 Statistics</em>, 46(2):526-554.</p>
 <p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. <em>Journal of Machine Learning Research</em> 22:1-33.</p>
+Multiple Hypotheses. <em>Journal of Machine Learning Research</em>, 22(33):1-39.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -168,21 +168,21 @@ i.e. where each test can only start when the previous test has finished.</p></di
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">LORDstar</span><span class="op">(</span><span class="va">sample.df</span>, version<span class="op">=</span><span class="st">'async'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 2.675839e-04 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 5.819103e-05 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 2.457817e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 5.649373e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 4.810068e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 4.011918e-04 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 3.410964e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 2.971630e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 8.426900e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 7.286513e-04 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 6.227110e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 3.217229e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 1.060551e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 9.246646e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 8.010731e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 2.740772e-04 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 5.960313e-05 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 2.517460e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 5.786464e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 4.926792e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 4.109274e-04 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 3.493736e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 3.043742e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 8.631393e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 7.463333e-04 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 6.378221e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 3.295300e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 1.086287e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 9.471031e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 8.205125e-04 0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sample.df2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'A15432'</span>, <span class="st">'B90969'</span>, <span class="st">'C18705'</span>, <span class="st">'B49731'</span>, <span class="st">'E99902'</span>,</span></span>
@@ -195,21 +195,21 @@ i.e. where each test can only start when the previous test has finished.</p></di
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">LORDstar</span><span class="op">(</span><span class="va">sample.df2</span>, version<span class="op">=</span><span class="st">'dep'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          pval lag       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08   1 2.675839e-04 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02   1 5.819103e-05 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02   1 2.457817e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02   1 5.649373e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03   1 4.810068e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05   1 4.011918e-04 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01   1 3.410964e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01   1 2.971630e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01   1 8.426900e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08   1 7.286513e-04 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01   1 6.227110e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01   1 3.217229e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03   1 1.060551e-03 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01   1 9.246646e-04 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01   1 8.010731e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08   1 2.740772e-04 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02   1 5.960313e-05 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02   1 2.517460e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02   1 5.786464e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03   1 4.926792e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05   1 4.109274e-04 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01   1 3.493736e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01   1 3.043742e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01   1 8.631393e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08   1 7.463333e-04 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01   1 6.378221e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01   1 3.295300e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03   1 1.086287e-03 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01   1 9.471031e-04 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01   1 8.205125e-04 0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

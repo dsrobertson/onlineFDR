@@ -1,6 +1,6 @@
 # LORD (dep): Online FDR control based on recent discovery for dependent p-values
 
-This funcion is deprecated, please use
+This function is deprecated, please use
 [`LORD`](https://dsrobertson.github.io/onlineFDR/reference/LORD.md)
 instead with `version = 'dep'`.
 
@@ -81,18 +81,18 @@ arriving one at a time.
 This modified LORD procedure controls FDR for dependent p-values. Given
 an overall significance level \\\alpha\\, we choose a sequence of
 non-negative numbers \\\xi_i\\ such that they satisfy a condition given
-in Javanmard and Montanari (2018), example 3.8.
+in Javanmard and Montanari (2018), example 3.7.
 
 The procedure depends on constants \\w_0\\ and \\b_0\\, where \\w_0 \ge
-0\\ represents the intial \`wealth' and \\b_0 \> 0\\ represents the
+0\\ represents the initial \`wealth' and \\b_0 \> 0\\ represents the
 \`payout' for rejecting a hypothesis. We require \\w_0+b_0 \le \alpha\\
-for FDR control to hold.
+and \\w_0 \le b_0\\ for FDR control to hold.
 
 Further details of the modified LORD procedure can be found in Javanmard
 and Montanari (2018).
 
 ## References
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.

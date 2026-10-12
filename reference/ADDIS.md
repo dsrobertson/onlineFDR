@@ -29,7 +29,8 @@ ADDIS(
 - d:
 
   Either a vector of p-values, or a dataframe with three columns: an
-  identifier (\`id'), p-value (\`pval'), and decision times
+  identifier (\`id'), date (\`date') and p-value (\`pval'). For the
+  asynchronous version, the date column is replaced by decision times
   (\`decision.times').
 
 - alpha:
@@ -39,7 +40,7 @@ ADDIS(
 - gammai:
 
   Optional vector of \\\gamma_i\\. A default is provided with
-  \\\gamma_j\\ proportional to \\1/j^(1.6)\\.
+  \\\gamma_j\\ proportional to \\1/j^{1.6}\\.
 
 - w0:
 
@@ -79,8 +80,10 @@ ADDIS(
 
 - out:
 
-  A dataframe with the original p-values `pval`, the adjusted testing
-  levels \\\alpha_i\\ and the indicator function of discoveries `R`.
+  A dataframe with the p-values `pval` (reordered if there are batches,
+  `async = FALSE` and `random = TRUE`), the adjusted significance
+  thresholds \\\alpha_i\\, the indicator function of discoveries `R`
+  and, if `d` is a dataframe with a column `id`, the identifiers `id`.
   Hypothesis \\i\\ is rejected if the \\i\\-th p-value is less than or
   equal to \\\alpha_i\\, in which case `R[i] = 1` (otherwise
   `R[i] = 0`).
@@ -96,21 +99,22 @@ replaced by the decision times.
 Given an overall significance level \\\alpha\\, ADDIS depends on
 constants \\w_0\\, \\\lambda\\ and \\\tau\\. Here \\w_0\\ represents the
 initial \`wealth' of the procedure and satisfies \\0 \le w_0 \le
-\alpha\\. \\\tau \in (0,1)\\ represents the threshold for a hypothesis
+\alpha\\. \\\tau \in (0,1\]\\ represents the threshold for a hypothesis
 to be selected for testing: p-values greater than \\\tau\\ are
 implicitly \`discarded' by the procedure. Finally, \\\lambda \in
-\[0,\tau)\\ sets the threshold for a p-value to be a candidate for
+(0,\tau)\\ sets the threshold for a p-value to be a candidate for
 rejection: ADDIS will never reject a p-value larger than \\\lambda\\.
-The algorithm also require a sequence of non-negative non-increasing
+The algorithm also requires a sequence of non-negative non-increasing
 numbers \\\gamma_i\\ that sum to 1.
 
 The ADDIS procedure provably controls the FDR for independent p-values.
 Tian and Ramdas (2019) also presented a version for an asynchronous
 testing process, consisting of tests that start and finish at
-(potentially) random times. The discretised finish times of the test
+(potentially) random times. The discretised finish times of the tests
 correspond to the decision times. These decision times are given as the
-input `decision.times`. Note that this asynchronous version controls a
-modified version of the FDR.
+input `decision.times`. Note that this asynchronous version controls the
+modified FDR (mFDR) and, under the conditions given in Tian and Ramdas
+(2019), Appendix C, also the FDR.
 
 Further details of the ADDIS algorithms can be found in Tian and Ramdas
 (2019).
@@ -119,17 +123,15 @@ Further details of the ADDIS algorithms can be found in Tian and Ramdas
 
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm
 for online FDR control with conservative nulls. *Advances in Neural
-Information Processing Systems*, 9388-9396.
+Information Processing Systems 32*, 9388-9396.
 
 ## See also
 
-ADDIS is identical to
 [`SAFFRON`](https://dsrobertson.github.io/onlineFDR/reference/SAFFRON.md)
-with option `discard=TRUE`.
+is the special case of ADDIS with `tau = 1`.
 
-ADDIS with option `async=TRUE` is identical to
 [`SAFFRONstar`](https://dsrobertson.github.io/onlineFDR/reference/SAFFRONstar.md)
-with option `discard=TRUE`.
+provides asynchronous versions of SAFFRON.
 
 ## Examples
 

@@ -9,7 +9,7 @@ Zrnic et al. (2020)."><meta property="og:image" content="https://dsrobertson.git
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@ batch numbers (`batch') and p-values (`pval').</p></dd>
 
 <dt id="arg-gammai">gammai<a class="anchor" aria-label="anchor" href="#arg-gammai"></a></dt>
 <dd><p>Optional vector of \(\gamma_i\). A default is provided with
-\(\gamma_j\) proportional to \(1/j^(1.6)\).</p></dd>
+\(\gamma_j\) proportional to \(1/j^{1.6}\).</p></dd>
 
 
 <dt id="arg-display-progress">display_progress<a class="anchor" aria-label="anchor" href="#arg-display-progress"></a></dt>
@@ -72,13 +72,14 @@ batch numbers (`batch') and p-values (`pval').</p></dd>
 
 
 <dl><dt>out</dt>
-<dd><p>A dataframe with the original data <code>d</code> and the
-  indicator function of discoveries <code>R</code>. Hypothesis \(i\) is rejected
-  if the \(i\)-th p-value within the \(t\)-th batch is less than or equal
-  to \((r/n)\alpha_t\), where \(r\) is the rank of the \(i\)-th p-value
-  within an ordered set and \(n\) is the total number of hypotheses within
-  the \(t\)-th batch. If hypothesis \(i\) is rejected, <code>R[i] = 1</code>
-  (otherwise <code>R[i] = 0</code>).</p></dd>
+<dd><p>A dataframe with the original data <code>d</code>, the
+  indicator function of discoveries <code>R</code> and the test level
+  <code>alphai</code> (\(\alpha_t\)) of each hypothesis's batch. Hypothesis
+  \(i\) in the \(t\)-th batch is rejected if its p-value is less than or
+  equal to \((k/n)\alpha_t\), where \(n\) is the number of hypotheses in
+  the batch and \(k\) is the largest \(r\) such that the \(r\)-th
+  smallest p-value in the batch is at most \((r/n)\alpha_t\). If hypothesis
+  \(i\) is rejected, <code>R[i] = 1</code> (otherwise <code>R[i] = 0</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -96,9 +97,10 @@ discoveries.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
-  Batching in Multiple Hypothesis Testing. <em>International Conference on
-  Artificial Intelligence and Statistics</em>, 3806-3815.</p>
+    <p>Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The
+  Power of Batching in Multiple Hypothesis Testing. <em>International
+  Conference on
+  Artificial Intelligence and Statistics</em>, PMLR, 108:3806-3815.</p>
     </div>
 
     <div class="section level2">

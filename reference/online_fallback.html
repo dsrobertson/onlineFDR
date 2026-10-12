@@ -9,7 +9,7 @@ guarantees strong FWER control under arbitrary dependence of the p-values."><met
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ in sequence, arriving one at a time.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
-<dd><p>Overall significance level of the FDR procedure, the default is
+<dd><p>Overall significance level of the FWER procedure, the default is
 0.05.</p></dd>
 
 
@@ -92,12 +92,13 @@ the algorithm runtime.</p></dd>
 
 
 <dl><dt>out</dt>
-<dd><p>A dataframe with the original data <code>d</code> (which will
-  be reordered if there are batches and <code>random = TRUE</code>), the
-  LORD-adjusted significance thresholds \(\alpha_i\) and the indicator
-  function of discoveries <code>R</code>. Hypothesis \(i\) is rejected if the
-  \(i\)-th p-value is less than or equal to \(\alpha_i\), in which case
-  <code>R[i] = 1</code>  (otherwise <code>R[i] = 0</code>).</p></dd>
+<dd><p>A dataframe with the p-values <code>pval</code> (reordered if
+  there are batches and <code>random = TRUE</code>), the adjusted
+  significance thresholds \(\alpha_i\), the indicator function of
+  discoveries <code>R</code> and, if <code>d</code> is a dataframe with a column
+  <code>id</code>, the identifiers <code>id</code>. Hypothesis \(i\) is rejected if
+  the \(i\)-th p-value is less than or equal to \(\alpha_i\), in which
+  case <code>R[i] = 1</code> (otherwise <code>R[i] = 0</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -112,15 +113,20 @@ non-increasing numbers \(\gamma_i\) that sum to 1.</p>
 <p>The online fallback procedure provides a uniformly more powerful method than
 Alpha-spending, by saving the significance level of a previous rejection.
 More specifically, the procedure tests hypothesis \(H_i\) at level
-$$\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}$$ where \(R_i =
-1\{p_i \leq \alpha_i\}\) denotes a rejected hypothesis.</p>
+$$\alpha_i = \alpha \gamma_i + R_{i-1} \alpha_{i-1}$$ for \(i \ge 2\),
+with \(\alpha_1 = \alpha\gamma_1\), where \(R_i = 1\{p_i \leq
+\alpha_i\}\) denotes a rejected hypothesis.</p>
 <p>Further details of the online fallback procedure can be found in Tian and
 Ramdas (2021).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
-error rate. <em>Statistical Methods for Medical Research</em>, 30(4):976–993.</p>
+    <p>Javanmard, A. and Montanari, A. (2018). Online Rules for Control
+of False Discovery Rate and False Discovery Exceedance. <em>Annals of
+Statistics</em>,
+46(2):526-554.</p>
+<p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
+error rate. <em>Statistical Methods in Medical Research</em>, 30(4):976-993.</p>
     </div>
 
     <div class="section level2">
@@ -139,58 +145,58 @@ error rate. <em>Statistical Methods for Medical Research</em>, 30(4):976–993.<
 <span class="r-in"><span>        <span class="fl">0.69274</span>, <span class="fl">0.30443</span>, <span class="fl">0.00136</span>, <span class="fl">0.72342</span>, <span class="fl">0.54757</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">online_fallback</span><span class="op">(</span><span class="va">sample.df</span>, random<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0026758385 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0032577488 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0004956249 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0004121803 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0003494435 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.0003022950 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.0005682672 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.0002372613 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.0002140474 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.0001949126 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0003737922 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.0001652568 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0001535420 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.0001433627 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.0001344368 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0027407722 1 A15432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0033368035 0 B90969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0005076521 0 C18705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0004221825 0 B49731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0003579233 0 E99902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.0003096307 1 C38292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.0005820572 0 A30619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.0002430188 0 D46627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.0002192416 0 E29198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.0001996425 1 A41418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0003828629 0 D51456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.0001692671 0 C88669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0001572680 0 E03673</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.0001468417 0 A63155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.0001376991 0 B66033</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">online_fallback</span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0026758385 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0032577488 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0004956249 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0004121803 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0003494435 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.0003022950 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.0002659722 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.0005032335 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.0002140474 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.0004089600 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0001788796 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.0001652568 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.0001535420 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.0001433627 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.0001344368 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0027407722 1 A15432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0033368035 0 B90969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0005076521 0 C18705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0004221825 0 B49731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0003579233 0 E99902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.0003096307 0 D46627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.0002724265 1 C38292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.0005154453 0 A30619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.0002192416 1 A41418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.0004188841 0 E29198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0001832205 0 D51456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.0001692671 0 A63155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.0001572680 0 C88669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.0001468417 0 B66033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.0001376991 0 E03673</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="fu">online_fallback</span><span class="op">(</span><span class="va">sample.df</span>, alpha<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0053516771 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0065154977 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0009912499 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0008243606 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0006988870 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.0006045900 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.0005319444 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.0010064670 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.0004280949 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.0008179201 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0003577593 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.0003305137 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.0003070841 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.0002867254 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.0002688736 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          pval       alphai R     id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2.9000e-08 0.0054815445 1 A15432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  6.7430e-02 0.0066736071 0 B90969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.5140e-02 0.0010153042 0 C18705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8.1740e-02 0.0008443651 0 B49731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  1.7100e-03 0.0007158466 0 E99902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2.7201e-01 0.0006192614 0 D46627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  3.6000e-05 0.0005448529 1 C38292</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  7.9149e-01 0.0010308906 0 A30619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  7.5900e-08 0.0004384833 1 A41418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2.8295e-01 0.0008377682 0 E29198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0003664409 0 D51456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 7.2342e-01 0.0003385341 0 A63155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 3.0443e-01 0.0003145360 0 C88669</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 5.4757e-01 0.0002936833 0 B66033</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 1.3600e-03 0.0002753983 0 E03673</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

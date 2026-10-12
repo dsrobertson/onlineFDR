@@ -4,18 +4,12 @@
 
 - [`ADDIS()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS.md)
   : ADDIS: Adaptive discarding algorithm for online FDR control
-- [`ADDIS_exhaustive()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS_exhaustive.md)
-  : ADDIS-exhaustive: Exhaustive ADDIS-spending procedure for online
-  FWER control
 - [`Alpha_investing()`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_investing.md)
   : Alpha-investing for online FDR control
 - [`LOND()`](https://dsrobertson.github.io/onlineFDR/reference/LOND.md)
   : LOND: Online FDR control based on number of discoveries
 - [`LORD()`](https://dsrobertson.github.io/onlineFDR/reference/LORD.md)
   : LORD: Online FDR control based on recent discovery
-- [`LORDdep()`](https://dsrobertson.github.io/onlineFDR/reference/LORDdep.md)
-  : LORD (dep): Online FDR control based on recent discovery for
-  dependent p-values
 - [`SAFFRON()`](https://dsrobertson.github.io/onlineFDR/reference/SAFFRON.md)
   : SAFFRON: Adaptive online FDR control
 
@@ -24,7 +18,7 @@
 - [`BatchBH()`](https://dsrobertson.github.io/onlineFDR/reference/BatchBH.md)
   : BatchBH: Online batch FDR control using the BH procedure
 - [`BatchPRDS()`](https://dsrobertson.github.io/onlineFDR/reference/BatchPRDS.md)
-  : BatchPRDS: Online batch FDR control under Positive Dependence
+  : BatchPRDS: Online batch FDR control under positive dependence
 - [`BatchStBH()`](https://dsrobertson.github.io/onlineFDR/reference/BatchStBH.md)
   : BatchStBH: Online batch FDR control using the St-BH procedure
 
@@ -48,6 +42,9 @@
 
 ## FWER Control
 
+- [`ADDIS_exhaustive()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS_exhaustive.md)
+  : ADDIS-exhaustive: Exhaustive ADDIS-spending procedure for online
+  FWER control
 - [`ADDIS_spending()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS_spending.md)
   : ADDIS-spending: Adaptive discarding algorithm for online FWER
   control
@@ -60,6 +57,9 @@
 
 - [`bonfInfinite()`](https://dsrobertson.github.io/onlineFDR/reference/bonfInfinite.md)
   : Online FDR control based on a Bonferroni-like test
+- [`LORDdep()`](https://dsrobertson.github.io/onlineFDR/reference/LORDdep.md)
+  : LORD (dep): Online FDR control based on recent discovery for
+  dependent p-values
 - [`onlineFDR-deprecated`](https://dsrobertson.github.io/onlineFDR/reference/onlineFDR-deprecated.md)
   : Deprecated functions in package ‘onlineFDR’
 - [`onlineFDR`](https://dsrobertson.github.io/onlineFDR/reference/onlineFDR-package.md)

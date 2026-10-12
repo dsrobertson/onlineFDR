@@ -39,7 +39,7 @@ SAFFRON(
 - gammai:
 
   Optional vector of \\\gamma_i\\. A default is provided with
-  \\\gamma_j\\ proportional to \\1/j^(1.6)\\.
+  \\\gamma_j\\ proportional to \\1/j^{1.6}\\.
 
 - w0:
 
@@ -69,12 +69,12 @@ SAFFRON(
 
 - out:
 
-  A dataframe with the original data `d` (which will be reordered if
-  there are batches and `random = TRUE`), the LORD-adjusted significance
-  thresholds \\\alpha_i\\ and the indicator function of discoveries `R`.
-  Hypothesis \\i\\ is rejected if the \\i\\-th p-value is less than or
-  equal to \\\alpha_i\\, in which case `R[i] = 1` (otherwise
-  `R[i] = 0`).
+  A dataframe with the p-values `pval` (reordered if there are batches
+  and `random = TRUE`), the adjusted significance thresholds
+  \\\alpha_i\\, the indicator function of discoveries `R` and, if `d` is
+  a dataframe with a column `id`, the identifiers `id`. Hypothesis \\i\\
+  is rejected if the \\i\\-th p-value is less than or equal to
+  \\\alpha_i\\, in which case `R[i] = 1` (otherwise `R[i] = 0`).
 
 ## Details
 
@@ -85,14 +85,15 @@ to multiple instances of the same date. If no column of dates is
 provided, then the p-values are treated as being ordered in sequence,
 arriving one at a time.
 
-SAFFRON procedure provably controls FDR for independent p-values. Given
-an overall significance level \\\alpha\\, we choose a sequence of
-non-negative non-increasing numbers \\\gamma_i\\ that sum to 1.
+The SAFFRON procedure provably controls the FDR for independent
+p-values. Given an overall significance level \\\alpha\\, we choose a
+sequence of non-negative non-increasing numbers \\\gamma_i\\ that sum to
+1.
 
 SAFFRON depends on constants \\w_0\\ and \\\lambda\\, where \\w_0\\
 satisfies \\0 \le w_0 \le \alpha\\ and represents the initial \`wealth'
 of the procedure, and \\0 \< \lambda \< 1\\ represents the threshold for
-a \`candidate' hypothesis. A \`candidate' refers to p-values smaller
+a \`candidate' hypothesis. A \`candidate' refers to p-values no larger
 than \\\lambda\\, since SAFFRON will never reject a p-value larger than
 \\\lambda\\.
 
@@ -102,18 +103,18 @@ independent from the non-null p-values.
 
 The SAFFRON procedure can lose power in the presence of conservative
 nulls, which can be compensated for by adaptively \`discarding' these
-p-values. This option is called by setting `discard=TRUE`, which is the
-same algorithm as ADDIS.
+p-values, as in the ADDIS algorithm (see
+[`ADDIS`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS.md)).
 
 Further details of the SAFFRON procedure can be found in Ramdas et al.
 (2018).
 
 ## References
 
-Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018). SAFFRON:
-an adaptive algorithm for online control of the false discovery rate.
-*Proceedings of the 35th International Conference in Machine Learning*,
-80:4286-4294.
+Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018).
+SAFFRON: an adaptive algorithm for online control of the false discovery
+rate. *Proceedings of the 35th International Conference on Machine
+Learning*, 80:4286-4294.
 
 ## See also
 

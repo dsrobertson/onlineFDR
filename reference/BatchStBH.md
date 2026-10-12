@@ -1,9 +1,10 @@
 # BatchStBH: Online batch FDR control using the St-BH procedure
 
 Implements the BatchSt-BH algorithm for online FDR control, as presented
-by Zrnic et al. (2020). This algorithm makes one modification to the
-original Storey-BH algorithm (Storey 2002), by adding 1 to the numerator
-of the null proportion estimate for more stable results.
+by Zrnic et al. (2020). Within each batch it uses the Storey-BH
+procedure (Storey 2002) with the null proportion estimate of Storey,
+Taylor and Siegmund (2004), which adds 1 to the numerator for more
+stable results.
 
 ## Usage
 
@@ -25,7 +26,7 @@ BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = FALSE)
 - gammai:
 
   Optional vector of \\\gamma_i\\. A default is provided with
-  \\\gamma_j\\ proportional to \\1/j^(1.6)\\.
+  \\\gamma_j\\ proportional to \\1/j^{1.6}\\.
 
 - lambda:
 
@@ -40,12 +41,17 @@ BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = FALSE)
 
 - out:
 
-  A dataframe with the original data `d` and the indicator function of
-  discoveries `R`. Hypothesis \\i\\ is rejected if the \\i\\-th p-value
-  within the \\t\\-th batch is less than or equal to \\(r/n)\alpha_t\\,
-  where \\r\\ is the rank of the \\i\\-th p-value within an ordered set
-  and \\n\\ is the total number of hypotheses within the \\t\\-th batch.
-  If hypothesis \\i\\ is rejected, `R[i] = 1` (otherwise `R[i] = 0`).
+  A dataframe with the original data `d`, the indicator function of
+  discoveries `R` and the test level `alphai` (\\\alpha_t\\) of each
+  hypothesis's batch. Hypothesis \\i\\ in the \\t\\-th batch is rejected
+  if its p-value is less than or equal to \\(k/n)\alpha_t /
+  \hat{\pi}\_0\\, where \\n\\ is the number of hypotheses in the batch,
+  \\k\\ is the largest \\r\\ such that the \\r\\-th smallest p-value in
+  the batch is at most \\(r/n)\alpha_t / \hat{\pi}\_0\\, and
+  \\\hat{\pi}\_0 = (1 + n\_\lambda)/(n(1 - \lambda))\\, with
+  \\n\_\lambda\\ the number of p-values in the batch greater than
+  \\\lambda\\. If hypothesis \\i\\ is rejected, `R[i] = 1` (otherwise
+  `R[i] = 0`).
 
 ## Details
 
@@ -65,12 +71,17 @@ Further details of the BatchSt-BH algorithm can be found in Zrnic et al.
 
 ## References
 
-Storey, J.D. (2002). A direct approach to false discovery rates. *J. R.
-Statist. Soc. B*: 64, Part 3, 479-498.
+Storey, J.D. (2002). A direct approach to false discovery rates.
+*Journal of the Royal Statistical Society (Series B)*, 64(3):479-498.
 
-Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
+Storey, J.D., Taylor, J.E. and Siegmund, D. (2004). Strong control,
+conservative point estimation and simultaneous conservative consistency
+of false discovery rates: a unified approach. *Journal of the Royal
+Statistical Society (Series B)*, 66(1):187-205.
+
+Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The Power of
 Batching in Multiple Hypothesis Testing. *International Conference on
-Artificial Intelligence and Statistics*: 3806-3815
+Artificial Intelligence and Statistics*, PMLR, 108:3806-3815.
 
 ## Examples
 

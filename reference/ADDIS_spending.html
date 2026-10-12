@@ -15,7 +15,7 @@ hypotheses and the conservativeness of nulls."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,12 +77,12 @@ identifier (`id'), p-value (`pval'), and lags (`lags').</p></dd>
 
 <dt id="arg-gammai">gammai<a class="anchor" aria-label="anchor" href="#arg-gammai"></a></dt>
 <dd><p>Optional vector of \(\gamma_i\). A default is provided with
-\(\gamma_j\) proportional to \(1/j^(1.6)\).</p></dd>
+\(\gamma_j\) proportional to \(1/j^{1.6}\).</p></dd>
 
 
 <dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
 <dd><p>Optional parameter that sets the threshold for `candidate'
-hypotheses. Must be between 0 and 1, defaults to 0.25.</p></dd>
+hypotheses. Must be between 0 and tau, defaults to 0.25.</p></dd>
 
 
 <dt id="arg-tau">tau<a class="anchor" aria-label="anchor" href="#arg-tau"></a></dt>
@@ -92,7 +92,7 @@ be between 0 and 1, defaults to 0.5.</p></dd>
 
 <dt id="arg-dep">dep<a class="anchor" aria-label="anchor" href="#arg-dep"></a></dt>
 <dd><p>Logical. If <code>TRUE</code> runs the version for locally dependent
-p-values</p></dd>
+p-values.</p></dd>
 
 
 <dt id="arg-display-progress">display_progress<a class="anchor" aria-label="anchor" href="#arg-display-progress"></a></dt>
@@ -116,14 +116,15 @@ p-values</p></dd>
     <p>The function takes as its input either a vector of p-values, or a dataframe
 with three columns: an identifier (`id'), p-value (`pval'), and lags, if the
 dependent version is specified (see below). Given an overall significance
-level \(\alpha\), ADDIS depends on constants \(\lambda\) and \(\tau\),
-where \(\lambda &lt; \tau\). Here \(\tau \in (0,1)\) represents the
-threshold for a hypothesis to be selected for testing: p-values greater than
-\(\tau\) are implicitly `discarded' by the procedure, while \(\lambda
+level \(\alpha\), ADDIS-spending depends on constants \(\lambda\) and
+\(\tau\), where \(\lambda &lt; \tau\). Here \(\tau \in (0,1]\) represents
+the threshold for a hypothesis to be selected for testing: p-values greater
+than \(\tau\) are implicitly `discarded' by the procedure, while
+\(\lambda
 \in (0,1)\) sets the threshold for a p-value to be a candidate for rejection:
 ADDIS-spending will never reject a p-value larger than \(\lambda\). The
-algorithms also require a sequence of non-negative non-increasing numbers
-\(\gamma_i\) that sum to 1.</p>
+algorithms also require a sequence of non-negative numbers \(\gamma_i\)
+that sum to 1.</p>
 <p>The ADDIS-spending procedure provably controls the FWER in the strong sense
 for independent p-values. Note that the procedure also controls the
 generalised familywise error rate (k-FWER) for \(k &gt; 1\) if \(\alpha\) is
@@ -132,14 +133,15 @@ replaced by min(\(1, k\alpha\)).</p>
 dependence. More precisely, for any \(t&gt;0\) we allow the p-value \(p_t\)
 to have arbitrary dependence on the previous \(L_t\) p-values. The fixed
 sequence \(L_t\) is referred to as `lags', and is given as the input
-<code>lags</code> for this version of the ADDIS-spending algorithm.</p>
+<code>lags</code> for this version of the ADDIS-spending algorithm. The lags must
+satisfy \(L_{t+1} \le L_t + 1\).</p>
 <p>Further details of the ADDIS-spending algorithms can be found in Tian and
 Ramdas (2021).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Tian, J. and Ramdas, A. (2021). Online control of the familywise
-  error rate. <em>Statistical Methods for Medical Research</em> 30(4):976–993.</p>
+  error rate. <em>Statistical Methods in Medical Research</em>, 30(4):976-993.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -185,11 +187,11 @@ Ramdas (2021).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  3.6000e-05 0.0018039742 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7  7.9149e-01 0.0018039742 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8  2.7201e-01 0.0018039742 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.0009429405 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.0005950895 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2.8295e-01 0.0018039742 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 7.5900e-08 0.0009429405 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 6.9274e-01 0.0005950895 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 3.0443e-01 0.0005950895 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0004164149 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 1.3600e-03 0.0005950895 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14 7.2342e-01 0.0004164149 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15 5.4757e-01 0.0004164149 0</span>
 <span class="r-in"><span></span></span>

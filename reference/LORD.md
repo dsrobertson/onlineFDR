@@ -39,7 +39,7 @@ LORD(
   Optional vector of \\\gamma_i\\. A default is provided as proposed by
   Javanmard and Montanari (2018), equation 31 for all versions of LORD
   except 'dep'. The latter is provided a default to satisfy a condition
-  given in Javanmard and Montanari (2018), example 3.8.
+  given in Javanmard and Montanari (2018), example 3.7.
 
 - version:
 
@@ -48,18 +48,19 @@ LORD(
 
 - w0:
 
-  Initial \`wealth' of the procedure, defaults to \\\alpha/10\\.
+  Initial \`wealth' of the procedure, defaults to \\\alpha/10\\
+  (\\\min(\alpha/10, \tau\alpha/2)\\ for `version='discard'`). Version
+  'discard' requires \\w_0 \le \tau\alpha\\.
 
 - b0:
 
-  The 'payout' for rejecting a hypothesis in all versions of LORD except
-  for '++'. Defaults to \\\alpha - w_0\\.
+  The \`payout' for rejecting a hypothesis in versions 3 and 'dep' of
+  LORD. Defaults to \\\alpha - w_0\\.
 
 - tau.discard:
 
   Optional threshold for hypotheses to be selected for testing. Must be
-  between 0 and 1, defaults to 0.5. This is required if
-  `version='discard'`.
+  in (0, 1\], defaults to 0.5. This is only used if `version='discard'`.
 
 - random:
 
@@ -79,12 +80,12 @@ LORD(
 
 - d.out:
 
-  A dataframe with the original data `d` (which will be reordered if
-  there are batches and `random = TRUE`), the LORD-adjusted significance
-  thresholds \\\alpha_i\\ and the indicator function of discoveries `R`.
-  Hypothesis \\i\\ is rejected if the \\i\\-th p-value is less than or
-  equal to \\\alpha_i\\, in which case `R[i] = 1` (otherwise
-  `R[i] = 0`).
+  A dataframe with the p-values `pval` (reordered if there are batches
+  and `random = TRUE`), the LORD-adjusted significance thresholds
+  \\\alpha_i\\, the indicator function of discoveries `R` and, if `d` is
+  a dataframe with a column `id`, the identifiers `id`. Hypothesis \\i\\
+  is rejected if the \\i\\-th p-value is less than or equal to
+  \\\alpha_i\\, in which case `R[i] = 1` (otherwise `R[i] = 0`).
 
 ## Details
 
@@ -93,10 +94,11 @@ dataframe with three columns: an identifier (\`id'), date (\`date') and
 p-value (\`pval'). The case where p-values arrive in batches corresponds
 to multiple instances of the same date. If no column of dates is
 provided, then the p-values are treated as being ordered in sequence,
-arriving one at a time..
+arriving one at a time.
 
-The LORD procedure provably controls FDR for independent p-values (see
-below for dependent p-values). Given an overall significance level
+LORD++ and the discarding version of LORD provably control the FDR for
+independent p-values; for LORD 3 this has only been shown empirically
+(see below for dependent p-values). Given an overall significance level
 \\\alpha\\, we choose a sequence of non-negative non-increasing numbers
 \\\gamma_i\\ that sum to 1.
 
@@ -117,7 +119,7 @@ LORD depends on constants \\w_0\\ and (for versions 3 and 'dep')
 of the procedure and \\b_0 \> 0\\ represents the \`payout' for rejecting
 a hypothesis. We require \\w_0+b_0 \le \alpha\\ for FDR control to hold.
 Version 'discard' also depends on a constant \\\tau\\, where \\\tau \in
-(0,1)\\ represents the threshold for a hypothesis to be selected for
+(0,1\]\\ represents the threshold for a hypothesis to be selected for
 testing: p-values greater than \\\tau\\ are implicitly \`discarded' by
 the procedure.
 
@@ -126,28 +128,31 @@ p-values corresponding to true nulls are mutually independent, and
 independent from the non-null p-values.
 
 For dependent p-values, a modified LORD procedure was proposed in
-Javanmard and Montanari (2018), which is called be setting
+Javanmard and Montanari (2018), which is called by setting
 `version='dep'`. Given an overall significance level \\\alpha\\, we
-choose a sequence of non-negative numbers \\\xi_i\\ such that they
-satisfy a condition given in Javanmard and Montanari (2018), example
-3.8.
+choose a sequence of non-negative numbers \\\xi_i\\ (supplied through
+the argument `gammai`) such that \\\sum_i \xi_i (1 + \log i) \le
+\alpha/b_0\\ if \\w_0 \le b_0\\, which is the condition in Javanmard and
+Montanari (2018), example 3.7. If \\w_0 \> b_0\\, the condition is
+instead \\\sum_i (w_0 + b_0 \log i) \xi_i \le \alpha\\, which follows
+from their Theorem 3.6.
 
 Further details of the LORD procedures can be found in Javanmard and
 Montanari (2018), Ramdas et al. (2017) and Tian and Ramdas (2019).
 
 ## References
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.
 
-Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online
+Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online
 control of the false discovery rate with decaying memory. *Advances in
 Neural Information Processing Systems 30*, 5650-5659.
 
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm
 for online FDR control with conservative nulls. *Advances in Neural
-Information Processing Systems*, 9388-9396.
+Information Processing Systems 32*, 9388-9396.
 
 ## See also
 
@@ -174,74 +179,74 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
 
 LORD(sample.df, random=FALSE)
 #>          pval       alphai R     id
-#> 1  2.9000e-08 0.0002675839 1 A15432
-#> 2  6.7430e-02 0.0024664457 0 B90969
-#> 3  1.5140e-02 0.0005732818 0 C18705
-#> 4  8.1740e-02 0.0004872805 0 B49731
-#> 5  1.7100e-03 0.0004059066 0 E99902
-#> 6  3.6000e-05 0.0003447286 1 C38292
-#> 7  7.9149e-01 0.0029745013 0 A30619
-#> 8  2.7201e-01 0.0008450114 0 D46627
-#> 9  2.8295e-01 0.0007305648 0 E29198
-#> 10 7.5900e-08 0.0006243143 1 A41418
-#> 11 6.9274e-01 0.0032185913 0 D51456
-#> 12 3.0443e-01 0.0010617227 0 C88669
-#> 13 1.3600e-03 0.0009256825 0 E03673
-#> 14 7.2342e-01 0.0008019657 0 A63155
-#> 15 5.4757e-01 0.0007059610 0 B66033
+#> 1  2.9000e-08 0.0002740772 1 A15432
+#> 2  6.7430e-02 0.0025262981 0 B90969
+#> 3  1.5140e-02 0.0005871934 0 C18705
+#> 4  8.1740e-02 0.0004991051 0 B49731
+#> 5  1.7100e-03 0.0004157566 0 E99902
+#> 6  3.6000e-05 0.0003530941 1 C38292
+#> 7  7.9149e-01 0.0030466825 0 A30619
+#> 8  2.7201e-01 0.0008655170 0 D46627
+#> 9  2.8295e-01 0.0007482932 0 E29198
+#> 10 7.5900e-08 0.0006394643 1 A41418
+#> 11 6.9274e-01 0.0032966958 0 D51456
+#> 12 3.0443e-01 0.0010874871 0 C88669
+#> 13 1.3600e-03 0.0009481457 0 E03673
+#> 14 7.2342e-01 0.0008214267 0 A63155
+#> 15 5.4757e-01 0.0007230924 0 B66033
 
 set.seed(1); LORD(sample.df, version='dep')
 #>          pval       alphai R     id
-#> 1  2.9000e-08 2.091542e-03 1 A15432
-#> 2  6.7430e-02 1.002025e-02 0 B90969
-#> 3  1.5140e-02 1.677763e-03 0 C18705
-#> 4  8.1740e-02 6.262659e-04 0 B49731
-#> 5  1.7100e-03 3.201787e-04 0 E99902
-#> 6  2.7201e-01 1.933725e-04 0 D46627
-#> 7  3.6000e-05 1.293954e-04 1 C38292
-#> 8  7.9149e-01 1.548152e-04 0 A30619
-#> 9  7.5900e-08 1.166482e-04 1 A41418
-#> 10 2.8295e-01 1.422614e-04 0 E29198
-#> 11 6.9274e-01 1.145119e-04 0 D51456
-#> 12 7.2342e-01 9.432408e-05 0 A63155
-#> 13 3.0443e-01 7.916885e-05 0 C88669
-#> 14 5.4757e-01 6.749313e-05 0 B66033
-#> 15 1.3600e-03 5.830055e-05 0 E03673
+#> 1  2.9000e-08 2.091536e-03 1 A15432
+#> 2  6.7430e-02 1.002023e-02 0 B90969
+#> 3  1.5140e-02 1.677758e-03 0 C18705
+#> 4  8.1740e-02 6.262642e-04 0 B49731
+#> 5  1.7100e-03 3.201778e-04 0 E99902
+#> 6  2.7201e-01 1.933720e-04 0 D46627
+#> 7  3.6000e-05 1.293950e-04 1 C38292
+#> 8  7.9149e-01 1.548148e-04 0 A30619
+#> 9  7.5900e-08 1.166479e-04 1 A41418
+#> 10 2.8295e-01 1.422610e-04 0 E29198
+#> 11 6.9274e-01 1.145116e-04 0 D51456
+#> 12 7.2342e-01 9.432385e-05 0 A63155
+#> 13 3.0443e-01 7.916865e-05 0 C88669
+#> 14 5.4757e-01 6.749296e-05 0 B66033
+#> 15 1.3600e-03 5.830041e-05 0 E03673
 
 set.seed(1); LORD(sample.df, version='discard')
 #>          pval       alphai R     id
-#> 1  2.9000e-08 0.0002675839 1 A15432
-#> 2  6.7430e-02 0.0011285264 0 B90969
-#> 3  1.5140e-02 0.0002823266 0 C18705
-#> 4  8.1740e-02 0.0002394680 0 B49731
-#> 5  1.7100e-03 0.0001998165 0 E99902
-#> 6  2.7201e-01 0.0001700069 0 D46627
-#> 7  3.6000e-05 0.0001475152 1 C38292
-#> 8  7.9149e-01 0.0014680343 0 A30619
-#> 9  7.5900e-08 0.0014680343 1 A41418
-#> 10 2.8295e-01 0.0017451837 0 E29198
-#> 11 6.9274e-01 0.0006438778 0 D51456
-#> 12 7.2342e-01 0.0006438778 0 A63155
-#> 13 3.0443e-01 0.0006438778 0 C88669
-#> 14 5.4757e-01 0.0005497556 0 B66033
-#> 15 1.3600e-03 0.0005497556 0 E03673
+#> 1  2.9000e-08 0.0002740772 1 A15432
+#> 2  6.7430e-02 0.0011559120 0 B90969
+#> 3  1.5140e-02 0.0002891777 0 C18705
+#> 4  8.1740e-02 0.0002452791 0 B49731
+#> 5  1.7100e-03 0.0002046653 0 E99902
+#> 6  2.7201e-01 0.0001741324 0 D46627
+#> 7  3.6000e-05 0.0001510949 1 C38292
+#> 8  7.9149e-01 0.0015036586 0 A30619
+#> 9  7.5900e-08 0.0015036586 1 A41418
+#> 10 2.8295e-01 0.0017875335 0 E29198
+#> 11 6.9274e-01 0.0006595026 0 D51456
+#> 12 7.2342e-01 0.0006595026 0 A63155
+#> 13 3.0443e-01 0.0006595026 0 C88669
+#> 14 5.4757e-01 0.0005630964 0 B66033
+#> 15 1.3600e-03 0.0005630964 0 E03673
 
 set.seed(1); LORD(sample.df, alpha=0.1, w0=0.05)
 #>          pval       alphai R     id
-#> 1  2.9000e-08 0.0026758385 1 A15432
-#> 2  6.7430e-02 0.0032577488 0 B90969
-#> 3  1.5140e-02 0.0010775352 0 C18705
-#> 4  8.1740e-02 0.0009078052 0 B49731
-#> 5  1.7100e-03 0.0007616238 0 E99902
-#> 6  2.7201e-01 0.0006517385 0 D46627
-#> 7  3.6000e-05 0.0005682672 1 C38292
-#> 8  7.9149e-01 0.0058549106 0 A30619
-#> 9  7.5900e-08 0.0016151293 1 A41418
-#> 10 2.8295e-01 0.0067518870 0 E29198
-#> 11 6.9274e-01 0.0023619734 0 D51456
-#> 12 7.2342e-01 0.0020342733 0 A63155
-#> 13 3.0443e-01 0.0017477495 0 C88669
-#> 14 5.4757e-01 0.0015277362 0 B66033
-#> 15 1.3600e-03 0.0013569121 0 E03673
+#> 1  2.9000e-08 0.0027407722 1 A15432
+#> 2  6.7430e-02 0.0033368035 0 B90969
+#> 3  1.5140e-02 0.0011036834 0 C18705
+#> 4  8.1740e-02 0.0009298346 0 B49731
+#> 5  1.7100e-03 0.0007801059 0 E99902
+#> 6  2.7201e-01 0.0006675540 0 D46627
+#> 7  3.6000e-05 0.0005820572 1 C38292
+#> 8  7.9149e-01 0.0059969897 0 A30619
+#> 9  7.5900e-08 0.0016543231 1 A41418
+#> 10 2.8295e-01 0.0069157328 0 E29198
+#> 11 6.9274e-01 0.0024192906 0 D51456
+#> 12 7.2342e-01 0.0020836384 0 A63155
+#> 13 3.0443e-01 0.0017901616 0 C88669
+#> 14 5.4757e-01 0.0015648092 0 B66033
+#> 15 1.3600e-03 0.0013898398 1 E03673
 
 ```

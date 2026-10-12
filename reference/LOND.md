@@ -59,19 +59,21 @@ LOND(
 - original:
 
   Logical. If `TRUE`, runs the original LOND algorithm of Javanmard and
-  Montanari (2015), otherwise runs the modified algorithm of Zrnic et
-  al. (2018). Defaults to `TRUE`.
+  Montanari (2015), otherwise runs the modified algorithm with
+  \\\alpha_i = \max(D(i-1), 1)\beta_i\\ (Javanmard and Montanari, 2015,
+  Remark 2.3), which also controls the FDR under positive dependence
+  (Zrnic et al., 2021). Defaults to `TRUE`.
 
 ## Value
 
 - out:
 
-  A dataframe with the original data `d` (which will be reordered if
-  there are batches and `random = TRUE`), the LOND-adjusted significance
-  thresholds \\\alpha_i\\ and the indicator function of discoveries `R`.
-  Hypothesis \\i\\ is rejected if the \\i\\-th p-value is less than or
-  equal to \\\alpha_i\\, in which case `R[i] = 1` (otherwise
-  `R[i] = 0`).
+  A dataframe with the p-values `pval` (reordered if there are batches
+  and `random = TRUE`), the LOND-adjusted significance thresholds
+  \\\alpha_i\\, the indicator function of discoveries `R` and, if `d` is
+  a dataframe with a column `id`, the identifiers `id`. Hypothesis \\i\\
+  is rejected if the \\i\\-th p-value is less than or equal to
+  \\\alpha_i\\, in which case `R[i] = 1` (otherwise `R[i] = 0`).
 
 ## Details
 
@@ -91,11 +93,12 @@ adjusted significance thresholds \\\alpha_i\\ are chosen as follows:
 of discoveries in the first \\n\\ hypotheses.
 
 A slightly modified version of LOND with thresholds \\\alpha_i =
-max(D(i-1), 1)\beta_i\\ provably controls the FDR under positive
-dependence (PRDS condition), see Zrnic et al. (2021).
+\max(D(i-1), 1)\beta_i\\ (Javanmard and Montanari, 2015, Remark 2.3)
+provably controls the FDR under positive dependence (PRDS condition),
+see Zrnic et al. (2021).
 
 For arbitrarily dependent p-values, LOND controls the FDR if it is
-modified with \\\beta_i / H(i)\\ in place of \\\beta_i\\, where \\H(j)\\
+modified with \\\beta_i / H(i)\\ in place of \\\beta_i\\, where \\H(i)\\
 is the i-th harmonic number.
 
 Further details of the LOND algorithm can be found in Javanmard and
@@ -103,22 +106,23 @@ Montanari (2015).
 
 ## References
 
-Javanmard, A. and Montanari, A. (2015) On Online Control of False
+Javanmard, A. and Montanari, A. (2015). On Online Control of False
 Discovery Rate. *arXiv preprint*, <https://arxiv.org/abs/1502.06197>.
 
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
-Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
-46(2):526-554.
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
+False Discovery Rate and False Discovery Exceedance. *Annals of
+Statistics*, 46(2):526-554.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
-Testing of Multiple Hypotheses. *Journal of Machine Learning Research*
-(to appear), <https://arxiv.org/abs/1812.05068>.
+Testing of Multiple Hypotheses. *Journal of Machine Learning Research*,
+22(33):1-39.
 
 ## See also
 
 [`LONDstar`](https://dsrobertson.github.io/onlineFDR/reference/LONDstar.md)
-presents versions of LORD for *synchronous* p-values, i.e. where each
-test can only start when the previous test has finished.
+presents versions of LOND for *asynchronous* testing, i.e. where each
+hypothesis test can itself be a sequential process and the tests can
+overlap in time.
 
 ## Examples
 
@@ -137,56 +141,56 @@ pval = c(2.90e-08, 0.06743, 0.01514, 0.08174, 0.00171,
         0.69274, 0.30443, 0.00136, 0.72342, 0.54757))
 
 set.seed(1); LOND(sample.df)
-#>          pval       alphai R
-#> 1  2.9000e-08 0.0026758385 1
-#> 2  6.7430e-02 0.0011638206 0
-#> 3  1.5140e-02 0.0009912499 0
-#> 4  8.1740e-02 0.0008243606 0
-#> 5  1.7100e-03 0.0006988870 0
-#> 6  2.7201e-01 0.0006045900 0
-#> 7  3.6000e-05 0.0005319444 1
-#> 8  7.9149e-01 0.0007117838 0
-#> 9  7.5900e-08 0.0006421423 1
-#> 10 2.8295e-01 0.0007796504 0
-#> 11 6.9274e-01 0.0007155186 0
-#> 12 7.2342e-01 0.0006610273 0
-#> 13 3.0443e-01 0.0006141682 0
-#> 14 5.4757e-01 0.0005734509 0
-#> 15 1.3600e-03 0.0005377472 0
+#>          pval       alphai R     id
+#> 1  2.9000e-08 0.0027407722 1 A15432
+#> 2  6.7430e-02 0.0011920626 0 B90969
+#> 3  1.5140e-02 0.0010153042 0 C18705
+#> 4  8.1740e-02 0.0008443651 0 B49731
+#> 5  1.7100e-03 0.0007158466 0 E99902
+#> 6  2.7201e-01 0.0006192614 0 D46627
+#> 7  3.6000e-05 0.0005448529 1 C38292
+#> 8  7.9149e-01 0.0007290564 0 A30619
+#> 9  7.5900e-08 0.0006577249 1 A41418
+#> 10 2.8295e-01 0.0007985699 0 E29198
+#> 11 6.9274e-01 0.0007328818 0 D51456
+#> 12 7.2342e-01 0.0006770682 0 A63155
+#> 13 3.0443e-01 0.0006290720 0 C88669
+#> 14 5.4757e-01 0.0005873666 0 B66033
+#> 15 1.3600e-03 0.0005507966 0 E03673
 
 LOND(sample.df, random=FALSE)
-#>          pval       alphai R
-#> 1  2.9000e-08 0.0026758385 1
-#> 2  6.7430e-02 0.0011638206 0
-#> 3  1.5140e-02 0.0009912499 0
-#> 4  8.1740e-02 0.0008243606 0
-#> 5  1.7100e-03 0.0006988870 0
-#> 6  3.6000e-05 0.0006045900 1
-#> 7  7.9149e-01 0.0007979166 0
-#> 8  2.7201e-01 0.0007117838 0
-#> 9  2.8295e-01 0.0006421423 0
-#> 10 7.5900e-08 0.0005847378 1
-#> 11 6.9274e-01 0.0007155186 0
-#> 12 3.0443e-01 0.0006610273 0
-#> 13 1.3600e-03 0.0006141682 0
-#> 14 7.2342e-01 0.0005734509 0
-#> 15 5.4757e-01 0.0005377472 0
+#>          pval       alphai R     id
+#> 1  2.9000e-08 0.0027407722 1 A15432
+#> 2  6.7430e-02 0.0011920626 0 B90969
+#> 3  1.5140e-02 0.0010153042 0 C18705
+#> 4  8.1740e-02 0.0008443651 0 B49731
+#> 5  1.7100e-03 0.0007158466 0 E99902
+#> 6  3.6000e-05 0.0006192614 1 C38292
+#> 7  7.9149e-01 0.0008172794 0 A30619
+#> 8  2.7201e-01 0.0007290564 0 D46627
+#> 9  2.8295e-01 0.0006577249 0 E29198
+#> 10 7.5900e-08 0.0005989274 1 A41418
+#> 11 6.9274e-01 0.0007328818 0 D51456
+#> 12 3.0443e-01 0.0006770682 0 C88669
+#> 13 1.3600e-03 0.0006290720 0 E03673
+#> 14 7.2342e-01 0.0005873666 0 A63155
+#> 15 5.4757e-01 0.0005507966 0 B66033
 
 set.seed(1); LOND(sample.df, alpha=0.1)
-#>          pval      alphai R
-#> 1  2.9000e-08 0.005351677 1
-#> 2  6.7430e-02 0.002327641 0
-#> 3  1.5140e-02 0.001982500 0
-#> 4  8.1740e-02 0.001648721 0
-#> 5  1.7100e-03 0.001397774 0
-#> 6  2.7201e-01 0.001209180 0
-#> 7  3.6000e-05 0.001063889 1
-#> 8  7.9149e-01 0.001423568 0
-#> 9  7.5900e-08 0.001284285 1
-#> 10 2.8295e-01 0.001559301 0
-#> 11 6.9274e-01 0.001431037 0
-#> 12 7.2342e-01 0.001322055 0
-#> 13 3.0443e-01 0.001228336 0
-#> 14 5.4757e-01 0.001146902 0
-#> 15 1.3600e-03 0.001075494 0
+#>          pval      alphai R     id
+#> 1  2.9000e-08 0.005481544 1 A15432
+#> 2  6.7430e-02 0.002384125 0 B90969
+#> 3  1.5140e-02 0.002030608 0 C18705
+#> 4  8.1740e-02 0.001688730 0 B49731
+#> 5  1.7100e-03 0.001431693 0 E99902
+#> 6  2.7201e-01 0.001238523 0 D46627
+#> 7  3.6000e-05 0.001089706 1 C38292
+#> 8  7.9149e-01 0.001458113 0 A30619
+#> 9  7.5900e-08 0.001315450 1 A41418
+#> 10 2.8295e-01 0.001597140 0 E29198
+#> 11 6.9274e-01 0.001465764 0 D51456
+#> 12 7.2342e-01 0.001354136 0 A63155
+#> 13 3.0443e-01 0.001258144 0 C88669
+#> 14 5.4757e-01 0.001174733 0 B66033
+#> 15 1.3600e-03 0.001101593 0 E03673
 ```

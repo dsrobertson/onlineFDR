@@ -1,7 +1,8 @@
 # StoreyBH: Offline FDR control using the St-BH procedure
 
 Implements the Storey-BH algorithm for offline FDR control, as presented
-by Storey (2002).
+by Storey (2002), with the null proportion estimate of Storey, Taylor
+and Siegmund (2004).
 
 ## Usage
 
@@ -22,18 +23,21 @@ StoreyBH(d, alpha = 0.05, lambda = 0.5)
 
 - lambda:
 
-  Threshold for Storey-BH, must be between 0 and 1. Defaults to 0.5.
+  Threshold for Storey-BH, must be in (0, 1). Defaults to 0.5.
 
 ## Value
 
-- ordered_d:
+- out:
 
   A dataframe with the original data `d` and the indicator function of
   discoveries `R`. Hypothesis \\i\\ is rejected if the \\i\\-th p-value
-  is less than or equal to \\(r/n)\alpha\\, where \\r\\ is the rank of
-  the \\i\\-th p-value within an ordered set and \\n\\ is the total
-  number of hypotheses. If hypothesis \\i\\ is rejected, `R[i] = 1`
-  (otherwise `R[i] = 0`).
+  is less than or equal to \\(k/n)\alpha / \hat{\pi}\_0\\, where \\k\\
+  is the largest \\r\\ such that the \\r\\-th smallest p-value is at
+  most \\(r/n)\alpha / \hat{\pi}\_0\\, \\n\\ is the total number of
+  hypotheses and \\\hat{\pi}\_0 = (1 + n\_\lambda) / (n(1 - \lambda))\\
+  is Storey's estimate of the proportion of true null hypotheses, with
+  \\n\_\lambda\\ the number of p-values greater than \\\lambda\\. If
+  hypothesis \\i\\ is rejected, `R[i] = 1` (otherwise `R[i] = 0`).
 
 ## Details
 
@@ -42,8 +46,13 @@ dataframe with a column of p-values (\`pval').
 
 ## References
 
-Storey, J.D. (2002). A direct approach to false discovery rates. *J. R.
-Statist. Soc. B*: 64, Part 3, 479-498.
+Storey, J.D. (2002). A direct approach to false discovery rates.
+*Journal of the Royal Statistical Society (Series B)*, 64(3):479-498.
+
+Storey, J.D., Taylor, J.E. and Siegmund, D. (2004). Strong control,
+conservative point estimation and simultaneous conservative consistency
+of false discovery rates: a unified approach. *Journal of the Royal
+Statistical Society (Series B)*, 66(1):187-205.
 
 ## Examples
 
