@@ -19,14 +19,15 @@ ADDIS(
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), p-value (`pval'), and decision times 
+identifier (`id'), date (`date') and p-value (`pval'). For the
+asynchronous version, the date column is replaced by decision times
 (`decision.times').}
 
 \item{alpha}{Overall significance level of the procedure, the default is
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
 \item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.}
 
@@ -48,11 +49,13 @@ randomised. Only needed if async=FALSE.}
 \item{date.format}{Optional string giving the format that is used for dates.}
 }
 \value{
-\item{out}{A dataframe with the original p-values \code{pval}, the
-  adjusted testing levels \eqn{\alpha_i} and the indicator function of
-  discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-  p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
-  1}  (otherwise \code{R[i] = 0}).}
+\item{out}{ A dataframe with the p-values \code{pval} (reordered if
+  there are batches, \code{async = FALSE} and \code{random = TRUE}), the
+  adjusted significance thresholds \eqn{\alpha_i}, the indicator function of
+  discoveries \code{R} and, if \code{d} is a dataframe with a column
+  \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+  the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+  case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the ADDIS algorithm for online FDR control, where ADDIS stands for
@@ -72,20 +75,22 @@ by the decision times.
 Given an overall significance level \eqn{\alpha}, ADDIS depends on constants
 \eqn{w_0}, \eqn{\lambda} and \eqn{\tau}. Here \eqn{w_0} represents the
 initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \alpha}.
-\eqn{\tau \in (0,1)} represents the threshold for a
+\eqn{\tau \in (0,1]} represents the threshold for a
 hypothesis to be selected for testing: p-values greater than \eqn{\tau} are
-implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in [0,\tau)}
+implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in (0,\tau)}
 sets the threshold for a p-value to be a candidate for rejection: ADDIS will
 never reject a p-value larger than \eqn{\lambda}. The algorithm also
-require a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
+requires a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 sum to 1.
 
 The ADDIS procedure provably controls the FDR for independent p-values. Tian
 and Ramdas (2019) also presented a version for an asynchronous testing
 process, consisting of tests that start and finish at (potentially) random
-times. The discretised finish times of the test correspond to the decision
+times. The discretised finish times of the tests correspond to the decision
 times. These decision times are given as the input \code{decision.times}.
-Note that this asynchronous version controls a modified version of the FDR.
+Note that this asynchronous version controls the modified FDR (mFDR) and,
+under the conditions given in Tian and Ramdas (2019), Appendix C, also the
+FDR.
 
 Further details of the ADDIS algorithms can be found in Tian and Ramdas
 (2019).
@@ -123,11 +128,10 @@ ADDIS(sample.df2, async = TRUE) # Asynchronous
 \references{
 Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
   algorithm for online FDR control with conservative nulls.
-  \emph{Advances in Neural Information Processing Systems}, 9388-9396.
+  \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 }
 \seealso{
-ADDIS is identical to \code{\link{SAFFRON}} with option \code{discard=TRUE}.
+\code{\link{SAFFRON}} is the special case of ADDIS with \code{tau = 1}.
 
-ADDIS with option \code{async=TRUE} is identical to \code{\link{SAFFRONstar}}
-with option \code{discard=TRUE}.
+\code{\link{SAFFRONstar}} provides asynchronous versions of SAFFRON.
 }

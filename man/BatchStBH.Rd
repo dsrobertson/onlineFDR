@@ -14,7 +14,7 @@ BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = FALSE)
 0.05.}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
 \item{lambda}{Threshold for Storey-BH, must be between 0 and 1. Defaults to
 0.5.}
@@ -22,19 +22,23 @@ BatchStBH(d, alpha = 0.05, gammai, lambda = 0.5, display_progress = FALSE)
 \item{display_progress}{Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime.}
 }
 \value{
-\item{out}{ A dataframe with the original data \code{d} and the
-  indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
-  if the \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal
-  to \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value
-  within an ordered set and \eqn{n} is the total number of hypotheses within
-  the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
+\item{out}{ A dataframe with the original data \code{d}, the
+  indicator function of discoveries \code{R} and the test level
+  \code{alphai} (\eqn{\alpha_t}) of each hypothesis's batch. Hypothesis
+  \eqn{i} in the \eqn{t}-th batch is rejected if its p-value is less than or
+  equal to \eqn{(k/n)\alpha_t / \hat{\pi}_0}, where \eqn{n} is the number of
+  hypotheses in the batch, \eqn{k} is the largest \eqn{r} such that the
+  \eqn{r}-th smallest p-value in the batch is at most \eqn{(r/n)\alpha_t /
+  \hat{\pi}_0}, and \eqn{\hat{\pi}_0 = (1 + n_\lambda)/(n(1 - \lambda))},
+  with \eqn{n_\lambda} the number of p-values in the batch greater than
+  \eqn{\lambda}. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
   (otherwise \code{R[i] = 0}).}
 }
 \description{
 Implements the BatchSt-BH algorithm for online FDR control, as presented by
-Zrnic et al. (2020). This algorithm makes one modification to the original
-Storey-BH algorithm (Storey 2002), by adding 1 to the numerator of
-the null proportion estimate for more stable results.
+Zrnic et al. (2020). Within each batch it uses the Storey-BH procedure
+(Storey 2002) with the null proportion estimate of Storey, Taylor and
+Siegmund (2004), which adds 1 to the numerator for more stable results.
 }
 \details{
 The function takes as its input a dataframe with three columns: identifiers
@@ -67,9 +71,14 @@ BatchStBH(sample.df)
 }
 \references{
 Storey, J.D. (2002). A direct approach to false discovery rates.
-  \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
+  \emph{Journal of the Royal Statistical Society (Series B)}, 64(3):479-498.
 
-  Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of Batching
-  in Multiple Hypothesis Testing. \emph{International Conference on
-  Artificial Intelligence and Statistics}: 3806-3815
+  Storey, J.D., Taylor, J.E. and Siegmund, D. (2004). Strong control,
+  conservative point estimation and simultaneous conservative consistency of
+  false discovery rates: a unified approach. \emph{Journal of the Royal
+  Statistical Society (Series B)}, 66(1):187-205.
+
+  Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The Power of
+  Batching in Multiple Hypothesis Testing. \emph{International Conference on
+  Artificial Intelligence and Statistics}, PMLR, 108:3806-3815.
 }

@@ -16,33 +16,36 @@
 #' Given an overall significance level \eqn{\alpha}, ADDIS depends on constants
 #' \eqn{w_0}, \eqn{\lambda} and \eqn{\tau}. Here \eqn{w_0} represents the
 #' initial `wealth' of the procedure and satisfies \eqn{0 \le w_0 \le \alpha}.
-#' \eqn{\tau \in (0,1)} represents the threshold for a
+#' \eqn{\tau \in (0,1]} represents the threshold for a
 #' hypothesis to be selected for testing: p-values greater than \eqn{\tau} are
-#' implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in [0,\tau)}
+#' implicitly `discarded' by the procedure. Finally, \eqn{\lambda \in (0,\tau)}
 #' sets the threshold for a p-value to be a candidate for rejection: ADDIS will
 #' never reject a p-value larger than \eqn{\lambda}. The algorithm also
-#' require a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
+#' requires a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 #' sum to 1.
 #'
 #' The ADDIS procedure provably controls the FDR for independent p-values. Tian
 #' and Ramdas (2019) also presented a version for an asynchronous testing
 #' process, consisting of tests that start and finish at (potentially) random
-#' times. The discretised finish times of the test correspond to the decision
+#' times. The discretised finish times of the tests correspond to the decision
 #' times. These decision times are given as the input \code{decision.times}.
-#' Note that this asynchronous version controls a modified version of the FDR.
+#' Note that this asynchronous version controls the modified FDR (mFDR) and,
+#' under the conditions given in Tian and Ramdas (2019), Appendix C, also the
+#' FDR.
 #' 
 #' Further details of the ADDIS algorithms can be found in Tian and Ramdas
 #' (2019).
 #'
 #' @param d Either a vector of p-values, or a dataframe with three columns: an
-#'   identifier (`id'), p-value (`pval'), and decision times 
+#'   identifier (`id'), date (`date') and p-value (`pval'). For the
+#'   asynchronous version, the date column is replaced by decision times
 #'   (`decision.times').
 #'
 #' @param alpha Overall significance level of the procedure, the default is
 #'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.
 #'   
@@ -63,24 +66,25 @@
 #'   
 #' @param date.format Optional string giving the format that is used for dates.
 #'
-#' @return \item{out}{A dataframe with the original p-values \code{pval}, the
-#'   adjusted testing levels \eqn{\alpha_i} and the indicator function of
-#'   discoveries \code{R}. Hypothesis \eqn{i} is rejected if the \eqn{i}-th
-#'   p-value is less than or equal to \eqn{\alpha_i}, in which case \code{R[i] =
-#'   1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{out}{ A dataframe with the p-values \code{pval} (reordered if
+#'   there are batches, \code{async = FALSE} and \code{random = TRUE}), the
+#'   adjusted significance thresholds \eqn{\alpha_i}, the indicator function of
+#'   discoveries \code{R} and, if \code{d} is a dataframe with a column
+#'   \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+#'   the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+#'   case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #'
 #' @references Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
 #'   algorithm for online FDR control with conservative nulls.
-#'   \emph{Advances in Neural Information Processing Systems}, 9388-9396.
+#'   \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 #'
 #'
 #' @seealso
 #'
-#' ADDIS is identical to \code{\link{SAFFRON}} with option \code{discard=TRUE}.
+#' \code{\link{SAFFRON}} is the special case of ADDIS with \code{tau = 1}.
 #'
-#' ADDIS with option \code{async=TRUE} is identical to \code{\link{SAFFRONstar}}
-#' with option \code{discard=TRUE}.
+#' \code{\link{SAFFRONstar}} provides asynchronous versions of SAFFRON.
 #'
 #'
 #' @examples
@@ -146,7 +150,7 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
       stop("tau must be between 0 and 1.")
     }
     
-    if (lambda <= 0 || lambda > tau) {
+    if (lambda <= 0 || lambda >= tau) {
         stop("lambda must be between 0 and tau.")
     }
     
@@ -156,8 +160,13 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
         gammai <- 0.4374901658/(seq_len(N + 1)^(1.6))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (!isNonIncreasing(gammai)) {
+        stop("The elements of gammai must be non-increasing.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     if (missing(w0)) {
@@ -165,7 +174,7 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
     } else if (w0 > alpha) {
-        stop("w0 must be less than alpha.")
+        stop("w0 must not be greater than alpha.")
     }
     
     if (!(async)) {
@@ -185,12 +194,12 @@ ADDIS <- function(d, alpha = 0.05, gammai, w0, lambda = 0.25, tau = 0.5,
         
     } else {
         
-        if (any(is.na(d$decision.times))) {
-            stop("Please provide a decision time for each p-value.")
-        }
-        
-        E <- d$decision.times
-        
+        checkStarVersion(d, N, "async")
+
+        # decision times after the last test are never reached, so capping them
+        # at N + 1 leaves the result unchanged and avoids integer overflow
+        E <- pmin(d$decision.times, N + 1)
+
         out <- addis_async_faster(pval, 
                                   E,
                                   gammai,

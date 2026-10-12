@@ -17,7 +17,7 @@ SAFFRONstar(
 }
 \arguments{
 \item{d}{Either a vector of p-values, or a dataframe with three columns: an
-identifier (`id'), p-value (`pval'), and either decision.times', or `lags',
+identifier (`id'), p-value (`pval'), and either `decision.times', or `lags',
 depending on which version you're using. See version for more details.}
 
 \item{alpha}{Overall significance level of the procedure, the default is
@@ -30,9 +30,9 @@ column of lags (`lags').
 \code{version='batch'} requires a vector of batch sizes (`batch.sizes').}
 
 \item{gammai}{Optional vector of \eqn{\gamma_i}. A default is provided with
-\eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.}
+\eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.}
 
-\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.}
+\item{w0}{Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}.}
 
 \item{lambda}{Optional threshold for a `candidate' hypothesis, must be
 between 0 and 1. Defaults to 0.5.}
@@ -56,20 +56,20 @@ presented by Zrnic et al. (2021).
 \details{
 The function takes as its input either a vector of p-values, or a dataframe
 with three columns: an identifier (`id'),
-p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+p-value (`pval'), and a column describing the conflict sets for the hypotheses. 
 This takes the form of a vector of decision times or lags. Batch sizes can be 
 specified as a separate argument (see below).
 
-Zrnic et al. (2021) present explicit three versions of SAFFRONstar:
+Zrnic et al. (2021) present three explicit versions of SAFFRONstar:
 
 1) \code{version='async'} is for an asynchronous testing process, consisting
 of tests that start and finish at (potentially) random times. The discretised
-finish times of the test correspond to the decision times. These decision
+finish times of the tests correspond to the decision times. These decision
 times are given as the input \code{decision.times} for this version of the
 SAFFRONstar algorithm. For this version of SAFFRONstar, Tian and Ramdas
 (2019) presented an algorithm that can improve the power of the procedure in
 the presence of conservative nulls by adaptively `discarding' these p-values.
-This can be called by setting the option \code{discard=TRUE}.
+This is implemented by \code{\link{ADDIS}} with \code{async=TRUE}.
 
 2) \code{version='dep'} is for online testing under local dependence of the
 p-values. More precisely, for any \eqn{t>0} we allow the p-value \eqn{p_t} to
@@ -86,9 +86,9 @@ the SAFFRONstar algorithm.
 
 Given an overall significance level \eqn{\alpha}, SAFFRONstar depends on
 constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0} satisfies \eqn{0 \le
-w_0 \le \alpha} and represents the intial `wealth' of the
+w_0 \le \alpha} and represents the initial `wealth' of the
 procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
-`candidate' hypothesis. A `candidate' refers to p-values smaller than
+`candidate' hypothesis. A `candidate' refers to p-values no larger than
 \eqn{\lambda}, since SAFFRONstar will never reject a p-value larger than
 \eqn{\lambda}. The algorithms also require a sequence of non-negative
 non-increasing numbers \eqn{\gamma_i} that sum to 1.
@@ -125,8 +125,12 @@ SAFFRONstar(sample.df2, version='dep')
 
 }
 \references{
+Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding
+  algorithm for online FDR control with conservative nulls.
+  \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
+
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22:1-33.
+Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 }
 \seealso{
 \code{\link{SAFFRON}} presents versions of SAFFRON for \emph{synchronous}

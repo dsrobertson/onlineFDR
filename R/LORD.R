@@ -8,10 +8,12 @@
 #' with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 #' The case where p-values arrive in batches corresponds to multiple instances
 #' of the same date. If no column of dates is provided, then the p-values are
-#' treated as being ordered in sequence, arriving one at a time..
+#' treated as being ordered in sequence, arriving one at a time.
 #'
-#' The LORD procedure provably controls FDR for independent p-values (see below
-#' for dependent p-values). Given an overall significance level \eqn{\alpha}, we
+#' LORD++ and the discarding version of LORD provably control the FDR for
+#' independent p-values; for LORD 3 this has only been shown empirically (see
+#' below for dependent p-values). Given an overall significance level
+#' \eqn{\alpha}, we
 #' choose a sequence of non-negative non-increasing numbers \eqn{\gamma_i} that
 #' sum to 1.
 #'
@@ -31,7 +33,7 @@
 #' procedure and \eqn{b_0 > 0} represents the `payout' for rejecting a
 #' hypothesis. We require \eqn{w_0+b_0 \le \alpha} for FDR control to hold.
 #' Version 'discard' also depends on a constant \eqn{\tau}, where \eqn{\tau \in
-#' (0,1)} represents the threshold for a hypothesis to be selected for testing:
+#' (0,1]} represents the threshold for a hypothesis to be selected for testing:
 #' p-values greater than \eqn{\tau} are implicitly `discarded' by the procedure.
 #'
 #' Note that FDR control also holds for the LORD procedure if only the p-values
@@ -39,10 +41,13 @@
 #' the non-null p-values.
 #'
 #' For dependent p-values, a modified LORD procedure was proposed in Javanmard
-#' and Montanari (2018), which is called be setting \code{version='dep'}. Given
+#' and Montanari (2018), which is called by setting \code{version='dep'}. Given
 #' an overall significance level \eqn{\alpha}, we choose a sequence of
-#' non-negative numbers \eqn{\xi_i} such that they satisfy a condition given in
-#' Javanmard and Montanari (2018), example 3.8.
+#' non-negative numbers \eqn{\xi_i} (supplied through the argument
+#' \code{gammai}) such that \eqn{\sum_i \xi_i (1 + \log i) \le \alpha/b_0} if
+#' \eqn{w_0 \le b_0}, which is the condition in Javanmard and Montanari (2018),
+#' example 3.7. If \eqn{w_0 > b_0}, the condition is instead \eqn{\sum_i (w_0 +
+#' b_0 \log i) \xi_i \le \alpha}, which follows from their Theorem 3.6.
 #'
 #' Further details of the LORD procedures can be found in Javanmard and
 #' Montanari (2018), Ramdas et al. (2017) and Tian and Ramdas (2019).
@@ -59,18 +64,20 @@
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided as
 #'   proposed by Javanmard and Montanari (2018), equation 31 for all versions of
 #'   LORD except 'dep'. The latter is provided a default to satisfy a condition
-#'   given in Javanmard and Montanari (2018), example 3.8.
+#'   given in Javanmard and Montanari (2018), example 3.7.
 #'
 #' @param version Takes values '++', 3, 'discard', or 'dep'. This specifies the
 #'   version of LORD to use, and defaults to '++'.
 #'
-#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}.
+#' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/10}
+#'   (\eqn{\min(\alpha/10, \tau\alpha/2)} for \code{version='discard'}).
+#'   Version 'discard' requires \eqn{w_0 \le \tau\alpha}.
 #'
-#' @param b0 The 'payout' for rejecting a hypothesis in all versions of LORD
-#'   except for '++'. Defaults to \eqn{\alpha - w_0}.
+#' @param b0 The `payout' for rejecting a hypothesis in versions 3 and 'dep' of
+#'   LORD. Defaults to \eqn{\alpha - w_0}.
 #'
 #' @param tau.discard Optional threshold for hypotheses to be selected for
-#'   testing. Must be between 0 and 1, defaults to 0.5. This is required if
+#'   testing. Must be in (0, 1], defaults to 0.5. This is only used if
 #'   \code{version='discard'}.
 #'
 #' @param random Logical. If \code{TRUE} (the default), then the order of the
@@ -82,25 +89,26 @@
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return \item{d.out}{ A dataframe with the original data \code{d} (which
-#'   will be reordered if there are batches and \code{random = TRUE}), the
-#'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
-#'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{d.out}{ A dataframe with the p-values \code{pval} (reordered if
+#'   there are batches and \code{random = TRUE}), the LORD-adjusted
+#'   significance thresholds \eqn{\alpha_i}, the indicator function of
+#'   discoveries \code{R} and, if \code{d} is a dataframe with a column
+#'   \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+#'   the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+#'   case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Javanmard, A. and Montanari, A. (2018) Online Rules for Control
+#' @references Javanmard, A. and Montanari, A. (2018). Online Rules for Control
 #' of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
 #' Statistics}, 46(2):526-554.
 #'
-#' Ramdas, A., Yang, F., Wainwright M.J. and Jordan, M.I. (2017). Online control
+#' Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
 #' of the false discovery rate with decaying memory. \emph{Advances in Neural
 #' Information Processing Systems 30}, 5650-5659.
 #'
 #' Tian, J. and Ramdas, A. (2019). ADDIS: an adaptive discarding algorithm for
 #' online FDR control with conservative nulls.
-#' \emph{Advances in Neural Information Processing Systems}, 9388-9396.
+#' \emph{Advances in Neural Information Processing Systems 32}, 9388-9396.
 #'
 #'
 #' @seealso
@@ -156,19 +164,35 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
     }
     
     if (version %in% c(1, 2)) {
-        stop("LORD 1 and LORD 2 have been superceded by LORD++, please use version '++' instead.")
+        stop("LORD 1 and LORD 2 have been superseded by LORD++, please use ",
+             "version '++' instead.")
     } else if (!(version %in% c("++", 3, "3", "discard", "dep"))) {
         stop("version must be '++', 3, 'discard' or 'dep'.")
     }
     
+    if (version == "discard") {
+        if (missing(tau.discard)) {
+            tau.discard = 0.5
+        } else if (tau.discard <= 0 || tau.discard > 1) {
+            stop("tau.discard must be between 0 and 1.")
+        }
+    }
+
     if (missing(w0)) {
-        w0 = alpha/10
+        if (version == "discard") {
+            w0 = min(alpha/10, tau.discard * alpha/2)
+        } else {
+            w0 = alpha/10
+        }
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
     }
-    
+
     if (version %in% c(3, "3", "dep")) {
         if (missing(b0)) {
+            if (w0 >= alpha) {
+                stop("w0 must be less than alpha.")
+            }
             b0 = alpha - w0
         } else if (b0 <= 0) {
             stop("b0 must be positive.")
@@ -182,43 +206,55 @@ LORD <- function(d, alpha = 0.05, gammai, version = "++", w0, b0, tau.discard = 
         if (w0 > alpha) {
             stop("w0 must not be greater than alpha.")
         }
-    }
-    
-    if (version == "discard") {
-        if (missing(tau.discard)) {
-            tau.discard = 0.5
-        } else if (tau.discard <= 0 || tau.discard > 1) {
-            stop("tau.discard must be between 0 and 1.")
+        if (version == "discard" &&
+            w0 - tau.discard * alpha > sqrt(.Machine$double.eps)) {
+            stop("w0 must not be greater than tau.discard * alpha.")
         }
     }
-    
+
     if (version != "dep") {
         if (missing(gammai)) {
-            gammai <- 0.07720838 * log(pmax(seq_len(N + 1), 2))/(seq_len(N + 1) * 
+            gammai <- 0.07908197 * log(pmax(seq_len(N + 1), 2))/
+                (seq_len(N + 1) *
                 exp(sqrt(log(seq_len(N + 1)))))
         } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if (sum(gammai) > 1) {
+        } else if (sumExceeds(gammai, 1)) {
             stop("The sum of the elements of gammai must be <= 1.")
+        } else if (!isNonIncreasing(gammai)) {
+            stop("The elements of gammai must be non-increasing.")
+        } else if (length(gammai) < N) {
+            stop("gammai must have length at least equal to the number of ",
+                 "p-values.")
         }
     } else if (w0 <= b0) {
         if (missing(gammai)) {
-            gammai <- 0.139307 /(seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
+            gammai <- 0.1393066 /(seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
         } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if (sum(gammai) > alpha/b0) {
-            stop("The sum of the elements of gammai must be <= alpha/b0.")
+        } else if (sumExceeds(gammai * (1 + log(seq_along(gammai))),
+                              alpha/b0)) {
+            stop("The sum of the elements of gammai*(1 + log(i)) must be <= ",
+                 "alpha/b0.")
+        } else if (length(gammai) < N) {
+            stop("gammai must have length at least equal to the number of ",
+                 "p-values.")
         }
     } else {
         if (missing(gammai)) {
-            M <- seq_len(max(N, 10^6))
-            normC <- alpha / sum((w0 + b0*log(M))/(M*(log(pmax(M,2))^3)))
-            gammai <- normC / (seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
-            gammai <- gammai / sum(gammai)
+            # Scaled so that sum_i (w0 + b0*log(i))*gammai[i] = alpha over all
+            # i >= 1, so the sequence does not depend on N. 5.068667247 and
+            # 2.109742802 are the sums over i >= 1 of 1/(i*log(max(i,2))^3) and
+            # log(i)/(i*log(max(i,2))^3) (rounded up)
+            gammai <- alpha/(5.068667247*w0 + 2.109742802*b0) /
+                (seq_len(N) * (log(pmax(seq_len(N), 2)))^3)
         } else if (any(gammai < 0)) {
             stop("All elements of gammai must be non-negative.")
-        } else if (sum((w0 + b0*log(seq_len(N)))*gammai) > alpha) {
+        } else if (sumExceeds((w0 + b0*log(seq_along(gammai)))*gammai, alpha)) {
             stop("The sum of the elements of (w0 + b0*log(seq_len(N)))*gammai must be <= alpha.")
+        } else if (length(gammai) < N) {
+            stop("gammai must have length at least equal to the number of ",
+                 "p-values.")
         }
     }
     

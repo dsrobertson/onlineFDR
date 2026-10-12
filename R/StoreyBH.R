@@ -1,7 +1,8 @@
 #' StoreyBH: Offline FDR control using the St-BH procedure
 #'
 #' Implements the Storey-BH algorithm for offline FDR control, as presented by
-#' Storey (2002).
+#' Storey (2002), with the null proportion estimate of Storey, Taylor and
+#' Siegmund (2004).
 #'
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with a column of p-values (`pval').
@@ -12,18 +13,27 @@
 #' @param alpha Overall significance level of the FDR procedure, the default is
 #'   0.05.
 #'
-#' @param lambda Threshold for Storey-BH, must be between 0 and 1. Defaults to
+#' @param lambda Threshold for Storey-BH, must be in (0, 1). Defaults to
 #'   0.5.
 #'
-#' @return \item{ordered_d}{ A dataframe with the original data \code{d} and the
+#' @return \item{out}{ A dataframe with the original data \code{d} and the
 #'   indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
-#'   if the \eqn{i}-th p-value is less than or equal to \eqn{(r/n)\alpha}, where
-#'   \eqn{r} is the rank of the \eqn{i}-th p-value within an ordered set and
-#'   \eqn{n} is the total number of hypotheses. If hypothesis \eqn{i} is
+#'   if the \eqn{i}-th p-value is less than or equal to \eqn{(k/n)\alpha /
+#'   \hat{\pi}_0}, where \eqn{k} is the largest \eqn{r} such that the
+#'   \eqn{r}-th smallest p-value is at most \eqn{(r/n)\alpha / \hat{\pi}_0},
+#'   \eqn{n} is the total number of hypotheses and \eqn{\hat{\pi}_0 = (1 +
+#'   n_\lambda) / (n(1 - \lambda))} is Storey's estimate of the proportion of
+#'   true null hypotheses, with \eqn{n_\lambda} the number of p-values greater
+#'   than \eqn{\lambda}. If hypothesis \eqn{i} is
 #'   rejected, \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #' @references Storey, J.D. (2002). A direct approach to false discovery rates.
-#'   \emph{J. R. Statist. Soc. B}: 64, Part 3, 479-498.
+#'   \emph{Journal of the Royal Statistical Society (Series B)}, 64(3):479-498.
+#'
+#'   Storey, J.D., Taylor, J.E. and Siegmund, D. (2004). Strong control,
+#'   conservative point estimation and simultaneous conservative consistency of
+#'   false discovery rates: a unified approach. \emph{Journal of the Royal
+#'   Statistical Society (Series B)}, 66(1):187-205.
 #'
 #' @examples
 #'
@@ -42,7 +52,7 @@ StoreyBH <- function(d, alpha = 0.05, lambda = 0.5){
   if (is.vector(d)) {
     d <- as.data.frame(d)
     colnames(d) <- "pval"
-  } else {
+  } else if (!is.data.frame(d)) {
     stop("d must either be a dataframe or a vector of p-values.")
   }
   
@@ -50,7 +60,7 @@ StoreyBH <- function(d, alpha = 0.05, lambda = 0.5){
     stop("alpha must be between 0 and 1.")
   }
   
-  if (lambda <= 0 || lambda > 1) {
+  if (lambda <= 0 || lambda >= 1) {
     stop("lambda must be between 0 and 1.")
   }
   
@@ -64,7 +74,7 @@ StoreyBH <- function(d, alpha = 0.05, lambda = 0.5){
   pi0 <- (candsum + 1)/((1 - lambda) * n)
   
   jvec <- n:1L
-  out_R <- pmin(1, cummin(n/jvec * pi0 * pvals[o]))[ro] <= alpha
+  out_R <- cummin(n/jvec * pi0 * pvals[o])[ro] <= alpha
   
   out <- d
   out$R <- as.numeric(out_R)

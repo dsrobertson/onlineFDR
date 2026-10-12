@@ -19,11 +19,12 @@
 #' \eqn{n} hypotheses.
 #'
 #' A slightly modified version of LOND with thresholds \eqn{\alpha_i =
-#' max(D(i-1), 1)\beta_i} provably controls the FDR under positive dependence
-#' (PRDS condition), see Zrnic et al. (2021).
+#' \max(D(i-1), 1)\beta_i} (Javanmard and Montanari, 2015, Remark 2.3)
+#' provably controls the FDR under positive dependence (PRDS condition), see
+#' Zrnic et al. (2021).
 #'
 #' For arbitrarily dependent p-values, LOND controls the FDR if it is modified
-#' with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(j)} is the
+#' with \eqn{\beta_i / H(i)} in place of \eqn{\beta_i}, where \eqn{H(i)} is the
 #' i-th harmonic number.
 #'
 #' Further details of the LOND algorithm can be found in Javanmard and Montanari
@@ -53,36 +54,39 @@
 #'
 #' @param date.format Optional string giving the format that is used for dates.
 #'
-#' @param original Logical. If \code{TRUE}, runs the original LOND algorithm 
-#' of Javanmard and Montanari (2015), otherwise runs the modified algorithm 
-#' of Zrnic et al. (2018). Defaults to \code{TRUE}.
+#' @param original Logical. If \code{TRUE}, runs the original LOND algorithm
+#' of Javanmard and Montanari (2015), otherwise runs the modified algorithm
+#' with \eqn{\alpha_i = \max(D(i-1), 1)\beta_i} (Javanmard and Montanari, 2015,
+#' Remark 2.3), which also controls the FDR under positive dependence (Zrnic et
+#' al., 2021). Defaults to \code{TRUE}.
 #'
 #'
-#' @return \item{out}{ A dataframe with the original data \code{d} (which
-#' will be reordered if there are batches and \code{random = TRUE}), the
-#' LOND-adjusted significance thresholds \eqn{\alpha_i} and the indicator
-#' function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#' \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#' \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{out}{ A dataframe with the p-values \code{pval} (reordered if
+#'   there are batches and \code{random = TRUE}), the LOND-adjusted
+#'   significance thresholds \eqn{\alpha_i}, the indicator function of
+#'   discoveries \code{R} and, if \code{d} is a dataframe with a column
+#'   \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+#'   the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+#'   case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Javanmard, A. and Montanari, A. (2015) On Online Control of False
-#' Discovery Rate. \emph{arXiv preprint}, \url{https://arxiv.org/abs/1502.06197}.
+#' @references Javanmard, A. and Montanari, A. (2015). On Online Control of
+#' False Discovery Rate. \emph{arXiv preprint},
+#' \url{https://arxiv.org/abs/1502.06197}.
 #'
-#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+#' Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #'
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-#' \url{https://arxiv.org/abs/1812.05068}.
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #' 
 #'
 #' @seealso
 #'
-#' \code{\link{LONDstar}} presents versions of LORD for \emph{synchronous}
-#' p-values, i.e. where each test can only start when the previous test has
-#' finished.
+#' \code{\link{LONDstar}} presents versions of LOND for \emph{asynchronous}
+#' testing, i.e. where each hypothesis test can itself be a sequential process
+#' and the tests can overlap in time.
 #'
 #' @examples
 #' sample.df <- data.frame(
@@ -127,16 +131,19 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, display_pro
     }
     
     if (missing(betai)) {
-        betai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
+        betai <- 0.07908197 * alpha * log(pmax(seq_len(N), 2))/
+            (seq_len(N) * exp(sqrt(log(seq_len(N)))))
     } else if (any(betai < 0)) {
         stop("All elements of betai must be non-negative.")
-    } else if (sum(betai) > alpha + .Machine$double.eps * length(betai)) {
+    } else if (length(betai) < N) {
+        stop("betai must have length at least equal to the number of p-values.")
+    } else if (sumExceeds(betai, alpha)) {
         stop("The sum of the elements of betai must not be greater than alpha.")
     }
     
     if (dep) {
         den <- cumsum(1/seq_len(N))
-        betai <- betai/den
+        betai <- betai[seq_len(N)]/den
     }
     
     ### Start LOND procedure
@@ -147,5 +154,8 @@ LOND <- function(d, alpha = 0.05, betai, dep = FALSE, random = TRUE, display_pro
                        original = original, 
                        display_progress = display_progress)
     out$R <- as.numeric(out$R)
+    if(is.data.frame(d) && !is.null(d$id)) {
+        out$id <- d$id
+    }
     out
 }

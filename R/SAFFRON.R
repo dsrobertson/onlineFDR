@@ -13,14 +13,14 @@
 #' of the same date. If no column of dates is provided, then the p-values are
 #' treated as being ordered in sequence, arriving one at a time.
 #'
-#' SAFFRON procedure provably controls FDR for independent p-values. Given an
-#' overall significance level \eqn{\alpha}, we choose a sequence of non-negative
+#' The SAFFRON procedure provably controls the FDR for independent p-values.
+#' Given an overall significance level \eqn{\alpha}, we choose a sequence of non-negative
 #' non-increasing numbers \eqn{\gamma_i} that sum to 1.
 #'
 #' SAFFRON depends on constants \eqn{w_0} and \eqn{\lambda}, where \eqn{w_0}
 #' satisfies \eqn{0 \le w_0 \le \alpha} and represents the initial `wealth' of
 #' the procedure, and \eqn{0 < \lambda < 1} represents the threshold for a
-#' `candidate' hypothesis. A `candidate' refers to p-values smaller than
+#' `candidate' hypothesis. A `candidate' refers to p-values no larger than
 #' \eqn{\lambda}, since SAFFRON will never reject a p-value larger than
 #' \eqn{\lambda}.
 #'
@@ -29,9 +29,8 @@
 #' independent from the non-null p-values.
 #'
 #' The SAFFRON procedure can lose power in the presence of conservative nulls,
-#' which can be compensated for by adaptively `discarding' these p-values. This
-#' option is called by setting \code{discard=TRUE}, which is the same algorithm
-#' as ADDIS.
+#' which can be compensated for by adaptively `discarding' these p-values, as
+#' in the ADDIS algorithm (see \code{\link{ADDIS}}).
 #'
 #' Further details of the SAFFRON procedure can be found in Ramdas et al.
 #' (2018).
@@ -46,7 +45,7 @@
 #'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.
 #'
 #' @param w0 Initial `wealth' of the procedure, defaults to \eqn{\alpha/2}. Must
 #'   be between 0 and \eqn{\alpha}.
@@ -63,17 +62,18 @@
 #' @param date.format Optional string giving the format that is used for dates.
 #'
 #'
-#' @return \item{out}{ A dataframe with the original data \code{d} (which
-#'   will be reordered if there are batches and \code{random = TRUE}), the
-#'   LORD-adjusted significance thresholds \eqn{\alpha_i} and the indicator
-#'   function of discoveries \code{R}. Hypothesis \eqn{i} is rejected if the
-#'   \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which case
-#'   \code{R[i] = 1}  (otherwise \code{R[i] = 0}).}
+#' @return \item{out}{ A dataframe with the p-values \code{pval} (reordered if
+#'   there are batches and \code{random = TRUE}), the adjusted
+#'   significance thresholds \eqn{\alpha_i}, the indicator function of
+#'   discoveries \code{R} and, if \code{d} is a dataframe with a column
+#'   \code{id}, the identifiers \code{id}. Hypothesis \eqn{i} is rejected if
+#'   the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}, in which
+#'   case \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
 #'
-#' @references Ramdas, A., Zrnic, T., Wainwright M.J. and Jordan, M.I. (2018).
+#' @references Ramdas, A., Zrnic, T., Wainwright, M.J. and Jordan, M.I. (2018).
 #'   SAFFRON: an adaptive algorithm for online control of the false discovery
-#'   rate. \emph{Proceedings of the 35th International Conference in Machine
+#'   rate. \emph{Proceedings of the 35th International Conference on Machine
 #'   Learning}, 80:4286-4294.
 #'
 #' @seealso
@@ -126,7 +126,7 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE,
         stop("alpha must be between 0 and 1.")
     }
     
-    if (lambda <= 0 || lambda > 1) {
+    if (lambda <= 0 || lambda >= 1) {
         stop("lambda must be between 0 and 1.")
     }
     
@@ -134,8 +134,13 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE,
         gammai <- 0.4374901658/(seq_len(N)^(1.6))
     } else if (any(gammai < 0)) {
         stop("All elements of gammai must be non-negative.")
-    } else if (sum(gammai) > 1) {
+    } else if (sumExceeds(gammai, 1)) {
         stop("The sum of the elements of gammai must not be greater than 1.")
+    } else if (!isNonIncreasing(gammai)) {
+        stop("The elements of gammai must be non-increasing.")
+    } else if (length(gammai) < N) {
+        stop("gammai must have length at least equal to the number of ",
+             "p-values.")
     }
     
     if (missing(w0)) {
@@ -143,7 +148,7 @@ SAFFRON <- function(d, alpha = 0.05, gammai, w0, lambda = 0.5, random = TRUE,
     } else if (w0 < 0) {
         stop("w0 must be non-negative.")
     } else if (w0 > alpha) {
-        stop("w0 must be less than alpha.")
+        stop("w0 must not be greater than alpha.")
     }
     
     ### Start SAFFRON algorithm

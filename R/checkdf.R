@@ -20,5 +20,3 @@ checkdf <- function(d, random, date.format) {
     
     return(d)
 }
-TRUE
-TRUE

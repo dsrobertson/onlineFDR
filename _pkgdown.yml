@@ -12,11 +12,9 @@ reference:
   - title: Fully Sequential FDR Control
     contents:
     - "ADDIS"
-    - "ADDIS_exhaustive"
     - "Alpha_investing"
     - "LOND"
     - "LORD"
-    - "LORDdep"
     - "SAFFRON"
   - title: Batch FDR Control
     contents:
@@ -34,12 +32,14 @@ reference:
     - "supLORD"
   - title: FWER Control
     contents:
+    - "ADDIS_exhaustive"
     - "ADDIS_spending"
     - "Alpha_spending"
     - "online_fallback"
   - title: Other
     contents:
     - "bonfInfinite"
+    - "LORDdep"
     - "onlineFDR-deprecated"
     - "onlineFDR-package"
     - "StoreyBH"

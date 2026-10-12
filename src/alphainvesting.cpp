@@ -35,9 +35,10 @@ DataFrame alphainvesting_faster(NumericVector pval,
 	
 	int K = sum(R);
 
-	Progress p(N * N, display_progress);
+	Progress p(N, display_progress);
 	
 	for(int i = 1; i < N; i++) {
+		p.increment();
 		
 		cand[i-1] = (pval[i-1] <= alphai[i-1]);
 		candsum += cand[i-1];
@@ -51,7 +52,6 @@ DataFrame alphainvesting_faster(NumericVector pval,
 	    //update Cjplus
 			double Cjplussum = 0;
 			for (int j = 0; j < K-1; j++) {
-				p.increment();
 				Cjplus[j] += cand[i-1];
 				Cjplussum += gammai[i - tau[j] - Cjplus[j] - 1];
 			}

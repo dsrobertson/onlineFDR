@@ -1,5 +1,111 @@
 # A NEWS File to document package updates
 
+CHANGES IN VERSION 2.21.2
+-----------------------
+MODIFICATIONS:
+
+    * ADDIS_exhaustive now checks that lambda >= alpha * tau, as required by
+      Fischer et al. (2024); this also ensures no p-value above lambda is
+      rejected
+    * ADDIS_exhaustive now rejects alpha = 1, lambda = tau and gamma summing
+      to more than 1, which previously gave invalid results without an error
+    * ADDIS now rejects lambda = tau, as required by Tian and Ramdas (2019)
+    * ADDIS with async = TRUE now follows Algorithm 3 of Tian and Ramdas (2019)
+      exactly. Rejection times and candidate counts were previously based on the
+      order in which tests started rather than on their decision times, which
+      gave different (sometimes higher) test levels when tests overlapped
+    * LOND now checks that a user-supplied betai is at least as long as the
+      number of p-values
+    * the default gamma (or beta) sequences based on Javanmard and Montanari
+      (2018), equation 31, now use the normalising constant 0.07908197, so that
+      they sum to 1; the constant given in the paper (0.07720838) gives a sum of
+      about 0.976. This affects the defaults of LOND, LORD, LONDstar, LORDstar,
+      Alpha_spending, bonfInfinite, online_fallback and supLORD
+    * LORD with version = 'discard' now requires w0 <= tau.discard * alpha, as
+      in Tian and Ramdas (2019), and its default w0 is min(alpha/10,
+      tau.discard * alpha/2). Previously FDR control could be lost when
+      tau.discard < 0.1
+    * LORD with version = 'dep' and LORDdep now check the condition of
+      Javanmard and Montanari (2018), example 3.7, sum(xi_i * (1 + log(i))) <=
+      alpha/b0, instead of sum(xi_i) <= alpha/b0. setBound("LORDdep") now
+      returns a sequence satisfying this condition
+    * LORD with version = 3 now adds the reward b0 to the wealth at the time of
+      each rejection, as in Javanmard and Montanari (2018), equation 9; the
+      reward was previously credited two steps late
+    * LORD with versions 3 and 'dep' now give an error if w0 >= alpha and b0 is
+      not supplied (b0 = alpha - w0 was previously negative)
+    * BatchStBH and StoreyBH no longer cap the adjusted p-values at 1, which
+      made every hypothesis in a batch rejected when the test level was 1 or
+      more
+    * SAFFRONstar with version = 'batch' now caps the test levels of the first
+      batch at lambda, as for later batches
+    * ADDIS_spending with dep = TRUE now sums over j < t - L_t, as in Tian and
+      Ramdas (2021), equation 23; the sum previously included one more test,
+      and could read past the end of gammai
+    * ADDIS, ADDIS_spending, Alpha_investing, LONDstar, LORD, LORDstar,
+      online_fallback, SAFFRON and SAFFRONstar now check that a user-supplied
+      gammai (or betai) is at least as long as the number of p-values
+    * fixed a memory error in LORDstar with version = 'async' for a single
+      p-value
+    * the checks that gammai (or betai) sums to at most 1 (or alpha) now allow
+      for rounding error, so the output of setBound() is always accepted
+    * LORD, LORDstar, SAFFRON, SAFFRONstar, ADDIS and Alpha_investing now check
+      that a user-supplied gammai is non-increasing, as the source papers
+      require
+    * the batch versions of LONDstar, LORDstar and SAFFRONstar no longer fail
+      when some test levels are exactly zero
+    * SAFFRON, SAFFRONstar, BatchStBH, StoreyBH and ADDIS_spending now require
+      lambda < 1
+    * ADDIS_spending test levels are now capped at lambda, as Tian and Ramdas
+      (2021) require
+    * StoreyBH now accepts a data frame, as documented, and its help page gives
+      the Storey-BH rejection threshold
+    * bonfInfinite and LORDdep now use the date-sorted data frame
+    * supLORD is much faster: the normalising constant of each rejection's
+      spending sequence is computed once rather than at every later step
+      (e.g. 6 s to 0.03 s for 1000 p-values with rho = 1000)
+    * supLORD now follows Xu and Ramdas (2021) exactly: the boost from the first
+      rejection is spent from the next test onwards (previously only after a
+      second rejection); the r-th rejection earns b rather than beta0
+      (equation 21); the offset a is the root of equation 20 (previously
+      searched for only on (0, r/10)); and the spending sequence is computed on
+      the log scale, avoiding NaN levels for large eta. These changes increase
+      power, in some settings substantially
+    * supLORD now accepts rho greater than the number of p-values with the
+      default gammai, and checks the length of a user-supplied gammai
+    * LORDstar and SAFFRONstar (all versions) are much faster, with identical
+      results: the times of known rejections and the counts of candidates are
+      updated as tests are made rather than recomputed at every step (e.g.
+      LORDstar with version = 'async' takes under 0.01 s rather than 150 s,
+      and SAFFRONstar 0.01 s rather than 350 s, for 8000 p-values)
+    * all functions now give an error if no p-values remain after missing
+      values are removed; several functions previously crashed R for empty or
+      all-missing input
+    * missing p-values in a data frame now remove only those rows (rows with
+      missing values in other columns were also removed), and are an error when
+      the data frame has decision times or lags
+    * LOND, Alpha_investing and online_fallback now return the id column, as
+      LORD, SAFFRON and ADDIS do, so results can be matched to the input after
+      the p-values are sorted by date
+    * decision times must be finite, and ADDIS with async = TRUE now checks
+      them as LONDstar, LORDstar and SAFFRONstar do; decision times larger than
+      the integer range were previously treated as already known
+    * ADDIS_spending with dep = TRUE gives a clear error if there is no column
+      of lags
+    * Alpha_spending, BatchBH, BatchPRDS and BatchStBH (and the deprecated
+      LORDdep and bonfInfinite) now check that a user-supplied gammai (or xi or
+      alphai) is long enough, instead of returning NA levels
+    * the default sequence of LORD with version = 'dep' and w0 > b0 no longer
+      depends on the number of p-values, and the default for w0 <= b0 uses the
+      constant 0.1393066, so that the condition of Javanmard and Montanari
+      (2018), example 3.7, holds exactly
+    * the progress bars of ADDIS, Alpha_investing, LONDstar, LORD and SAFFRON
+      count tests, and no longer overflow for more than 46,340 p-values
+    * corrected several error messages
+    * added tests of ADDIS_exhaustive testing levels and of the async ADDIS
+      candidate threshold
+    * corrected errors in the documentation, vignettes and references
+
 CHANGES IN VERSION 2.21.1
 -----------------------
 MODIFICATIONS:
@@ -51,7 +157,7 @@ MODIFICATIONS:
     * added the Alpha-investing procedure of Ramdas et al. [2018]
     * updated vignette
     * deprecated LORDdep and added functionality to LORD
-    * deprecated Bonfinifinite, which is replaced by AlphaSpending
+    * deprecated bonfInfinite, which is replaced by Alpha_spending
     * removed LORD versions 1 and 2
     * added unit tests
     * updated references

@@ -5,15 +5,15 @@
 #'
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with three columns: an identifier (`id'),
-#' p-value (`pval'), or a column describing the conflict sets for the hypotheses. 
+#' p-value (`pval'), and a column describing the conflict sets for the hypotheses. 
 #' This takes the form of a vector of decision times or lags. Batch sizes can be 
 #' specified as a separate argument (see below).
 #'
-#' Zrnic et al. (2021) present explicit three versions of LONDstar:
+#' Zrnic et al. (2021) present three explicit versions of LONDstar:
 #'
 #' 1) \code{version='async'} is for an asynchronous testing
 #' process, consisting of tests that start and finish at (potentially) random 
-#' times. The discretised finish times of the test correspond to the decision 
+#' times. The discretised finish times of the tests correspond to the decision 
 #' times. These decision times are given as the input \code{decision.times}
 #' for this version of the LONDstar algorithm.
 #' 
@@ -73,13 +73,12 @@
 #'
 #'
 #' @references
-#' Javanmard, A. and Montanari, A. (2018) Online Rules for Control of False
+#' Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 #' Discovery Rate and False Discovery Exceedance. \emph{Annals of Statistics},
 #' 46(2):526-554.
 #' 
 #' Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
-#' Multiple Hypotheses. \emph{Journal of Machine Learning Research} (to appear),
-#' \url{https://arxiv.org/abs/1812.05068}.
+#' Multiple Hypotheses. \emph{Journal of Machine Learning Research}, 22(33):1-39.
 #'
 #'
 #' @seealso
@@ -150,12 +149,15 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes, display_progr
     N <- length(pval)
     
     if (missing(betai)) {
-        betai <- 0.07720838 * alpha * log(pmax(seq_len(N), 2))/(seq_len(N) * exp(sqrt(log(seq_len(N)))))
+        betai <- 0.07908197 * alpha * log(pmax(seq_len(N), 2))/
+            (seq_len(N) * exp(sqrt(log(seq_len(N)))))
     } else if (any(betai < 0)) {
 
         stop("All elements of betai must be non-negative.")
-    } else if (sum(betai) > alpha) {
+    } else if (sumExceeds(betai, alpha)) {
         stop("The sum of the elements of betai must be <= alpha.")
+    } else if (length(betai) < N) {
+        stop("betai must have length at least equal to the number of p-values.")
     }
     
     version <- checkStarVersion(d, N, version, batch.sizes)
@@ -163,7 +165,9 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes, display_progr
     switch(version, {
         
         ## async = 1
-        E <- d$decision.times
+        # decision times after the last test are never reached, so capping them
+        # at N + 1 leaves the result unchanged and avoids integer overflow
+        E <- pmin(d$decision.times, N + 1)
         out <- londstar_async_faster(pval, 
                                      E, 
                                      betai,
@@ -197,12 +201,10 @@ LONDstar <- function(d, alpha = 0.05, version, betai, batch.sizes, display_progr
         
         alphai <- as.vector(t(list_out$alphai))
         R <- as.vector(t(list_out$R))
-        x <- alphai != 0
-        
-        if (length(x) > 0) {
-            alphai <- alphai[x]
-            R <- as.numeric(R[x])
-        }
+        # drop the padding of the batch-by-position matrices
+        x <- as.vector(t(outer(batch, seq_len(max(batch)), ">=")))
+        alphai <- alphai[x]
+        R <- as.numeric(R[x])
         
         batch.no <- rep(seq_len(length(batch)), batch)
         out <- data.frame(pval, batch = batch.no, alphai, R)

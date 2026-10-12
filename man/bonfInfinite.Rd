@@ -35,12 +35,12 @@ randomised.}
 \value{
 \item{d.out}{ A dataframe with the original data \code{d} (which
  will be reordered if there are batches and \code{random = TRUE}), the
- adjusted signifcance thresholds \code{alphai} and the indicator function of
+ adjusted significance thresholds \code{alphai} and the indicator function of
  discoveries \code{R}, where \code{R[i] = 1} corresponds to hypothesis
  \eqn{i} being rejected (otherwise \code{R[i] = 0}).}
 }
 \description{
-This funcion is deprecated, please use \code{\link{Alpha_spending}} instead.
+This function is deprecated, please use \code{\link{Alpha_spending}} instead.
 }
 \details{
 Implements online FDR control using a Bonferroni-like test.
@@ -58,7 +58,7 @@ numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}. Hypothesis \eqn{i}
 is rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
 }
 \references{
-Javanmard, A. and Montanari, A. (2018) Online Rules for Control of
- False Discovery Rate and False Discovery Exceedance. \emph{Annals of
+Javanmard, A. and Montanari, A. (2018). Online Rules for Control
+ of False Discovery Rate and False Discovery Exceedance. \emph{Annals of
  Statistics}, 46(2):526-554.
 }

@@ -45,9 +45,10 @@ DataFrame lord_faster(NumericVector pval,
 		IntegerVector tau(1);
 		int K = sum(R);
 
-		Progress p(N * N, display_progress);
+		Progress p(N, display_progress);
 
 		for (int i = 1; i < N; i++) {
+			p.increment();
 
 			if (K <= 1) {
 
@@ -71,7 +72,6 @@ DataFrame lord_faster(NumericVector pval,
 				tau2.erase(tau2.begin());
 
 				for (int j = 0; j < K-1; j++){
-					p.increment();
 					Cjsum += gammai[ i-tau2[j]-1 ];
 
 				}
@@ -99,9 +99,10 @@ DataFrame lord_faster(NumericVector pval,
 		IntegerVector kappai(1);
 		int K = sum(R);
 
-		Progress p(N * N,display_progress);
+		Progress p(N, display_progress);
 
 		for (int i = 1; i < N; i++) {
+			p.increment();
 
 			double alphaitilde;
 
@@ -128,7 +129,6 @@ DataFrame lord_faster(NumericVector pval,
 				IntegerVector kappaistar2 = clone(kappaistar);
 				kappaistar2.erase(kappaistar2.begin());
 				for(int j = 0; j < K-1; j++){
-					p.increment();
 					Cjsum += gammai[ S[i-1]-kappaistar2[j] ];
 				}
 				
@@ -187,7 +187,7 @@ DataFrame lord_faster(NumericVector pval,
 			phi = gammai[ i-taumax ]*W[taumax];
 
 			R[i+1] = (pval[i] <= alphai[i]);
-			W[i+1] = W[i] - phi + R[i-1]*b0;
+			W[i+1] = W[i] - phi + R[i+1]*b0;
 		}
 
 		R.erase(R.begin());

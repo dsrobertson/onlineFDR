@@ -18,7 +18,7 @@ DataFrame addis_spending_faster(NumericVector pval,
 	NumericVector alphai(N);
 	LogicalVector R(N);
 
-	alphai[0] = alpha * (tau - lambda) * gammai[0];
+	alphai[0] = std::min(lambda, alpha * (tau - lambda) * gammai[0]);
 	R[0] = (pval[0] <= alphai[0]);
 
 	int selectsum = (pval[0] <= tau);
@@ -28,7 +28,7 @@ DataFrame addis_spending_faster(NumericVector pval,
 
 	for (int i = 1; i < N; i++) {
 		p.increment();
-		alphai[i] = alpha * (tau - lambda) * gammai[selectsum - candsum];
+		alphai[i] = std::min(lambda, alpha * (tau - lambda) * gammai[selectsum - candsum]);
 		R[i] = (pval[i] <= alphai[i]);
 		selectsum = selectsum + (pval[i] <= tau);
 		candsum = candsum + (pval[i] <= lambda);
@@ -53,7 +53,7 @@ DataFrame addis_spending_dep_faster(NumericVector pval,
 	LogicalVector select(N);
 	LogicalVector cand(N);
 
-	alphai[0] = alpha * (tau - lambda) * gammai[0];
+	alphai[0] = std::min(lambda, alpha * (tau - lambda) * gammai[0]);
 	R[0] = (pval[0] <= alphai[0]);
 	select[0] = (pval[0] <= tau);
 	cand[0] = (pval[0] <= lambda);
@@ -66,7 +66,7 @@ DataFrame addis_spending_dep_faster(NumericVector pval,
 		int candsum = 0;
 		int maxL = std::max(0, i - L[i]);
 		if (maxL > 0) {
-			for (int j = 0; j <= maxL; j++) {
+			for (int j = 0; j < maxL; j++) {
 				if (select[j])
 					selectsum++;
 				if (cand[j])
@@ -74,7 +74,7 @@ DataFrame addis_spending_dep_faster(NumericVector pval,
 			}
 		}
 
-		alphai[i] = alpha * (tau - lambda) * gammai[1 + std::min(L[i]-1, i-1) + selectsum - candsum];
+		alphai[i] = std::min(lambda, alpha * (tau - lambda) * gammai[1 + std::min(L[i]-1, i-1) + selectsum - candsum]);
 		R[i] = (pval[i] <= alphai[i]);
 		select[i] = (pval[i] <= tau);
 		cand[i] = (pval[i] <= lambda);

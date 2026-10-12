@@ -1,4 +1,4 @@
-#' BatchPRDS: Online batch FDR control under Positive Dependence
+#' BatchPRDS: Online batch FDR control under positive dependence
 #'
 #' Implements the BatchPRDS algorithm for online FDR control, where PRDS stands
 #' for positive regression dependency on a subset, as presented by Zrnic et al.
@@ -25,21 +25,23 @@
 #'   0.05.
 #'
 #' @param gammai Optional vector of \eqn{\gamma_i}. A default is provided with
-#'   \eqn{\gamma_j} proportional to \eqn{1/j^(1.6)}.
+#'   \eqn{\gamma_j} proportional to \eqn{1/j^{1.6}}.
 #'   
 #' @param display_progress Logical. If \code{TRUE} prints out a progress bar for the algorithm runtime. 
 #'
-#' @return \item{out}{ A dataframe with the original data \code{d} and the
-#'   indicator function of discoveries \code{R}. Hypothesis \eqn{i} is rejected
-#'   if the \eqn{i}-th p-value within the \eqn{t}-th batch is less than or equal
-#'   to \eqn{(r/n)\alpha_t}, where \eqn{r} is the rank of the \eqn{i}-th p-value
-#'   within an ordered set and \eqn{n} is the total number of hypotheses within
-#'   the \eqn{t}-th batch. If hypothesis \eqn{i} is rejected, \code{R[i] = 1}
-#'   (otherwise \code{R[i] = 0}).}
+#' @return \item{out}{ A dataframe with the original data \code{d}, the
+#'   indicator function of discoveries \code{R} and the test level
+#'   \code{alphai} (\eqn{\alpha_t}) of each hypothesis's batch. Hypothesis
+#'   \eqn{i} in the \eqn{t}-th batch is rejected if its p-value is less than or
+#'   equal to \eqn{(k/n)\alpha_t}, where \eqn{n} is the number of hypotheses in
+#'   the batch and \eqn{k} is the largest \eqn{r} such that the \eqn{r}-th
+#'   smallest p-value in the batch is at most \eqn{(r/n)\alpha_t}. If hypothesis
+#'   \eqn{i} is rejected, \code{R[i] = 1} (otherwise \code{R[i] = 0}).}
 #'
-#' @references Zrnic, T., Jiang D., Ramdas A. and Jordan M. (2020). The Power of
-#'   Batching in Multiple Hypothesis Testing. \emph{International Conference on
-#'   Artificial Intelligence and Statistics}: 3806-3815
+#' @references Zrnic, T., Jiang, D., Ramdas, A. and Jordan, M.I. (2020). The
+#'   Power of Batching in Multiple Hypothesis Testing. \emph{International
+#'   Conference on
+#'   Artificial Intelligence and Statistics}, PMLR, 108:3806-3815.
 #'
 #' @examples
 #'
@@ -86,8 +88,10 @@ BatchPRDS <- function(d, alpha = 0.05, gammai, display_progress = FALSE){
     gammai <- 0.4374901658/(seq_len(n_batch)^(1.6))
   } else if (any(gammai < 0)) {
     stop("All elements of gammai must be non-negative.")
-  } else if (sum(gammai) > 1) {
+  } else if (sumExceeds(gammai, 1)) {
     stop("The sum of the elements of gammai must not be greater than 1.")
+  } else if (length(gammai) < n_batch) {
+    stop("gammai must have length at least equal to the number of batches.")
   }
   
   ### Start Batch PRDS procedure
