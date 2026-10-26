@@ -1,6 +1,6 @@
 Package: onlineFDR
-Version: 2.21.2
-Date: 2026-10-08
+Version: 2.21.3
+Date: 2026-10-26
 Title: Online Error Rate Control
 Authors@R: c(person(c("David", "S."), "Robertson", role = c("aut", "cre"),
                     email = "david.robertson@mrc-bsu.cam.ac.uk"),

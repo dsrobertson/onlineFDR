@@ -1,5 +1,29 @@
 # A NEWS File to document package updates
 
+CHANGES IN VERSION 2.21.3
+-----------------------
+MODIFICATIONS:
+
+    * the help pages and vignettes now state the dependence conditions under
+      which each procedure controls the FDR or FWER. In particular, LORD,
+      SAFFRON, Alpha_investing and ADDIS do not in general control the FDR for
+      positively dependent p-values (examples are given in
+      vignette("theory")), and the original LOND (original = TRUE) also
+      controls the FDR under positive dependence (PRDS)
+    * the help pages of ADDIS_spending and ADDIS_exhaustive state that FWER
+      control is not guaranteed for positively dependent p-values, and those
+      of Alpha_spending and bonfInfinite that they allow arbitrary dependence
+    * LONDstar and LORDstar with version = 'async' are documented to control
+      the FDR when the null p-values are independent (Zrnic et al., 2021,
+      Theorem 3); the 'dep' and 'batch' versions of the star functions are
+      documented as guaranteed to control only the mFDR
+    * the help page of SAFFRONstar now states that version = 'async' follows
+      Algorithm 3 of Zrnic et al. (2021) with asynchronous conflict sets,
+      counting candidates among tests that started after each rejection
+      became known (their Appendix Algorithm 7 counts candidates by decision
+      time instead, which can give an undefined index); a test checks this
+      against a reference implementation
+
 CHANGES IN VERSION 2.21.2
 -----------------------
 MODIFICATIONS:

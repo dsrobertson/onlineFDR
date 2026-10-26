@@ -20,7 +20,11 @@
 #' that sum to 1.
 #'
 #' The ADDIS-spending procedure provably controls the FWER in the strong sense
-#' for independent p-values. Note that the procedure also controls the
+#' for independent p-values. FWER control is not guaranteed for positively
+#' dependent p-values in general; the version for local dependence is
+#' described below, and \code{\link{Alpha_spending}} and
+#' \code{\link{online_fallback}} control the FWER under arbitrary dependence.
+#' Note that the procedure also controls the
 #' generalised familywise error rate (k-FWER) for \eqn{k > 1} if \eqn{\alpha} is
 #' replaced by min(\eqn{1, k\alpha}).
 #'

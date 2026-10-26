@@ -61,6 +61,8 @@ of the same date. If no column of dates is provided, then the p-values are
 treated as being ordered in sequence.
 
 The Alpha-investing procedure provably controls FDR for independent p-values.
+It does not control the FDR for positively dependent p-values in general,
+even with the default settings; see \code{vignette("theory")}.
 Given an overall significance level \eqn{\alpha}, we choose a sequence of
 non-negative non-increasing numbers \eqn{\gamma_i} that sum to 1.
 Alpha-investing depends on a constant \eqn{w_0}, which satisfies \eqn{0 \le

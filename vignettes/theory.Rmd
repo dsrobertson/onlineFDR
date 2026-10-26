@@ -76,7 +76,11 @@ the first $n$ hypotheses tested.
 A slightly modified version of LOND, with $\alpha_i = \beta_i \max(D(i-1), 1)$
 (Javanmard and Montanari, 2015, Remark 2.3), also controls the FDR for
 positively dependent (PRDS) $p$-values (Zrnic *et al.*, 2021). It is used by
-setting `original = FALSE`.
+setting `original = FALSE`. Their argument also shows that the original
+version controls the FDR for PRDS $p$-values: if the $i$-th hypothesis is
+rejected, the total number of discoveries is at least $D(i-1) + 1$, the factor
+used in $\alpha_i$, and this factor can only increase when $p$-values decrease,
+so Lemma 1 of Ramdas *et al.* (2019) applies.
 
 LOND can be adjusted to also control FDR under arbitrarily dependent $p$-values.
 To do so, it is modified with $\tilde{\beta}_i = \beta_i/H(i)$ in place of
@@ -230,7 +234,9 @@ given by $\gamma_j \propto j^{-1.6}$.
 ### Alpha-investing {#AlphaInvesting}
 
 Ramdas *et al.* (2018) proposed a variant of the Alpha-investing algorithm of
-Foster and Stine (2008) that guarantees FDR control for independent p-values.
+Foster and Stine (2008) that guarantees FDR control for independent p-values
+(but not for positively dependent p-values in general; see
+[Accounting for dependent p-values](#accounting-for-dependent-p-values)).
 This procedure uses SAFFRON's update rule with the constant $\lambda$
 replaced by a sequence $\lambda_i = \alpha_i$. This is also equivalent to using
 the ADDIS algorithm (see below) with $\tau = 1$ and $\lambda_i = \alpha_i$.
@@ -325,12 +331,57 @@ given [here](#SAFFRON_gamma).
 
 ## Accounting for dependent p-values
 
-As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending procedures assume
-independent p-values, while the modified LOND procedure (`original = FALSE`)
-is also valid under positive dependencies (like the Benjamini-Hochberg method, see below). Adjusted
-versions of LOND and LORD are available for arbitrarily dependent p-values.
-Alpha-spending and online fallback also control the FWER and FDR for arbitrarily
-dependent p-values.
+The LORD, SAFFRON, Alpha-investing, ADDIS, ADDIS-spending and ADDIS-exhaustive
+procedures assume
+that the null p-values are independent of each other and of the non-null
+p-values. Unlike for
+the Benjamini-Hochberg procedure (see below), their guarantees do not extend to
+positively dependent (PRDS) p-values in general, even when the dependence is
+confined to blocks of consecutive tests. Fisher (2024) shows that LORD and
+SAFFRON still control the FDR under positive dependence if each null p-value is
+conditionally super-uniform given the information used to set its test level.
+For well-powered tests this essentially requires each p-value to be independent
+of that information (local dependence in Fisher's sense), for example when the
+levels for a block of tests are set only from the results of earlier,
+independent blocks.
+
+Without such a condition the FDR can exceed the nominal level. For example, with
+one-sided tests of normal means whose test statistics share a common factor,
+either across the whole sequence or within blocks of tests ($\alpha = 0.05$):
+
+* SAFFRON with the default settings, all hypotheses null: the FDR is 0.051 for
+  30 tests with pairwise correlation 0.5, and 0.068 for 100 tests and 0.075 for
+  1000 tests with pairwise correlation 0.7. The inflation is larger at smaller
+  $\alpha$: for $\alpha = 0.01$ and 1000 tests the FDR is about $4\alpha$.
+* ADDIS with the default settings: the FDR is about 0.085 when 20 strong
+  signals are followed by 80 nulls and all test statistics have pairwise
+  correlation 0.9.
+* Alpha-investing with the default settings: in the same setting the FDR is
+  about 0.15, three times the nominal level.
+* LORD++ with the default settings: the FDR is about 0.063 for 10,500 tests in
+  50 independent blocks, each of 10 strong signals (p-values of essentially 0)
+  followed by 200 nulls whose test statistics have pairwise correlation 0.99
+  within the block. With $\gamma_j = 2^{-j}$ and blocks of 10 strong signals
+  followed by 50 such nulls (3,000 tests), the FDR is about 0.135.
+
+For SAFFRON, ADDIS and Alpha-investing the reason is that alpha-wealth is not
+spent on some p-values: those below $\lambda$ for SAFFRON, those outside
+$(\lambda, \tau]$ for ADDIS, and the rejected ones for Alpha-investing. When a
+shared effect makes all the p-values small, the test levels stop decreasing
+exactly when the null p-values are also small. For LORD++, each rejection
+raises the levels of the tests that follow it, so when a block of correlated
+null p-values is small, one false rejection makes the next ones more likely
+and the rejections cascade.
+
+For p-values that may be positively dependent across the sequence, LOND
+controls the FDR under the PRDS condition (see above), and so does BatchPRDS
+when the p-values are independent across batches. Adjusted versions of LOND
+(`dep = TRUE`) and LORD (`version = 'dep'`) control the FDR for arbitrarily
+dependent p-values, while LONDstar, LORDstar and SAFFRONstar
+(`version = 'dep'`) control the modified FDR (mFDR) under local dependence.
+Alpha-spending and online fallback control the FWER (and hence the FDR) for
+arbitrarily dependent p-values, and ADDIS-spending (`dep = TRUE`) controls the
+FWER under local dependence.
 
 By way of comparison, the usual Benjamini-Hochberg method for controlling
 the FDR assumes that the p-values are positively dependent (PRDS). As an
@@ -344,6 +395,9 @@ Benjamini, Y. and Yekutieli, D. (2001). The control of the false discovery rate
 in multiple testing under dependency. *The Annals of Statistics*,
 29(4):1165-1188.
 
+Fisher, A. (2024). Online false discovery rate control for LORD++ and SAFFRON
+under positive, local dependence. *Biometrical Journal*, 66(1):2300177.
+
 Foster, D. and Stine, R. (2008). $\alpha$-investing: a procedure for sequential
 control of expected false discoveries.
 *Journal of the Royal Statistical Society (Series B)*, 70(2):429-444.
@@ -354,6 +408,10 @@ Discovery Rate. *arXiv preprint*, https://arxiv.org/abs/1502.06197.
 Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. *Annals of Statistics*,
 46(2):526-554.
+
+Ramdas, A., Barber, R.F., Wainwright, M.J. and Jordan, M.I. (2019). A unified
+treatment of multiple testing with prior knowledge using the p-filter. *The
+Annals of Statistics*, 47(5):2790-2821.
 
 Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017). Online control
 of the false discovery rate with decaying memory.

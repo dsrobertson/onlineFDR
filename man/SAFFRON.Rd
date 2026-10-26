@@ -80,6 +80,14 @@ Note that FDR control also holds for the SAFFRON procedure if only the
 p-values corresponding to true nulls are mutually independent, and
 independent from the non-null p-values.
 
+SAFFRON does not control the FDR for positively dependent p-values in
+general, even with the default settings. For example, for 100 null one-sided
+p-values whose test statistics have pairwise correlation 0.7, SAFFRON with
+the default settings and \eqn{\alpha = 0.05} has an FDR of 0.068; see
+\code{vignette("theory")}. \code{\link{SAFFRONstar}} with
+\code{version='dep'} controls the modified FDR (mFDR) under local
+dependence.
+
 The SAFFRON procedure can lose power in the presence of conservative nulls,
 which can be compensated for by adaptively `discarding' these p-values, as
 in the ADDIS algorithm (see \code{\link{ADDIS}}).

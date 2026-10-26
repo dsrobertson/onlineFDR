@@ -4,6 +4,8 @@
 #' Storey (2002), with the null proportion estimate of Storey, Taylor and
 #' Siegmund (2004).
 #'
+#' The Storey-BH procedure controls the FDR for independent p-values.
+#'
 #' The function takes as its input either a vector of p-values, or a dataframe
 #' with a column of p-values (`pval').
 #'
