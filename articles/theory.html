@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,7 +120,18 @@ hypotheses tested.</p>
 positively dependent (PRDS)
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
 (Zrnic <em>et al.</em>, 2021). It is used by setting
-<code>original = FALSE</code>.</p>
+<code>original = FALSE</code>. Their argument also shows that the
+original version controls the FDR for PRDS
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values:
+if the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+hypothesis is rejected, the total number of discoveries is at least
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false" form="prefix">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">D(i-1) + 1</annotation></semantics></math>,
+the factor used in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\alpha_i</annotation></semantics></math>,
+and this factor can only increase when
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
+decrease, so Lemma 1 of Ramdas <em>et al.</em> (2019) applies.</p>
 <p>LOND can be adjusted to also control FDR under arbitrarily dependent
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values.
 To do so, it is modified with
@@ -383,8 +394,10 @@ for SAFFRON is given by
 </h3>
 <p>Ramdas <em>et al.</em> (2018) proposed a variant of the
 Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR
-control for independent p-values. This procedure uses SAFFRON’s update
-rule with the constant
+control for independent p-values (but not for positively dependent
+p-values in general; see <a href="#accounting-for-dependent-p-values">Accounting for dependent
+p-values</a>). This procedure uses SAFFRON’s update rule with the
+constant
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
 replaced by a sequence
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>α</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\lambda_i = \alpha_i</annotation></semantics></math>.
@@ -539,13 +552,69 @@ for ADDIS-spending is the same as for SAFFRON given <a href="#SAFFRON_gamma">her
 <div class="section level2">
 <h2 id="accounting-for-dependent-p-values">Accounting for dependent p-values<a class="anchor" aria-label="anchor" href="#accounting-for-dependent-p-values"></a>
 </h2>
-<p>As noted above, the LORD, SAFFRON, ADDIS and ADDIS-spending
-procedures assume independent p-values, while the modified LOND
-procedure (<code>original = FALSE</code>) is also valid under positive
-dependencies (like the Benjamini-Hochberg method, see below). Adjusted
-versions of LOND and LORD are available for arbitrarily dependent
-p-values. Alpha-spending and online fallback also control the FWER and
-FDR for arbitrarily dependent p-values.</p>
+<p>The LORD, SAFFRON, Alpha-investing, ADDIS, ADDIS-spending and
+ADDIS-exhaustive procedures assume that the null p-values are
+independent of each other and of the non-null p-values. Unlike for the
+Benjamini-Hochberg procedure (see below), their guarantees do not extend
+to positively dependent (PRDS) p-values in general, even when the
+dependence is confined to blocks of consecutive tests. Fisher (2024)
+shows that LORD and SAFFRON still control the FDR under positive
+dependence if each null p-value is conditionally super-uniform given the
+information used to set its test level. For well-powered tests this
+essentially requires each p-value to be independent of that information
+(local dependence in Fisher’s sense), for example when the levels for a
+block of tests are set only from the results of earlier, independent
+blocks.</p>
+<p>Without such a condition the FDR can exceed the nominal level. For
+example, with one-sided tests of normal means whose test statistics
+share a common factor, either across the whole sequence or within blocks
+of tests
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.05</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.05</annotation></semantics></math>):</p>
+<ul>
+<li>SAFFRON with the default settings, all hypotheses null: the FDR is
+0.051 for 30 tests with pairwise correlation 0.5, and 0.068 for 100
+tests and 0.075 for 1000 tests with pairwise correlation 0.7. The
+inflation is larger at smaller
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>:
+for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.01</annotation></semantics></math>
+and 1000 tests the FDR is about
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>α</mi></mrow><annotation encoding="application/x-tex">4\alpha</annotation></semantics></math>.</li>
+<li>ADDIS with the default settings: the FDR is about 0.085 when 20
+strong signals are followed by 80 nulls and all test statistics have
+pairwise correlation 0.9.</li>
+<li>Alpha-investing with the default settings: in the same setting the
+FDR is about 0.15, three times the nominal level.</li>
+<li>LORD++ with the default settings: the FDR is about 0.063 for 10,500
+tests in 50 independent blocks, each of 10 strong signals (p-values of
+essentially 0) followed by 200 nulls whose test statistics have pairwise
+correlation 0.99 within the block. With
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>γ</mi><mi>j</mi></msub><mo>=</mo><msup><mn>2</mn><mrow><mi>−</mi><mi>j</mi></mrow></msup></mrow><annotation encoding="application/x-tex">\gamma_j = 2^{-j}</annotation></semantics></math>
+and blocks of 10 strong signals followed by 50 such nulls (3,000 tests),
+the FDR is about 0.135.</li>
+</ul>
+<p>For SAFFRON, ADDIS and Alpha-investing the reason is that
+alpha-wealth is not spent on some p-values: those below
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+for SAFFRON, those outside
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>λ</mi><mo>,</mo><mi>τ</mi><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">(\lambda, \tau]</annotation></semantics></math>
+for ADDIS, and the rejected ones for Alpha-investing. When a shared
+effect makes all the p-values small, the test levels stop decreasing
+exactly when the null p-values are also small. For LORD++, each
+rejection raises the levels of the tests that follow it, so when a block
+of correlated null p-values is small, one false rejection makes the next
+ones more likely and the rejections cascade.</p>
+<p>For p-values that may be positively dependent across the sequence,
+LOND controls the FDR under the PRDS condition (see above), and so does
+BatchPRDS when the p-values are independent across batches. Adjusted
+versions of LOND (<code>dep = TRUE</code>) and LORD
+(<code>version = 'dep'</code>) control the FDR for arbitrarily dependent
+p-values, while LONDstar, LORDstar and SAFFRONstar
+(<code>version = 'dep'</code>) control the modified FDR (mFDR) under
+local dependence. Alpha-spending and online fallback control the FWER
+(and hence the FDR) for arbitrarily dependent p-values, and
+ADDIS-spending (<code>dep = TRUE</code>) controls the FWER under local
+dependence.</p>
 <p>By way of comparison, the usual Benjamini-Hochberg method for
 controlling the FDR assumes that the p-values are positively dependent
 (PRDS). As an example, the PRDS is satisfied for one-sided p-values from
@@ -559,6 +628,9 @@ details.</p>
 <p>Benjamini, Y. and Yekutieli, D. (2001). The control of the false
 discovery rate in multiple testing under dependency. <em>The Annals of
 Statistics</em>, 29(4):1165-1188.</p>
+<p>Fisher, A. (2024). Online false discovery rate control for LORD++ and
+SAFFRON under positive, local dependence. <em>Biometrical Journal</em>,
+66(1):2300177.</p>
 <p>Foster, D. and Stine, R. (2008).
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-investing:
 a procedure for sequential control of expected false discoveries.
@@ -569,6 +641,9 @@ Discovery Rate. <em>arXiv preprint</em>, <a href="https://arxiv.org/abs/1502.061
 <p>Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
 False Discovery Rate and False Discovery Exceedance. <em>Annals of
 Statistics</em>, 46(2):526-554.</p>
+<p>Ramdas, A., Barber, R.F., Wainwright, M.J. and Jordan, M.I. (2019). A
+unified treatment of multiple testing with prior knowledge using the
+p-filter. <em>The Annals of Statistics</em>, 47(5):2790-2821.</p>
 <p>Ramdas, A., Yang, F., Wainwright, M.J. and Jordan, M.I. (2017).
 Online control of the false discovery rate with decaying memory.
 <em>Advances in Neural Information Processing Systems 30</em>,

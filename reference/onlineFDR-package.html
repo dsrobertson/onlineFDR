@@ -13,7 +13,7 @@ based on the evidence against it and on the previous rejection decisions."><meta
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,14 +61,17 @@ improve the power of the procedure in the presence of conservative nulls by
 adaptively `discarding' these p-values, as proposed by Tian and Ramdas
 (2019). LORD++ and the discarding version provably control the FDR under
 independence of the p-values; for LORD 3 this has only been shown
-empirically. Setting <code>version='dep'</code> provides
+empirically. FDR control is not guaranteed for positively dependent
+p-values in general (see <code><a href="../articles/theory.html">vignette("theory")</a></code>). Setting
+<code>version='dep'</code> provides
 a modified version of LORD that is valid for arbitrarily dependent p-values.</p>
 <p>The second method is LOND, which stands for (significance) Levels based On
 Number of Discoveries and is implemented by the function <code><a href="LOND.html">LOND</a></code>.
-This procedure controls the FDR under independence of the p-values, but the
+This procedure controls the FDR under independence of the p-values. The
 slightly modified version of LOND of Javanmard and Montanari (2015, Remark
 2.3) also provably controls the FDR under positive dependence (PRDS
-condition), as shown by Zrnic et al. (2021). In
+condition), as shown by Zrnic et al. (2021), and their argument shows that
+the original version does too (see <code><a href="LOND.html">LOND</a></code>). In
 addition, by specifying <code>dep = TRUE</code>, this function runs a modified
 version of LOND which is valid for arbitrarily dependent p-values.</p>
 <p>Another method for online FDR control proposed by Ramdas et al. (2018) is the
@@ -77,16 +80,18 @@ Alpha Fraction that is Futilely Rationed On true Null hypotheses. This
 provides an adaptive algorithm for online FDR control. SAFFRON is related to
 the Alpha-investing procedure of Foster and Stine (2008), a monotone version
 of which is implemented by the function <code><a href="Alpha_investing.html">Alpha_investing</a></code>. Both
-these procedures provably control the FDR under independence of the p-values.</p>
+these procedures provably control the FDR under independence of the p-values,
+but not for positively dependent p-values in general, even with the default
+settings (see <code><a href="../articles/theory.html">vignette("theory")</a></code>).</p>
 <p>Tian and Ramdas (2019) proposed the <code><a href="ADDIS.html">ADDIS</a></code>
 algorithm, which stands for an ADaptive algorithm that DIScards conservative
 nulls. The algorithm compensates for the power loss of SAFFRON with
 conservative nulls, by including both adaptivity in the fraction of null
 hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
-The ADDIS procedure provably controls the FDR for independent p-values. Tian
-and Ramdas (2019) also presented a version for an asynchronous testing
-process, consisting of tests that start and finish at (potentially) random
-times.</p>
+The ADDIS procedure provably controls the FDR for independent p-values, but
+not for positively dependent p-values in general. Tian and Ramdas (2019)
+also presented a version for an asynchronous testing process, consisting of
+tests that start and finish at (potentially) random times.</p>
 <p>For testing batches of hypotheses, Zrnic et al. (2020) proposed batched
 online testing algorithms that control the FDR, where the p-values across
 different batches are independent, and within a batch the p-values are either
@@ -94,9 +99,11 @@ positively dependent or independent.</p>
 <p>Zrnic et al. (2021) generalised LOND, LORD and SAFFRON for asynchronous
 online testing, where each hypothesis test can itself be a sequential process
 and the tests can overlap in time. Note though that these algorithms are
-designed for the control of a modified FDR (mFDR), although LORDstar and
-SAFFRONstar with <code>version='async'</code> also control the FDR when the null
-p-values are independent of each other and of the non-nulls. They are
+designed for the control of a modified FDR (mFDR), although LONDstar,
+LORDstar and SAFFRONstar with <code>version='async'</code> also control the FDR
+when the null p-values are independent of each other and of the non-nulls,
+and the decision times do not depend on the p-values. The <code>'dep'</code> and
+<code>'batch'</code> versions are only guaranteed to control the mFDR. They are
 implemented by
 the functions <code><a href="LONDstar.html">LONDstar</a></code>, <code><a href="LORDstar.html">LORDstar</a></code> and
 <code><a href="SAFFRONstar.html">SAFFRONstar</a></code>. Zrnic et al. (2021) presented three explicit
@@ -128,9 +135,10 @@ controls the FWER even under arbitrary dependence amongst the p-values. The
 <code><a href="ADDIS_spending.html">ADDIS_spending</a></code> procedure compensates for the power loss of
 Alpha-spending and online fallback, by including both adaptivity in the
 fraction of null hypotheses and the conservativeness of nulls. This procedure
-controls the FWER in the strong sense for independent p-values. Tian and
-Ramdas (2021) also presented a version for handling local dependence, which
-can be specified by setting <code>dep=TRUE</code>. Fischer et al. (2024) proposed
+controls the FWER in the strong sense for independent p-values; this is not
+guaranteed for positively dependent p-values in general. Tian and Ramdas
+(2021) also presented a version for handling local dependence, which can be
+specified by setting <code>dep=TRUE</code>. Fischer et al. (2024) proposed
 an exhaustive version of ADDIS-spending, implemented by the function
 <code><a href="ADDIS_exhaustive.html">ADDIS_exhaustive</a></code>, which is a uniform improvement of
 ADDIS-spending and also strongly controls the FWER for independent p-values.</p>

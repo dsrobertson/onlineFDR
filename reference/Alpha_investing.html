@@ -15,7 +15,7 @@ the ADDIS algorithm with \(\tau = 1\) and \(\lambda_i = \alpha_i\)."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,6 +123,8 @@ The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
 treated as being ordered in sequence.</p>
 <p>The Alpha-investing procedure provably controls FDR for independent p-values.
+It does not control the FDR for positively dependent p-values in general,
+even with the default settings; see <code><a href="../articles/theory.html">vignette("theory")</a></code>.
 Given an overall significance level \(\alpha\), we choose a sequence of
 non-negative non-increasing numbers \(\gamma_i\) that sum to 1.
 Alpha-investing depends on a constant \(w_0\), which satisfies \(0 \le

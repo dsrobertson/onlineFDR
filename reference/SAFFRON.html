@@ -17,7 +17,7 @@ alpha-wealth that is allocated to testing the true null hypotheses."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,6 +143,13 @@ the procedure, and \(0 &lt; \lambda &lt; 1\) represents the threshold for a
 <p>Note that FDR control also holds for the SAFFRON procedure if only the
 p-values corresponding to true nulls are mutually independent, and
 independent from the non-null p-values.</p>
+<p>SAFFRON does not control the FDR for positively dependent p-values in
+general, even with the default settings. For example, for 100 null one-sided
+p-values whose test statistics have pairwise correlation 0.7, SAFFRON with
+the default settings and \(\alpha = 0.05\) has an FDR of 0.068; see
+<code><a href="../articles/theory.html">vignette("theory")</a></code>. <code><a href="SAFFRONstar.html">SAFFRONstar</a></code> with
+<code>version='dep'</code> controls the modified FDR (mFDR) under local
+dependence.</p>
 <p>The SAFFRON procedure can lose power in the presence of conservative nulls,
 which can be compensated for by adaptively `discarding' these p-values, as
 in the ADDIS algorithm (see <code><a href="ADDIS.html">ADDIS</a></code>).</p>

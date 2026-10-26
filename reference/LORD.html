@@ -11,7 +11,7 @@ and Montanari (2018) and Ramdas et al. (2017)."><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -164,6 +164,10 @@ p-values greater than \(\tau\) are implicitly `discarded' by the procedure.</p>
 <p>Note that FDR control also holds for the LORD procedure if only the p-values
 corresponding to true nulls are mutually independent, and independent from
 the non-null p-values.</p>
+<p>FDR control is not guaranteed for positively dependent p-values in general,
+even with the default settings. For example, the FDR of LORD++ can exceed
+\(\alpha\) when long runs of positively correlated null p-values follow
+strong signals; see <code><a href="../articles/theory.html">vignette("theory")</a></code>.</p>
 <p>For dependent p-values, a modified LORD procedure was proposed in Javanmard
 and Montanari (2018), which is called by setting <code>version='dep'</code>. Given
 an overall significance level \(\alpha\), we choose a sequence of

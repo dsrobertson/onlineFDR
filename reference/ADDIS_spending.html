@@ -15,7 +15,7 @@ hypotheses and the conservativeness of nulls."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -126,7 +126,11 @@ ADDIS-spending will never reject a p-value larger than \(\lambda\). The
 algorithms also require a sequence of non-negative numbers \(\gamma_i\)
 that sum to 1.</p>
 <p>The ADDIS-spending procedure provably controls the FWER in the strong sense
-for independent p-values. Note that the procedure also controls the
+for independent p-values. FWER control is not guaranteed for positively
+dependent p-values in general; the version for local dependence is
+described below, and <code><a href="Alpha_spending.html">Alpha_spending</a></code> and
+<code><a href="online_fallback.html">online_fallback</a></code> control the FWER under arbitrary dependence.
+Note that the procedure also controls the
 generalised familywise error rate (k-FWER) for \(k &gt; 1\) if \(\alpha\) is
 replaced by min(\(1, k\alpha\)).</p>
 <p>Tian and Ramdas (2021) also presented a version for handling local

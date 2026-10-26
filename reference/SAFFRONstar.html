@@ -9,7 +9,7 @@ presented by Zrnic et al. (2021)."><meta property="og:image" content="https://ds
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,7 +123,13 @@ specified as a separate argument (see below).</p>
 of tests that start and finish at (potentially) random times. The discretised
 finish times of the tests correspond to the decision times. These decision
 times are given as the input <code>decision.times</code> for this version of the
-SAFFRONstar algorithm. For this version of SAFFRONstar, Tian and Ramdas
+SAFFRONstar algorithm. The test levels follow Algorithm 3 of Zrnic et al.
+(2021) with the asynchronous conflict sets of their Section 3: the
+candidates counted after the \(j\)-th rejection are those among tests
+that started after that rejection became known. (The explicit statement in
+their Appendix, Algorithm 7, instead counts candidates by decision time,
+which can give an undefined index of \(\gamma\) when tests overlap.)
+For this version of SAFFRONstar, Tian and Ramdas
 (2019) presented an algorithm that can improve the power of the procedure in
 the presence of conservative nulls by adaptively `discarding' these p-values.
 This is implemented by <code><a href="ADDIS.html">ADDIS</a></code> with <code>async=TRUE</code>.</p>
@@ -147,8 +153,10 @@ procedure, and \(0 &lt; \lambda &lt; 1\) represents the threshold for a
 \(\lambda\). The algorithms also require a sequence of non-negative
 non-increasing numbers \(\gamma_i\) that sum to 1.</p>
 <p>Note that these SAFFRONstar algorithms control the <em>modified</em> FDR
-(mFDR). The `async' version also controls the usual FDR if the p-values are
-assumed to be independent.</p>
+(mFDR). The `async' version also controls the usual FDR if the null
+p-values are independent of each other and of the non-nulls, and the
+decision times do not depend on the p-values (Zrnic et al., 2021,
+Theorem 3).</p>
 <p>Further details of the SAFFRONstar algorithms can be found in Zrnic et al.
 (2021).</p>
     </div>

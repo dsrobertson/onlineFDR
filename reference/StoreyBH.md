@@ -41,6 +41,8 @@ StoreyBH(d, alpha = 0.05, lambda = 0.5)
 
 ## Details
 
+The Storey-BH procedure controls the FDR for independent p-values.
+
 The function takes as its input either a vector of p-values, or a
 dataframe with a column of p-values (\`pval').
 

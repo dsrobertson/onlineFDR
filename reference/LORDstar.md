@@ -101,8 +101,9 @@ Given an overall significance level \\\alpha\\, LORDstar depends on
 non-negative non-increasing numbers \\\gamma_i\\ that sum to 1.
 
 Note that these LORDstar algorithms control the *modified* FDR (mFDR).
-The \`async' version also controls the usual FDR if the p-values are
-assumed to be independent.
+The \`async' version also controls the usual FDR if the null p-values
+are independent of each other and of the non-nulls, and the decision
+times do not depend on the p-values (Zrnic et al., 2021, Theorem 3).
 
 Further details of the LORDstar algorithms can be found in Zrnic et al.
 (2021).

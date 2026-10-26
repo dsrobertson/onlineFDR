@@ -25,18 +25,23 @@ improve the power of the procedure in the presence of conservative nulls
 by adaptively \`discarding' these p-values, as proposed by Tian and
 Ramdas (2019). LORD++ and the discarding version provably control the
 FDR under independence of the p-values; for LORD 3 this has only been
-shown empirically. Setting `version='dep'` provides a modified version
-of LORD that is valid for arbitrarily dependent p-values.
+shown empirically. FDR control is not guaranteed for positively
+dependent p-values in general (see
+[`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md)).
+Setting `version='dep'` provides a modified version of LORD that is
+valid for arbitrarily dependent p-values.
 
 The second method is LOND, which stands for (significance) Levels based
 On Number of Discoveries and is implemented by the function
 [`LOND`](https://dsrobertson.github.io/onlineFDR/reference/LOND.md).
-This procedure controls the FDR under independence of the p-values, but
-the slightly modified version of LOND of Javanmard and Montanari (2015,
+This procedure controls the FDR under independence of the p-values. The
+slightly modified version of LOND of Javanmard and Montanari (2015,
 Remark 2.3) also provably controls the FDR under positive dependence
-(PRDS condition), as shown by Zrnic et al. (2021). In addition, by
-specifying `dep = TRUE`, this function runs a modified version of LOND
-which is valid for arbitrarily dependent p-values.
+(PRDS condition), as shown by Zrnic et al. (2021), and their argument
+shows that the original version does too (see
+[`LOND`](https://dsrobertson.github.io/onlineFDR/reference/LOND.md)). In
+addition, by specifying `dep = TRUE`, this function runs a modified
+version of LOND which is valid for arbitrarily dependent p-values.
 
 Another method for online FDR control proposed by Ramdas et al. (2018)
 is the
@@ -48,7 +53,9 @@ Alpha-investing procedure of Foster and Stine (2008), a monotone version
 of which is implemented by the function
 [`Alpha_investing`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_investing.md).
 Both these procedures provably control the FDR under independence of the
-p-values.
+p-values, but not for positively dependent p-values in general, even
+with the default settings (see
+[`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md)).
 
 Tian and Ramdas (2019) proposed the
 [`ADDIS`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS.md)
@@ -57,9 +64,10 @@ conservative nulls. The algorithm compensates for the power loss of
 SAFFRON with conservative nulls, by including both adaptivity in the
 fraction of null hypotheses (like SAFFRON) and the conservativeness of
 nulls (unlike SAFFRON). The ADDIS procedure provably controls the FDR
-for independent p-values. Tian and Ramdas (2019) also presented a
-version for an asynchronous testing process, consisting of tests that
-start and finish at (potentially) random times.
+for independent p-values, but not for positively dependent p-values in
+general. Tian and Ramdas (2019) also presented a version for an
+asynchronous testing process, consisting of tests that start and finish
+at (potentially) random times.
 
 For testing batches of hypotheses, Zrnic et al. (2020) proposed batched
 online testing algorithms that control the FDR, where the p-values
@@ -70,9 +78,11 @@ Zrnic et al. (2021) generalised LOND, LORD and SAFFRON for asynchronous
 online testing, where each hypothesis test can itself be a sequential
 process and the tests can overlap in time. Note though that these
 algorithms are designed for the control of a modified FDR (mFDR),
-although LORDstar and SAFFRONstar with `version='async'` also control
-the FDR when the null p-values are independent of each other and of the
-non-nulls. They are implemented by the functions
+although LONDstar, LORDstar and SAFFRONstar with `version='async'` also
+control the FDR when the null p-values are independent of each other and
+of the non-nulls, and the decision times do not depend on the p-values.
+The `'dep'` and `'batch'` versions are only guaranteed to control the
+mFDR. They are implemented by the functions
 [`LONDstar`](https://dsrobertson.github.io/onlineFDR/reference/LONDstar.md),
 [`LORDstar`](https://dsrobertson.github.io/onlineFDR/reference/LORDstar.md)
 and
@@ -115,7 +125,8 @@ amongst the p-values. The
 procedure compensates for the power loss of Alpha-spending and online
 fallback, by including both adaptivity in the fraction of null
 hypotheses and the conservativeness of nulls. This procedure controls
-the FWER in the strong sense for independent p-values. Tian and Ramdas
+the FWER in the strong sense for independent p-values; this is not
+guaranteed for positively dependent p-values in general. Tian and Ramdas
 (2021) also presented a version for handling local dependence, which can
 be specified by setting `dep=TRUE`. Fischer et al. (2024) proposed an
 exhaustive version of ADDIS-spending, implemented by the function

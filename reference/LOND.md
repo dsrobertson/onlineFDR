@@ -61,8 +61,9 @@ LOND(
   Logical. If `TRUE`, runs the original LOND algorithm of Javanmard and
   Montanari (2015), otherwise runs the modified algorithm with
   \\\alpha_i = \max(D(i-1), 1)\beta_i\\ (Javanmard and Montanari, 2015,
-  Remark 2.3), which also controls the FDR under positive dependence
-  (Zrnic et al., 2021). Defaults to `TRUE`.
+  Remark 2.3), which makes slightly fewer discoveries and provably
+  controls the FDR under positive dependence (Zrnic et al., 2021); see
+  Details for the original version. Defaults to `TRUE`.
 
 ## Value
 
@@ -85,17 +86,21 @@ provided, then the p-values are treated as being ordered in sequence,
 arriving one at a time.
 
 The LOND algorithm controls the FDR for independent p-values (see below
-for the modification for dependent p-values). Given an overall
-significance level \\\alpha\\, we choose a sequence of non-negative
-numbers \\\beta_i\\ such that they sum to \\\alpha\\. The values of the
-adjusted significance thresholds \\\alpha_i\\ are chosen as follows:
-\$\$\alpha_i = (D(i-1) + 1)\beta_i\$\$ where \\D(n)\\ denotes the number
-of discoveries in the first \\n\\ hypotheses.
+for positively dependent p-values). Given an overall significance level
+\\\alpha\\, we choose a sequence of non-negative numbers \\\beta_i\\
+such that they sum to \\\alpha\\. The values of the adjusted
+significance thresholds \\\alpha_i\\ are chosen as follows: \$\$\alpha_i
+= (D(i-1) + 1)\beta_i\$\$ where \\D(n)\\ denotes the number of
+discoveries in the first \\n\\ hypotheses.
 
 A slightly modified version of LOND with thresholds \\\alpha_i =
 \max(D(i-1), 1)\beta_i\\ (Javanmard and Montanari, 2015, Remark 2.3)
 provably controls the FDR under positive dependence (PRDS condition),
-see Zrnic et al. (2021).
+see Zrnic et al. (2021). Their argument also shows that the original
+version controls the FDR under PRDS: if the \\i\\-th hypothesis is
+rejected, the total number of discoveries is at least \\D(i-1) + 1\\,
+the factor used in \\\alpha_i\\, and this factor can only increase when
+p-values decrease, so Lemma 1 of Ramdas et al. (2019) applies.
 
 For arbitrarily dependent p-values, LOND controls the FDR if it is
 modified with \\\beta_i / H(i)\\ in place of \\\beta_i\\, where \\H(i)\\
@@ -112,6 +117,10 @@ Discovery Rate. *arXiv preprint*, <https://arxiv.org/abs/1502.06197>.
 Javanmard, A. and Montanari, A. (2018). Online Rules for Control of
 False Discovery Rate and False Discovery Exceedance. *Annals of
 Statistics*, 46(2):526-554.
+
+Ramdas, A., Barber, R.F., Wainwright, M.J. and Jordan, M.I. (2019). A
+unified treatment of multiple testing with prior knowledge using the
+p-filter. *The Annals of Statistics*, 47(5):2790-2821.
 
 Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online
 Testing of Multiple Hypotheses. *Journal of Machine Learning Research*,

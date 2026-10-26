@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,12 +141,12 @@ and will implement the LOND procedure to guarantee FDR control for
 arbitrarily dependent p-values. This method will in general be more
 conservative.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>    <span class="co"># for independent p-values</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># for dependent p-values</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span><span class="op">)</span>    <span class="co"># independent or PRDS</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>; <span class="va">results.dep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/LOND.html">LOND</a></span><span class="op">(</span><span class="va">sample.df</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># arbitrary dependence</span></span>
 <span></span>
 <span><span class="co"># compare adjusted significance thresholds</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>independent <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dependent <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        independent    dependent</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span>default <span class="op">=</span> <span class="va">results.indep</span><span class="op">$</span><span class="va">alphai</span>, dep <span class="op">=</span> <span class="va">results.dep</span><span class="op">$</span><span class="va">alphai</span><span class="op">)</span></span>
+<span><span class="co">#&gt;            default          dep</span></span>
 <span><span class="co">#&gt;  [1,] 0.0027407722 0.0027407722</span></span>
 <span><span class="co">#&gt;  [2,] 0.0011920626 0.0007947084</span></span>
 <span><span class="co">#&gt;  [3,] 0.0010153042 0.0005538023</span></span>

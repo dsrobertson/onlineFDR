@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,10 +100,11 @@ with three columns: an identifier (`id'), date (`date') and p-value (`pval').
 The case where p-values arrive in batches corresponds to multiple instances of
 the same date. If no column of dates is provided, then the p-values are
 treated as being ordered in sequence, arriving one at a time.</p>
-<p>The procedure controls FDR for a potentially infinite stream of p-values by
-using a Bonferroni-like test. Given an overall significance level
-\(\alpha\), we choose a (potentially infinite) sequence of non-negative
-numbers \(\alpha_i\) such that they sum to \(\alpha\). Hypothesis \(i\)
+<p>The procedure controls FDR (and FWER) for a potentially infinite stream of
+arbitrarily dependent p-values by using a Bonferroni-like test. Given an
+overall significance level \(\alpha\), we choose a (potentially infinite)
+sequence of non-negative numbers \(\alpha_i\) such that they sum to
+\(\alpha\). Hypothesis \(i\)
 is rejected if the \(i\)-th p-value is less than or equal to \(\alpha_i\).</p>
     </div>
     <div class="section level2">

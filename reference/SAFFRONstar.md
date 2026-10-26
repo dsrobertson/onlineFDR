@@ -86,9 +86,15 @@ Zrnic et al. (2021) present three explicit versions of SAFFRONstar:
 of tests that start and finish at (potentially) random times. The
 discretised finish times of the tests correspond to the decision times.
 These decision times are given as the input `decision.times` for this
-version of the SAFFRONstar algorithm. For this version of SAFFRONstar,
-Tian and Ramdas (2019) presented an algorithm that can improve the power
-of the procedure in the presence of conservative nulls by adaptively
+version of the SAFFRONstar algorithm. The test levels follow Algorithm 3
+of Zrnic et al. (2021) with the asynchronous conflict sets of their
+Section 3: the candidates counted after the \\j\\-th rejection are those
+among tests that started after that rejection became known. (The
+explicit statement in their Appendix, Algorithm 7, instead counts
+candidates by decision time, which can give an undefined index of
+\\\gamma\\ when tests overlap.) For this version of SAFFRONstar, Tian
+and Ramdas (2019) presented an algorithm that can improve the power of
+the procedure in the presence of conservative nulls by adaptively
 \`discarding' these p-values. This is implemented by
 [`ADDIS`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS.md)
 with `async=TRUE`.
@@ -116,8 +122,10 @@ hypothesis. A \`candidate' refers to p-values no larger than
 non-increasing numbers \\\gamma_i\\ that sum to 1.
 
 Note that these SAFFRONstar algorithms control the *modified* FDR
-(mFDR). The \`async' version also controls the usual FDR if the p-values
-are assumed to be independent.
+(mFDR). The \`async' version also controls the usual FDR if the null
+p-values are independent of each other and of the non-nulls, and the
+decision times do not depend on the p-values (Zrnic et al., 2021,
+Theorem 3).
 
 Further details of the SAFFRONstar algorithms can be found in Zrnic et
 al. (2021).

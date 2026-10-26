@@ -108,6 +108,9 @@ The algorithm also requires a sequence of non-negative non-increasing
 numbers \\\gamma_i\\ that sum to 1.
 
 The ADDIS procedure provably controls the FDR for independent p-values.
+It does not control the FDR for positively dependent p-values in
+general, even with the default settings; see
+[`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
 Tian and Ramdas (2019) also presented a version for an asynchronous
 testing process, consisting of tests that start and finish at
 (potentially) random times. The discretised finish times of the tests

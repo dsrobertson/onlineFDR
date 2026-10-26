@@ -80,9 +80,15 @@ will never reject a p-value larger than \\\lambda\\. The algorithms also
 require a sequence of non-negative numbers \\\gamma_i\\ that sum to 1.
 
 The ADDIS-spending procedure provably controls the FWER in the strong
-sense for independent p-values. Note that the procedure also controls
-the generalised familywise error rate (k-FWER) for \\k \> 1\\ if
-\\\alpha\\ is replaced by min(\\1, k\alpha\\).
+sense for independent p-values. FWER control is not guaranteed for
+positively dependent p-values in general; the version for local
+dependence is described below, and
+[`Alpha_spending`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_spending.md)
+and
+[`online_fallback`](https://dsrobertson.github.io/onlineFDR/reference/online_fallback.md)
+control the FWER under arbitrary dependence. Note that the procedure
+also controls the generalised familywise error rate (k-FWER) for \\k \>
+1\\ if \\\alpha\\ is replaced by min(\\1, k\alpha\\).
 
 Tian and Ramdas (2021) also presented a version for handling local
 dependence. More precisely, for any \\t\>0\\ we allow the p-value

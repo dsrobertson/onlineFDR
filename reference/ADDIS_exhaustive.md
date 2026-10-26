@@ -62,7 +62,12 @@ larger than \\\lambda\\. The algorithm also requires a sequence of
 non-negative numbers \\\gamma_i\\ that sum to at most 1.
 
 The ADDIS-exhaustive procedure provably controls the FWER in the strong
-sense for independent p-values.
+sense for independent p-values. FWER control is not guaranteed for
+positively dependent p-values;
+[`Alpha_spending`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_spending.md)
+and
+[`online_fallback`](https://dsrobertson.github.io/onlineFDR/reference/online_fallback.md)
+control the FWER under arbitrary dependence.
 
 ## References
 

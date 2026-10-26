@@ -11,7 +11,7 @@ Javanmard and Montanari (2015)."><meta property="og:image" content="https://dsro
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,8 +101,9 @@ randomised.</p></dd>
 <dd><p>Logical. If <code>TRUE</code>, runs the original LOND algorithm
 of Javanmard and Montanari (2015), otherwise runs the modified algorithm
 with \(\alpha_i = \max(D(i-1), 1)\beta_i\) (Javanmard and Montanari, 2015,
-Remark 2.3), which also controls the FDR under positive dependence (Zrnic et
-al., 2021). Defaults to <code>TRUE</code>.</p></dd>
+Remark 2.3), which makes slightly fewer discoveries and provably controls the
+FDR under positive dependence (Zrnic et al., 2021); see Details for the
+original version. Defaults to <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -127,7 +128,7 @@ The case where p-values arrive in batches corresponds to multiple instances
 of the same date. If no column of dates is provided, then the p-values are
 treated as being ordered in sequence, arriving one at a time.</p>
 <p>The LOND algorithm controls the FDR for independent p-values (see below for
-the modification for dependent p-values). Given an overall significance level
+positively dependent p-values). Given an overall significance level
 \(\alpha\), we choose a sequence of non-negative numbers \(\beta_i\) such
 that they sum to \(\alpha\). The values of the adjusted significance
 thresholds \(\alpha_i\) are chosen as follows: $$\alpha_i = (D(i-1) +
@@ -136,7 +137,11 @@ thresholds \(\alpha_i\) are chosen as follows: $$\alpha_i = (D(i-1) +
 <p>A slightly modified version of LOND with thresholds \(\alpha_i =
 \max(D(i-1), 1)\beta_i\) (Javanmard and Montanari, 2015, Remark 2.3)
 provably controls the FDR under positive dependence (PRDS condition), see
-Zrnic et al. (2021).</p>
+Zrnic et al. (2021). Their argument also shows that the original version
+controls the FDR under PRDS: if the \(i\)-th hypothesis is rejected, the
+total number of discoveries is at least \(D(i-1) + 1\), the factor used in
+\(\alpha_i\), and this factor can only increase when p-values decrease, so
+Lemma 1 of Ramdas et al. (2019) applies.</p>
 <p>For arbitrarily dependent p-values, LOND controls the FDR if it is modified
 with \(\beta_i / H(i)\) in place of \(\beta_i\), where \(H(i)\) is the
 i-th harmonic number.</p>
@@ -151,6 +156,9 @@ False Discovery Rate. <em>arXiv preprint</em>,
 <p>Javanmard, A. and Montanari, A. (2018). Online Rules for Control of False
 Discovery Rate and False Discovery Exceedance. <em>Annals of Statistics</em>,
 46(2):526-554.</p>
+<p>Ramdas, A., Barber, R.F., Wainwright, M.J. and Jordan, M.I. (2019). A
+unified treatment of multiple testing with prior knowledge using the
+p-filter. <em>The Annals of Statistics</em>, 47(5):2790-2821.</p>
 <p>Zrnic, T., Ramdas, A. and Jordan, M.I. (2021). Asynchronous Online Testing of
 Multiple Hypotheses. <em>Journal of Machine Learning Research</em>, 22(33):1-39.</p>
     </div>

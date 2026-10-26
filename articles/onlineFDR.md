@@ -50,6 +50,17 @@ procedure](onlineFDR-diagram.png)
 
 Flowchart guiding the choice of onlineFDR procedure
 
+For FWER control,
+[`Alpha_spending()`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_spending.md)
+and
+[`online_fallback()`](https://dsrobertson.github.io/onlineFDR/reference/online_fallback.md)
+allow arbitrarily dependent p-values, while
+[`ADDIS_spending()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS_spending.md)
+and
+[`ADDIS_exhaustive()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS_exhaustive.md)
+require independent p-values (`ADDIS_spending(dep = TRUE)` allows local
+dependence).
+
 ### Frequently Asked Questions
 
 We have also provided a non-exhaustive list of answers to some questions
@@ -408,22 +419,29 @@ LOND_results <- LOND(sample.df, alpha = 0.04, betai = bound)
   presented by Javanmard and Montanari (2018), Ramdas *et al.* (2017)
   and Tian and Ramdas (2019). The function provides different versions
   of the procedure valid for independent p-values, see
-  [`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
-  There is also a version (‘dep’) that guarantees control for dependent
-  p-values.
+  [`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md);
+  these are not guaranteed to control the FDR for positively dependent
+  p-values, even with the default settings. There is also a version
+  (‘dep’) that guarantees control for dependent p-values.
 
 - [`SAFFRON()`](https://dsrobertson.github.io/onlineFDR/reference/SAFFRON.md)
   implements the SAFFRON procedure for online FDR control, where SAFFRON
   stands for Serial estimate of the Alpha Fraction that is Futilely
   Rationed On true Null hypotheses, as presented by Ramdas *et al.*
   (2018). The procedure provides an adaptive method of online FDR
-  control.
+  control. It controls the FDR for independent p-values, but not in
+  general for positively dependent p-values, even with the default
+  settings; see
+  [`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
 
 - [`Alpha_investing()`](https://dsrobertson.github.io/onlineFDR/reference/Alpha_investing.md)
   implements a variant of the Alpha-investing algorithm of Foster and
   Stine (2008) that guarantees FDR control, as proposed by Ramdas *et
   al.* (2018). This procedure uses a variant of SAFFRON’s update rule.
-  This procedure controls the FDR for independent p-values.
+  This procedure controls the FDR for independent p-values, but not in
+  general for positively dependent p-values, even with the default
+  settings; see
+  [`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
 
 - [`ADDIS()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS.md)
   implements the ADDIS algorithm for online FDR control, where ADDIS
@@ -432,7 +450,9 @@ LOND_results <- LOND(sample.df, alpha = 0.04, betai = bound)
   power loss of SAFFRON with conservative nulls, by including both
   adaptivity in the fraction of null hypotheses (like SAFFRON) and the
   conservativeness of nulls (unlike SAFFRON). This procedure controls
-  the FDR for independent p-values.
+  the FDR for independent p-values, but not in general for positively
+  dependent p-values, even with the default settings; see
+  [`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
 
 ### Batch FDR Control
 
@@ -464,15 +484,24 @@ LOND_results <- LOND(sample.df, alpha = 0.04, betai = bound)
 
 - [`LONDstar()`](https://dsrobertson.github.io/onlineFDR/reference/LONDstar.md)
   implements the LOND algorithm for asynchronous online testing, as
-  presented by Zrnic *et al.* (2021). This controls the mFDR.
+  presented by Zrnic *et al.* (2021). This controls the mFDR; the
+  ‘async’ version also controls the FDR for independent p-values (see
+  [`?LONDstar`](https://dsrobertson.github.io/onlineFDR/reference/LONDstar.md)
+  for the conditions).
 
 - [`LORDstar()`](https://dsrobertson.github.io/onlineFDR/reference/LORDstar.md)
   implements LORD algorithms for asynchronous online testing, as
-  presented by Zrnic *et al.* (2021). This controls the mFDR.
+  presented by Zrnic *et al.* (2021). This controls the mFDR; the
+  ‘async’ version also controls the FDR for independent p-values (see
+  [`?LORDstar`](https://dsrobertson.github.io/onlineFDR/reference/LORDstar.md)
+  for the conditions).
 
 - [`SAFFRONstar()`](https://dsrobertson.github.io/onlineFDR/reference/SAFFRONstar.md)
   implements the SAFFRON algorithm for asynchronous online testing, as
-  presented by Zrnic *et al.* (2021). This controls the mFDR.
+  presented by Zrnic *et al.* (2021). This controls the mFDR; the
+  ‘async’ version also controls the FDR for independent p-values (see
+  [`?SAFFRONstar`](https://dsrobertson.github.io/onlineFDR/reference/SAFFRONstar.md)
+  for the conditions).
 
 ### False Discovery Exceedance Control
 
@@ -501,15 +530,17 @@ LOND_results <- LOND(sample.df, alpha = 0.04, betai = bound)
   proposed by Tian and Ramdas (2021). The algorithm compensates for the
   power loss of Alpha-spending, by including both adaptivity in the
   fraction of null hypotheses and the conservativeness of nulls.
-  ADDIS-spending provides strong FWER control for independent p-values.
-  Tian and Ramdas (2021) also presented a version for handling local
-  dependence.
+  ADDIS-spending provides strong FWER control for independent p-values,
+  but this is not guaranteed for positively dependent p-values in
+  general. Tian and Ramdas (2021) also presented a version for handling
+  local dependence (`dep = TRUE`).
 
 - [`ADDIS_exhaustive()`](https://dsrobertson.github.io/onlineFDR/reference/ADDIS_exhaustive.md)
   implements the exhaustive ADDIS-spending algorithm for online FWER
   control, as proposed by Fischer *et al.* (2024). It is a uniform
   improvement of ADDIS-spending and provides strong FWER control for
-  independent p-values.
+  independent p-values, but this is not guaranteed for positively
+  dependent p-values.
 
 ## How to get help for onlineFDR
 

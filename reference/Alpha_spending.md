@@ -63,11 +63,11 @@ provided, then the p-values are treated as being ordered in sequence,
 arriving one at a time.
 
 Alpha-spending provides strong FWER control for a potentially infinite
-stream of p-values by using a Bonferroni-like test. Given an overall
-significance level \\\alpha\\, we choose a (potentially infinite)
-sequence of non-negative numbers \\\gamma_i\\ such that they sum to 1.
-Hypothesis \\i\\ is rejected if the \\i\\-th p-value is less than or
-equal to \\\alpha \gamma_i\\.
+stream of arbitrarily dependent p-values by using a Bonferroni-like
+test. Given an overall significance level \\\alpha\\, we choose a
+(potentially infinite) sequence of non-negative numbers \\\gamma_i\\
+such that they sum to 1. Hypothesis \\i\\ is rejected if the \\i\\-th
+p-value is less than or equal to \\\alpha \gamma_i\\.
 
 Note that the procedure controls the generalised familywise error rate
 (k-FWER) for \\k \> 1\\ if \\\alpha\\ is replaced by \\\min(1,

@@ -78,11 +78,13 @@ to multiple instances of the same date. If no column of dates is
 provided, then the p-values are treated as being ordered in sequence.
 
 The Alpha-investing procedure provably controls FDR for independent
-p-values. Given an overall significance level \\\alpha\\, we choose a
-sequence of non-negative non-increasing numbers \\\gamma_i\\ that sum
-to 1. Alpha-investing depends on a constant \\w_0\\, which satisfies \\0
-\le w_0 \< \alpha\\ and represents the initial \`wealth' of the
-procedure.
+p-values. It does not control the FDR for positively dependent p-values
+in general, even with the default settings; see
+[`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
+Given an overall significance level \\\alpha\\, we choose a sequence of
+non-negative non-increasing numbers \\\gamma_i\\ that sum to 1.
+Alpha-investing depends on a constant \\w_0\\, which satisfies \\0 \le
+w_0 \< \alpha\\ and represents the initial \`wealth' of the procedure.
 
 Further details of the Alpha-investing procedure and its modification
 can be found in Foster and Stine (2008) and Ramdas et al. (2018).

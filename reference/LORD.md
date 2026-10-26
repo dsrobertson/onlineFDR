@@ -127,6 +127,12 @@ Note that FDR control also holds for the LORD procedure if only the
 p-values corresponding to true nulls are mutually independent, and
 independent from the non-null p-values.
 
+FDR control is not guaranteed for positively dependent p-values in
+general, even with the default settings. For example, the FDR of LORD++
+can exceed \\\alpha\\ when long runs of positively correlated null
+p-values follow strong signals; see
+[`vignette("theory")`](https://dsrobertson.github.io/onlineFDR/articles/theory.md).
+
 For dependent p-values, a modified LORD procedure was proposed in
 Javanmard and Montanari (2018), which is called by setting
 `version='dep'`. Given an overall significance level \\\alpha\\, we

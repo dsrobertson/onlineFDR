@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">onlineFDR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.21.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,6 +110,11 @@ problem. The interactive version (click-to-functions) is available <a href="http
 <img src="onlineFDR-diagram.png" alt="Flowchart guiding the choice of onlineFDR procedure"><div class="figcaption">Flowchart guiding the choice of onlineFDR
 procedure</div>
 </div>
+<p>For FWER control, <code><a href="../reference/Alpha_spending.html">Alpha_spending()</a></code> and
+<code><a href="../reference/online_fallback.html">online_fallback()</a></code> allow arbitrarily dependent p-values,
+while <code><a href="../reference/ADDIS_spending.html">ADDIS_spending()</a></code> and <code><a href="../reference/ADDIS_exhaustive.html">ADDIS_exhaustive()</a></code>
+require independent p-values (<code>ADDIS_spending(dep = TRUE)</code>
+allows local dependence).</p>
 <div class="section level3">
 <h3 id="frequently-asked-questions">Frequently Asked Questions<a class="anchor" aria-label="anchor" href="#frequently-asked-questions"></a>
 </h3>
@@ -433,25 +438,34 @@ control, where LORD stands for (significance) Levels based On Recent
 Discovery, as presented by Javanmard and Montanari (2018), Ramdas <em>et
 al.</em> (2017) and Tian and Ramdas (2019). The function provides
 different versions of the procedure valid for independent p-values, see
-<code><a href="../articles/theory.html">vignette("theory")</a></code>. There is also a version (‘dep’) that
-guarantees control for dependent p-values.</p></li>
+<code><a href="../articles/theory.html">vignette("theory")</a></code>; these are not guaranteed to control the
+FDR for positively dependent p-values, even with the default settings.
+There is also a version (‘dep’) that guarantees control for dependent
+p-values.</p></li>
 <li><p><code><a href="../reference/SAFFRON.html">SAFFRON()</a></code> implements the SAFFRON procedure for
 online FDR control, where SAFFRON stands for Serial estimate of the
 Alpha Fraction that is Futilely Rationed On true Null hypotheses, as
 presented by Ramdas <em>et al.</em> (2018). The procedure provides an
-adaptive method of online FDR control.</p></li>
+adaptive method of online FDR control. It controls the FDR for
+independent p-values, but not in general for positively dependent
+p-values, even with the default settings; see
+<code><a href="../articles/theory.html">vignette("theory")</a></code>.</p></li>
 <li><p><code><a href="../reference/Alpha_investing.html">Alpha_investing()</a></code> implements a variant of the
 Alpha-investing algorithm of Foster and Stine (2008) that guarantees FDR
 control, as proposed by Ramdas <em>et al.</em> (2018). This procedure
 uses a variant of SAFFRON’s update rule. This procedure controls the FDR
-for independent p-values.</p></li>
+for independent p-values, but not in general for positively dependent
+p-values, even with the default settings; see
+<code><a href="../articles/theory.html">vignette("theory")</a></code>.</p></li>
 <li><p><code><a href="../reference/ADDIS.html">ADDIS()</a></code> implements the ADDIS algorithm for online
 FDR control, where ADDIS stands for an ADaptive algorithm that DIScards
 conservative nulls, as presented by Tian &amp; Ramdas (2019). The
 algorithm compensates for the power loss of SAFFRON with conservative
 nulls, by including both adaptivity in the fraction of null hypotheses
 (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON). This
-procedure controls the FDR for independent p-values.</p></li>
+procedure controls the FDR for independent p-values, but not in general
+for positively dependent p-values, even with the default settings; see
+<code><a href="../articles/theory.html">vignette("theory")</a></code>.</p></li>
 </ul>
 </div>
 <div class="section level3">
@@ -485,13 +499,19 @@ procedure on each batch.</p></li>
 <ul>
 <li><p><code><a href="../reference/LONDstar.html">LONDstar()</a></code> implements the LOND algorithm for
 asynchronous online testing, as presented by Zrnic <em>et al.</em>
-(2021). This controls the mFDR.</p></li>
+(2021). This controls the mFDR; the ‘async’ version also controls the
+FDR for independent p-values (see <code><a href="../reference/LONDstar.html">?LONDstar</a></code> for the
+conditions).</p></li>
 <li><p><code><a href="../reference/LORDstar.html">LORDstar()</a></code> implements LORD algorithms for
 asynchronous online testing, as presented by Zrnic <em>et al.</em>
-(2021). This controls the mFDR.</p></li>
+(2021). This controls the mFDR; the ‘async’ version also controls the
+FDR for independent p-values (see <code><a href="../reference/LORDstar.html">?LORDstar</a></code> for the
+conditions).</p></li>
 <li><p><code><a href="../reference/SAFFRONstar.html">SAFFRONstar()</a></code> implements the SAFFRON algorithm for
 asynchronous online testing, as presented by Zrnic <em>et al.</em>
-(2021). This controls the mFDR.</p></li>
+(2021). This controls the mFDR; the ‘async’ version also controls the
+FDR for independent p-values (see <code><a href="../reference/SAFFRONstar.html">?SAFFRONstar</a></code> for the
+conditions).</p></li>
 </ul>
 </div>
 <div class="section level3">
@@ -523,12 +543,15 @@ algorithm for online FWER control, as proposed by Tian and Ramdas
 (2021). The algorithm compensates for the power loss of Alpha-spending,
 by including both adaptivity in the fraction of null hypotheses and the
 conservativeness of nulls. ADDIS-spending provides strong FWER control
-for independent p-values. Tian and Ramdas (2021) also presented a
-version for handling local dependence.</p></li>
+for independent p-values, but this is not guaranteed for positively
+dependent p-values in general. Tian and Ramdas (2021) also presented a
+version for handling local dependence
+(<code>dep = TRUE</code>).</p></li>
 <li><p><code><a href="../reference/ADDIS_exhaustive.html">ADDIS_exhaustive()</a></code> implements the exhaustive
 ADDIS-spending algorithm for online FWER control, as proposed by Fischer
 <em>et al.</em> (2024). It is a uniform improvement of ADDIS-spending
-and provides strong FWER control for independent p-values.</p></li>
+and provides strong FWER control for independent p-values, but this is
+not guaranteed for positively dependent p-values.</p></li>
 </ul>
 </div>
 </div>

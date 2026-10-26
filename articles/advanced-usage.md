@@ -79,12 +79,12 @@ general be more conservative.
 
 ``` r
 
-set.seed(1); results.indep <- LOND(sample.df)    # for independent p-values
-set.seed(1); results.dep <- LOND(sample.df, dep=TRUE)   # for dependent p-values
+set.seed(1); results.indep <- LOND(sample.df)    # independent or PRDS
+set.seed(1); results.dep <- LOND(sample.df, dep=TRUE)   # arbitrary dependence
 
 # compare adjusted significance thresholds
-cbind(independent = results.indep$alphai, dependent = results.dep$alphai)
-#>        independent    dependent
+cbind(default = results.indep$alphai, dep = results.dep$alphai)
+#>            default          dep
 #>  [1,] 0.0027407722 0.0027407722
 #>  [2,] 0.0011920626 0.0007947084
 #>  [3,] 0.0010153042 0.0005538023

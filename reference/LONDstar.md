@@ -95,6 +95,11 @@ sequence of non-negative non-increasing numbers \\\beta_i\\ that sum to
 \\\alpha\\.
 
 Note that these LONDstar algorithms control the *modified* FDR (mFDR).
+The \`async' version also controls the usual FDR if the null p-values
+are independent of each other and of the non-nulls, and the decision
+times do not depend on the p-values (Zrnic et al., 2021, Theorem 3,
+which covers LORDasync; asynchronous LOND is a special case, their
+Algorithm 6).
 
 Further details of the LONDstar algorithms can be found in Zrnic et al.
 (2021).
