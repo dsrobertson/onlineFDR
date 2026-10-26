@@ -10,10 +10,11 @@
 #' the same date. If no column of dates is provided, then the p-values are
 #' treated as being ordered in sequence, arriving one at a time.
 #'
-#' The procedure controls FDR for a potentially infinite stream of p-values by
-#' using a Bonferroni-like test. Given an overall significance level
-#' \eqn{\alpha}, we choose a (potentially infinite) sequence of non-negative
-#' numbers \eqn{\alpha_i} such that they sum to \eqn{\alpha}. Hypothesis \eqn{i}
+#' The procedure controls FDR (and FWER) for a potentially infinite stream of
+#' arbitrarily dependent p-values by using a Bonferroni-like test. Given an
+#' overall significance level \eqn{\alpha}, we choose a (potentially infinite)
+#' sequence of non-negative numbers \eqn{\alpha_i} such that they sum to
+#' \eqn{\alpha}. Hypothesis \eqn{i}
 #' is rejected if the \eqn{i}-th p-value is less than or equal to \eqn{\alpha_i}.
 #'
 #'

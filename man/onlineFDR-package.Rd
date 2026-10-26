@@ -30,15 +30,18 @@ improve the power of the procedure in the presence of conservative nulls by
 adaptively `discarding' these p-values, as proposed by Tian and Ramdas
 (2019). LORD++ and the discarding version provably control the FDR under
 independence of the p-values; for LORD 3 this has only been shown
-empirically. Setting \code{version='dep'} provides
+empirically. FDR control is not guaranteed for positively dependent
+p-values in general (see \code{vignette("theory")}). Setting
+\code{version='dep'} provides
 a modified version of LORD that is valid for arbitrarily dependent p-values.
 
 The second method is LOND, which stands for (significance) Levels based On
 Number of Discoveries and is implemented by the function \code{\link{LOND}}.
-This procedure controls the FDR under independence of the p-values, but the
+This procedure controls the FDR under independence of the p-values. The
 slightly modified version of LOND of Javanmard and Montanari (2015, Remark
 2.3) also provably controls the FDR under positive dependence (PRDS
-condition), as shown by Zrnic et al. (2021). In
+condition), as shown by Zrnic et al. (2021), and their argument shows that
+the original version does too (see \code{\link{LOND}}). In
 addition, by specifying \code{dep = TRUE}, this function runs a modified
 version of LOND which is valid for arbitrarily dependent p-values.
 
@@ -48,17 +51,19 @@ Alpha Fraction that is Futilely Rationed On true Null hypotheses. This
 provides an adaptive algorithm for online FDR control. SAFFRON is related to 
 the Alpha-investing procedure of Foster and Stine (2008), a monotone version
 of which is implemented by the function \code{\link{Alpha_investing}}. Both 
-these procedures provably control the FDR under independence of the p-values.
+these procedures provably control the FDR under independence of the p-values,
+but not for positively dependent p-values in general, even with the default
+settings (see \code{vignette("theory")}).
 
 Tian and Ramdas (2019) proposed the \code{\link{ADDIS}}
 algorithm, which stands for an ADaptive algorithm that DIScards conservative
 nulls. The algorithm compensates for the power loss of SAFFRON with
 conservative nulls, by including both adaptivity in the fraction of null
 hypotheses (like SAFFRON) and the conservativeness of nulls (unlike SAFFRON).
-The ADDIS procedure provably controls the FDR for independent p-values. Tian
-and Ramdas (2019) also presented a version for an asynchronous testing
-process, consisting of tests that start and finish at (potentially) random
-times.
+The ADDIS procedure provably controls the FDR for independent p-values, but
+not for positively dependent p-values in general. Tian and Ramdas (2019)
+also presented a version for an asynchronous testing process, consisting of
+tests that start and finish at (potentially) random times.
 
 For testing batches of hypotheses, Zrnic et al. (2020) proposed batched 
 online testing algorithms that control the FDR, where the p-values across
@@ -68,9 +73,11 @@ positively dependent or independent.
 Zrnic et al. (2021) generalised LOND, LORD and SAFFRON for asynchronous
 online testing, where each hypothesis test can itself be a sequential process
 and the tests can overlap in time. Note though that these algorithms are
-designed for the control of a modified FDR (mFDR), although LORDstar and
-SAFFRONstar with \code{version='async'} also control the FDR when the null
-p-values are independent of each other and of the non-nulls. They are
+designed for the control of a modified FDR (mFDR), although LONDstar,
+LORDstar and SAFFRONstar with \code{version='async'} also control the FDR
+when the null p-values are independent of each other and of the non-nulls,
+and the decision times do not depend on the p-values. The \code{'dep'} and
+\code{'batch'} versions are only guaranteed to control the mFDR. They are
 implemented by
 the functions \code{\link{LONDstar}}, \code{\link{LORDstar}} and
 \code{\link{SAFFRONstar}}. Zrnic et al. (2021) presented three explicit
@@ -107,9 +114,10 @@ controls the FWER even under arbitrary dependence amongst the p-values. The
 \code{\link{ADDIS_spending}} procedure compensates for the power loss of
 Alpha-spending and online fallback, by including both adaptivity in the
 fraction of null hypotheses and the conservativeness of nulls. This procedure
-controls the FWER in the strong sense for independent p-values. Tian and
-Ramdas (2021) also presented a version for handling local dependence, which
-can be specified by setting \code{dep=TRUE}. Fischer et al. (2024) proposed
+controls the FWER in the strong sense for independent p-values; this is not
+guaranteed for positively dependent p-values in general. Tian and Ramdas
+(2021) also presented a version for handling local dependence, which can be
+specified by setting \code{dep=TRUE}. Fischer et al. (2024) proposed
 an exhaustive version of ADDIS-spending, implemented by the function
 \code{\link{ADDIS_exhaustive}}, which is a uniform improvement of
 ADDIS-spending and also strongly controls the FWER for independent p-values.

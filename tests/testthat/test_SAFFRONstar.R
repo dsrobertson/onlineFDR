@@ -82,6 +82,41 @@ test_that("Check that SAFFRON is a special case of the SAFFRONstar
                                     batch.sizes = rep(1,4))$alphai)              
 })
 
+test_that("Async SAFFRONstar follows Zrnic et al. (2021), Algorithm 3", {
+  # Reference implementation of Algorithm 3 with asynchronous conflict sets:
+  # test t uses the outcomes of tests i < t with E[i] < t, r_k is the k-th
+  # smallest decision time among those rejections, and C_k^+ counts the
+  # candidates among tests that started after r_k
+  ref <- function(p, E, alpha, g, w0, lambda) {
+    a <- numeric(length(p))
+    for (t in seq_along(p)) {
+      prev <- seq_len(t - 1)
+      known <- prev[E[prev] < t]
+      cand <- known[p[known] <= lambda]
+      r <- sort(E[known][p[known] <= a[known]])
+      val <- w0 * g[t - length(cand)]
+      for (k in seq_along(r)) {
+        val <- val + (if (k == 1) alpha - w0 else alpha) *
+          g[t - r[k] - sum(cand > r[k])]
+      }
+      a[t] <- min(lambda, (1 - lambda) * val)
+    }
+    a
+  }
+  for (maxdelay in c(10, 50)) {
+    set.seed(maxdelay)
+    n <- 80
+    p <- pnorm(-(rnorm(n) + 3 * (runif(n) < 0.3)))
+    E <- seq_len(n) + sample(0:maxdelay, n, replace = TRUE)
+    g <- 0.4374901658 / seq_len(n + 1)^1.6
+    d <- data.frame(id = seq_len(n), pval = p, decision.times = E)
+    out <- SAFFRONstar(d, alpha = 0.1, version = "async", gammai = g,
+                       w0 = 0.04, lambda = 0.4)
+    expect_equal(out$alphai, ref(p, E, 0.1, g, 0.04, 0.4))
+    expect_gt(sum(out$R), 0)
+  }
+})
+
 test_that("SAFFRONstar inputs are correct when given vector input", {
     expect_error(SAFFRONstar(test.pval, version="async"),
                  "d needs to be a dataframe with a column of decision.times")

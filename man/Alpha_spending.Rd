@@ -50,9 +50,10 @@ the same date. If no column of dates is provided, then the p-values are
 treated as being ordered in sequence, arriving one at a time.
 
 Alpha-spending provides strong FWER control for a potentially infinite stream
-of p-values by using a Bonferroni-like test. Given an overall significance
-level \eqn{\alpha}, we choose a (potentially infinite) sequence of
-non-negative numbers \eqn{\gamma_i} such that they sum to 1. Hypothesis
+of arbitrarily dependent p-values by using a Bonferroni-like test. Given an
+overall significance level \eqn{\alpha}, we choose a (potentially infinite)
+sequence of non-negative numbers \eqn{\gamma_i} such that they sum to 1.
+Hypothesis
 \eqn{i} is rejected if the \eqn{i}-th p-value is less than or equal to
 \eqn{\alpha \gamma_i}.
 
